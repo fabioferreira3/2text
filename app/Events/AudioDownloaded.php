@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\TextRequest;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -12,17 +13,17 @@ class AudioDownloaded
 
     public string $filePath;
     public string $fileName;
-    public string $language;
+    public TextRequest $textRequest;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(string $filePath, string $fileName, string $language)
+    public function __construct(string $filePath, string $fileName, TextRequest $textRequest)
     {
         $this->filePath = $filePath;
         $this->fileName = $fileName;
-        $this->language = $language;
+        $this->textRequest = $textRequest;
     }
 }

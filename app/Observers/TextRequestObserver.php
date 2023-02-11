@@ -14,9 +14,11 @@ class TextRequestObserver
      * @param  \App\Models\TextRequest  $textRequest
      * @return void
      */
-    public function creating(TextRequest $textRequest)
+    public function saving(TextRequest $textRequest)
     {
-        $textRequest->word_count = Str::wordCount($textRequest->original_text);
+        if ($textRequest->isDirty('original_text')) {
+            $textRequest->word_count = Str::wordCount($textRequest->original_text);
+        }
     }
 
     /**

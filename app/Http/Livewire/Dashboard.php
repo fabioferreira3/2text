@@ -3,17 +3,18 @@
 namespace App\Http\Livewire;
 
 use App\Jobs\DownloadAudio;
+use App\Repositories\TextRequestRepository;
 use Livewire\Component;
 
 
 class Dashboard extends Component
 {
-    public string $url;
+    public string $source_url;
     public string $language;
 
     public function __construct()
     {
-        $this->url = '';
+        $this->source_url = '';
         $this->language = 'en';
     }
 
@@ -24,6 +25,12 @@ class Dashboard extends Component
 
     public function process()
     {
-        DownloadAudio::dispatch($this->url, $this->language);
+        $textRequest = TextRequestRepository::create([
+            'source_url' => $this->source_url,
+            'source_provider' => 'youtube',
+            'language' => $this->language
+        ]);
+
+        DownloadAudio::dispatch($textRequest);
     }
 }

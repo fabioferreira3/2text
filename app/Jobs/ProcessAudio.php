@@ -17,18 +17,18 @@ class ProcessAudio implements ShouldQueue
 
     public string $filePath;
     public string $fileName;
-    public string $language;
+    public TextRequest $textRequest;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(string $filePath, string $fileName, string $language)
+    public function __construct(string $filePath, string $fileName, TextRequest $textRequest)
     {
         $this->filePath = $filePath;
         $this->fileName = $fileName;
-        $this->language = $language;
+        $this->textRequest = $textRequest;
     }
 
     /**
@@ -47,8 +47,8 @@ class ProcessAudio implements ShouldQueue
         }
 
         if ($response->successful()) {
-            $textRequest = TextRequest::create(['original_text' => $response->json('text')]);
-            event(new AudioProcessed($textRequest));
+            $this->textRequest->update(['original_text' => $response->json('text')]);
+            event(new AudioProcessed($this->textRequest));
         }
     }
 }

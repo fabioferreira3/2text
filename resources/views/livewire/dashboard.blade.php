@@ -3,7 +3,7 @@
     <div class="col-span-10">
         <div class="flex flex-col gap-4">
             <label>Youtube url:</label>
-            <input name="url" wire:model="url" class="p-3 rounded-lg" />
+            <input name="url" wire:model="source_url" class="p-3 rounded-lg" />
             <label>Language:</label>
             <select
                 name="language"

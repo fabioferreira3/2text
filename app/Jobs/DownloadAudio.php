@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Events\AudioDownloaded;
+use App\Models\TextRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,18 +18,16 @@ class DownloadAudio implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public string $url;
-    public string $language;
+    public TextRequest $textRequest;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(string $url, string $language)
+    public function __construct(TextRequest $textRequest)
     {
-        $this->url = $url;
-        $this->language = $language;
+        $this->textRequest = $textRequest;
     }
 
     /**
@@ -62,10 +61,10 @@ class DownloadAudio implements ShouldQueue
                 ->audioFormat('mp3')
                 ->audioQuality('0') // best
                 ->output($fileName)
-                ->url($this->url)
+                ->url($this->textRequest->source->url)
         )->getVideos();
 
-        event(new AudioDownloaded($collection[0]->getFile(), $fileName, $this->language));
+        event(new AudioDownloaded($collection[0]->getFile(), $fileName, $this->textRequest));
     }
 
     /**

@@ -16,6 +16,6 @@ class HandleAudioProcessing
      */
     public function handle(AudioDownloaded $event)
     {
-        ProcessAudio::dispatch($event->filePath, $event->fileName, $event->language);
+        ProcessAudio::dispatch($event->filePath, $event->fileName, $event->textRequest);
     }
 }
