@@ -2,10 +2,6 @@
 
 namespace App\Providers;
 
-use App\Events\AudioDownloaded;
-use App\Events\AudioProcessed;
-use App\Listeners\HandleAudioProcessing;
-use App\Listeners\HandleTextProcessing;
 use App\Models\TextRequest;
 use App\Observers\TextRequestObserver;
 use Illuminate\Auth\Events\Registered;
@@ -23,12 +19,6 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
-        ],
-        AudioDownloaded::class => [
-            HandleAudioProcessing::class
-        ],
-        AudioProcessed::class => [
-            HandleTextProcessing::class
         ]
     ];
 

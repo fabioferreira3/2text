@@ -35,7 +35,7 @@ class DownloadAudio implements ShouldQueue
      *
      * @var int
      */
-    public $tries = 25;
+    public $tries = 5;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -61,10 +61,12 @@ class DownloadAudio implements ShouldQueue
                 ->audioFormat('mp3')
                 ->audioQuality('0') // best
                 ->output($fileName)
-                ->url($this->textRequest->source->url)
+                ->url($this->textRequest->source_url)
         )->getVideos();
 
-        event(new AudioDownloaded($collection[0]->getFile(), $fileName, $this->textRequest));
+        $this->textRequest->update(['audio_file_path' => $collection[0]->getFile()]);
+
+        //   event(new AudioDownloaded($collection[0]->getFile(), $fileName, $this->textRequest));
     }
 
     /**

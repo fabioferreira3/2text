@@ -46,7 +46,7 @@ class SummarizeText implements ShouldQueue
                 'model' => 'text-davinci-003',
                 'prompt' => "Summarize the following text: " . $chunk->join(' '),
                 'temperature' => 0.7,
-                'max_tokens' => 100,
+                'max_tokens' => 1000,
                 'top_p' => 1.0,
                 'frequency_penalty' => 0.0,
                 'presence_penalty' => 1
@@ -54,8 +54,5 @@ class SummarizeText implements ShouldQueue
             $results->push($result['choices'][0]['text']);
         }
         $this->textRequest->update(['summary' => Str::squish($results->join(' '))]);
-
-        GenerateTitle::dispatch($this->textRequest);
-        GenerateMetaDescription::dispatch($this->textRequest);
     }
 }

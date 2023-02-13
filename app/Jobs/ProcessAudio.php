@@ -10,13 +10,12 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class ProcessAudio implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public string $filePath;
-    public string $fileName;
     public TextRequest $textRequest;
 
     /**
@@ -24,10 +23,8 @@ class ProcessAudio implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(string $filePath, string $fileName, TextRequest $textRequest)
+    public function __construct(TextRequest $textRequest)
     {
-        $this->filePath = $filePath;
-        $this->fileName = $fileName;
         $this->textRequest = $textRequest;
     }
 
@@ -38,17 +35,32 @@ class ProcessAudio implements ShouldQueue
      */
     public function handle()
     {
+        $fileName = Str::uuid() . '.mp3';
+        $processer = $this->defineProcesser();
         $response = Http::timeout(900)
-            ->attach('audio_file', file_get_contents($this->filePath), $this->fileName)
-            ->post("http://whisper:9000/asr?task=transcribe&language=$this->language&output=json");
+            ->attach('audio_file', file_get_contents($this->textRequest->audio_file_path), $fileName)
+            ->post($processer);
 
         if ($response->failed()) {
             return $response->throw();
         }
 
         if ($response->successful()) {
-            $this->textRequest->update(['original_text' => $response->json('text')]);
-            event(new AudioProcessed($this->textRequest));
+            $originalText = Str::squish($response->json('text'));
+            $this->textRequest->update(['original_text' => $originalText]);
+            //    event(new AudioProcessed($this->textRequest));
         }
+    }
+
+    public function defineProcesser()
+    {
+        $language = $this->textRequest->language;
+        $service = 'whisper';
+
+        if ($language != 'en') {
+            $service = 'whisper-large';
+        }
+
+        return "http://$service:9000/asr?task=transcribe&language=$language&output=json";
     }
 }

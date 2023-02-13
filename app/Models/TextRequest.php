@@ -17,4 +17,9 @@ class TextRequest extends Model
     {
         return $this->hasMany(TextRequestLog::class);
     }
+
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
 }
