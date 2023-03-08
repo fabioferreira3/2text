@@ -39,13 +39,7 @@ class ProcessRequestFromUrl implements ShouldQueue
         Bus::chain([
             new DownloadAudio($textRequest->refresh()),
             new ProcessAudio($textRequest->refresh()),
-            function () use ($textRequest) {
-                $textRequest->refresh();
-                ParaphraseText::dispatchIf($textRequest->language == 'en', $textRequest);
-            },
-            new SummarizeText($textRequest->refresh()),
-            new GenerateTitle($textRequest->refresh()),
-            new GenerateMetaDescription($textRequest->refresh()),
+            new BloggifyText($textRequest->refresh()),
             function () use ($textRequest) {
                 $textRequest->refresh();
                 $textRequest->update(['status' => 'finished']);

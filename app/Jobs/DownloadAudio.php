@@ -4,12 +4,14 @@ namespace App\Jobs;
 
 use App\Events\AudioDownloaded;
 use App\Models\TextRequest;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use YoutubeDl\Options;
 use YoutubeDl\YoutubeDl;
@@ -35,14 +37,14 @@ class DownloadAudio implements ShouldQueue
      *
      * @var int
      */
-    public $tries = 5;
+    public $tries = 1;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
      *
      * @var int
      */
-    public $maxExceptions = 3;
+    public $maxExceptions = 1;
 
     /**
      * Execute the job.
@@ -51,22 +53,30 @@ class DownloadAudio implements ShouldQueue
      */
     public function handle()
     {
-        $yt = new YoutubeDl();
-        $fileName = Str::uuid() . '.%(ext)s';
+        try {
+            $yt = new YoutubeDl();
+            $yt->setBinPath('/usr/local/bin/yt-dlp');
+            $fileName = Str::uuid() . '.%(ext)s';
 
-        $collection = $yt->download(
-            Options::create()
-                ->downloadPath(storage_path('app'))
-                ->extractAudio(true)
-                ->audioFormat('mp3')
-                ->audioQuality('0') // best
-                ->output($fileName)
-                ->url($this->textRequest->source_url)
-        )->getVideos();
+            $collection = $yt->download(
+                Options::create()
+                    ->downloadPath(storage_path('app'))
+                    ->extractAudio(true)
+                    ->audioFormat('mp3')
+                    ->audioQuality('0') // best
+                    ->output($fileName)
+                    ->url($this->textRequest->source_url)
+            )->getVideos();
 
-        $this->textRequest->update(['audio_file_path' => $collection[0]->getFile()]);
+            Log::debug($collection);
 
-        //   event(new AudioDownloaded($collection[0]->getFile(), $fileName, $this->textRequest));
+            $this->textRequest->update(['audio_file_path' => $collection[0]->getFile()]);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+        }
+
+
+        //event(new AudioDownloade($collection[0]->getFile(), $fileName, $this->textRequest));
     }
 
     /**

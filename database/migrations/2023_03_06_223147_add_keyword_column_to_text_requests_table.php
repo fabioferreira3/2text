@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignUuid('account_id')->nullable()->constrained('accounts')->cascadeOnDelete();
+        Schema::table('text_requests', function (Blueprint $table) {
+            $table->string('keyword')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('account_id');
+        Schema::table('text_requests', function (Blueprint $table) {
+            $table->dropColumn('keyword');
         });
     }
 };

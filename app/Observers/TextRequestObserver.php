@@ -16,8 +16,8 @@ class TextRequestObserver
      */
     public function saving(TextRequest $textRequest)
     {
-        if ($textRequest->isDirty('original_text')) {
-            $textRequest->word_count = Str::wordCount($textRequest->original_text);
+        if ($textRequest->isDirty('final_text')) {
+            $textRequest->word_count = Str::wordCount($textRequest->final_text);
         }
     }
 
@@ -33,8 +33,8 @@ class TextRequestObserver
             $textRequest->logs()->create(['type' => 'title', 'content' => $textRequest->title]);
         }
 
-        if ($textRequest->isDirty('paraphrased_text')) {
-            $textRequest->logs()->create(['type' => 'paraphrased_text', 'content' => $textRequest->paraphrased_text]);
+        if ($textRequest->isDirty('final_text')) {
+            $textRequest->logs()->create(['type' => 'final_text', 'content' => $textRequest->final_text]);
         }
 
         if ($textRequest->isDirty('summary')) {

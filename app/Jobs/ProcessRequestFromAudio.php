@@ -35,19 +35,19 @@ class ProcessRequestFromAudio implements ShouldQueue
     {
         $textRequest = $this->textRequest;
 
-        Bus::chain([
-            new ProcessAudio($textRequest),
-            function () use ($textRequest) {
-                $textRequest->refresh();
-                ParaphraseText::dispatchIf($textRequest->language == 'en', $textRequest);
-            },
-            new SummarizeText($textRequest->refresh()),
-            new GenerateTitle($textRequest->refresh()),
-            new GenerateMetaDescription($textRequest->refresh()),
-            function () use ($textRequest) {
-                $textRequest->refresh();
-                $textRequest->update(['status' => 'finished']);
-            }
-        ])->dispatch();
+        // Bus::chain([
+        //     new ProcessAudio($textRequest),
+        //     function () use ($textRequest) {
+        //         $textRequest->refresh();
+        //         ParaphraseText::dispatchIf($textRequest->language == 'en', $textRequest);
+        //     },
+        //     new SummarizeText($textRequest->refresh()),
+        //     new GenerateTitle($textRequest->refresh()),
+        //     new GenerateMetaDescription($textRequest->refresh()),
+        //     function () use ($textRequest) {
+        //         $textRequest->refresh();
+        //         $textRequest->update(['status' => 'finished']);
+        //     }
+        // ])->dispatch();
     }
 }

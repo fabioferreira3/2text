@@ -43,7 +43,7 @@ class ParaphraseText implements ShouldQueue
         ]);
 
         if ($response->successful()) {
-            $this->textRequest->update(['paraphrased_text' => $response->json('rewrites')[0]]);
+            //    $this->textRequest->update(['paraphrased_text' => $response->json('rewrites')[0]]);
         } else {
             return $response->throw();
         }
