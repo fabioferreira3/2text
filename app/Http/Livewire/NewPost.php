@@ -3,9 +3,6 @@
 namespace App\Http\Livewire;
 
 use App\Jobs\DownloadAudio;
-use App\Jobs\GenerateMetaDescription;
-use App\Jobs\GenerateTitle;
-use App\Jobs\ParaphraseText;
 use App\Jobs\ProcessAudio;
 use App\Jobs\ProcessRequestFromUrl;
 use App\Jobs\BloggifyText;
@@ -14,8 +11,10 @@ use Illuminate\Support\Facades\Bus;
 use Livewire\Component;
 
 
-class Dashboard extends Component
+class NewPost extends Component
 {
+    public string $origin;
+    public string $free_text;
     public string $source_url;
     public string $language;
     public string $keyword;
@@ -23,6 +22,8 @@ class Dashboard extends Component
 
     public function __construct()
     {
+        $this->origin = 'free_text';
+        $this->free_text = '';
         $this->source_url = '';
         $this->language = 'en';
         $this->keyword = '';
@@ -31,12 +32,7 @@ class Dashboard extends Component
 
     public function render()
     {
-        return view('livewire.dashboard');
-    }
-
-    public function newPost()
-    {
-        return redirect()->to('/blog/new');
+        return view('livewire.blog.new');
     }
 
     public function process()

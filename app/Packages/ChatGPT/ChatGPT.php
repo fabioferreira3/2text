@@ -17,6 +17,7 @@ class ChatGPT
     {
         $this->baseUri = 'https://api.openai.com/v1/chat/completions';
         $this->model = 'gpt-3.5-turbo';
+        //$this->model = 'gpt-4';
         $this->defaultMessages = [
             [
                 'role' => 'system',
@@ -27,9 +28,9 @@ class ChatGPT
 
     public function request(array $messages)
     {
-        $response = Http::connectTimeout(45)->acceptJson()->withHeaders([
+        $response = Http::connectTimeout(10)->acceptJson()->withHeaders([
             'Authorization' => 'Bearer ' . env('OPENAI_API_KEY')
-        ])->retry(20, 20000)->post($this->baseUri, [
+        ])->retry(5, 100)->post($this->baseUri, [
             'model' => $this->model,
             'messages' => [
                 ...$this->defaultMessages,
