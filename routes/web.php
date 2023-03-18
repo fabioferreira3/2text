@@ -2,6 +2,7 @@
 
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\NewPost;
+use App\Http\Livewire\PendingJobs;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,4 +27,5 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/blog/new', NewPost::class)->name('new-post');
+    Route::get('/blog/pending', PendingJobs::class)->name('pending-jobs');
 });

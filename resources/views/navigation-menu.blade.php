@@ -22,7 +22,7 @@
                     </x-jet-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('pending-jobs')">
+                    <x-jet-nav-link href="{{ route('pending-jobs') }}" :active="request()->routeIs('pending-jobs')">
                         {{ __('Pending jobs') }}
                     </x-jet-nav-link>
                 </div>

@@ -2,27 +2,23 @@
 
 namespace App\Http\Livewire;
 
-use App\Jobs\DownloadAudio;
-use App\Jobs\ProcessAudio;
-use App\Jobs\ProcessRequestFromUrl;
-use App\Jobs\BloggifyText;
+use App\Jobs\ProcessTextRequest;
 use App\Repositories\TextRequestRepository;
-use Illuminate\Support\Facades\Bus;
 use Livewire\Component;
 
 
 class NewPost extends Component
 {
-    public string $origin;
     public string $free_text;
     public string $source_url;
+    public string $source_provider;
     public string $language;
     public string $keyword;
     public string $tone;
 
     public function __construct()
     {
-        $this->origin = 'free_text';
+        $this->source_provider = 'free_text';
         $this->free_text = '';
         $this->source_url = '';
         $this->language = 'en';
@@ -38,23 +34,15 @@ class NewPost extends Component
     public function process()
     {
         $textRequest = TextRequestRepository::create([
+            'original_text' => $this->free_text,
             'source_url' => $this->source_url,
-            'source_provider' => 'youtube',
+            'source_provider' => $this->source_provider,
             'language' => $this->language,
             'keyword' => $this->keyword,
             'tone' => $this->tone
         ]);
 
-        ProcessRequestFromUrl::dispatchIf($textRequest->source_url, $textRequest);
-
-        Bus::chain([
-            new DownloadAudio($textRequest->refresh()),
-            new ProcessAudio($textRequest->refresh()),
-            new BloggifyText($textRequest->refresh()),
-            function () use ($textRequest) {
-                $textRequest->refresh();
-                $textRequest->update(['status' => 'finished']);
-            }
-        ])->dispatch();
+        ProcessTextRequest::dispatch($textRequest);
+        return redirect()->to('/jobs/pending');
     }
 }

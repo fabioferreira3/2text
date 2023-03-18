@@ -21,8 +21,8 @@
                     <div class="flex flex-col gap-3">
                         <label>Origin</label>
                         <select
-                            name="origin"
-                            wire:model="origin"
+                            name="provider"
+                            wire:model="source_provider"
                             class="p-3 rounded-lg border border-zinc-200"
                         >
                             <option value="youtube">Youtube</option>
@@ -40,7 +40,7 @@
                     </div>
                 </div>
 
-                @if ($origin === 'youtube')
+                @if ($source_provider === 'youtube')
                 <div class="flex flex-col gap-3">
                     <label>Youtube url:</label>
                     <input
@@ -49,7 +49,7 @@
                         class="p-3 border border-zinc-200 rounded-lg"
                     />
                 </div>
-                @endif @if ($origin === 'free_text')
+                @endif @if ($source_provider === 'free_text')
                 <div class="flex flex-col gap-3">
                     <label>Text:</label>
                     <textarea

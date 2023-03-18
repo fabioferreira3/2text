@@ -199,10 +199,10 @@ class BloggifyText implements ShouldQueue
     public function generateMetaDescription()
     {
         $tone = $this->textRequest->tone;
-        $keyword = $this->textRequest->keywordl;
+        $keyword = $this->textRequest->keyword;
         $response = $this->chatGpt->request([[
             'role' => 'user',
-            'content' => "Write a meta description, with a $tone tone, using the keyword $keyword, for the following text using a maximum of 20 words: \n\n" . $this->textRequest->final_text
+            'content' => "Write a meta description of a maximum of 20 words, with a $tone tone, using the keyword $keyword, for the following text: \n\n" . $this->textRequest->final_text
         ]]);
         $meta = $response['choices'][0]['message']['content'];
         $this->textRequest->update(['meta_description' => $meta]);

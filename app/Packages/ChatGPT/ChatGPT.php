@@ -21,7 +21,7 @@ class ChatGPT
         $this->defaultMessages = [
             [
                 'role' => 'system',
-                'content' => ''
+                'content' => 'Strictly follow the instructions. Never mention you are ChatGPT or an AI assistant.'
             ]
         ];
     }
