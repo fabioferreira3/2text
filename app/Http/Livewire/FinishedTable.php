@@ -3,6 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Enums\Language;
+use App\Enums\SourceProvider;
+use App\Enums\Tone;
 use App\Helpers\TextRequestHelper;
 use App\Models\TextRequest;
 use Illuminate\Support\Carbon;
@@ -94,7 +96,6 @@ final class FinishedTable extends PowerGridComponent
             ->addColumn('language', fn (TextRequest $model) => TextRequestHelper::parseLanguage($model->language))
             ->addColumn('keyword')
             ->addColumn('tone', fn (TextRequest $model) => Str::of($model->tone)->ucfirst())
-            ->addColumn('word_count')
             ->addColumn('created_at_formatted', fn (TextRequest $model) => Carbon::parse($model->created_at)->format('d/m/Y - H:i:s'));
     }
 
@@ -115,28 +116,27 @@ final class FinishedTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-
             Column::make('Source', 'source_provider')
+                ->makeInputEnumSelect(SourceProvider::cases(), 'source_provider')
                 ->sortable(),
             Column::make('Title', 'title')
-                ->searchable()
+                ->makeInputText()
                 ->sortable(),
             Column::make('Language', 'language')
                 ->searchable()
                 ->sortable()
                 ->makeInputEnumSelect(Language::cases(), 'language'),
             Column::make('Keyword', 'keyword')
-                ->searchable()
+                ->makeInputText()
                 ->sortable(),
             Column::make('Tone', 'tone')
                 ->searchable()
-                ->sortable(),
-            Column::make('Word Count', 'word_count')
-                ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->makeInputEnumSelect(Tone::cases(), 'tone'),
             Column::make('Created at', 'created_at_formatted', 'created_at')
                 ->makeInputDatePicker()
-                ->searchable()
+                ->searchable(),
+
         ];
     }
 
@@ -158,12 +158,14 @@ final class FinishedTable extends PowerGridComponent
     public function actions(): array
     {
         return [
-            //    Button::make('edit', 'Edit')
-            //        ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-            //        ->route('text-request.edit', ['text-request' => 'id']),
+            Button::add('view')
+                ->caption('View')
+                ->class('bg-zinc-800 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
+                ->route('text-request.destroy', ['text-request' => 'id']),
 
-            Button::make('destroy', 'Delete')
-                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
+            Button::add('destroy')
+                ->caption('Delete')
+                ->class('bg-white border border-zinc-300 cursor-pointer text-zinc-500 px-3 py-2 m-1 rounded text-sm')
                 ->route('text-request.destroy', ['text-request' => 'id'])
                 ->method('delete')
         ];

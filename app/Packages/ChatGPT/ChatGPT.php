@@ -38,6 +38,8 @@ class ChatGPT
             ]
         ]);
 
+        Log::debug($response);
+
         if ($response->successful()) {
             return $response;
         }

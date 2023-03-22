@@ -14,6 +14,6 @@ class MyWork extends Component
 
     public function render()
     {
-        return view('livewire.blog.finished');
+        return view('livewire.my-work');
     }
 }

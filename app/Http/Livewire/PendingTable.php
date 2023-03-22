@@ -2,9 +2,14 @@
 
 namespace App\Http\Livewire;
 
+use App\Enums\Language;
+use App\Enums\SourceProvider;
+use App\Enums\Tone;
+use App\Helpers\TextRequestHelper;
 use App\Models\TextRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
@@ -50,7 +55,7 @@ final class PendingTable extends PowerGridComponent
      */
     public function datasource(): Builder
     {
-        return TextRequest::query()->whereIn('status', ['pending', 'processing']);
+        return TextRequest::query()->whereIn('status', ['pending', 'processing'])->latest();
     }
 
     /*
@@ -86,7 +91,11 @@ final class PendingTable extends PowerGridComponent
     {
         return PowerGrid::eloquent()
             ->addColumn('id')
-            ->addColumn('source_provider')
+            ->addColumn('source_provider', fn (TextRequest $model) => TextRequestHelper::parseSource($model->source_provider))
+            ->addColumn('keyword')
+            ->addColumn('language', fn (TextRequest $model) => TextRequestHelper::parseLanguage($model->language))
+            ->addColumn('tone', fn (TextRequest $model) => Str::of($model->tone)->ucfirst())
+            ->addColumn('progress', fn (TextRequest $model) => $model->progress . '%')
             ->addColumn('created_at_formatted', fn (TextRequest $model) => Carbon::parse($model->created_at)->format('d/m/Y - H:i:s'));
     }
 
@@ -107,12 +116,23 @@ final class PendingTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-
-            Column::make('Source', 'source_provider')
-                ->sortable(),
             Column::make('Created at', 'created_at_formatted', 'created_at')
                 ->makeInputDatePicker()
-                ->searchable()
+                ->searchable(),
+            Column::make('Progress', 'progress')
+                ->sortable(),
+            Column::make('Source', 'source_provider')
+                ->makeInputEnumSelect(SourceProvider::cases(), 'source_provider')
+                ->sortable(),
+            Column::make('Language', 'language')
+                ->makeInputEnumSelect(Language::cases(), 'language')
+                ->sortable(),
+            Column::make('Keyword', 'keyword')
+                ->makeInputText()
+                ->sortable(),
+            Column::make('Tone', 'tone')
+                ->makeInputEnumSelect(Tone::cases(), 'tone')
+                ->sortable(),
         ];
     }
 

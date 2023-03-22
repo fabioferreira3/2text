@@ -6,7 +6,6 @@ use App\Jobs\ProcessTextRequest;
 use App\Repositories\TextRequestRepository;
 use Livewire\Component;
 
-
 class NewPost extends Component
 {
     public string $free_text;
@@ -43,6 +42,6 @@ class NewPost extends Component
         ]);
 
         ProcessTextRequest::dispatch($textRequest);
-        return redirect()->to('/jobs/pending');
+        return redirect()->to('/pending');
     }
 }

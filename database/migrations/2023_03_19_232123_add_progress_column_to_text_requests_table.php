@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('text_requests', function (Blueprint $table) {
-            //
+            $table->smallInteger('progress')->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('text_requests', function (Blueprint $table) {
-            //
+            $table->dropColumn('progress');
         });
     }
 };
