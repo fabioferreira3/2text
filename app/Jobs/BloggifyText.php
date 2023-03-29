@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Helpers\TextRequestHelper;
 use App\Models\TextRequest;
 use App\Packages\ChatGPT\ChatGPT;
 use Illuminate\Bus\Queueable;
@@ -9,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class BloggifyText implements ShouldQueue
 {
@@ -25,7 +27,7 @@ class BloggifyText implements ShouldQueue
     public function __construct(TextRequest $textRequest)
     {
         $this->textRequest = $textRequest;
-        $this->chatGpt = new ChatGPT($this->textRequest->tone);
+        $this->chatGpt = new ChatGPT();
     }
 
     /**
@@ -37,27 +39,47 @@ class BloggifyText implements ShouldQueue
     {
         if (!$this->textRequest->summary) {
             $this->generateSummary();
+            $this->increaseProgressBy(15);
         }
 
-        if (!$this->textRequest->subheaders) {
-            $this->generateSubheaders();
+        if (!$this->textRequest->outline) {
+            $this->generateOutline();
+            $this->increaseProgressBy(15);
         }
 
-        $this->generateParagraphs();
+        if (!$this->textRequest->final_text) {
+            $this->expandText();
+            $this->increaseProgressBy(50);
+        }
+
+        if (!$this->textRequest->meta_description) {
+            $this->generateMetaDescription();
+            $this->increaseProgressBy(10);
+        }
 
         if (!$this->textRequest->title) {
             $this->generateTitle();
+            $this->increaseProgressBy(10);
         }
-
-        $this->generateIntro();
-        $this->generateConclusion();
-        if (!$this->textRequest->meta_description) {
-            $this->generateMetaDescription();
-        }
-        $this->parseToHtmlTags();
     }
 
-    public function generateSummary($keyword = null)
+    public function increaseProgressBy(int $amount)
+    {
+        $this->textRequest->update(['progress' => $this->textRequest->progress + $amount]);
+    }
+
+    public function generateTitle()
+    {
+        $keyword = $this->textRequest->keyword;
+        $tone = $this->textRequest->tone;
+        $response = $this->chatGpt->request([[
+            'role' => 'user',
+            'content' => "Write a title, with a maximum of 7 words, using the keyword $keyword and with a $tone tone, for the following text: \n\n" . $this->textRequest->final_text
+        ]]);
+        $this->textRequest->update(['title' => $response]);
+    }
+
+    public function generateSummary()
     {
         $sentences = collect(preg_split("/(?<=[.?!])\s+(?=([^\d\w]*[A-Z][^.?!]+))/", $this->textRequest->original_text, -1, PREG_SPLIT_NO_EMPTY));
         $paragraphs = collect([]);
@@ -70,11 +92,11 @@ class BloggifyText implements ShouldQueue
             return $paragraph->join(' ');
         });
 
-        $summarizedParagraphs = collect([]);
+        $rewrittenParagraphs = collect([]);
         $messages = collect([]);
 
         // Paragraphs generation
-        $paragraphs->each(function ($paragraph) use (&$messages, &$summarizedParagraphs, $keyword) {
+        $paragraphs->each(function ($paragraph) use (&$messages, &$rewrittenParagraphs) {
             $allContent = $messages->map(function ($message) {
                 return $message['content'];
             })->join("");
@@ -85,19 +107,16 @@ class BloggifyText implements ShouldQueue
                 return $message['content'];
             })->join("");
 
-            if ($tokenCount > 3000) {
+            if ($tokenCount > 6000) {
                 $messages = collect([]);
-                $summarizedParagraphs = collect([]);
+                $rewrittenParagraphs = collect([]);
                 $response = $this->chatGpt->request([[
                     'role' => 'user',
-                    'content' => "Summarize the following text using maximum of 750 words: \n\n" . $assistantContent
+                    'content' => "Summarize the following text using maximum of 2000 words: \n\n" . $assistantContent
                 ]]);
             } else {
-                $instruction = "Rewrite the following text in the first person using different words";
+                $instruction = "Rewrite the following text using similar words";
 
-                if ($keyword) {
-                    $instruction . " and including the keyword \"" . $keyword . "\"";
-                }
                 $messages->push([
                     'role' => 'user',
                     'content' => $instruction . ": \n\n" . $paragraph
@@ -105,95 +124,66 @@ class BloggifyText implements ShouldQueue
                 $response = $this->chatGpt->request($messages->toArray());
             }
 
-            $messages->push($response['choices'][0]['message']);
-            $summarizedParagraphs->push($response['choices'][0]['message']['content']);
+            $messages->push([
+                'role' => 'assistant',
+                'content' => $response
+            ]);
+            $rewrittenParagraphs->push($response);
         });
+        $allRewrittenParagraphs = $rewrittenParagraphs->join(' ');
 
-        $mainSummary = $summarizedParagraphs->join(' ');
+        $mainSummary = $this->chatGpt->request([[
+            'role' => 'user',
+            'content' => "Summarize the following text using a maximum of 1500 words:\n\n\n" . $allRewrittenParagraphs
+        ]]);
+
         $this->textRequest->update(['summary' => $mainSummary]);
     }
 
-    public function generateSubheaders()
+    public function generateOutline()
     {
-        $keyword = $this->textRequest->keyword;
-        $tone = $this->textRequest->tone;
-        $response = $this->chatGpt->request([[
-            'role' => 'user',
-            'content' => "Create 7 subheaders, with maximum of 7 words each, using the keyword $keyword, with a $tone tone, for the following text: \n\n" . $this->textRequest->summary
-        ]]);
-        $rawSubheaders = $response['choices'][0]['message']['content'];
-        $subheaderArray = explode("\n", $rawSubheaders);
-        $subheaders = array_filter($subheaderArray, function ($subheader) {
-            return is_numeric(substr(trim($subheader), 0, 1));
-        });
-        $this->textRequest->update(['subheaders' => $subheaders]);
-    }
-
-    public function generateParagraphs()
-    {
-        $mainText = "";
-        $keyword = $this->textRequest->keyword;
-        $tone = $this->textRequest->tone;
-        foreach ($this->textRequest->subheaders as $subheader) {
-            $response = $this->chatGpt->request([[
+        $response = $this->chatGpt->request([
+            [
                 'role' => 'user',
-                'content' => "Taking into account the following summary for context: \n\n" . $this->textRequest->summary . ". " . $mainText .
-                    "\n\n Write 3 paragraphs, in the first person, using the keyword $keyword, with a $tone tone, about the following subtopic \n \"" . $subheader . "\""
-            ]]);
-            $mainText .= "\n" . "<h2>" . preg_replace('/^\d+\./', '', $subheader) . "</h2>" . "\n" . $response['choices'][0]['message']['content'];
+                'content' =>   "Create an indept and comprehensive blog post outline, with maximum of two levels, with a " . $this->textRequest->tone . " tone, that will be " . $this->textRequest->target_word_count . " words long, using roman numerals indicating main topics and alphabet letters to indicate subtopics, for example: \n\n I. Main Topic \n A. Subtopic 1 \n B. Subtopic 2 \n C. Subtopic 3 \n\n The outline should be based on the following text: \n\n" . $this->textRequest->summary
+            ]
+        ]);
+        Log::debug('Outline: ' . $response);
+        $this->textRequest->update(['outline' => $response, 'raw_structure' => TextRequestHelper::parseOutlineToRawStructure($response)]);
+    }
+
+    // public function generateFirstExpansion()
+    // {
+    //     $response = $this->chatGpt->request([
+    //         [
+    //             'role' => 'user',
+    //             'content' =>  "Write a blog post, with a " . $this->textRequest->tone . " tone, using the keyword '" . $this->textRequest->keyword . "', using the following structure as example: \n\n" .  "I. Topic \n   <p>Paragraph 1</p><p>Paragraph 2</p>\n\n\nAnd using this exact outline: \n\n" . $this->textRequest->outline . "\n\n\nThis is a summary to also be used as context: \n\n" . $this->textRequest->summary
+    //         ]
+    //     ]);
+
+    //     Log::debug('First expansion:' . $response);
+    //     $this->textRequest->update(['raw_structure' => $this->parseExpandedTextToRawStructure($response)]);
+    // }
+
+    public function expandText()
+    {
+        $rawStructure = $this->textRequest->raw_structure;
+
+        foreach ($this->textRequest->raw_structure as $key => $section) {
+            $response = $this->chatGpt->request([
+                [
+                    'role' => 'user',
+                    'content' =>  "Given the following text: \n\n" . $this->textRequest->normalized_structure . "\n\n\nUsing a " . $this->textRequest->tone . " tone, and using <p> tags, expand more on: \n\n" . "<h2>" . $section['subheader'] . "</h2>" . collect($section['content'])->implode('.')
+                ]
+
+            ]);
+            Log::debug($response);
+            $rawStructure[$key]['content'] = TextRequestHelper::parseHtmlTagsToRawStructure($response);
+            $this->textRequest->update(['raw_structure' => $rawStructure]);
+            $this->textRequest->refresh();
         }
-        $this->textRequest->update(['final_text' => $mainText]);
-    }
 
-    public function generateTitle()
-    {
-        $keyword = $this->textRequest->keyword;
-        $tone = $this->textRequest->tone;
-        $response = $this->chatGpt->request([[
-            'role' => 'user',
-            'content' => "Write a title, with a maximum of 7 words, using the keyword $keyword and with a $tone tone, for the following text: \n\n" . $this->textRequest->final_text
-        ]]);
-        $title = $response['choices'][0]['message']['content'];
-        $this->textRequest->update(['title' => $title]);
-    }
-
-    public function generateIntro()
-    {
-        $tone = $this->textRequest->tone;
-        $response = $this->chatGpt->request([[
-            'role' => 'user',
-            'content' => "Write an intro, with a $tone tone, for the following title: \n\n" . $this->textRequest->title
-        ]]);
-        $intro = $response['choices'][0]['message']['content'];
-        $mainText = $intro . "\n" . $this->textRequest->final_text;
-        $this->textRequest->update(['final_text' => $mainText]);
-    }
-
-    public function generateConclusion()
-    {
-        $tone = $this->textRequest->tone;
-        $response = $this->chatGpt->request([[
-            'role' => 'user',
-            'content' => "Write a conclusion, with a $tone tone, highlighting the most important parts of the following text: \n\n" . $this->textRequest->final_text
-        ]]);
-        $end = $response['choices'][0]['message']['content'];
-        $mainText = $this->textRequest->final_text . "\n" . $end;
-        $this->textRequest->update(['final_text' => $mainText]);
-    }
-
-    public function parseToHtmlTags()
-    {
-        $paragraphs = explode("\n", $this->textRequest->final_text);
-        $ptagsArray = collect([]);
-        foreach ($paragraphs as $paragraph) {
-            if (strpos($paragraph, "<") === false || strpos($paragraph, ">") === false) {
-                $ptagsArray->push("<p>" . trim($paragraph) . "</p>");
-            } else {
-                $ptagsArray->push($paragraph);
-            }
-        }
-        $finalText = preg_replace('/<[^\/>][^>]*><\/[^>]+>/', '', $ptagsArray->join(''));
-        $this->textRequest->update(['final_text' => $finalText]);
+        $this->textRequest->update(['final_text' => $this->textRequest->normalized_structure]);
     }
 
     public function generateMetaDescription()
@@ -204,7 +194,7 @@ class BloggifyText implements ShouldQueue
             'role' => 'user',
             'content' => "Write a meta description of a maximum of 20 words, with a $tone tone, using the keyword $keyword, for the following text: \n\n" . $this->textRequest->final_text
         ]]);
-        $meta = $response['choices'][0]['message']['content'];
+        $meta = $response;
         $this->textRequest->update(['meta_description' => $meta]);
     }
 }

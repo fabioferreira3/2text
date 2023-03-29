@@ -68,7 +68,7 @@ class DownloadAudio implements ShouldQueue
                     ->url($this->textRequest->source_url)
             )->getVideos();
 
-            Log::debug($collection);
+            // Log::debug($collection);
 
             $this->textRequest->update(['audio_file_path' => $collection[0]->getFile()]);
         } catch (Exception $e) {

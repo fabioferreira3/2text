@@ -14,6 +14,7 @@ class NewPost extends Component
     public string $language;
     public string $keyword;
     public string $tone;
+    public bool $modal;
 
     public function __construct()
     {
@@ -23,6 +24,7 @@ class NewPost extends Component
         $this->language = 'en';
         $this->keyword = '';
         $this->tone = '';
+        $this->modal = false;
     }
 
     public function render()
@@ -43,5 +45,10 @@ class NewPost extends Component
 
         ProcessTextRequest::dispatch($textRequest);
         return redirect()->to('/pending');
+    }
+
+    public function openModal()
+    {
+        $this->modal = true;
     }
 }
