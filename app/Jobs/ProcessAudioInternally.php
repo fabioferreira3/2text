@@ -3,12 +3,13 @@
 namespace App\Jobs;
 
 use App\Models\TextRequest;
-use App\Packages\Whisper\Whisper;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class ProcessAudio implements ShouldQueue
 {
@@ -33,25 +34,20 @@ class ProcessAudio implements ShouldQueue
      */
     public function handle()
     {
-        $whisper = new Whisper($this->textRequest->audio_file_path);
-        $response = $whisper->request();
+        $fileName = Str::uuid() . '.mp3';
+        $processer = $this->defineProcesser();
+        $response = Http::timeout(900)
+            ->attach('audio_file', file_get_contents($this->textRequest->audio_file_path), $fileName)
+            ->post($processer);
 
-        $this->textRequest->update(['original_text' => $response['text']]);
-        // $fileName = Str::uuid() . '.mp3';
-        // $processer = $this->defineProcesser();
-        // $response = Http::timeout(900)
-        //     ->attach('audio_file', file_get_contents($this->textRequest->audio_file_path), $fileName)
-        //     ->post($processer);
+        if ($response->failed()) {
+            return $response->throw();
+        }
 
-        // if ($response->failed()) {
-        //     return $response->throw();
-        // }
-
-        // if ($response->successful()) {
-        //     $originalText = Str::squish($response->json('text'));
-        //     $this->textRequest->update(['original_text' => $originalText]);
-        //     //    event(new AudioProcessed($this->textRequest));
-        // }
+        if ($response->successful()) {
+            $originalText = Str::squish($response->json('text'));
+            $this->textRequest->update(['original_text' => $originalText]);
+        }
     }
 
     public function defineProcesser()

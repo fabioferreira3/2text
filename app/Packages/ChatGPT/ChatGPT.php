@@ -14,9 +14,7 @@ class ChatGPT
 
     public function __construct($model = 'gpt-4', $shouldStream = false)
     {
-        //$this->model = 'gpt-3.5-turbo';
         $this->model = $model;
-        //$this->model = 'gpt-4-0314';
         $this->shouldStream = $shouldStream;
         $this->defaultMessages = [
             [

@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
 class BloggifyText implements ShouldQueue
 {
@@ -38,6 +39,10 @@ class BloggifyText implements ShouldQueue
      */
     public function handle()
     {
+        if (Str::wordCount($this->textRequest->original_text) < 150) {
+            throw new \Exception('Text is too short');
+        }
+
         if (!$this->textRequest->summary) {
             if ($this->textRequest->word_count > 2000) {
                 $this->repo->generateSummary($this->textRequest);
