@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\TextRequest;
+use App\Models\TextRequestLog;
+use App\Observers\TextRequestLogObserver;
 use App\Observers\TextRequestObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -30,6 +32,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         TextRequest::observe(TextRequestObserver::class);
+        TextRequestLog::observe(TextRequestLogObserver::class);
     }
 
     /**

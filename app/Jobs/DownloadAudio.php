@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Events\AudioDownloaded;
 use App\Models\TextRequest;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -67,8 +66,6 @@ class DownloadAudio implements ShouldQueue
                     ->output($fileName)
                     ->url($this->textRequest->source_url)
             )->getVideos();
-
-            // Log::debug($collection);
 
             $this->textRequest->update(['audio_file_path' => $collection[0]->getFile()]);
         } catch (Exception $e) {

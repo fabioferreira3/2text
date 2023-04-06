@@ -34,7 +34,9 @@ class NewPost extends Component
 
     public function process()
     {
-        $textRequest = TextRequestRepository::create([
+        $textRequest = new TextRequestRepository();
+
+        $textRequest = $textRequest->create([
             'original_text' => $this->free_text,
             'source_url' => $this->source_url,
             'source_provider' => $this->source_provider,

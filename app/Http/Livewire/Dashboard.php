@@ -36,12 +36,14 @@ class Dashboard extends Component
 
     public function newPost()
     {
-        return redirect()->to('/blog/new');
+        return redirect()->to('/new');
     }
 
     public function process()
     {
-        $textRequest = TextRequestRepository::create([
+        $textRequest = new TextRequestRepository();
+
+        $textRequest = $textRequest->create([
             'source_url' => $this->source_url,
             'source_provider' => 'youtube',
             'language' => $this->language,

@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('text_requests', function (Blueprint $table) {
-            $table->json('paragraphs')->default('[]');
+            $table->dropColumn('target_word_count');
+            $table->smallInteger('target_headers_count')->default(5);
         });
     }
 
@@ -26,7 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('text_requests', function (Blueprint $table) {
-            $table->dropColumn('paragraphs');
+            $table->dropColumn('target_headers_count');
+            $table->smallInteger('target_word_count')->default(500);
         });
     }
 };

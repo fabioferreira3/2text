@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('text_requests', function (Blueprint $table) {
-            $table->json('paragraphs')->default('[]');
+            $table->integer('char_count')->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('text_requests', function (Blueprint $table) {
-            $table->dropColumn('paragraphs');
+            $table->dropColumn('char_count');
         });
     }
 };

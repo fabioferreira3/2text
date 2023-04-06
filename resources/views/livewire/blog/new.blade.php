@@ -79,12 +79,15 @@
                         class="p-3 rounded-lg border border-zinc-200"
                     >
                         <option value="">Default</option>
-                        <option value="funny">Funny</option>
                         <option value="academic">Academic</option>
+                        <option value="adventurous">Adventurous</option>
+                        <option value="casual">Casual</option>
                         <option value="dramatic">Dramatic</option>
+                        <option value="formal">Formal</option>
+                        <option value="funny">Funny</option>
                         <option value="misterious">Misterious</option>
-                        <option value="optimistic">Optimistic</option>
                         <option value="pessimistic">Pessimistic</option>
+                        <option value="optimistic">Optimistic</option>
                     </select>
                 </div>
                 <div class="flex justify-center mt-4">

@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('text_requests', function (Blueprint $table) {
-            $table->json('paragraphs')->default('[]');
+        Schema::table('text_request_logs', function (Blueprint $table) {
+            $table->integer('token_usage')->default(0);
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('text_requests', function (Blueprint $table) {
-            $table->dropColumn('paragraphs');
+        Schema::table('text_request_logs', function (Blueprint $table) {
+            $table->dropColumn('token_usage');
         });
     }
 };

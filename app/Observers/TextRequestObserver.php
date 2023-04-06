@@ -18,31 +18,7 @@ class TextRequestObserver
     {
         if ($textRequest->isDirty('final_text')) {
             $textRequest->word_count = Str::wordCount($textRequest->final_text);
-        }
-    }
-
-    /**
-     * Handle the TextRequest "saved" event.
-     *
-     * @param  \App\Models\TextRequest  $textRequest
-     * @return void
-     */
-    public function saved(TextRequest $textRequest)
-    {
-        if ($textRequest->isDirty('title')) {
-            $textRequest->logs()->create(['type' => 'title', 'content' => $textRequest->title]);
-        }
-
-        if ($textRequest->isDirty('final_text')) {
-            $textRequest->logs()->create(['type' => 'final_text', 'content' => $textRequest->final_text]);
-        }
-
-        if ($textRequest->isDirty('summary')) {
-            $textRequest->logs()->create(['type' => 'summary', 'content' => $textRequest->summary]);
-        }
-
-        if ($textRequest->isDirty('meta_description')) {
-            $textRequest->logs()->create(['type' => 'meta_description', 'content' => $textRequest->meta_description]);
+            $textRequest->char_count = strlen($textRequest->final_text);
         }
     }
 }
