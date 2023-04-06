@@ -53,14 +53,14 @@ class Dashboard extends Component
 
         ProcessRequestFromUrl::dispatchIf($textRequest->source_url, $textRequest);
 
-        Bus::chain([
-            new DownloadAudio($textRequest->refresh()),
-            new ProcessAudio($textRequest->refresh()),
-            new BloggifyText($textRequest->refresh()),
-            function () use ($textRequest) {
-                $textRequest->refresh();
-                $textRequest->update(['status' => 'finished']);
-            }
-        ])->dispatch();
+        // Bus::chain([
+        //     new DownloadAudio($textRequest->refresh()),
+        //     new ProcessAudio($textRequest->refresh()),
+        //     new BloggifyText($textRequest->refresh()),
+        //     function () use ($textRequest) {
+        //         $textRequest->refresh();
+        //         $textRequest->update(['status' => 'finished']);
+        //     }
+        // ])->dispatch();
     }
 }
