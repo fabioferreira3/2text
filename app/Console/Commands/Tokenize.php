@@ -27,9 +27,9 @@ class Tokenize extends Command
      */
     public function handle()
     {
-        $python = '/usr/local/bin/python';
+        $python = app()->environment('production') ? '/usr/bin/python' : '/usr/local/bin/python';
 
-        $script = '/var/www/html/file.py';
+        $script = app()->environment('production') ? '/app/tiktoken.py' : '/var/www/html/tiktoken.py';
 
         $string = $this->argument('string');
 

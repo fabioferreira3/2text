@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\TextRequest;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -47,6 +48,8 @@ class ProcessAudio implements ShouldQueue
         if ($response->successful()) {
             $originalText = Str::squish($response->json('text'));
             $this->textRequest->update(['original_text' => $originalText]);
+        } else {
+            throw new Exception('Unable to process audio on Whisper');
         }
     }
 

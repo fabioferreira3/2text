@@ -7,7 +7,6 @@ use App\Helpers\PromptHelper;
 use App\Helpers\TextRequestHelper;
 use App\Models\TextRequest;
 use App\Packages\ChatGPT\ChatGPT;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class TextRequestRepository
@@ -59,7 +58,6 @@ class TextRequestRepository
             ]
         ]);
 
-        //Log::debug('First pass: ' . $response['content']);
         $textRequest->update(['raw_structure' => TextRequestHelper::parseHtmlTagsToRawStructure($response['content'])]);
         $this->saveField($textRequest, ['field' => 'final_text', 'content' => str_replace(["\r", "\n"], '', $textRequest->normalized_structure)], $response['token_usage']);
     }
@@ -84,7 +82,6 @@ class TextRequestRepository
                 ]
 
             ]);
-            //Log::debug($response['content']);
             $rawStructure[$key]['content'] = $response['content'];
             $this->saveField($textRequest, ['field' => 'raw_structure', 'content' => $rawStructure], $response['token_usage']);
             $textRequest->refresh();
@@ -190,43 +187,4 @@ class TextRequestRepository
         ]]);
         $this->saveField($textRequest, ['field' => 'meta_description', 'content' => $response['content']], $response['token_usage']);
     }
-
-    // public function rewriteText(TextRequest $textRequest)
-    // {
-    //     $model = ChatGptModel::GPT_4->value;
-    //     if ($textRequest->final_text_token_count > 4000) {
-    //         $model = ChatGptModel::GPT_4_32_0314->value;
-    //     }
-
-    //     $chatGpt = new ChatGPT($model);
-    //     $response = $chatGpt->request([[
-    //         'role' => 'user',
-    //         'content' => "Rewrite the following text following these instructions:\n\n\n-The whole text should be concise and compreensive\n-The whole text must not look like it's a combination of smaller texts that have introduction and conclusion each. Instead, each section should contribute to the overall theme of the text.\n- Split the paragraphs using <p> tags\n\n\nText:\n\n" . $textRequest->final_text
-    //     ]]);
-    //     Log::debug($response['content']);
-    //     $this->saveField($textRequest, ['field' => 'final_text', 'content' => $response['content']], $response['token_usage']);
-    // }
-
-    // public static function reduceText(TextRequest $textRequest)
-    // {
-    //     $chatGpt = new ChatGPT();
-    //     $rawStructure = $textRequest->raw_structure;
-    //     foreach ($textRequest->raw_structure as $key => $section) {
-    //         if ($textRequest->word_count <= ceil($textRequest->target_word_count + ($textRequest->target_word_count * (10 / 100)))) {
-    //             break;
-    //         }
-    //         $length = ceil(Str::wordCount($section['content']) / 2);
-    //         $response = $chatGpt->request([
-    //             [
-    //                 'role' => 'user',
-    //                 'content' =>  "Rewrite the following text using a maximum of $length words:\n\n\n" . $section['content']
-    //             ]
-
-    //         ]);
-    //         $rawStructure[$key]['content'] = $response['content'];
-    //         self::saveField($textRequest, ['field' => 'raw_structure', 'content' => $rawStructure], $response['token_usage']);
-    //         self::saveField($textRequest, ['field' => 'final_text', 'content' => $textRequest->normalized_structure], []);
-    //         $textRequest->refresh();
-    //     }
-    // }
 }

@@ -57,8 +57,9 @@ class BloggifyText implements ShouldQueue
 
         if (!$this->textRequest->final_text) {
             $this->repo->createFirstPass($this->textRequest);
+            $this->increaseProgressBy(25);
             $this->repo->expandText($this->textRequest);
-            $this->increaseProgressBy(50);
+            $this->increaseProgressBy(25);
         }
 
         if (!$this->textRequest->meta_description) {
