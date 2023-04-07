@@ -64,6 +64,7 @@ class TextRequestRepository
             $this->saveField($textRequest, ['field' => 'final_text', 'content' => str_replace(["\r", "\n"], '', $textRequest->normalized_structure)], $response['token_usage']);
         } catch (Exception $e) {
             $textRequest->update(['status' => 'failed']);
+            throw new Exception('Failed to create first pass: ' . $e->getMessage());
         }
     }
 
@@ -96,104 +97,125 @@ class TextRequestRepository
             $this->saveField($textRequest, ['field' => 'final_text', 'content' => str_replace(["\r", "\n"], '', $textRequest->normalized_structure)], []);
         } catch (Exception $e) {
             $textRequest->update(['status' => 'failed']);
+            throw new Exception('Failed to expand text: ' . $e->getMessage());
         }
     }
 
     public function generateTitle(TextRequest $textRequest)
     {
-        $this->promptHelper->setLanguage($textRequest->language);
-        $chatGpt = new ChatGPT(ChatGptModel::GPT_3_TURBO->value);
-        $response = $chatGpt->request([[
-            'role' => 'user',
-            'content' => $this->promptHelper->writeTitle($textRequest->context, $textRequest->tone, $textRequest->keyword)
-        ]]);
-        $this->saveField($textRequest, ['field' => 'title', 'content' => $response['content']], $response['token_usage']);
+        try {
+            $this->promptHelper->setLanguage($textRequest->language);
+            $chatGpt = new ChatGPT(ChatGptModel::GPT_3_TURBO->value);
+            $response = $chatGpt->request([[
+                'role' => 'user',
+                'content' => $this->promptHelper->writeTitle($textRequest->context, $textRequest->tone, $textRequest->keyword)
+            ]]);
+            $this->saveField($textRequest, ['field' => 'title', 'content' => $response['content']], $response['token_usage']);
+        } catch (Exception $e) {
+            $textRequest->update(['status' => 'failed']);
+            throw new Exception('Failed to create title: ' . $e->getMessage());
+        }
     }
 
     public function generateSummary(TextRequest $textRequest)
     {
-        $this->promptHelper->setLanguage($textRequest->language);
-        $chatGpt = new ChatGPT(ChatGptModel::GPT_3_TURBO->value);
+        try {
+            $this->promptHelper->setLanguage($textRequest->language);
+            $chatGpt = new ChatGPT(ChatGptModel::GPT_3_TURBO->value);
 
-        if ($textRequest->original_text_token_count < 2000) {
-            return;
-        }
-
-        $sentences = collect(preg_split("/(?<=[.?!])\s+(?=([^\d\w]*[A-Z][^.?!]+))/", $textRequest->original_text, -1, PREG_SPLIT_NO_EMPTY));
-        $paragraphs = collect([]);
-
-        $sentences->chunk(12)->each(function ($chunk) use ($paragraphs) {
-            $paragraphs->push($chunk);
-        });
-
-        $paragraphs = $paragraphs->map(function ($paragraph) {
-            return $paragraph->join(' ');
-        });
-
-        $rewrittenParagraphs = collect([]);
-        $messages = collect([]);
-
-        // Paragraphs generation
-        $paragraphs->each(function ($paragraph) use (&$messages, &$rewrittenParagraphs, &$chatGpt, &$textRequest) {
-            $allContent = $messages->map(function ($message) {
-                return $message['content'];
-            })->join("");
-            $tokenCount = $chatGpt->countTokens($allContent);
-            $assistantContent = $messages->filter(function ($message) {
-                return $message['role'] === 'assistant';
-            })->map(function ($message) {
-                return $message['content'];
-            })->join("");
-
-            if ($tokenCount > 2200) {
-                $messages = collect([]);
-                $rewrittenParagraphs = collect([]);
-                $response = $chatGpt->request([[
-                    'role' => 'user',
-                    'content' => $this->promptHelper->summarize($assistantContent)
-                ]]);
-            } else {
-                $messages->push([
-                    'role' => 'user',
-                    'content' => $this->promptHelper->rewriteWithSimilarWords($paragraph)
-                ]);
-                $response = $chatGpt->request($messages->toArray());
+            if ($textRequest->original_text_token_count < 2000) {
+                return;
             }
 
-            $messages->push([
-                'role' => 'assistant',
-                'content' => $response['content']
-            ]);
-            $rewrittenParagraphs->push($response['content']);
-            $this->logModelChange($textRequest, ['field' => 'partial_summary', 'content' => $response['content']], $response['token_usage']);
-        });
-        $allRewrittenParagraphs = $rewrittenParagraphs->join(' ');
-        $this->saveField($textRequest, ['field' => 'summary', 'content' => $allRewrittenParagraphs], []);
+            $sentences = collect(preg_split("/(?<=[.?!])\s+(?=([^\d\w]*[A-Z][^.?!]+))/", $textRequest->original_text, -1, PREG_SPLIT_NO_EMPTY));
+            $paragraphs = collect([]);
+
+            $sentences->chunk(12)->each(function ($chunk) use ($paragraphs) {
+                $paragraphs->push($chunk);
+            });
+
+            $paragraphs = $paragraphs->map(function ($paragraph) {
+                return $paragraph->join(' ');
+            });
+
+            $rewrittenParagraphs = collect([]);
+            $messages = collect([]);
+
+            // Paragraphs generation
+            $paragraphs->each(function ($paragraph) use (&$messages, &$rewrittenParagraphs, &$chatGpt, &$textRequest) {
+                $allContent = $messages->map(function ($message) {
+                    return $message['content'];
+                })->join("");
+                $tokenCount = $chatGpt->countTokens($allContent);
+                $assistantContent = $messages->filter(function ($message) {
+                    return $message['role'] === 'assistant';
+                })->map(function ($message) {
+                    return $message['content'];
+                })->join("");
+
+                if ($tokenCount > 2200) {
+                    $messages = collect([]);
+                    $rewrittenParagraphs = collect([]);
+                    $response = $chatGpt->request([[
+                        'role' => 'user',
+                        'content' => $this->promptHelper->summarize($assistantContent)
+                    ]]);
+                } else {
+                    $messages->push([
+                        'role' => 'user',
+                        'content' => $this->promptHelper->rewriteWithSimilarWords($paragraph)
+                    ]);
+                    $response = $chatGpt->request($messages->toArray());
+                }
+
+                $messages->push([
+                    'role' => 'assistant',
+                    'content' => $response['content']
+                ]);
+                $rewrittenParagraphs->push($response['content']);
+                $this->logModelChange($textRequest, ['field' => 'partial_summary', 'content' => $response['content']], $response['token_usage']);
+            });
+            $allRewrittenParagraphs = $rewrittenParagraphs->join(' ');
+            $this->saveField($textRequest, ['field' => 'summary', 'content' => $allRewrittenParagraphs], []);
+        } catch (Exception $e) {
+            $textRequest->update(['status' => 'failed']);
+            throw new Exception('Failed to generate summary: ' . $e->getMessage());
+        }
     }
 
     public function generateOutline(TextRequest $textRequest)
     {
-        $this->promptHelper->setLanguage($textRequest->language);
-        $chatGpt = new ChatGPT();
-        $response = $chatGpt->request([
-            [
-                'role' => 'user',
-                'content' =>   $this->promptHelper->writeOutline($textRequest->context, $textRequest->target_headers_count, $textRequest->tone)
-            ]
-        ]);
+        try {
+            $this->promptHelper->setLanguage($textRequest->language);
+            $chatGpt = new ChatGPT();
+            $response = $chatGpt->request([
+                [
+                    'role' => 'user',
+                    'content' =>   $this->promptHelper->writeOutline($textRequest->context, $textRequest->target_headers_count, $textRequest->tone)
+                ]
+            ]);
 
-        $textRequest->update(['raw_structure' => TextRequestHelper::parseOutlineToRawStructure($response['content'])]);
-        $this->saveField($textRequest, ['field' => 'outline', 'content' => $response['content']], $response['token_usage']);
+            $textRequest->update(['raw_structure' => TextRequestHelper::parseOutlineToRawStructure($response['content'])]);
+            $this->saveField($textRequest, ['field' => 'outline', 'content' => $response['content']], $response['token_usage']);
+        } catch (Exception $e) {
+            $textRequest->update(['status' => 'failed']);
+            throw new Exception('Failed to generate outline: ' . $e->getMessage());
+        }
     }
 
     public function generateMetaDescription(TextRequest $textRequest)
     {
-        $this->promptHelper->setLanguage($textRequest->language);
-        $chatGpt = new ChatGPT(ChatGptModel::GPT_3_TURBO->value);
-        $response = $chatGpt->request([[
-            'role' => 'user',
-            'content' => $this->promptHelper->writeMetaDescription($textRequest->context, $textRequest->tone, $textRequest->keyword)
-        ]]);
-        $this->saveField($textRequest, ['field' => 'meta_description', 'content' => $response['content']], $response['token_usage']);
+        try {
+            $this->promptHelper->setLanguage($textRequest->language);
+            $chatGpt = new ChatGPT(ChatGptModel::GPT_3_TURBO->value);
+            $response = $chatGpt->request([[
+                'role' => 'user',
+                'content' => $this->promptHelper->writeMetaDescription($textRequest->context, $textRequest->tone, $textRequest->keyword)
+            ]]);
+            $this->saveField($textRequest, ['field' => 'meta_description', 'content' => $response['content']], $response['token_usage']);
+        } catch (Exception $e) {
+            $textRequest->update(['status' => 'failed']);
+            throw new Exception('Failed to generate meta description: ' . $e->getMessage());
+        }
     }
 }
