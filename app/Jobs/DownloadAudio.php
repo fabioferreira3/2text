@@ -78,6 +78,8 @@ class DownloadAudio implements ShouldQueue
                 throw new Exception('Audio download error: unable to download');
             }
 
+            Log::debug($collection);
+
             $this->textRequest->update(['audio_file_path' => $collection[0]->getFile()]);
         } catch (Exception $e) {
             Log::error($e->getMessage());
