@@ -54,7 +54,12 @@ class DownloadAudio implements ShouldQueue
     {
         try {
             $yt = new YoutubeDl();
-            $yt->setBinPath('/usr/local/bin/yt-dlp');
+            if (app()->environment('production')) {
+                $yt->setBinPath('/app/yt-dlp');
+            } else {
+                $yt->setBinPath('/usr/local/bin/yt-dlp');
+            }
+
             $fileName = Str::uuid() . '.%(ext)s';
 
             $collection = $yt->download(
