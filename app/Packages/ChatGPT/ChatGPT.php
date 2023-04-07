@@ -2,6 +2,7 @@
 
 namespace App\Packages\ChatGPT;
 
+use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Laravel\Facades\OpenAI;
@@ -26,31 +27,35 @@ class ChatGPT
 
     public function request(array $messages)
     {
-        $response = OpenAI::chat()->create([
-            'model' => $this->model,
-            'messages' => [
-                ...$this->defaultMessages,
-                ...$messages
-            ]
-        ]);
+        try {
+            $response = OpenAI::chat()->create([
+                'model' => $this->model,
+                'messages' => [
+                    ...$this->defaultMessages,
+                    ...$messages
+                ]
+            ]);
 
-        foreach ($response->choices as $result) {
-            if ($result->message->role === 'assistant') {
-                if ($result->finishReason !== 'stop') {
-                    Log::error("finish reason: " . $result->finishReason);
-                    Log::error($result->message->content);
+            foreach ($response->choices as $result) {
+                if ($result->message->role === 'assistant') {
+                    if ($result->finishReason !== 'stop') {
+                        Log::error("finish reason: " . $result->finishReason);
+                        Log::error($result->message->content);
+                    }
+
+                    return [
+                        'content' => $result->message->content,
+                        'token_usage' => [
+                            'model' => $response->model,
+                            'prompt' => $response->usage->promptTokens,
+                            'completion' => $response->usage->completionTokens,
+                            'total' => $response->usage->totalTokens
+                        ]
+                    ];
                 }
-
-                return [
-                    'content' => $result->message->content,
-                    'token_usage' => [
-                        'model' => $response->model,
-                        'prompt' => $response->usage->promptTokens,
-                        'completion' => $response->usage->completionTokens,
-                        'total' => $response->usage->totalTokens
-                    ]
-                ];
             }
+        } catch (Exception $e) {
+            throw new Exception('Unable to connect to OpenAI API. Please try again later or contact. ' . $e->getMessage());
         }
     }
 

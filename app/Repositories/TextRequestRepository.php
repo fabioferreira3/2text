@@ -7,6 +7,7 @@ use App\Helpers\PromptHelper;
 use App\Helpers\TextRequestHelper;
 use App\Models\TextRequest;
 use App\Packages\ChatGPT\ChatGPT;
+use Exception;
 use Illuminate\Support\Str;
 
 class TextRequestRepository
@@ -50,44 +51,52 @@ class TextRequestRepository
 
     public function createFirstPass(TextRequest $textRequest)
     {
-        $chatGpt = new ChatGPT();
-        $response = $chatGpt->request([
-            [
-                'role' => 'user',
-                'content' =>  "Write a blog article, using a " . $textRequest->tone . " tone, using <p> tags to surround paragraphs, <h2> tags to surround main topics and <h3> tags to surround inner topics, based on the following outline: \n\n" . $textRequest->outline . "\n\n\nFurther instructions: Do not surround h2 and h3 tags with p tags, for example: \n\n Bad output:\n<p><h2>Topic</h2></p>\n\nBad output:\n<p><h2>Topic</h2><h3>Inner topic</h3></p>\n\n\nThe outline structure should be parsed to html tags like this:\n\nInput:\nA. Topic 1\n\nOutput:<h3>A. Topic 1</h3>\n\nInput:\nB. Topic 2\n\nOutput:<h3>B. Topic 2</h3>"
-            ]
-        ]);
+        try {
+            $chatGpt = new ChatGPT();
+            $response = $chatGpt->request([
+                [
+                    'role' => 'user',
+                    'content' =>  "Write a blog article, using a " . $textRequest->tone . " tone, using <p> tags to surround paragraphs, <h2> tags to surround main topics and <h3> tags to surround inner topics, based on the following outline: \n\n" . $textRequest->outline . "\n\n\nFurther instructions: Do not surround h2 and h3 tags with p tags, for example: \n\n Bad output:\n<p><h2>Topic</h2></p>\n\nBad output:\n<p><h2>Topic</h2><h3>Inner topic</h3></p>\n\n\nThe outline structure should be parsed to html tags like this:\n\nInput:\nA. Topic 1\n\nOutput:<h3>A. Topic 1</h3>\n\nInput:\nB. Topic 2\n\nOutput:<h3>B. Topic 2</h3>"
+                ]
+            ]);
 
-        $textRequest->update(['raw_structure' => TextRequestHelper::parseHtmlTagsToRawStructure($response['content'])]);
-        $this->saveField($textRequest, ['field' => 'final_text', 'content' => str_replace(["\r", "\n"], '', $textRequest->normalized_structure)], $response['token_usage']);
+            $textRequest->update(['raw_structure' => TextRequestHelper::parseHtmlTagsToRawStructure($response['content'])]);
+            $this->saveField($textRequest, ['field' => 'final_text', 'content' => str_replace(["\r", "\n"], '', $textRequest->normalized_structure)], $response['token_usage']);
+        } catch (Exception $e) {
+            $textRequest->update(['status' => 'failed']);
+        }
     }
 
     public function expandText(TextRequest $textRequest)
     {
-        $this->promptHelper->setLanguage($textRequest->language);
-        $chatGpt = new ChatGPT();
-        $rawStructure = $textRequest->raw_structure;
+        try {
+            $this->promptHelper->setLanguage($textRequest->language);
+            $chatGpt = new ChatGPT();
+            $rawStructure = $textRequest->raw_structure;
 
-        $prompt = $this->promptHelper->givenFollowingText($textRequest->normalized_structure);
+            $prompt = $this->promptHelper->givenFollowingText($textRequest->normalized_structure);
 
-        if (Str::wordCount($textRequest->normalized_structure) <= 1000) {
-            $prompt .= $this->promptHelper->andGivenFollowingContext($textRequest->context);
+            if (Str::wordCount($textRequest->normalized_structure) <= 1000) {
+                $prompt .= $this->promptHelper->andGivenFollowingContext($textRequest->context);
+            }
+
+            foreach ($textRequest->raw_structure as $key => $section) {
+                $response = $chatGpt->request([
+                    [
+                        'role' => 'user',
+                        'content' =>  $prompt . $this->promptHelper->expandOn($section['content'], $textRequest->tone)
+                    ]
+
+                ]);
+                $rawStructure[$key]['content'] = $response['content'];
+                $this->saveField($textRequest, ['field' => 'raw_structure', 'content' => $rawStructure], $response['token_usage']);
+                $textRequest->refresh();
+            }
+
+            $this->saveField($textRequest, ['field' => 'final_text', 'content' => str_replace(["\r", "\n"], '', $textRequest->normalized_structure)], []);
+        } catch (Exception $e) {
+            $textRequest->update(['status' => 'failed']);
         }
-
-        foreach ($textRequest->raw_structure as $key => $section) {
-            $response = $chatGpt->request([
-                [
-                    'role' => 'user',
-                    'content' =>  $prompt . $this->promptHelper->expandOn($section['content'], $textRequest->tone)
-                ]
-
-            ]);
-            $rawStructure[$key]['content'] = $response['content'];
-            $this->saveField($textRequest, ['field' => 'raw_structure', 'content' => $rawStructure], $response['token_usage']);
-            $textRequest->refresh();
-        }
-
-        $this->saveField($textRequest, ['field' => 'final_text', 'content' => str_replace(["\r", "\n"], '', $textRequest->normalized_structure)], []);
     }
 
     public function generateTitle(TextRequest $textRequest)
