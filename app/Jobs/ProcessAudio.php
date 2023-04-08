@@ -35,9 +35,14 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        $fileUrl = Storage::disk('s3')->temporaryUrl($this->textRequest->audio_file_path, now()->addDays(2));
-        $whisper = new Whisper($fileUrl);
+        $fileUrl = Storage::disk('s3')->temporaryUrl($this->textRequest->audio_file_path, now()->addDay());
+        $localFilePath = Storage::disk('local')->path($this->textRequest->audio_file_path);
+        Storage::disk('local')->put($localFilePath, file_get_contents($fileUrl));
+        $content = Storage::disk('local')->get($localFilePath);
+        $whisper = new Whisper($content);
         $response = $whisper->request();
+
+        Storage::disk('local')->delete($localFilePath);
 
         $this->textRequest->update(['original_text' => $response['text']]);
     }
