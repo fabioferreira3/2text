@@ -13,16 +13,13 @@ class ResumeRequests implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public TextRequest $textRequest;
-
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(TextRequest $textRequest)
+    public function __construct()
     {
-        $this->textRequest = $textRequest;
     }
 
     /**
@@ -32,5 +29,11 @@ class ResumeRequests implements ShouldQueue
      */
     public function handle()
     {
+        $failedTextRequests = TextRequest::failed()->get();
+        if ($failedTextRequests->count()) {
+            foreach ($failedTextRequests as $textRequest) {
+                ProcessTextRequest::dispatch($textRequest);
+            }
+        }
     }
 }

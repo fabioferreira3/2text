@@ -35,6 +35,10 @@ class ProcessAudio implements ShouldQueue
      */
     public function handle()
     {
+        if ($this->textRequest->original_text) {
+            return;
+        }
+
         $fileName = Str::uuid() . '.mp3';
         $processer = $this->defineProcesser();
         $response = Http::timeout(900)

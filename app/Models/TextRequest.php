@@ -53,6 +53,16 @@ class TextRequest extends Model
         return $query->where('status', 'pending');
     }
 
+    public function scopeFailed($query)
+    {
+        return $query->where('status', 'failed');
+    }
+
+    public function scopeProcessing($query)
+    {
+        return $query->where('status', 'processing');
+    }
+
     public function getContextAttribute()
     {
         return $this->summary ? $this->summary : $this->original_text;

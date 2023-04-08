@@ -53,6 +53,10 @@ class DownloadAudio implements ShouldQueue
     public function handle()
     {
         try {
+            if ($this->textRequest->audio_file_path) {
+                return;
+            }
+
             $yt = new YoutubeDl();
             if (app()->environment('production')) {
                 $yt->setBinPath('/app/yt-dlp');
@@ -81,9 +85,6 @@ class DownloadAudio implements ShouldQueue
             Log::error($e->getMessage());
             throw new Exception('Audio download error: ' . $e->getMessage());
         }
-
-
-        //event(new AudioDownloade($collection[0]->getFile(), $fileName, $this->textRequest));
     }
 
     /**
