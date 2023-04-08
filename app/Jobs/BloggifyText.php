@@ -6,13 +6,14 @@ use App\Models\TextRequest;
 use App\Packages\ChatGPT\ChatGPT;
 use App\Repositories\TextRequestRepository;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
-class BloggifyText implements ShouldQueue
+class BloggifyText implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -76,5 +77,13 @@ class BloggifyText implements ShouldQueue
     public function increaseProgressBy(int $amount)
     {
         $this->textRequest->update(['progress' => $this->textRequest->progress + $amount]);
+    }
+
+    /**
+     * The unique ID of the job.
+     */
+    public function uniqueId(): string
+    {
+        return 'bloggify_text_' . $this->textRequest->id;
     }
 }

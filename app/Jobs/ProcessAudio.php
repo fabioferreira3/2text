@@ -5,12 +5,14 @@ namespace App\Jobs;
 use App\Models\TextRequest;
 use App\Packages\Whisper\Whisper;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
-class ProcessAudio implements ShouldQueue
+class ProcessAudio implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -33,36 +35,18 @@ class ProcessAudio implements ShouldQueue
      */
     public function handle()
     {
-        $whisper = new Whisper($this->textRequest->audio_file_path);
+        $fileUrl = Storage::disk('s3')->temporaryUrl($this->textRequest->audio_file_path, now()->addDays(2));
+        $whisper = new Whisper($fileUrl);
         $response = $whisper->request();
 
         $this->textRequest->update(['original_text' => $response['text']]);
-        // $fileName = Str::uuid() . '.mp3';
-        // $processer = $this->defineProcesser();
-        // $response = Http::timeout(900)
-        //     ->attach('audio_file', file_get_contents($this->textRequest->audio_file_path), $fileName)
-        //     ->post($processer);
-
-        // if ($response->failed()) {
-        //     return $response->throw();
-        // }
-
-        // if ($response->successful()) {
-        //     $originalText = Str::squish($response->json('text'));
-        //     $this->textRequest->update(['original_text' => $originalText]);
-        //     //    event(new AudioProcessed($this->textRequest));
-        // }
     }
 
-    public function defineProcesser()
+    /**
+     * The unique ID of the job.
+     */
+    public function uniqueId(): string
     {
-        $language = $this->textRequest->language;
-        $service = 'whisper';
-
-        if ($language != 'en') {
-            $service = 'whisper-large';
-        }
-
-        return "http://$service:9000/asr?task=transcribe&language=$language&output=json";
+        return 'process_audio_' . $this->textRequest->id;
     }
 }

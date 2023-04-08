@@ -5,17 +5,19 @@ namespace App\Jobs;
 use App\Models\TextRequest;
 use Exception;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use YoutubeDl\Options;
 use YoutubeDl\YoutubeDl;
 
-class DownloadAudio implements ShouldQueue
+class DownloadAudio implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -80,7 +82,10 @@ class DownloadAudio implements ShouldQueue
                 throw new Exception('Audio download error: unable to download');
             }
 
-            $this->textRequest->update(['audio_file_path' => $collection[0]->getFile()]);
+            $localFilePath = $collection[0]->getFile();
+            Storage::disk('s3')->put($collection[0]->getFile()->getBasename(), file_get_contents($localFilePath));
+
+            $this->textRequest->update(['audio_file_path' => $collection[0]->getFile()->getBasename()]);
         } catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception('Audio download error: ' . $e->getMessage());
@@ -105,5 +110,13 @@ class DownloadAudio implements ShouldQueue
     public function retryUntil()
     {
         return now()->addMinutes(2);
+    }
+
+    /**
+     * The unique ID of the job.
+     */
+    public function uniqueId(): string
+    {
+        return 'download_audio_' . $this->textRequest->id;
     }
 }
