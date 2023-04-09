@@ -5,25 +5,16 @@ namespace App\Packages\ChatGPT;
 use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
-use OpenAI\Laravel\Facades\OpenAI;
 use OpenAI\Factory as OpenAIFactory;
 
 class ChatGPT
 {
-    protected $client;
     protected string $model;
     protected array $defaultMessages;
     protected bool $shouldStream;
 
     public function __construct($model = 'gpt-4', $shouldStream = false)
     {
-        $factory = new OpenAIFactory();
-        $this->client = $factory
-            ->withApiKey(env('OPENAI_API_KEY'))
-            ->withHttpClient($this->client = new \GuzzleHttp\Client([
-                'timeout' => 300.0
-            ]))
-            ->make();
         $this->model = $model;
         $this->shouldStream = $shouldStream;
         $this->defaultMessages = [
@@ -37,7 +28,14 @@ class ChatGPT
     public function request(array $messages)
     {
         try {
-            $response = $this->client->chat()->create([
+            $factory = new OpenAIFactory();
+            $client = $factory
+                ->withApiKey(env('OPENAI_API_KEY'))
+                ->withHttpClient($client = new \GuzzleHttp\Client([
+                    'timeout' => 300.0
+                ]))
+                ->make();
+            $response = $client->chat()->create([
                 'model' => $this->model,
                 'messages' => [
                     ...$this->defaultMessages,
