@@ -4,12 +4,11 @@ namespace App\Jobs;
 
 use App\Models\TextRequest;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Bus;
 
 class ProcessRequestFromUrl
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
 
     public TextRequest $textRequest;
 
