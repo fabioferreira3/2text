@@ -36,10 +36,7 @@ class ProcessRequestFromUrl
             new DownloadAudio($textRequest->refresh()),
             new ProcessAudio($textRequest->refresh()),
             new BloggifyText($textRequest->refresh()),
-            function () use ($textRequest) {
-                $textRequest->refresh();
-                $textRequest->update(['status' => 'finished']);
-            }
+            new FinalizeProcess($textRequest->refresh())
         ])->dispatch();
     }
 }
