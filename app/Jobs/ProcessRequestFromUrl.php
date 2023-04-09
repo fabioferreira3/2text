@@ -3,12 +3,17 @@
 namespace App\Jobs;
 
 use App\Models\TextRequest;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Bus;
 
-class ProcessRequestFromUrl
+class ProcessRequestFromUrl implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public TextRequest $textRequest;
 
@@ -38,5 +43,13 @@ class ProcessRequestFromUrl
             new BloggifyText($textRequest),
             new FinalizeProcess($textRequest)
         ])->dispatch();
+    }
+
+    /**
+     * The unique ID of the job.
+     */
+    public function uniqueId(): string
+    {
+        return 'process_url_request_' . $this->textRequest->id;
     }
 }
