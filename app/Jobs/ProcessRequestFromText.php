@@ -38,10 +38,7 @@ class ProcessRequestFromText implements ShouldQueue
 
         Bus::chain([
             new BloggifyText($textRequest),
-            function () use ($textRequest) {
-                $textRequest->refresh();
-                $textRequest->update(['status' => 'finished']);
-            }
+            new FinalizeProcess($textRequest)
         ])->dispatch();
     }
 }

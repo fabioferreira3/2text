@@ -73,7 +73,7 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
                     ->downloadPath(storage_path('app'))
                     ->extractAudio(true)
                     ->audioFormat('mp3')
-                    ->audioQuality('0') // best
+                    ->audioQuality('4') // 0 = best
                     ->output($fileName)
                     ->url($this->textRequest->source_url)
             )->getVideos();
@@ -83,6 +83,7 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
             }
 
             $localFilePath = $collection[0]->getFile();
+
             Storage::disk('s3')->put($collection[0]->getFile()->getBasename(), file_get_contents($localFilePath));
 
             $this->textRequest->update(['audio_file_path' => $collection[0]->getFile()->getBasename()]);

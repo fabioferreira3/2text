@@ -5,7 +5,7 @@ namespace App\Packages\ChatGPT;
 use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
-use OpenAI\Factory as OpenAIFactory;
+use OpenAI\Factory as OpenAI;
 
 class ChatGPT
 {
@@ -28,7 +28,7 @@ class ChatGPT
     public function request(array $messages)
     {
         try {
-            $factory = new OpenAIFactory();
+            $factory = new OpenAI();
             $client = $factory
                 ->withApiKey(env('OPENAI_API_KEY'))
                 ->withHttpClient($client = new \GuzzleHttp\Client([

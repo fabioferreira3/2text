@@ -28,7 +28,7 @@ class BloggifyText implements ShouldQueue, ShouldBeUnique
      */
     public function __construct(TextRequest $textRequest)
     {
-        //$this->repo = new TextRequestRepository();
+        $this->repo = new TextRequestRepository();
         $this->textRequest = $textRequest->fresh();
         $this->chatGpt = new ChatGPT();
     }
@@ -40,37 +40,37 @@ class BloggifyText implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        // if (Str::wordCount($this->textRequest->original_text) < 150) {
-        //     throw new \Exception('Text is too short');
-        // }
+        if (Str::wordCount($this->textRequest->original_text) < 150) {
+            throw new \Exception('Text is too short');
+        }
 
-        // if (!$this->textRequest->summary) {
-        //     if ($this->textRequest->word_count > 2000) {
-        //         $this->repo->generateSummary($this->textRequest);
-        //     }
-        // }
+        if (!$this->textRequest->summary) {
+            if ($this->textRequest->original_text_word_count > 2000) {
+                $this->repo->generateSummary($this->textRequest);
+            }
+        }
 
-        // if (!$this->textRequest->outline) {
-        //     $this->repo->generateOutline($this->textRequest);
-        //     $this->increaseProgressBy(20);
-        // }
+        if (!$this->textRequest->outline) {
+            $this->repo->generateOutline($this->textRequest);
+            $this->increaseProgressBy(20);
+        }
 
-        // if (!$this->textRequest->final_text) {
-        //     $this->repo->createFirstPass($this->textRequest);
-        //     $this->increaseProgressBy(25);
-        //     $this->repo->expandText($this->textRequest);
-        //     $this->increaseProgressBy(25);
-        // }
+        if (!$this->textRequest->final_text) {
+            $this->repo->createFirstPass($this->textRequest);
+            $this->increaseProgressBy(25);
+            $this->repo->expandText($this->textRequest);
+            $this->increaseProgressBy(25);
+        }
 
-        // if (!$this->textRequest->meta_description) {
-        //     $this->repo->generateMetaDescription($this->textRequest);
-        //     $this->increaseProgressBy(15);
-        // }
+        if (!$this->textRequest->meta_description) {
+            $this->repo->generateMetaDescription($this->textRequest);
+            $this->increaseProgressBy(15);
+        }
 
-        // if (!$this->textRequest->title) {
-        //     $this->repo->generateTitle($this->textRequest);
-        //     $this->increaseProgressBy(15);
-        // }
+        if (!$this->textRequest->title) {
+            $this->repo->generateTitle($this->textRequest);
+            $this->increaseProgressBy(15);
+        }
     }
 
     public function increaseProgressBy(int $amount)

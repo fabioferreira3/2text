@@ -17,9 +17,21 @@ class PromptHelper
     {
         switch ($this->language) {
             case 'en':
-                return "Summarize the following text using maximum of 1500 words: \n\n" . $text;
+                return "Summarize the following text: \n\n" . $text;
             case 'pt':
-                return "Resuma o seguinte texto usando no máximo 1500 palavras: \n\n" . $text;
+                return "Resuma o seguinte texto: \n\n" . $text;
+            default:
+                return '';
+        }
+    }
+
+    public function simplify($text)
+    {
+        switch ($this->language) {
+            case 'en':
+                return "Simplify the following text: \n\n" . $text;
+            case 'pt':
+                return "Simplifique o seguinte texto: \n\n" . $text;
             default:
                 return '';
         }

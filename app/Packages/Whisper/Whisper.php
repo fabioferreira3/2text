@@ -2,7 +2,7 @@
 
 namespace App\Packages\Whisper;
 
-use OpenAI\Laravel\Facades\OpenAI;
+use OpenAI\Factory as OpenAI;
 
 class Whisper
 {
@@ -15,7 +15,14 @@ class Whisper
 
     public function request()
     {
-        $response = OpenAI::audio()->transcribe([
+        $factory = new OpenAI();
+        $client = $factory
+            ->withApiKey(env('OPENAI_API_KEY'))
+            ->withHttpClient($client = new \GuzzleHttp\Client([
+                'timeout' => 300.0
+            ]))
+            ->make();
+        $response = $client->audio()->transcribe([
             'model' => 'whisper-1',
             'file' => fopen($this->file, 'r'),
             'response_format' => 'verbose_json',

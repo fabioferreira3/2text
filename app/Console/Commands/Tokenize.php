@@ -29,7 +29,7 @@ class Tokenize extends Command
     {
         $python = app()->environment('production') ? '/usr/bin/python' : '/usr/local/bin/python';
 
-        $script = app()->environment('production') ? '/app/tiktoken.py' : '/var/www/html/tiktoken.py';
+        $script = app()->environment('production') ? '/app/token-counter.py' : '/var/www/html/token-counter.py';
 
         $string = $this->argument('string');
 

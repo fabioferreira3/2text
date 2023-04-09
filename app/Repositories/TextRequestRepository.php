@@ -123,10 +123,6 @@ class TextRequestRepository
             $this->promptHelper->setLanguage($textRequest->language);
             $chatGpt = new ChatGPT(ChatGptModel::GPT_3_TURBO->value);
 
-            if ($textRequest->original_text_token_count < 2000) {
-                return;
-            }
-
             $sentences = collect(preg_split("/(?<=[.?!])\s+(?=([^\d\w]*[A-Z][^.?!]+))/", $textRequest->original_text, -1, PREG_SPLIT_NO_EMPTY));
             $paragraphs = collect([]);
 
@@ -153,7 +149,7 @@ class TextRequestRepository
                     return $message['content'];
                 })->join("");
 
-                if ($tokenCount > 2200) {
+                if ($tokenCount > 2000) {
                     $messages = collect([]);
                     $rewrittenParagraphs = collect([]);
                     $response = $chatGpt->request([[
@@ -161,18 +157,17 @@ class TextRequestRepository
                         'content' => $this->promptHelper->summarize($assistantContent)
                     ]]);
                 } else {
-                    $messages->push([
+                    $response = $chatGpt->request([[
                         'role' => 'user',
-                        'content' => $this->promptHelper->rewriteWithSimilarWords($paragraph)
-                    ]);
-                    $response = $chatGpt->request($messages->toArray());
+                        'content' => $this->promptHelper->simplify($paragraph)
+                    ]]);
                 }
 
+                $rewrittenParagraphs->push($response['content']);
                 $messages->push([
                     'role' => 'assistant',
                     'content' => $response['content']
                 ]);
-                $rewrittenParagraphs->push($response['content']);
                 $this->logModelChange($textRequest, ['field' => 'partial_summary', 'content' => $response['content']], $response['token_usage']);
             });
             $allRewrittenParagraphs = $rewrittenParagraphs->join(' ');
