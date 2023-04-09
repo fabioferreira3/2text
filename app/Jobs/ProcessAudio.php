@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProcessAudio implements ShouldQueue, ShouldBeUnique
@@ -35,14 +36,17 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        $fileUrl = Storage::disk('s3')->temporaryUrl($this->textRequest->audio_file_path, now()->addDay());
         $localFilePath = Storage::disk('local')->path($this->textRequest->audio_file_path);
-        Storage::disk('local')->put($localFilePath, file_get_contents($fileUrl));
-        $content = Storage::disk('local')->get($localFilePath);
-        $whisper = new Whisper($content);
+
+        if (!Storage::disk('local')->exists($this->textRequest->audio_file_path)) {
+            $fileUrl = Storage::disk('s3')->get($this->textRequest->audio_file_path);
+            Storage::disk('local')->put($this->textRequest->audio_file_path, $fileUrl);
+        }
+
+        $whisper = new Whisper($localFilePath);
         $response = $whisper->request();
 
-        Storage::disk('local')->delete($localFilePath);
+        Storage::disk('local')->delete($this->textRequest->audio_file_path);
 
         $this->textRequest->update(['original_text' => $response['text']]);
     }
