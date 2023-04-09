@@ -25,7 +25,7 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
      */
     public function __construct(TextRequest $textRequest)
     {
-        $this->textRequest = $textRequest;
+        $this->textRequest = $textRequest->fresh();
     }
 
     /**

@@ -29,7 +29,7 @@ class BloggifyText implements ShouldQueue, ShouldBeUnique
     public function __construct(TextRequest $textRequest)
     {
         $this->repo = new TextRequestRepository();
-        $this->textRequest = $textRequest;
+        $this->textRequest = $textRequest->fresh();
         $this->chatGpt = new ChatGPT();
     }
 

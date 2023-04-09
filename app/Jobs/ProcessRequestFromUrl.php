@@ -33,10 +33,10 @@ class ProcessRequestFromUrl
         $textRequest = $this->textRequest;
 
         Bus::chain([
-            new DownloadAudio($textRequest->refresh()),
-            new ProcessAudio($textRequest->refresh()),
-            new BloggifyText($textRequest->refresh()),
-            new FinalizeProcess($textRequest->refresh())
+            new DownloadAudio($textRequest),
+            new ProcessAudio($textRequest),
+            new BloggifyText($textRequest),
+            new FinalizeProcess($textRequest)
         ])->dispatch();
     }
 }

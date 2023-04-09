@@ -17,7 +17,7 @@ class FinalizeProcess implements ShouldQueue
 
     public function __construct(TextRequest $textRequest)
     {
-        $this->textRequest = $textRequest;
+        $this->textRequest = $textRequest->fresh();
     }
 
     public function handle()
