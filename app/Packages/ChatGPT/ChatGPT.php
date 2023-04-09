@@ -21,7 +21,7 @@ class ChatGPT
         $this->client = $factory
             ->withApiKey(env('OPENAI_API_KEY'))
             ->withHttpClient($this->client = new \GuzzleHttp\Client([
-                'timeout' => 180.0
+                'timeout' => 300.0
             ]))
             ->make();
         $this->model = $model;
@@ -64,7 +64,7 @@ class ChatGPT
                 }
             }
         } catch (Exception $e) {
-            throw new Exception('Unable to connect to OpenAI API. Please try again later or contact. ' . $e->getMessage());
+            throw new Exception($e->getMessage());
         }
     }
 
