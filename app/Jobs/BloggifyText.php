@@ -48,12 +48,11 @@ class BloggifyText implements ShouldQueue, ShouldBeUnique
             if ($this->textRequest->word_count > 2000) {
                 $this->repo->generateSummary($this->textRequest);
             }
-            $this->increaseProgressBy(15);
         }
 
         if (!$this->textRequest->outline) {
             $this->repo->generateOutline($this->textRequest);
-            $this->increaseProgressBy(15);
+            $this->increaseProgressBy(20);
         }
 
         if (!$this->textRequest->final_text) {
@@ -65,12 +64,12 @@ class BloggifyText implements ShouldQueue, ShouldBeUnique
 
         if (!$this->textRequest->meta_description) {
             $this->repo->generateMetaDescription($this->textRequest);
-            $this->increaseProgressBy(10);
+            $this->increaseProgressBy(15);
         }
 
         if (!$this->textRequest->title) {
             $this->repo->generateTitle($this->textRequest);
-            $this->increaseProgressBy(10);
+            $this->increaseProgressBy(15);
         }
     }
 
