@@ -6,15 +6,24 @@ use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Laravel\Facades\OpenAI;
+use OpenAI\Factory as OpenAIFactory;
 
 class ChatGPT
 {
+    protected $client;
     protected string $model;
     protected array $defaultMessages;
     protected bool $shouldStream;
 
     public function __construct($model = 'gpt-4', $shouldStream = false)
     {
+        $factory = new OpenAIFactory();
+        $this->client = $factory
+            ->withApiKey(env('OPENAI_API_KEY'))
+            ->withHttpClient($this->client = new \GuzzleHttp\Client([
+                'timeout' => 180.0
+            ]))
+            ->make();
         $this->model = $model;
         $this->shouldStream = $shouldStream;
         $this->defaultMessages = [
@@ -28,7 +37,7 @@ class ChatGPT
     public function request(array $messages)
     {
         try {
-            $response = OpenAI::chat()->create([
+            $response = $this->client->chat()->create([
                 'model' => $this->model,
                 'messages' => [
                     ...$this->defaultMessages,
