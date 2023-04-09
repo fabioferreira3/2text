@@ -35,6 +35,10 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
+        if ($this->textRequest->original_text) {
+            return;
+        }
+
         $localFilePath = Storage::disk('local')->path($this->textRequest->audio_file_path);
 
         if (!Storage::disk('local')->exists($this->textRequest->audio_file_path)) {
