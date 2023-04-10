@@ -13,6 +13,7 @@ enum Tone: string
     case FORMAL = 'formal';
     case FUNNY = 'funny';
     case MYSTERIOUS = 'mysterious';
+    case OPTIMISTIC = 'optimistic';
     case PESSIMISTIC = 'pessimistic';
     case SARCASTIC = 'sarcastic';
 
@@ -27,6 +28,7 @@ enum Tone: string
             self::FUNNY => "Funny",
             self::MYSTERIOUS => "Mysterious",
             self::PESSIMISTIC => "Pessimistic",
+            self::OPTIMISTIC => "Optimistic",
             self::SARCASTIC => "Sarcastic",
         };
     }
@@ -62,6 +64,7 @@ enum Tone: string
             self::FUNNY => "Engraçado",
             self::MYSTERIOUS => "Misterioso",
             self::PESSIMISTIC => "Pessimista",
+            self::OPTIMISTIC => "Otimista",
             self::SARCASTIC => "Sarcástico",
             default => $tone->value,
         };
