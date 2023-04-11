@@ -49,6 +49,19 @@ class PromptHelper
         }
     }
 
+    public function writeFirstPass($tone = 'casual', $outline)
+    {
+        $tone = Tone::fromLanguage($tone, $this->language);
+        switch ($this->language) {
+            case 'en':
+                return "Write a blog article, using a " . $tone . " tone, using <p> tags to surround paragraphs, <h2> tags to surround main topics and <h3> tags to surround inner topics, based on the following outline: \n\n" . $outline . "\n\n\nFurther instructions: Do not surround h2 and h3 tags with p tags, for example: \n\n Bad output:\n<p><h2>Topic</h2></p>\n\nBad output:\n<p><h2>Topic</h2><h3>Inner topic</h3></p>\n\n\nThe outline structure should be parsed to html tags like this:\n\nInput:\nA. Topic 1\n\nOutput:<h3>A. Topic 1</h3>\n\nInput:\nB. Topic 2\n\nOutput:<h3>B. Topic 2</h3>";
+            case 'pt':
+                return "Escreva um artigo para um blog, usando um tom " . $tone . ", usando tags <p> ao redor dos parágrafos, tags <h2> ao redor dos tópicos principais e tags <h3> ao redor dos tópicos internos, baseado no seguinte esboço: \n\n" . $outline . "\n\n\nOutras instruções: Não coloque tags p dentro de tags h2 e h3, por exemplo: \n\n Output incorreto:\n<p><h2>Tópico</h2></p>\n\nOutput incorreto:\n<p><h2>Tópico</h2><h3>Tópico interno</h3></p>\n\n\nA estrutura do esboço deve ser convertida em tags html desta forma::\n\nInput:\nA. Tópico 1\n\nOutput:<h3>A. Tópico 1</h3>\n\nInput:\nB. Tópico 2\n\nOutput:<h3>B. Tópico 2</h3>";
+            default:
+                return '';
+        }
+    }
+
     public function writeTitle($context, $tone = 'casual', $keyword = null)
     {
         $tone = Tone::fromLanguage($tone, $this->language);

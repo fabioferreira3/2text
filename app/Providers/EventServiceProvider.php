@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\FailedTextRequest;
+use App\Listeners\HandleFailedTextRequest;
 use App\Models\TextRequest;
 use App\Models\TextRequestLog;
 use App\Observers\TextRequestLogObserver;
@@ -19,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
+        FailedTextRequest::class => [
+            HandleFailedTextRequest::class
+        ],
         Registered::class => [
             SendEmailVerificationNotification::class,
         ]

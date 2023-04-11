@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\ChatGptModel;
+use App\Events\FailedTextRequest;
 use App\Helpers\PromptHelper;
 use App\Helpers\TextRequestHelper;
 use App\Models\TextRequest;
@@ -52,18 +53,19 @@ class TextRequestRepository
     public function createFirstPass(TextRequest $textRequest)
     {
         try {
+            $this->promptHelper->setLanguage($textRequest->language);
             $chatGpt = new ChatGPT();
             $response = $chatGpt->request([
                 [
                     'role' => 'user',
-                    'content' =>  "Write a blog article, using a " . $textRequest->tone . " tone, using <p> tags to surround paragraphs, <h2> tags to surround main topics and <h3> tags to surround inner topics, based on the following outline: \n\n" . $textRequest->outline . "\n\n\nFurther instructions: Do not surround h2 and h3 tags with p tags, for example: \n\n Bad output:\n<p><h2>Topic</h2></p>\n\nBad output:\n<p><h2>Topic</h2><h3>Inner topic</h3></p>\n\n\nThe outline structure should be parsed to html tags like this:\n\nInput:\nA. Topic 1\n\nOutput:<h3>A. Topic 1</h3>\n\nInput:\nB. Topic 2\n\nOutput:<h3>B. Topic 2</h3>"
+                    'content' => $this->promptHelper->writeFirstPass($textRequest->tone, $textRequest->outline)
                 ]
             ]);
 
             $textRequest->update(['raw_structure' => TextRequestHelper::parseHtmlTagsToRawStructure($response['content'])]);
-            $this->saveField($textRequest, ['field' => 'final_text', 'content' => str_replace(["\r", "\n"], '', $textRequest->normalized_structure)], $response['token_usage']);
+            $this->saveField($textRequest, ['field' => 'draft_text', 'content' => str_replace(["\r", "\n"], '', $textRequest->normalized_structure)], $response['token_usage']);
         } catch (Exception $e) {
-            $textRequest->update(['status' => 'failed']);
+            event(new FailedTextRequest($textRequest, $e->getMessage()));
             throw new Exception('Failed to create first pass: ' . $e->getMessage());
         }
     }
@@ -94,11 +96,16 @@ class TextRequestRepository
                 $textRequest->refresh();
             }
 
-            $this->saveField($textRequest, ['field' => 'final_text', 'content' => str_replace(["\r", "\n"], '', $textRequest->normalized_structure)], []);
+            $this->saveField($textRequest, ['field' => 'draft_text', 'content' => str_replace(["\r", "\n"], '', $textRequest->normalized_structure)], []);
         } catch (Exception $e) {
-            $textRequest->update(['status' => 'failed']);
+            event(new FailedTextRequest($textRequest, $e->getMessage()));
             throw new Exception('Failed to expand text: ' . $e->getMessage());
         }
+    }
+
+    public function publishText(TextRequest $textRequest)
+    {
+        $this->saveField($textRequest, ['field' => 'final_text', 'content' => $textRequest->draft_text], []);
     }
 
     public function generateTitle(TextRequest $textRequest)
@@ -112,7 +119,7 @@ class TextRequestRepository
             ]]);
             $this->saveField($textRequest, ['field' => 'title', 'content' => $response['content']], $response['token_usage']);
         } catch (Exception $e) {
-            $textRequest->update(['status' => 'failed']);
+            event(new FailedTextRequest($textRequest, $e->getMessage()));
             throw new Exception('Failed to create title: ' . $e->getMessage());
         }
     }
@@ -173,7 +180,7 @@ class TextRequestRepository
             $allRewrittenParagraphs = $rewrittenParagraphs->join(' ');
             $this->saveField($textRequest, ['field' => 'summary', 'content' => $allRewrittenParagraphs], []);
         } catch (Exception $e) {
-            $textRequest->update(['status' => 'failed']);
+            event(new FailedTextRequest($textRequest, $e->getMessage()));
             throw new Exception('Failed to generate summary: ' . $e->getMessage());
         }
     }
@@ -193,7 +200,7 @@ class TextRequestRepository
             $textRequest->update(['raw_structure' => TextRequestHelper::parseOutlineToRawStructure($response['content'])]);
             $this->saveField($textRequest, ['field' => 'outline', 'content' => $response['content']], $response['token_usage']);
         } catch (Exception $e) {
-            $textRequest->update(['status' => 'failed']);
+            event(new FailedTextRequest($textRequest, $e->getMessage()));
             throw new Exception('Failed to generate outline: ' . $e->getMessage());
         }
     }
@@ -209,7 +216,7 @@ class TextRequestRepository
             ]]);
             $this->saveField($textRequest, ['field' => 'meta_description', 'content' => $response['content']], $response['token_usage']);
         } catch (Exception $e) {
-            $textRequest->update(['status' => 'failed']);
+            event(new FailedTextRequest($textRequest, $e->getMessage()));
             throw new Exception('Failed to generate meta description: ' . $e->getMessage());
         }
     }

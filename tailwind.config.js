@@ -9,8 +9,7 @@ module.exports = {
         "./resources/views/**/*.blade.php",
         "./src/**/*.{js,ts,jsx,tsx}",
         "./app/Http/Livewire/**/*Table.php",
-        "./vendor/power-components/livewire-powergrid/resources/views/**/*.php",
-        "./vendor/power-components/livewire-powergrid/src/Themes/Tailwind.php",
+        "./vendor/rappasoft/laravel-livewire-tables/resources/views/**/*.blade.php",
     ],
 
     theme: {

@@ -33,11 +33,6 @@ enum Tone: string
         };
     }
 
-    public function labelPowergridFilter(): string
-    {
-        return $this->labels();
-    }
-
     public static function fromLanguage($tone, $language)
     {
         $enumTone = self::tryFrom($tone);

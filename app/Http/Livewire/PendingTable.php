@@ -2,194 +2,57 @@
 
 namespace App\Http\Livewire;
 
-use App\Enums\Language;
-use App\Enums\SourceProvider;
-use App\Enums\Tone;
-use App\Helpers\TextRequestHelper;
+use Rappasoft\LaravelLivewireTables\DataTableComponent;
+use Rappasoft\LaravelLivewireTables\Views\Column;
+use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 use App\Models\TextRequest;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Str;
-use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
-use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
-use PowerComponents\LivewirePowerGrid\{Button, Column, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
 
-final class PendingTable extends PowerGridComponent
+class PendingTable extends DataTableComponent
 {
-    use ActionButton;
+    protected $model = TextRequest::class;
 
-    /*
-    |--------------------------------------------------------------------------
-    |  Features Setup
-    |--------------------------------------------------------------------------
-    | Setup Table's general features
-    |
-    */
-    public function setUp(): array
+    public function configure(): void
     {
-        //$this->showCheckBox();
-
-        return [
-            // Exportable::make('export')
-            //     ->striped()
-            //     ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
-            Header::make()->showSearchInput(),
-            Footer::make()
-                ->showPerPage()
-                ->showRecordCount(),
-        ];
+        $this->setPrimaryKey('id');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    |  Datasource
-    |--------------------------------------------------------------------------
-    | Provides data to your Table using a Model or Collection
-    |
-    */
-
-    /**
-     * PowerGrid datasource.
-     *
-     * @return Builder<\App\Models\TextRequest>
-     */
-    public function datasource(): Builder
+    public function builder(): Builder
     {
-        return TextRequest::query()->whereIn('status', ['pending', 'processing'])->latest();
+        return TextRequest::query()->whereNotIn('status', ['finished', 'aborted'])->latest();
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    |  Relationship Search
-    |--------------------------------------------------------------------------
-    | Configure here relationships to be used by the Search and Table Filters.
-    |
-    */
-
-    /**
-     * Relationship search.
-     *
-     * @return array<string, array<int, string>>
-     */
-    public function relationSearch(): array
-    {
-        return [];
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    |  Add Column
-    |--------------------------------------------------------------------------
-    | Make Datasource fields available to be used as columns.
-    | You can pass a closure to transform/modify the data.
-    |
-    | ❗ IMPORTANT: When using closures, you must escape any value coming from
-    |    the database using the `e()` Laravel Helper function.
-    |
-    */
-    public function addColumns(): PowerGridEloquent
-    {
-        return PowerGrid::eloquent()
-            ->addColumn('id')
-            ->addColumn('source_provider', fn (TextRequest $model) => TextRequestHelper::parseSource($model->source_provider))
-            ->addColumn('keyword')
-            ->addColumn('language', fn (TextRequest $model) => TextRequestHelper::parseLanguage($model->language))
-            ->addColumn('tone', fn (TextRequest $model) => Str::of($model->tone)->ucfirst())
-            ->addColumn('progress', fn (TextRequest $model) => $model->progress . '%')
-            ->addColumn('created_at_formatted', fn (TextRequest $model) => Carbon::parse($model->created_at)->format('d/m/Y - H:i:s'));
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    |  Include Columns
-    |--------------------------------------------------------------------------
-    | Include the columns added columns, making them visible on the Table.
-    | Each column can be configured with properties, filters, actions...
-    |
-    */
-
-    /**
-     * PowerGrid Columns.
-     *
-     * @return array<int, Column>
-     */
     public function columns(): array
     {
         return [
-            Column::make('Created at', 'created_at_formatted', 'created_at')
-                ->makeInputDatePicker()
-                ->searchable(),
-            Column::make('Progress', 'progress')
+            Column::make("Source", "source_provider")
                 ->sortable(),
-            Column::make('Source', 'source_provider')
-                ->makeInputEnumSelect(SourceProvider::cases(), 'source_provider')
+            Column::make("Progress", "progress")
+                ->format(fn ($value, $row, Column $column) => $row->progress . "%")
                 ->sortable(),
-            Column::make('Language', 'language')
-                ->makeInputEnumSelect(Language::cases(), 'language')
+            Column::make("Status", "status")
                 ->sortable(),
-            Column::make('Keyword', 'keyword')
-                ->makeInputText()
-                ->sortable(),
-            Column::make('Tone', 'tone')
-                ->makeInputEnumSelect(Tone::cases(), 'tone')
+            Column::make("Created at", "created_at")
                 ->sortable(),
         ];
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Actions Method
-    |--------------------------------------------------------------------------
-    | Enable the method below only if the Routes below are defined in your app.
-    |
-    */
-
-    /**
-     * PowerGrid TextRequest Action Buttons.
-     *
-     * @return array<int, Button>
-     */
-
-    /*
-    public function actions(): array
+    public function filters(): array
     {
-       return [
-           Button::make('edit', 'Edit')
-               ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-               ->route('text-request.edit', ['text-request' => 'id']),
-
-           Button::make('destroy', 'Delete')
-               ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-               ->route('text-request.destroy', ['text-request' => 'id'])
-               ->method('delete')
+        return [
+            SelectFilter::make('Status')
+                ->options([
+                    '' => 'All',
+                    'pending' => 'Pending',
+                    'processing' => 'Processing',
+                ])
+                ->filter(function (Builder $builder, string $value) {
+                    if ($value === 'pending') {
+                        $builder->where('status', 'pending');
+                    } elseif ($value === 'processing') {
+                        $builder->where('status', 'processing');
+                    }
+                }),
         ];
     }
-    */
-
-    /*
-    |--------------------------------------------------------------------------
-    | Actions Rules
-    |--------------------------------------------------------------------------
-    | Enable the method below to configure Rules for your Table and Action Buttons.
-    |
-    */
-
-    /**
-     * PowerGrid TextRequest Action Rules.
-     *
-     * @return array<int, RuleActions>
-     */
-
-    /*
-    public function actionRules(): array
-    {
-       return [
-
-           //Hide button edit for ID 1
-            Rule::button('edit')
-                ->when(fn($text-request) => $text-request->id === 1)
-                ->hide(),
-        ];
-    }
-    */
 }

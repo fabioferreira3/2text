@@ -14,9 +14,4 @@ enum Language: string
             self::PORTUGUESE       => "Portuguese",
         };
     }
-
-    public function labelPowergridFilter(): string
-    {
-        return $this->labels();
-    }
 }

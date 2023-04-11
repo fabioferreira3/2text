@@ -59,6 +59,7 @@ class BloggifyText implements ShouldQueue, ShouldBeUnique
             $this->repo->createFirstPass($this->textRequest);
             $this->increaseProgressBy(25);
             $this->repo->expandText($this->textRequest);
+            $this->repo->publishText($this->textRequest);
             $this->increaseProgressBy(25);
         }
 

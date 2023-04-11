@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
 class TextRequest extends Model
@@ -19,10 +18,7 @@ class TextRequest extends Model
         'context',
         'normalized_structure',
         'total_costs',
-        'original_text_token_count',
         'original_text_word_count',
-        'final_text_token_count',
-        'summary_token_count'
     ];
 
     public function logs(): HasMany
@@ -48,6 +44,11 @@ class TextRequest extends Model
         return $this->logs()->sum('costs');
     }
 
+    public function getCostPerWord()
+    {
+        return number_format($this->total_costs / $this->word_count, 4);
+    }
+
     public function scopePending($query)
     {
         return $query->where('status', 'pending');
@@ -71,20 +72,5 @@ class TextRequest extends Model
     public function getOriginalTextWordCountAttribute()
     {
         return Str::wordCount($this->original_text);
-    }
-
-    public function getOriginalTextTokenCountAttribute()
-    {
-        return Artisan::call('count:token', ['string' => addslashes($this->original_text)]);
-    }
-
-    public function getSummaryTokenCountAttribute()
-    {
-        return Artisan::call('count:token', ['string' => addslashes($this->summary)]);
-    }
-
-    public function getFinalTextTokenCountAttribute()
-    {
-        return Artisan::call('count:token', ['string' => addslashes($this->final_text)]);
     }
 }

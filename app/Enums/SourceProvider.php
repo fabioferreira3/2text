@@ -14,9 +14,4 @@ enum SourceProvider: string
             self::FREE_TEXT       => "Free Text",
         };
     }
-
-    public function labelPowergridFilter(): string
-    {
-        return $this->labels();
-    }
 }
