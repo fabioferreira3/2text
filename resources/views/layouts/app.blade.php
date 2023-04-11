@@ -21,24 +21,19 @@
     <body class="font-sans antialiased">
         <x-jet-banner />
 
-        <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
-
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
-
+        <div class="flex min-h-screen bg-gray-100 relative">
+            <div class="w-1/4 h-full fixed p-6 bg-white border-r-2">
+                @include('livewire.common.sidebar')
+            </div>
             <!-- Page Content -->
-            <main class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-                <div>
+            <main class="mx-auto w-3/4 absolute right-0 min-h-screen bg-white pl-6">
+                @livewire('navigation-menu')
+                <div class="p-6 rounded-lg bg-zinc-100">
                     {{ $slot }}
                 </div>
             </main>
+            {{-- @livewire('navigation-menu') --}}
+
         </div>
 
         @stack('modals')

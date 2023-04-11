@@ -2,15 +2,8 @@
 
 namespace App\Http\Livewire;
 
-use App\Jobs\DownloadAudio;
-use App\Jobs\GenerateMetaDescription;
-use App\Jobs\GenerateTitle;
-use App\Jobs\ParaphraseText;
-use App\Jobs\ProcessAudio;
 use App\Jobs\ProcessRequestFromUrl;
-use App\Jobs\BloggifyText;
 use App\Repositories\TextRequestRepository;
-use Illuminate\Support\Facades\Bus;
 use Livewire\Component;
 
 
@@ -52,15 +45,5 @@ class Dashboard extends Component
         ]);
 
         ProcessRequestFromUrl::dispatchIf($textRequest->source_url, $textRequest);
-
-        // Bus::chain([
-        //     new DownloadAudio($textRequest->refresh()),
-        //     new ProcessAudio($textRequest->refresh()),
-        //     new BloggifyText($textRequest->refresh()),
-        //     function () use ($textRequest) {
-        //         $textRequest->refresh();
-        //         $textRequest->update(['status' => 'finished']);
-        //     }
-        // ])->dispatch();
     }
 }

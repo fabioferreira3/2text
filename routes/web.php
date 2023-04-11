@@ -30,5 +30,6 @@ Route::middleware([
     Route::get('/new', NewPost::class)->name('new-post');
     Route::get('/pending', PendingJobs::class)->name('pending-jobs');
     Route::get('/my-work', MyWork::class)->name('my-work');
+    Route::get('/templates', MyWork::class)->name('templates');
     Route::delete('/text/{text-request}', MyWork::class)->name('text-request.destroy');
 });
