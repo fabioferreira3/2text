@@ -17,10 +17,12 @@ return new class extends Migration
             $table->uuid('id')->primary;
             $table->string('name')->index();
             $table->foreignUuid('document_id')->constrained('documents');
-            $table->uuid('process_id')->nullable();
+            $table->uuid('process_id')->index()->nullable();
+            $table->smallInteger('order')->default(1);
             $table->smallInteger('progress')->default(0);
             $table->string('status')->default('pending');
             $table->string('job');
+            $table->json('meta')->default('{}');
             $table->timestamps();
         });
     }

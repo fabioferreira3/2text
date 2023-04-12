@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Jobs\Blog\CreateBlogPostFromVideoStream;
 use App\Models\TextRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,12 +30,12 @@ class RestartRequests implements ShouldQueue
      */
     public function handle()
     {
-        $pendingRequests = TextRequest::pending()->orderBy('created_at', 'ASC')->get();
-        if ($pendingRequests->count()) {
-            foreach ($pendingRequests as $textRequest) {
-                ProcessRequestFromUrl::dispatchIf($textRequest->source_url && !$textRequest->audio_file_path, $textRequest);
-                ProcessRequestFromAudio::dispatchIf($textRequest->audio_file_path, $textRequest);
-            }
-        }
+        // $pendingRequests = TextRequest::pending()->orderBy('created_at', 'ASC')->get();
+        // if ($pendingRequests->count()) {
+        //     foreach ($pendingRequests as $textRequest) {
+        //         CreateBlogPostFromVideoStream::dispatchIf($textRequest->source_url && !$textRequest->audio_file_path, $textRequest);
+        //         //    ProcessRequestFromAudio::dispatchIf($textRequest->audio_file_path, $textRequest);
+        //     }
+        // }
     }
 }

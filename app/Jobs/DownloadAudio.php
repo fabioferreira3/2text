@@ -2,7 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Models\TextRequest;
+use App\Events\DocumentTaskFailed;
+use App\Events\DocumentTaskFinished;
+use App\Models\Document;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -21,16 +23,18 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public TextRequest $textRequest;
+    public Document $document;
+    public array $meta;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(TextRequest $textRequest)
+    public function __construct(Document $document, $meta = [])
     {
-        $this->textRequest = $textRequest->fresh();
+        $this->document = $document->fresh();
+        $this->meta = $meta;
     }
 
     /**
@@ -55,10 +59,6 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            if ($this->textRequest->audio_file_path) {
-                return;
-            }
-
             $yt = new YoutubeDl();
             if (app()->environment('production')) {
                 $yt->setBinPath('/app/yt-dlp');
@@ -75,7 +75,7 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
                     ->audioFormat('mp3')
                     ->audioQuality('4') // 0 = best
                     ->output($fileName)
-                    ->url($this->textRequest->source_url)
+                    ->url($this->meta['source_url'])
             )->getVideos();
 
             if (!$collection && !isset($collection[0])) {
@@ -86,8 +86,16 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
 
             Storage::disk('s3')->put($collection[0]->getFile()->getBasename(), file_get_contents($localFilePath));
 
-            $this->textRequest->update(['audio_file_path' => $collection[0]->getFile()->getBasename()]);
+            $this->document->update(['meta' => [...$this->document->meta, 'audio_file_path' => $collection[0]->getFile()->getBasename()]]);
+
+            if (isset($this->meta['task_id'])) {
+                DocumentTaskFinished::dispatch($this->meta['task_id']);
+            }
         } catch (Exception $e) {
+            if (isset($this->meta['task_id'])) {
+                DocumentTaskFailed::dispatch($this->meta['task_id']);
+            }
+
             Log::error($e->getMessage());
             throw new Exception('Audio download error: ' . $e->getMessage());
         }
@@ -118,6 +126,6 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'download_audio_' . $this->textRequest->id;
+        return 'download_audio_' . $this->document->id;
     }
 }

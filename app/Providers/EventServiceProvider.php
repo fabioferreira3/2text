@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
+use App\Events\DocumentTaskFailed;
+use App\Events\DocumentTaskFinished;
 use App\Events\FailedTextRequest;
+use App\Listeners\HandleFailedDocumentTask;
 use App\Listeners\HandleFailedTextRequest;
+use App\Listeners\HandleFinishedDocumentTask;
 use App\Models\TextRequest;
 use App\Models\TextRequestLog;
 use App\Observers\TextRequestLogObserver;
@@ -26,6 +30,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        DocumentTaskFinished::class => [
+            HandleFinishedDocumentTask::class
+        ],
+        DocumentTaskFailed::class => [
+            HandleFailedDocumentTask::class
         ]
     ];
 

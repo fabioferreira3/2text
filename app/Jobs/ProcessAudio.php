@@ -2,9 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Models\TextRequest;
+use App\Models\Document;
 use App\Packages\Whisper\Whisper;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,16 +19,18 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public TextRequest $textRequest;
+    public Document $document;
+    public array $meta;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(TextRequest $textRequest)
+    public function __construct(Document $document, $meta = [])
     {
-        $this->textRequest = $textRequest->fresh();
+        $this->document = $document->fresh();
+        $this->meta = $meta;
     }
 
     /**
@@ -37,38 +38,46 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
      *
      * @return void
      */
-    // public function handle()
-    // {
-    //     if ($this->textRequest->original_text) {
-    //         return;
-    //     }
+    public function handle()
+    {
 
-    //     $localFilePath = Storage::disk('local')->path($this->textRequest->audio_file_path);
+        // Get the file from S3 and store it locally if it doesn't exist
+        if (!Storage::disk('local')->exists($this->document->meta['audio_file_path'])) {
+            $fileUrl = Storage::disk('s3')->get($this->document->meta['audio_file_path']);
+            Storage::disk('local')->put($this->document->meta['audio_file_path'], $fileUrl);
+        }
 
-    //     if (!Storage::disk('local')->exists($this->textRequest->audio_file_path)) {
-    //         $fileUrl = Storage::disk('s3')->get($this->textRequest->audio_file_path);
-    //         Storage::disk('local')->put($this->textRequest->audio_file_path, $fileUrl);
-    //     }
+        // Check the file size and compress it if necessary
+        $localFilePath = Storage::disk('local')->path($this->document->meta['audio_file_path']);
+        $neededToCompress = $this->compressAndStoreMp3(new \Illuminate\Http\File($localFilePath));
 
-    //     $whisper = new Whisper($localFilePath);
-    //     $response = $whisper->request();
+        // If the file was compressed, replace the local file with the compressed one
+        // if ($neededToCompress) {
+        //     Storage::disk('local')->delete($this->textRequest->audio_file_path);
+        //     $localFilePath = Storage::disk('local')->path($compressedFilePath);
+        // }
 
-    //     Storage::disk('local')->delete($this->textRequest->audio_file_path);
+        $whisper = new Whisper($localFilePath);
+        $response = $whisper->request();
 
-    //     $this->textRequest->update(['original_text' => $response['text']]);
-    // }
+        // Clean up the local files
+        Storage::disk('local')->delete($this->document->meta['audio_file_path']);
+        if ($neededToCompress) {
+            Storage::disk('local')->delete('compressed_' . $this->document->meta['audio_file_path']);
+        }
+
+        $this->document->update(['meta' => [...$this->document->meta, 'context' => $response['text']]]);
+    }
+
     protected function compressAndStoreMp3($file)
     {
         $maxFileSize = 25 * 1024 * 1024; // 25 MB in bytes
 
         // Check if the file size is greater than 25 MB
         if ($file->getSize() > $maxFileSize) {
-            Log::debug('is bigger');
             // Compress the file using FFmpeg
             $inputPath = $file->getRealPath();
-            $outputPath = Storage::disk('local')->path('compressed_' . $this->textRequest->audio_file_path);
-            //  $outputPath = tempnam(sys_get_temp_dir(), 'compressed_') . '.mp3';
-            Log::debug($outputPath);
+            $outputPath = Storage::disk('local')->path('compressed_' . $this->document->meta['audio_file_path']);
 
             $process = new Process([
                 'ffmpeg',
@@ -87,49 +96,14 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
             }
 
             // Replace the original file with the compressed one
-            //$file = new \Illuminate\Http\File($outputPath);
-            $file = Storage::disk('local')->get('compressed_' . $this->textRequest->audio_file_path);
+            $file = Storage::disk('local')->get('compressed_' . $this->document->meta['audio_file_path']);
 
             // Store the file using the Storage facade
-            Storage::disk('local')->put($this->textRequest->audio_file_path, $file);
+            Storage::disk('local')->put($this->document->meta['audio_file_path'], $file);
             return true;
         }
 
         return false;
-    }
-
-    public function handle()
-    {
-        if ($this->textRequest->original_text) {
-            return;
-        }
-
-        // Get the file from S3 and store it locally if it doesn't exist
-        if (!Storage::disk('local')->exists($this->textRequest->audio_file_path)) {
-            $fileUrl = Storage::disk('s3')->get($this->textRequest->audio_file_path);
-            Storage::disk('local')->put($this->textRequest->audio_file_path, $fileUrl);
-        }
-
-        // Check the file size and compress it if necessary
-        $localFilePath = Storage::disk('local')->path($this->textRequest->audio_file_path);
-        $neededToCompress = $this->compressAndStoreMp3(new \Illuminate\Http\File($localFilePath));
-
-        // If the file was compressed, replace the local file with the compressed one
-        // if ($neededToCompress) {
-        //     Storage::disk('local')->delete($this->textRequest->audio_file_path);
-        //     $localFilePath = Storage::disk('local')->path($compressedFilePath);
-        // }
-
-        $whisper = new Whisper($localFilePath);
-        $response = $whisper->request();
-
-        // Clean up the local files
-        // Storage::disk('local')->delete($this->textRequest->audio_file_path);
-        // if ($compressedFilePath !== $localFilePath) {
-        //     Storage::disk('local')->delete($compressedFilePath);
-        // }
-
-        $this->textRequest->update(['original_text' => $response['text']]);
     }
 
     /**
@@ -137,6 +111,6 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'process_audio_' . $this->textRequest->id;
+        return 'process_audio_' . $this->document->id;
     }
 }

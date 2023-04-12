@@ -41,11 +41,14 @@
                 </div>
                 @endif @if ($source === 'free_text')
                 <div class="flex flex-col gap-3">
-                    <label>Text for context (optional):</label>
+                    <label>Context:</label>
+                    <small>Describe what this blog post should be discussing</small>
+                    <small>You could also paste a larger text to be used as context</small>
                     <textarea
                         class="border border-zinc-200 rounded-lg"
                         rows="10"
-                        wire:model="free_text"
+                        maxlength="30000"
+                        wire:model="context"
                     ></textarea>
                 </div>
                 @endif

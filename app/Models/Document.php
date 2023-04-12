@@ -17,7 +17,7 @@ class Document extends Model
     use HasFactory, HasUuids;
 
     protected $guarded = ['id'];
-    protected $casts = ['type' => DocumentType::class, 'language' => Language::class];
+    protected $casts = ['type' => DocumentType::class, 'language' => Language::class, 'meta' => 'array'];
 
     public function history(): HasMany
     {

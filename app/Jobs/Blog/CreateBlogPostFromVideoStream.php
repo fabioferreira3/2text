@@ -11,9 +11,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Bus;
 
-class CreateBlogPostFromUrl implements ShouldQueue, ShouldBeUnique
+class CreateBlogPostFromVideoStream implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -39,14 +38,16 @@ class CreateBlogPostFromUrl implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         $repo = new DocumentRepository();
-        $repo->createTask($this->document, DocumentTaskEnum::DOWNLOAD_AUDIO, [...$this->params, 'status' => 'in_progress']);
-        $repo->createTask($this->document, DocumentTaskEnum::PROCESS_AUDIO, $this->params);
-        // Bus::chain([
-        //     new DownloadAudio($textRequest),
-        //     new ProcessAudio($textRequest),
-        //     new BloggifyText($textRequest),
-        //     new FinalizeProcess($textRequest)
-        // ])->dispatch();
+        $repo->createTask(
+            $this->document,
+            DocumentTaskEnum::DOWNLOAD_AUDIO,
+            [...$this->params, 'status' => 'ready', 'order' => 1]
+        );
+        $repo->createTask(
+            $this->document,
+            DocumentTaskEnum::PROCESS_AUDIO,
+            [...$this->params, 'order' => 2]
+        );
     }
 
     /**
@@ -54,6 +55,6 @@ class CreateBlogPostFromUrl implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'create_blog_post_from_url_' . $this->document->id;
+        return 'create_blog_post_from_video_stream_' . $this->document->id;
     }
 }

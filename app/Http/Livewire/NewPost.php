@@ -4,12 +4,13 @@ namespace App\Http\Livewire;
 
 use App\Enums\DocumentType;
 use App\Jobs\Blog\CreateBlogPost;
-use App\Jobs\ProcessTextRequest;
-use App\Repositories\TextRequestRepository;
+use WireUi\Traits\Actions;
 use Livewire\Component;
 
 class NewPost extends Component
 {
+    use Actions;
+
     public string $context;
     public string $source_url;
     public string $source;
@@ -38,13 +39,15 @@ class NewPost extends Component
         CreateBlogPost::dispatch([
             'source' => $this->source,
             'context' => $this->context,
-            'source_url' => $this->source_url,
             'language' => $this->language,
             'keyword' => $this->keyword,
-            'tone' => $this->tone,
+            'meta' => [
+                'source_url' => $this->source_url,
+                'tone' => $this->tone,
+            ],
             'type' => DocumentType::BLOG_POST->value,
         ]);
 
-        return redirect()->to('/pending');
+        return redirect()->to('/dashboard');
     }
 }

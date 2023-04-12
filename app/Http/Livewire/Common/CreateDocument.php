@@ -14,10 +14,11 @@ class CreateDocument extends Component
 
     public function templates()
     {
+        return redirect()->to('/templates');
     }
 
     public function render()
     {
-        return view('livewire.common.templates');
+        return view('livewire.common.create-document-button');
     }
 }

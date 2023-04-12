@@ -231,7 +231,9 @@ class DocumentRepository
             'document_id' => $document->id,
             'process_id' => $params['process_id'],
             'job' => $task->getJob(),
-            'status' => $params['status'] ?? 'pending'
+            'status' => $params['status'] ?? 'pending',
+            'meta' => $params['meta'] ?? [],
+            'order' => $params['order'] ?? 1,
         ]);
     }
 }
