@@ -5,24 +5,14 @@
         </div>
     </div>
     <div class="grid grid-cols-5 gap-6">
-        <div class="col-span-2">
-            <div class="p-4 bg-zinc-200 rounded">
-                <h2 class="font-bold text-lg">Instructions</h2>
-                <div class="flex flex-col gap-2 mt-2">
-                    <div>Text</div>
-                    <div>Text</div>
-                    <div>Text</div>
-                </div>
-            </div>
-        </div>
         <div class="col-span-3">
             <div class="flex flex-col gap-4 p-4 border rounded">
                 <div class="grid grid-cols-2 gap-6">
                     <div class="flex flex-col gap-3">
-                        <label>Origin</label>
+                        <label>Source</label>
                         <select
                             name="provider"
-                            wire:model="source_provider"
+                            wire:model="source"
                             class="p-3 rounded-lg border border-zinc-200"
                         >
                             <option value="youtube">Youtube</option>
@@ -31,7 +21,7 @@
                         </select>
                     </div>
                     <div class="flex flex-col gap-3">
-                        <label>Target keyword:</label>
+                        <label>Keyword:</label>
                         <input
                             name="keyword"
                             wire:model="keyword"
@@ -40,7 +30,7 @@
                     </div>
                 </div>
 
-                @if ($source_provider === 'youtube')
+                @if ($source === 'youtube')
                 <div class="flex flex-col gap-3">
                     <label>Youtube url:</label>
                     <input
@@ -49,9 +39,9 @@
                         class="p-3 border border-zinc-200 rounded-lg"
                     />
                 </div>
-                @endif @if ($source_provider === 'free_text')
+                @endif @if ($source === 'free_text')
                 <div class="flex flex-col gap-3">
-                    <label>Text:</label>
+                    <label>Text for context (optional):</label>
                     <textarea
                         class="border border-zinc-200 rounded-lg"
                         rows="10"
@@ -101,20 +91,15 @@
                 </div>
             </div>
         </div>
-    </div>
-    <button wire:click="openModal">Open</button>
-    <x-modal wire:model.defer="modal">
-        <x-card title="Consent Terms">
-            <p class="text-gray-600">
-                Lorem Ipsum...
-            </p>
-
-            <x-slot name="footer">
-                <div class="flex justify-end gap-x-4">
-                    <x-button flat label="Cancel" x-on:click="close" />
-                    <x-button primary label="I Agree" />
+        <div class="col-span-2">
+            <div class="p-4 bg-zinc-200 rounded">
+                <h2 class="font-bold text-lg">Instructions</h2>
+                <div class="flex flex-col gap-2 mt-2">
+                    <div>Text</div>
+                    <div>Text</div>
+                    <div>Text</div>
                 </div>
-            </x-slot>
-        </x-card>
-    </x-modal>
-</div>
+            </div>
+        </div>
+    </div>
+    </div>

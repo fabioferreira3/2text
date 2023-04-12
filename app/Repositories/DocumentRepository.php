@@ -3,15 +3,18 @@
 namespace App\Repositories;
 
 use App\Enums\ChatGptModel;
+use App\Enums\DocumentTaskEnum;
 use App\Events\FailedTextRequest;
 use App\Helpers\PromptHelper;
 use App\Helpers\TextRequestHelper;
+use App\Models\Document;
+use App\Models\DocumentTask;
 use App\Models\TextRequest;
 use App\Packages\ChatGPT\ChatGPT;
 use Exception;
 use Illuminate\Support\Str;
 
-class TextRequestRepository
+class DocumentRepository
 {
     protected PromptHelper $promptHelper;
 
@@ -20,9 +23,9 @@ class TextRequestRepository
         $this->promptHelper = new PromptHelper();
     }
 
-    public function create(array $params): TextRequest
+    public function create(array $params): Document
     {
-        return TextRequest::create($params);
+        return Document::create($params);
     }
 
     public function saveField(TextRequest $textRequest, array $payload, array $tokenUsage = [])
@@ -219,5 +222,16 @@ class TextRequestRepository
             event(new FailedTextRequest($textRequest, $e->getMessage()));
             throw new Exception('Failed to generate meta description: ' . $e->getMessage());
         }
+    }
+
+    public function createTask(Document $document, DocumentTaskEnum $task, array $params)
+    {
+        DocumentTask::create([
+            'name' => $task->value,
+            'document_id' => $document->id,
+            'process_id' => $params['process_id'],
+            'job' => $task->getJob(),
+            'status' => $params['status'] ?? 'pending'
+        ]);
     }
 }

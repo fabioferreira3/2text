@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Livewire\Dashboard;
-use App\Http\Livewire\MyWork;
+use App\Http\Livewire\MyDocuments;
 use App\Http\Livewire\NewPost;
 use App\Http\Livewire\PendingJobs;
+use App\Http\Livewire\Templates;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,9 +28,8 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
-    Route::get('/new', NewPost::class)->name('new-post');
+    Route::get('/blog/new', NewPost::class)->name('new-post');
     Route::get('/pending', PendingJobs::class)->name('pending-jobs');
-    Route::get('/my-work', MyWork::class)->name('my-work');
-    Route::get('/templates', MyWork::class)->name('templates');
-    Route::delete('/text/{text-request}', MyWork::class)->name('text-request.destroy');
+    Route::get('/templates', Templates::class)->name('templates');
+    Route::delete('/text/{text-request}', MyDocuments::class)->name('text-request.destroy');
 });

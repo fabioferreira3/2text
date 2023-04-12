@@ -8,7 +8,7 @@
         <title>2Text AI</title>
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
+        <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:weight@400;600;700&display=swap">
 
         <!-- Scripts -->
         @wireUiScripts
@@ -26,14 +26,12 @@
                 @include('livewire.common.sidebar')
             </div>
             <!-- Page Content -->
-            <main class="mx-auto w-3/4 absolute right-0 min-h-screen bg-white pl-6">
+            <main class="mx-auto w-3/4 absolute right-0 min-h-screen bg-white px-6">
                 @livewire('navigation-menu')
                 <div class="p-6 rounded-lg bg-zinc-100">
                     {{ $slot }}
                 </div>
             </main>
-            {{-- @livewire('navigation-menu') --}}
-
         </div>
 
         @stack('modals')

@@ -2,15 +2,17 @@
 
 namespace App\Http\Livewire;
 
+use App\Enums\DocumentType;
+use App\Jobs\Blog\CreateBlogPost;
 use App\Jobs\ProcessTextRequest;
 use App\Repositories\TextRequestRepository;
 use Livewire\Component;
 
 class NewPost extends Component
 {
-    public string $free_text;
+    public string $context;
     public string $source_url;
-    public string $source_provider;
+    public string $source;
     public string $language;
     public string $keyword;
     public string $tone;
@@ -18,13 +20,12 @@ class NewPost extends Component
 
     public function __construct()
     {
-        $this->source_provider = 'free_text';
-        $this->free_text = '';
+        $this->source = 'free_text';
+        $this->context = '';
         $this->source_url = '';
         $this->language = 'en';
         $this->keyword = '';
         $this->tone = '';
-        $this->modal = false;
     }
 
     public function render()
@@ -34,23 +35,16 @@ class NewPost extends Component
 
     public function process()
     {
-        $textRequest = new TextRequestRepository();
-
-        $textRequest = $textRequest->create([
-            'original_text' => $this->free_text,
+        CreateBlogPost::dispatch([
+            'source' => $this->source,
+            'context' => $this->context,
             'source_url' => $this->source_url,
-            'source_provider' => $this->source_provider,
             'language' => $this->language,
             'keyword' => $this->keyword,
-            'tone' => $this->tone
+            'tone' => $this->tone,
+            'type' => DocumentType::BLOG_POST->value,
         ]);
 
-        ProcessTextRequest::dispatch($textRequest);
         return redirect()->to('/pending');
-    }
-
-    public function openModal()
-    {
-        $this->modal = true;
     }
 }

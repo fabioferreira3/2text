@@ -5,7 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 
 
-class MyWork extends Component
+class MyDocuments extends Component
 {
 
     public function __construct()
@@ -14,6 +14,6 @@ class MyWork extends Component
 
     public function render()
     {
-        return view('livewire.my-work');
+        return view('livewire.my-documents');
     }
 }

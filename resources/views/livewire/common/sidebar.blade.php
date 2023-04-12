@@ -6,7 +6,7 @@
             </a>
         </div>
     </div>
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-5">
         <div class="hidden sm:flex">
             @include('livewire.common.navlink', ['route' => 'dashboard', 'name' => 'Dashboard', 'icon' => 'home'])
         </div>

@@ -7,7 +7,7 @@ enum Language: string
     case ENGLISH = 'en';
     case PORTUGUESE = 'pt';
 
-    public function labels(): string
+    public function label(): string
     {
         return match ($this) {
             self::ENGLISH         => "English",
