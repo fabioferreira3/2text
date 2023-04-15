@@ -7,6 +7,7 @@ use App\Http\Livewire\NewPost;
 use App\Http\Livewire\PendingJobs;
 use App\Http\Livewire\Templates;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,19 +20,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
+    Route::get('/', function () {
+        return redirect('/dashboard');
+    });
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/blog/new', NewPost::class)->name('new-post');
     Route::get('/pending', PendingJobs::class)->name('pending-jobs');
     Route::get('/templates', Templates::class)->name('templates');
     Route::get('/documents/{document}', DocumentView::class)->name('document-view');
     Route::delete('/text/{text-request}', MyDocuments::class)->name('text-request.destroy');
+});
+
+Route::get('/google/auth/redirect', function () {
+    return Socialite::driver('google')->redirect();
+});
+
+Route::get('/google/auth/callback', function () {
+    $user = Socialite::driver('google')->user();
+
+    // $user->token
 });

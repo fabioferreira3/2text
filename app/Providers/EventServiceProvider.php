@@ -38,7 +38,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         DocumentTaskFailed::class => [
             HandleFailedDocumentTask::class
-        ]
+        ],
+        \SocialiteProviders\Manager\SocialiteWasCalled::class => [
+            \SocialiteProviders\Google\GoogleExtendSocialite::class . '@handle',
+        ],
     ];
 
     /**
