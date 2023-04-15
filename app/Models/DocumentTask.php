@@ -18,14 +18,19 @@ class DocumentTask extends Model
         return $this->belongsTo(Document::class);
     }
 
+    public function scopeOfProcess($query, $processId)
+    {
+        return $query->where('process_id', $processId);
+    }
+
     public function scopePriorityFirst($query)
     {
         return $query->orderBy('order', 'asc');
     }
 
-    public function scopeReady($query)
+    public function scopeAvailable($query)
     {
-        return $query->where('status', 'ready');
+        return $query->whereIn('status', ['ready', 'failed', 'on_hold']);
     }
 
     public function scopeInProgress($query)
@@ -41,5 +46,10 @@ class DocumentTask extends Model
     public function scopeFailed($query)
     {
         return $query->where('status', 'failed');
+    }
+
+    public function scopeExcept($query, $taskIds)
+    {
+        return $query->whereNotIn('id', $taskIds);
     }
 }

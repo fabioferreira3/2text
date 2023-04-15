@@ -49,7 +49,7 @@ class PromptHelper
         }
     }
 
-    public function writeFirstPass($tone = 'casual', $outline)
+    public function writeFirstPass($outline, $tone = 'casual')
     {
         $tone = Tone::fromLanguage($tone, $this->language);
         switch ($this->language) {

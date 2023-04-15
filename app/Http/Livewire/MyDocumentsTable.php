@@ -8,6 +8,7 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 use App\Models\TextRequest;
 use Illuminate\Database\Eloquent\Builder;
+use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
 use Rappasoft\LaravelLivewireTables\Views\Filters\MultiSelectDropdownFilter;
 use Rappasoft\LaravelLivewireTables\Views\Filters\MultiSelectFilter;
 
@@ -29,15 +30,27 @@ class MyDocumentsTable extends DataTableComponent
     public function columns(): array
     {
         return [
+            Column::make("Id", "id")
+                ->format(fn ($value, $row, Column $column) => $row->id)
+                ->hideIf(true),
             Column::make("Type", "type")
                 ->format(fn ($value, $row, Column $column) => $row->type->label())
                 ->sortable(),
+            Column::make('Status')
+                ->label(
+                    fn ($row, Column $column) => $row->is_completed ? 'Ready' : 'In Progress'
+                ),
             Column::make("Language", "language")
                 ->format(fn ($value, $row, Column $column) => $row->language->label())
                 ->sortable(),
             Column::make("Created at", "created_at")
                 ->format(fn ($value, $row, Column $column) => $row->created_at->setTimezone(session('user_timezone') ?? 'America/New_York')->format('m/d/Y - h:ia'))
                 ->sortable(),
+            LinkColumn::make('Action')
+                ->title(fn ($row) => 'View')
+                ->location(function ($row) {
+                    return route('document-view', ['document' => $row->id]);
+                })
         ];
     }
 

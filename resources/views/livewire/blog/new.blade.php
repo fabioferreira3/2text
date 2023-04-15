@@ -41,9 +41,12 @@
                 </div>
                 @endif @if ($source === 'free_text')
                 <div class="flex flex-col gap-3">
-                    <label>Context:</label>
-                    <small>Describe what this blog post should be discussing</small>
-                    <small>You could also paste a larger text to be used as context</small>
+                    <div class="flex flex-col gap-1">
+                        <label>Context:</label>
+                        <small>Briefly describe the main topic of the post using at least 100 words</small>
+                        <small>You could also paste a larger text to be used as context</small>
+                    </div>
+
                     <textarea
                         class="border border-zinc-200 rounded-lg"
                         rows="10"
@@ -52,7 +55,15 @@
                     ></textarea>
                 </div>
                 @endif
-
+                <div class="flex flex-col gap-3">
+                    <label>Subtopics:</label>
+                    <input
+                        type="number"
+                        name="target_headers_count"
+                        wire:model="targetHeadersCount"
+                        class="p-3 rounded-lg border border-zinc-200"
+                    />
+                </div>
                 <div class="flex flex-col gap-3">
                     <label>Language:</label>
                     <select

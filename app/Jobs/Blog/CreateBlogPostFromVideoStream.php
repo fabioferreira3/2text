@@ -37,17 +37,15 @@ class CreateBlogPostFromVideoStream implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        $repo = new DocumentRepository();
-        $repo->createTask(
-            $this->document,
-            DocumentTaskEnum::DOWNLOAD_AUDIO,
-            [...$this->params, 'status' => 'ready', 'order' => 1]
-        );
-        $repo->createTask(
-            $this->document,
-            DocumentTaskEnum::PROCESS_AUDIO,
-            [...$this->params, 'order' => 2]
-        );
+        $repo = new DocumentRepository($this->document);
+        $repo->createTask(DocumentTaskEnum::DOWNLOAD_AUDIO, [...$this->params, 'order' => 1]);
+        $repo->createTask(DocumentTaskEnum::PROCESS_AUDIO, [...$this->params, 'order' => 2]);
+        $repo->createTask(DocumentTaskEnum::SUMMARIZE_DOC, [...$this->params, 'order' => 3]);
+        $repo->createTask(DocumentTaskEnum::CREATE_OUTLINE, [...$this->params, 'order' => 4]);
+        $repo->createTask(DocumentTaskEnum::EXPAND_OUTLINE, [...$this->params, 'order' => 5]);
+        $repo->createTask(DocumentTaskEnum::EXPAND_TEXT, [...$this->params, 'order' => 6]);
+        $repo->createTask(DocumentTaskEnum::CREATE_TITLE, [...$this->params, 'order' => 7]);
+        $repo->createTask(DocumentTaskEnum::CREATE_METADESCRIPTION, [...$this->params, 'order' => 8]);
     }
 
     /**

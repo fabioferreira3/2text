@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\DocumentTaskFailed;
+use App\Models\DocumentTask;
 
 class HandleFailedDocumentTask
 {
@@ -24,6 +25,13 @@ class HandleFailedDocumentTask
      */
     public function handle(DocumentTaskFailed $event)
     {
+        $tasksByProcess = DocumentTask::ofProcess($event->task->process_id)->inProgress()->except([$event->task->id])->get();
         $event->task->update(['status' => 'failed']);
+
+        if (!$tasksByProcess->isEmpty()) {
+            $tasksByProcess->each(function (DocumentTask $task) {
+                $task->update(['status' => 'on_hold']);
+            });
+        }
     }
 }

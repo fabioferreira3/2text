@@ -2,8 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Events\DocumentTaskFailed;
-use App\Events\DocumentTaskFinished;
+use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -13,7 +12,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use YoutubeDl\Options;
@@ -21,7 +19,7 @@ use YoutubeDl\YoutubeDl;
 
 class DownloadAudio implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
     public Document $document;
     public array $meta;
@@ -88,16 +86,9 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
 
             $this->document->update(['meta' => [...$this->document->meta, 'audio_file_path' => $collection[0]->getFile()->getBasename()]]);
 
-            if (isset($this->meta['task_id'])) {
-                DocumentTaskFinished::dispatch($this->meta['task_id']);
-            }
+            $this->jobSucceded();
         } catch (Exception $e) {
-            if (isset($this->meta['task_id'])) {
-                DocumentTaskFailed::dispatch($this->meta['task_id']);
-            }
-
-            Log::error($e->getMessage());
-            throw new Exception('Audio download error: ' . $e->getMessage());
+            $this->jobFailed('Audio download error: ' . $e->getMessage());
         }
     }
 

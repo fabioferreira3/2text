@@ -2,8 +2,10 @@
 
 namespace App\Jobs;
 
+use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Packages\Whisper\Whisper;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,7 +19,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ProcessAudio implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
     public Document $document;
     public array $meta;
@@ -40,33 +42,37 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
+        try {
+            // Get the file from S3 and store it locally if it doesn't exist
+            if (!Storage::disk('local')->exists($this->document->meta['audio_file_path'])) {
+                $fileUrl = Storage::disk('s3')->get($this->document->meta['audio_file_path']);
+                Storage::disk('local')->put($this->document->meta['audio_file_path'], $fileUrl);
+            }
 
-        // Get the file from S3 and store it locally if it doesn't exist
-        if (!Storage::disk('local')->exists($this->document->meta['audio_file_path'])) {
-            $fileUrl = Storage::disk('s3')->get($this->document->meta['audio_file_path']);
-            Storage::disk('local')->put($this->document->meta['audio_file_path'], $fileUrl);
+            // Check the file size and compress it if necessary
+            $localFilePath = Storage::disk('local')->path($this->document->meta['audio_file_path']);
+            $neededToCompress = $this->compressAndStoreMp3(new \Illuminate\Http\File($localFilePath));
+
+            // If the file was compressed, replace the local file with the compressed one
+            // if ($neededToCompress) {
+            //     Storage::disk('local')->delete($this->document->meta['audio_file_path']);
+            //     $localFilePath = Storage::disk('local')->path($compressedFilePath);
+            // }
+
+            $whisper = new Whisper($localFilePath);
+            $response = $whisper->request();
+
+            // Clean up the local files
+            Storage::disk('local')->delete($this->document->meta['audio_file_path']);
+            if ($neededToCompress) {
+                Storage::disk('local')->delete('compressed_' . $this->document->meta['audio_file_path']);
+            }
+
+            $this->document->update(['meta' => [...$this->document->meta, 'context' => $response['text']]]);
+            $this->jobSucceded();
+        } catch (Exception $e) {
+            $this->jobFailed('Audio download error: ' . $e->getMessage());
         }
-
-        // Check the file size and compress it if necessary
-        $localFilePath = Storage::disk('local')->path($this->document->meta['audio_file_path']);
-        $neededToCompress = $this->compressAndStoreMp3(new \Illuminate\Http\File($localFilePath));
-
-        // If the file was compressed, replace the local file with the compressed one
-        // if ($neededToCompress) {
-        //     Storage::disk('local')->delete($this->textRequest->audio_file_path);
-        //     $localFilePath = Storage::disk('local')->path($compressedFilePath);
-        // }
-
-        $whisper = new Whisper($localFilePath);
-        $response = $whisper->request();
-
-        // Clean up the local files
-        Storage::disk('local')->delete($this->document->meta['audio_file_path']);
-        if ($neededToCompress) {
-            Storage::disk('local')->delete('compressed_' . $this->document->meta['audio_file_path']);
-        }
-
-        $this->document->update(['meta' => [...$this->document->meta, 'context' => $response['text']]]);
     }
 
     protected function compressAndStoreMp3($file)
@@ -111,6 +117,6 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'process_audio_' . $this->document->id;
+        return 'process_audio_' . $this->meta['process_id'] ?? $this->document->id;
     }
 }

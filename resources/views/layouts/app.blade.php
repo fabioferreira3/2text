@@ -22,11 +22,11 @@
         <x-jet-banner />
 
         <div class="flex min-h-screen bg-gray-100 relative">
-            <div class="w-1/4 h-full fixed p-6 bg-white border-r-2">
+            <div class="hidden md:w-1/4 h-full fixed p-6 bg-white border-r-2">
                 @include('livewire.common.sidebar')
             </div>
             <!-- Page Content -->
-            <main class="mx-auto w-3/4 absolute right-0 min-h-screen bg-white px-6">
+            <main class="mx-auto w-full md:w-3/4 absolute right-0 min-h-screen bg-white px-6">
                 @livewire('navigation-menu')
                 <div class="p-6 rounded-lg bg-zinc-100">
                     {{ $slot }}
@@ -37,8 +37,8 @@
         @stack('modals')
 
         @livewireScripts
-        <style>
+        {{-- <style>
             [x-cloak] { display: none !important; }
-        </style>
+        </style> --}}
     </body>
 </html>

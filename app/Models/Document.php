@@ -18,6 +18,7 @@ class Document extends Model
 
     protected $guarded = ['id'];
     protected $casts = ['type' => DocumentType::class, 'language' => Language::class, 'meta' => 'array'];
+    protected $appends = ['normalized_structure', 'context', 'is_completed'];
 
     public function history(): HasMany
     {
@@ -32,6 +33,34 @@ class Document extends Model
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function getNormalizedStructureAttribute()
+    {
+        $text = '';
+        if (!isset($this->meta['raw_structure'])) {
+            return $text;
+        }
+
+        collect($this->meta['raw_structure'])->each(function ($section) use (&$text) {
+            $text .= "<h2>" . $section['subheader'] . "</h2>";
+            $text .= collect($section['content'])->map(function ($item) {
+                return $item;
+            })->implode('');
+        });
+
+        return $text;
+    }
+
+    public function getIsCompletedAttribute()
+    {
+        $finishedCount = $this->tasks->where('status', 'finished')->count();
+        return $this->tasks->count() === $finishedCount;
+    }
+
+    public function getContextAttribute()
+    {
+        return $this->meta['summary'] ?? $this->meta['context'];
     }
 
     protected static function booted(): void

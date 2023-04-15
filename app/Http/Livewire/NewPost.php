@@ -17,6 +17,7 @@ class NewPost extends Component
     public string $language;
     public string $keyword;
     public string $tone;
+    public string $targetHeadersCount;
     public bool $modal;
 
     public function __construct()
@@ -26,6 +27,7 @@ class NewPost extends Component
         $this->source_url = '';
         $this->language = 'en';
         $this->keyword = '';
+        $this->targetHeadersCount = '3';
         $this->tone = '';
     }
 
@@ -40,10 +42,11 @@ class NewPost extends Component
             'source' => $this->source,
             'context' => $this->context,
             'language' => $this->language,
-            'keyword' => $this->keyword,
             'meta' => [
                 'source_url' => $this->source_url,
+                'target_headers_count' => $this->targetHeadersCount,
                 'tone' => $this->tone,
+                'keyword' => $this->keyword,
             ],
             'type' => DocumentType::BLOG_POST->value,
         ]);

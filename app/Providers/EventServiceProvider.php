@@ -8,6 +8,7 @@ use App\Events\FailedTextRequest;
 use App\Listeners\HandleFailedDocumentTask;
 use App\Listeners\HandleFailedTextRequest;
 use App\Listeners\HandleFinishedDocumentTask;
+use App\Listeners\HandleFinishedProcess;
 use App\Models\TextRequest;
 use App\Models\TextRequestLog;
 use App\Observers\TextRequestLogObserver;
@@ -32,7 +33,8 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         DocumentTaskFinished::class => [
-            HandleFinishedDocumentTask::class
+            HandleFinishedDocumentTask::class,
+            HandleFinishedProcess::class
         ],
         DocumentTaskFailed::class => [
             HandleFailedDocumentTask::class

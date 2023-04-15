@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\DB;
 
 class DispatchDocumentTasks implements ShouldQueue
 {
@@ -20,13 +21,22 @@ class DispatchDocumentTasks implements ShouldQueue
 
     public function handle()
     {
-        $readyDocs = DocumentTask::ready()->priorityFirst()->get();
+        $tasks = DocumentTask::available()->priorityFirst()->get();
+        DB::table('document_tasks')->whereIn('id', $tasks->pluck('id')->toArray())->update(['status' => 'in_progress']);
+
         $jobsChain = [];
-        foreach ($readyDocs as $task) {
+        foreach ($tasks as $task) {
             $class = $task->job;
-            $jobsChain[] = new $class($task->document, [...$task->meta, 'task_id' => $task->id]);
+            $jobsChain[] = new $class($task->document, [
+                ...$task->meta,
+                'task_id' => $task->id,
+                'process_id' => $task->process_id,
+                'order' => $task->order,
+            ]);
         }
 
-        Bus::chain($jobsChain)->dispatch();
+        if (!empty($jobsChain)) {
+            Bus::chain($jobsChain)->dispatch();
+        }
     }
 }

@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 use App\Enums\ChatGptModel;
 
-class TextRequestHelper
+class DocumentHelper
 {
     public static function parseLanguage(string $language)
     {
@@ -43,12 +43,12 @@ class TextRequestHelper
                 $currentSubheader = preg_replace('/^[IVX]+\.\s/', '', $trimmed);
                 $result[] = [
                     'subheader' => $currentSubheader,
-                    'content' => []
+                    'content' => ''
                 ];
                 $currentSubheaderIndex++;
             } elseif (preg_match('/^[A-Z]\..+/', $trimmed)) {
                 $subtopic = preg_replace('/^[A-Z]\.\s/', '', $trimmed);
-                $result[$currentSubheaderIndex]['content'][] = '<h3>' . $subtopic . '</h3>';
+                $result[$currentSubheaderIndex]['content'] .= '<h3>' . $subtopic . '</h3>';
             }
         }
 
