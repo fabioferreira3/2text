@@ -31,26 +31,29 @@ class MyDocumentsTable extends DataTableComponent
     {
         return [
             Column::make("Id", "id")
-                ->format(fn ($value, $row, Column $column) => $row->id)
+                ->format(fn ($value, $row) => $row->id)
                 ->hideIf(true),
             Column::make("Type", "type")
-                ->format(fn ($value, $row, Column $column) => $row->type->label())
+                ->format(fn ($value, $row) => $row->type->label())
+                ->searchable()
                 ->sortable(),
             Column::make('Status')
                 ->label(
-                    fn ($row, Column $column) => $row->is_completed ? 'Ready' : 'In Progress'
+                    fn ($row) => $row->is_completed ? 'Ready' : 'In Progress'
                 ),
             Column::make("Language", "language")
-                ->format(fn ($value, $row, Column $column) => $row->language->label())
-                ->sortable(),
+                ->format(fn ($value, $row) => $row->language->label())
+                ->searchable()
+                ->sortable()
+                ->collapseOnMobile(),
             Column::make("Created at", "created_at")
-                ->format(fn ($value, $row, Column $column) => $row->created_at->setTimezone(session('user_timezone') ?? 'America/New_York')->format('m/d/Y - h:ia'))
-                ->sortable(),
+                ->format(fn ($value, $row) => $row->created_at->setTimezone(session('user_timezone') ?? 'America/New_York')->format('m/d/Y - h:ia'))
+                ->sortable()
+                ->collapseOnMobile(),
             LinkColumn::make('Action')
-                ->title(fn ($row) => 'View')
-                ->location(function ($row) {
-                    return route('document-view', ['document' => $row->id]);
-                })
+                ->title(fn () => 'View')
+                ->location(fn ($row) => route('document-view', ['document' => $row->id]))
+                ->attributes(fn () => ['class' => 'bg-zinc-200 px-3 py-2 rounded-lg']),
         ];
     }
 
