@@ -68,7 +68,6 @@ class ExpandText implements ShouldQueue, ShouldBeUnique
                 $order++;
             }
             $this->jobSucceded();
-            //$this->repo->updateMeta('draft_text', str_replace(["\r", "\n"], '', $this->document->normalized_structure));
         } catch (Exception $e) {
             $this->jobFailed('Failed to expand text: ' . $e->getMessage());
         }
