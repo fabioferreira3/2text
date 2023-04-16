@@ -49,7 +49,7 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
             $chatGpt = new ChatGPT(ChatGptModel::GPT_3_TURBO->value);
             $response = $chatGpt->request([[
                 'role' => 'user',
-                'content' => $this->promptHelper->writeTitle($this->document->normalized_structure, $this->meta['tone'], $this->document->meta['keyword'])
+                'content' => $this->promptHelper->writeTitle($this->document->normalized_structure, $this->meta['tone'], $this->meta['keyword'])
             ]]);
             $this->repo->updateMeta('title', $response['content']);
             $this->repo->addHistory(
