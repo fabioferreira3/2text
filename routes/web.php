@@ -38,7 +38,19 @@ Route::middleware([
 
 Route::get('/google/auth/redirect', function () {
     return Socialite::driver('google')->redirect();
-});
+})->name('login.google');
+
+Route::get('/apple/auth/redirect', function () {
+    return Socialite::driver('apple')->redirect();
+})->name('login.apple');
+
+Route::get('/linkedin/auth/redirect', function () {
+    return Socialite::driver('linkedin')->redirect();
+})->name('login.linkedin');
+
+Route::get('/medium/auth/redirect', function () {
+    return Socialite::driver('medium')->redirect();
+})->name('login.medium');
 
 Route::get('/google/auth/callback', function () {
     $user = Socialite::driver('google')->user();

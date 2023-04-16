@@ -41,6 +41,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
             \SocialiteProviders\Google\GoogleExtendSocialite::class . '@handle',
+            \SocialiteProviders\Apple\AppleExtendSocialite::class . '@handle',
+            \SocialiteProviders\LinkedIn\LinkedInExtendSocialite::class . '@handle',
+            \SocialiteProviders\Medium\MediumExtendSocialite::class . '@handle',
         ],
     ];
 

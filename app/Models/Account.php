@@ -11,4 +11,9 @@ class Account extends Model
     protected $guarded = ['id'];
 
     use HasFactory, HasUuids;
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

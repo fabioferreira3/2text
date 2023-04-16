@@ -9,7 +9,7 @@
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:weight@400;600;700&display=swap">
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-RpHs4zrqwhVMdNHOkUKq3rPLw45PaHDD+de0mkpoPZ7VXQvBwmR7Pr+GcSpYoU7lGJ+yPl62cSZk2QfKuDOJ5g==" crossorigin="anonymous" referrerpolicy="no-referrer">
         <!-- Scripts -->
         @wireUiScripts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
