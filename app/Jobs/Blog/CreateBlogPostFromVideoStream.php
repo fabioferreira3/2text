@@ -3,6 +3,7 @@
 namespace App\Jobs\Blog;
 
 use App\Enums\DocumentTaskEnum;
+use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Illuminate\Bus\Queueable;
@@ -46,6 +47,8 @@ class CreateBlogPostFromVideoStream implements ShouldQueue, ShouldBeUnique
         $repo->createTask(DocumentTaskEnum::EXPAND_TEXT, [...$this->params, 'order' => 6]);
         $repo->createTask(DocumentTaskEnum::CREATE_TITLE, [...$this->params, 'order' => 7]);
         $repo->createTask(DocumentTaskEnum::CREATE_METADESCRIPTION, [...$this->params, 'order' => 8]);
+
+        DispatchDocumentTasks::dispatch();
     }
 
     /**

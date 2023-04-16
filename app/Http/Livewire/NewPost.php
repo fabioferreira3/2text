@@ -75,9 +75,9 @@ class NewPost extends Component
 
     public function setSubtopicsInfo()
     {
-        $this->instructions = "<h2 class='font-bold'>Subtopics</h2><p>Define the number of subtopics of your blog post.<p><p>The more subtopics, more content will be generated.<p>
+        $this->instructions = "<h2 class='font-bold'>Subtopics</h2><p>Define the number of subtopics of your blog post. The more subtopics, more content will be generated.<p>
         <h3 class='font-bold text-sm'>Note</h3>
-        <p class='text-sm'>Roughly speaking, 1 subtopic covers 350 words.</p>";
+        <p class='text-sm'>As an estimate, 1 subtopic covers around 350 words.</p>";
     }
 
     public function setToneInfo()
