@@ -13,9 +13,6 @@
         <div class="hidden sm:flex">
             @include('livewire.common.navlink', ['route' => 'templates', 'name' => 'Templates', 'icon' => 'puzzle'])
         </div>
-        <div class="hidden sm:flex">
-            @include('livewire.common.navlink', ['route' => 'pending-jobs', 'name' => 'My Queue', 'icon' => 'view-boards'])
-        </div>
     </div>
 
 </nav>

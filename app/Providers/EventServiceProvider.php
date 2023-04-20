@@ -4,15 +4,11 @@ namespace App\Providers;
 
 use App\Events\DocumentTaskFailed;
 use App\Events\DocumentTaskFinished;
-use App\Events\FailedTextRequest;
 use App\Listeners\HandleFailedDocumentTask;
-use App\Listeners\HandleFailedTextRequest;
 use App\Listeners\HandleFinishedDocumentTask;
 use App\Listeners\HandleFinishedProcess;
-use App\Models\TextRequest;
-use App\Models\TextRequestLog;
-use App\Observers\TextRequestLogObserver;
-use App\Observers\TextRequestObserver;
+use App\Models\DocumentHistory;
+use App\Observers\DocumentHistoryObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -26,9 +22,6 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        FailedTextRequest::class => [
-            HandleFailedTextRequest::class
-        ],
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
@@ -54,8 +47,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        TextRequest::observe(TextRequestObserver::class);
-        TextRequestLog::observe(TextRequestLogObserver::class);
+        DocumentHistory::observe(DocumentHistoryObserver::class);
     }
 
     /**

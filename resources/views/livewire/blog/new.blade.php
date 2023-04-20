@@ -4,7 +4,7 @@
             <h1 class="text-4xl font-bold">New blog post</h1>
         </div>
     </div>
-    <div class="grid grid-cols-5 gap-6">
+    <div class="flex flex-col md:grid md:grid-cols-5 gap-6">
         <div class="col-span-3">
             <div class="flex flex-col gap-4 p-4 border rounded">
                 <div class="grid grid-cols-2 gap-6">
@@ -19,7 +19,7 @@
                             class="p-3 rounded-lg border border-zinc-200"
                         >
                             <option value="youtube">Youtube</option>
-                            <option value="video_file">Video file</option>
+                            {{-- <option value="video_file">Video file</option> --}}
                             <option value="free_text">Free text</option>
                         </select>
                     </div>
@@ -38,6 +38,19 @@
                         @endif
                     </div>
                 </div>
+                @if ($source === 'youtube')
+                    <div class="flex flex-col gap-3">
+                        <label>Youtube url:</label>
+                        <input
+                            name="url"
+                            wire:model="source_url"
+                            class="p-3 border border-zinc-200 rounded-lg"
+                        />
+                        @if($errors->has('source_url'))
+                            <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
+                        @endif
+                    </div>
+                @endif
                 <div class="grid grid-cols-2 gap-6">
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
@@ -93,33 +106,24 @@
                     </select>
                 </div>
 
-                @if ($source === 'youtube')
-                <div class="flex flex-col gap-3">
-                    <label>Youtube url:</label>
-                    <input
-                        name="url"
-                        wire:model="source_url"
-                        class="p-3 border border-zinc-200 rounded-lg"
-                    />
-                </div>
-                @endif @if ($source === 'free_text')
-                <div class="flex flex-col gap-3">
-                    <div class="flex flex-col gap-1">
-                        <label>Context:</label>
-                        <small>Briefly describe the main topic of the post using at least 100 words</small>
-                        <small>You could also paste a larger text to be used as context</small>
-                    </div>
+                @if ($source === 'free_text')
+                    <div class="flex flex-col gap-3">
+                        <div class="flex flex-col gap-1">
+                            <label>Context:</label>
+                            <small>Briefly describe the main topic of the post using at least 100 words</small>
+                            <small>You could also paste a larger text to be used as context</small>
+                        </div>
 
-                    <textarea
-                        class="border border-zinc-200 rounded-lg"
-                        rows="8"
-                        maxlength="30000"
-                        wire:model="context"
-                    ></textarea>
-                    @if($errors->has('context'))
+                        <textarea
+                            class="border border-zinc-200 rounded-lg"
+                            rows="8"
+                            maxlength="30000"
+                            wire:model="context"
+                        ></textarea>
+                        @if($errors->has('context'))
                             <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
                         @endif
-                </div>
+                    </div>
                 @endif
 
                 <div class="flex justify-center mt-4">
@@ -128,7 +132,7 @@
                         wire:loading.remove
                         class="bg-red-700 text-white font-bold px-4 py-2 rounded-lg"
                     >
-                        Submit
+                        Generate!
                     </button>
                 </div>
             </div>

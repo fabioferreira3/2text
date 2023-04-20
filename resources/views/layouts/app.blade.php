@@ -9,7 +9,7 @@
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:weight@400;600;700&display=swap">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-RpHs4zrqwhVMdNHOkUKq3rPLw45PaHDD+de0mkpoPZ7VXQvBwmR7Pr+GcSpYoU7lGJ+yPl62cSZk2QfKuDOJ5g==" crossorigin="anonymous" referrerpolicy="no-referrer">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <!-- Scripts -->
         @wireUiScripts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -23,7 +23,13 @@
 
     </head>
     <body class="font-sans antialiased">
+        <x-notifications />
         <x-jet-banner />
+        @if (session()->has('message'))
+                        <div class="alert alert-success">
+                            {{ session('message') }}
+                        </div>
+                    @endif
 
         <div class="flex min-h-screen bg-gray-100 relative">
             <div class="hidden md:block md:w-1/5 h-full fixed p-6 bg-white border-r-2">

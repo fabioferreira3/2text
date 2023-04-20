@@ -31,7 +31,17 @@ class NewPost extends Component
         $this->keyword = '';
         $this->targetHeadersCount = '3';
         $this->tone = '';
-        $this->instructions = '';
+        $this->instructions = '<h3 class="font-bold">Welcome!</h3><p>Please fill out the following information to help our AI generate a unique and high-quality blog post for you.</p>
+
+        <h3 class="font-bold">Source</h3><p class="text-sm">Enter the source of the content you would like to use for the blog post. You can provide free text, a YouTube link, or an audio file.</p>
+
+        <h3 class="font-bold">Keyword</h3><p class="text-sm">Provide a keyword that you would like our AI to use throughout the blog post. This keyword will help our AI to generate a relevant and focused article.</p>
+
+        <h3 class="font-bold">Number of Topics</h3><p class="text-sm">Indicate the number of topics you would like our AI to cover in the blog post. You can select a minimum of one topic and a maximum of fifteen topics.</p>
+
+        <h3 class="font-bold">Language</h3><p class="text-sm">Select the language you would like the blog post to be generated in. If you have provided a YouTube link, please ensure that the selected language matches the main language of the video.</p>
+
+        <h3 class="font-bold">Tone</h3><p class="text-sm">Select the tone you would like the blog post to have. You can choose from casual, funny, sarcastic, dramatic, academic, and other tones. This will help our AI to generate a blog post that is in line with your preferences.</p>';
     }
 
     public function render()
@@ -41,6 +51,7 @@ class NewPost extends Component
 
     protected $rules = [
         'source' => 'required|in:free_text,youtube,video',
+        'source_url' => 'required_if:source,youtube',
         'context' => 'required_if:source,free_text|nullable',
         'keyword' => 'required',
         'language' => 'required|in:en,pt',
@@ -50,6 +61,7 @@ class NewPost extends Component
 
     protected $messages = [
         'context.required_if' => 'You need to provide some context for the AI to generate your blog post.',
+        'source_url.required_if' => 'You need to provide a Youtube link for the AI to generate your blog post.',
         'keyword.required' => 'You need to provide a keyword.',
         'source.required' => 'Source is a required field.',
         'language.required' => 'Language is a required field.',
@@ -70,7 +82,7 @@ class NewPost extends Component
 
     public function setLanguageInfo()
     {
-        $this->instructions = "<h2 class='font-bold'>Language</h2><p>Define the main language of your blog post.</p><p>For example, if it's a youtube video, then it should be the language of the video. If it's based on free text, then it's the language used in the 'context' field.<p>";
+        $this->instructions = "<h2 class='font-bold'>Language</h2><p>Define the main language of your blog post.</p><p>For example, if it's a youtube video, then it should be the main language of the video. If it's based on free text, then it's the language used in the 'context' field.<p>";
     }
 
     public function setSubtopicsInfo()

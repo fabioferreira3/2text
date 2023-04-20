@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Observers;
+
+use App\Helpers\DocumentHelper;
+use App\Models\DocumentHistory;
+
+class DocumentHistoryObserver
+{
+
+    /**
+     * Handle the DocumentHistory "saving" event.
+     *
+     * @param  \App\Models\DocumentHistory  $documentHistory
+     * @return void
+     */
+    public function saving(DocumentHistory $documentHistory)
+    {
+        if ($documentHistory->isDirty('model')) {
+            $documentHistory->cost = DocumentHelper::calculateModelCosts($documentHistory->model, [
+                'prompt' => $documentHistory->prompt_token_usage,
+                'completion' => $documentHistory->completion_token_usage,
+                'total' => $documentHistory->total_token_usage
+            ]);
+        }
+    }
+}

@@ -3,23 +3,41 @@
 namespace App\Http\Livewire;
 
 use App\Models\Document;
+use App\Repositories\DocumentRepository;
+use Exception;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
-use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
-use App\Models\TextRequest;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
-use Rappasoft\LaravelLivewireTables\Views\Filters\MultiSelectDropdownFilter;
 use Rappasoft\LaravelLivewireTables\Views\Filters\MultiSelectFilter;
+use WireUi\Traits\Actions;
 
 class MyDocumentsTable extends DataTableComponent
 {
-    protected $model = TextRequest::class;
+    use Actions;
+
+    protected $model = Document::class;
+    protected $repo;
 
     public function configure(): void
     {
+        $this->repo = new DocumentRepository();
         $this->setPrimaryKey('id');
         $this->setRefreshTime(8000);
+    }
+
+    public function viewDoc($documentId)
+    {
+        return redirect()->route('document-view', ['document' => $documentId]);
+    }
+
+    public function deleteDoc($documentId)
+    {
+        try {
+            $this->repo->delete($documentId);
+            $this->notification(['icon' => 'success', 'iconColor' => 'text-green-400', 'timeout' => 5000, 'title' => 'Document moved to the trash can']);
+        } catch (Exception) {
+            $this->notification(['icon' => 'error', 'iconColor' => 'text-red-700', 'timeout' => 5000, 'title' => 'There was an error while deleting this document']);
+        }
     }
 
     public function builder(): Builder
@@ -50,10 +68,10 @@ class MyDocumentsTable extends DataTableComponent
                 ->format(fn ($value, $row) => $row->created_at->setTimezone(session('user_timezone') ?? 'America/New_York')->format('m/d/Y - h:ia'))
                 ->sortable()
                 ->collapseOnMobile(),
-            LinkColumn::make('Action')
-                ->title(fn () => 'View')
-                ->location(fn ($row) => route('document-view', ['document' => $row->id]))
-                ->attributes(fn () => ['class' => 'bg-zinc-200 px-3 py-2 rounded-lg']),
+            Column::make('Actions')
+                ->label(
+                    fn ($row, Column $column) => view('livewire.tables.my-documents.view-action', ['rowId' => $row->id])
+                ),
         ];
     }
 

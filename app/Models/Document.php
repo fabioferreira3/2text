@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 class Document extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $guarded = ['id'];
     protected $casts = ['type' => DocumentType::class, 'language' => Language::class, 'meta' => 'array'];
@@ -54,13 +55,14 @@ class Document extends Model
 
     public function getIsCompletedAttribute()
     {
+        return false;
         $finishedCount = $this->tasks->where('status', 'finished')->count();
         return $this->tasks->count() === $finishedCount;
     }
 
     public function getContextAttribute()
     {
-        return $this->meta['summary'] ?? $this->meta['context'];
+        return $this->meta['summary'] ?? $this->meta['context'] ?? '';
     }
 
     protected static function booted(): void

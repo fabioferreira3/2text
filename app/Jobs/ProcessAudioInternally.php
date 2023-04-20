@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\TextRequest;
+use App\Models\Document;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,16 +16,16 @@ class ProcessAudioInternally implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public TextRequest $textRequest;
+    public Document $document;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(TextRequest $textRequest)
+    public function __construct(Document $document)
     {
-        $this->textRequest = $textRequest;
+        $this->document = $document;
     }
 
     /**
@@ -35,14 +35,14 @@ class ProcessAudioInternally implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->textRequest->original_text) {
+        if ($this->document->meta['context']) {
             return;
         }
 
         $fileName = Str::uuid() . '.mp3';
         $processer = $this->defineProcesser();
         $response = Http::timeout(900)
-            ->attach('audio_file', file_get_contents($this->textRequest->audio_file_path), $fileName)
+            ->attach('audio_file', file_get_contents($this->document->meta['audio_file_path']), $fileName)
             ->post($processer);
 
         if ($response->failed()) {
@@ -51,7 +51,7 @@ class ProcessAudioInternally implements ShouldQueue
 
         if ($response->successful()) {
             $originalText = Str::squish($response->json('text'));
-            $this->textRequest->update(['original_text' => $originalText]);
+            $this->document->update(['context' => $originalText]);
         } else {
             throw new Exception('Unable to process audio on Whisper');
         }
@@ -59,7 +59,7 @@ class ProcessAudioInternally implements ShouldQueue
 
     public function defineProcesser()
     {
-        $language = $this->textRequest->language;
+        $language = $this->document->language;
         $service = 'whisper';
 
         if ($language != 'en') {

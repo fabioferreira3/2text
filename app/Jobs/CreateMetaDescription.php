@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 use Exception;
 
 class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
@@ -51,7 +52,7 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
                 'role' => 'user',
                 'content' => $this->promptHelper->writeMetaDescription($this->document->normalized_structure, $this->meta['tone'], $this->meta['keyword'])
             ]]);
-            $this->repo->updateMeta('meta_description', $response['content']);
+            $this->repo->updateMeta('meta_description', Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"'));
             $this->repo->addHistory(
                 [
                     'field' => 'meta_description',

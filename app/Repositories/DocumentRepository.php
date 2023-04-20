@@ -25,9 +25,14 @@ class DocumentRepository
         return Document::create([
             ...$params,
             'meta' => [
-                'context' => '',
+                'title' => '',
+                'context' => $params['context'] ?? '',
                 'raw_structure' => [],
-                'tone' => Tone::CASUAL->value
+                'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,
+                'source' => $params['source'],
+                'source_url' => $params['meta']['source_url'] ?? null,
+                'target_headers_count' => $params['meta']['target_headers_count'],
+                'keyword' => $params['meta']['keyword'] ?? '',
             ]
         ]);
     }
@@ -48,7 +53,15 @@ class DocumentRepository
 
     public function updateMeta($attribute, $value)
     {
-        return $this->document->update(['meta' => array_merge($this->document->meta, [$attribute => $value])]);
+        $meta = $this->document->meta;
+        $meta[$attribute] = $value;
+        return $this->document->update(['meta' => $meta]);
+    }
+
+    public function delete($documentId)
+    {
+        $document = Document::findOrFail($documentId);
+        return $document->delete();
     }
 
     public function publishText()

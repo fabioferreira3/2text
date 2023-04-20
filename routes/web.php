@@ -30,19 +30,13 @@ Route::middleware([
     });
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/blog/new', NewPost::class)->name('new-post');
-    Route::get('/pending', PendingJobs::class)->name('pending-jobs');
     Route::get('/templates', Templates::class)->name('templates');
     Route::get('/documents/{document}', DocumentView::class)->name('document-view');
-    Route::delete('/text/{text-request}', MyDocuments::class)->name('text-request.destroy');
 });
 
 Route::get('/google/auth/redirect', function () {
     return Socialite::driver('google')->redirect();
 })->name('login.google');
-
-Route::get('/apple/auth/redirect', function () {
-    return Socialite::driver('apple')->redirect();
-})->name('login.apple');
 
 Route::get('/linkedin/auth/redirect', function () {
     return Socialite::driver('linkedin')->redirect();

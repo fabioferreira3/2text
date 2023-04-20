@@ -1,18 +1,39 @@
-<div class="flex flex-col gap-6">
-    <div class="flex flex-col gap-2">
-        <label for="title" class="font-bold text-xl">Title</label>
-        <input class="p-3 rounded-lg border border-zinc-200" value="{{$document->meta['title']}}" type="text" name="title"/>
-
+<div class="flex flex-col gap-12">
+    <div class="flex flex-col gap-2 border p-4 bg-zinc-200 rounded-lg">
+        <div class="flex justify-between">
+            <label for="title" class="font-bold text-xl">Title</label>
+            <div class="flex gap-2">
+                <button class="px-2 py-1 bg-secondary rounded-lg text-white text-sm">Regenerate title</button>
+                <button class="px-2 py-1 bg-zinc-500 rounded-lg text-white text-sm">View history</button>
+                <button class="px-2 py-1 bg-zinc-300 rounded-lg text-zinc-800 text-sm">Copy</button>
+                <button class="px-2 py-1 bg-black rounded-lg text-white text-sm">Save</button>
+            </div>
+        </div>
+        <input class="p-3 rounded-lg border border-zinc-200" wire:model="title" type="text" name="title"/>
     </div>
-    <textarea class="editor">
-        {{$content}}
-     </textarea>
-     <div class="flex flex-col gap-2">
-        <label for="meta_description" class="font-bold text-xl">Meta Description</label>
-        <textarea class="p-3 rounded-lg border border-zinc-200" name="meta_description">
-            {{$document->meta['meta_description']}}
-        </textarea>
-
+    <div class="flex flex-col gap-2 border p-4 bg-zinc-200 rounded-lg">
+        <div class="flex justify-between">
+            <label for="title" class="font-bold text-xl">Meta description</label>
+            <div class="flex gap-2">
+                <button class="px-2 py-1 bg-secondary rounded-lg text-white text-sm">Regenerate meta description</button>
+                <button class="px-2 py-1 bg-zinc-500 rounded-lg text-white text-sm">View history</button>
+                <button class="px-2 py-1 bg-zinc-300 rounded-lg text-zinc-800 text-sm">Copy</button>
+                <button class="px-2 py-1 bg-black rounded-lg text-white text-sm">Save</button>
+            </div>
+        </div>
+        <textarea class="rounded-lg border border-zinc-200" name="meta_description" wire:model="meta_description" rows="2"></textarea>
+    </div>
+    <div class="flex flex-col gap-2 border p-4 bg-zinc-200 rounded-lg">
+        <div class="flex justify-between">
+            <label for="title" class="font-bold text-xl">Content</label>
+            <div class="flex gap-2">
+                <button class="px-2 py-1 bg-secondary rounded-lg text-white text-sm">Regenerate content</button>
+                <button class="px-2 py-1 bg-zinc-500 rounded-lg text-white text-sm">View history</button>
+                <button class="px-2 py-1 bg-zinc-300 rounded-lg text-zinc-800 text-sm">Copy</button>
+                <button class="px-2 py-1 bg-black rounded-lg text-white text-sm">Save</button>
+            </div>
+        </div>
+        <textarea class="editor" name="context" wire:model="content" rows="30"></textarea>
     </div>
 </div>
 
