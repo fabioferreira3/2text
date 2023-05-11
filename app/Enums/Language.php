@@ -2,21 +2,23 @@
 
 namespace App\Enums;
 
+use Illuminate\Support\Str;
+
 enum Language: string
 {
     case ENGLISH = 'en';
+    case ARABIC = 'ar';
+    case CHINESE = 'ch';
+    case FRENCH = 'fr';
+    case GERMAN = 'de';
+    case GREEK = 'el';
+    case KOREAN = 'ko';
+    case ITALIAN = 'it';
+    case JAPANESE = 'ja';
+    case POLNISH = 'pl';
     case PORTUGUESE = 'pt';
     case SPANISH = 'es';
-    case JAPANESE = 'ja';
-    case CHINESE = 'ch';
-    case KOREAN = 'ko';
-    case GERMAN = 'de';
-    case FRENCH = 'fr';
-    case ITALIAN = 'it';
-    case POLNISH = 'pl';
     case TURKISH = 'tr';
-    case ARABIC = 'ar';
-    case GREEK = 'el';
 
     public function label(): string
     {
@@ -35,5 +37,10 @@ enum Language: string
             self::SPANISH         => "Spanish",
             self::TURKISH         => "Turkish",
         };
+    }
+
+    public static function getLabels(): array
+    {
+        return collect(self::cases())->map(fn ($language) => ['value' => $language->value, 'name' => Str::of($language->name)->lower()->ucfirst()])->toArray();
     }
 }

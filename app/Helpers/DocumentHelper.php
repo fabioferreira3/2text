@@ -6,30 +6,6 @@ use App\Enums\ChatGptModel;
 
 class DocumentHelper
 {
-    public static function parseLanguage(string $language)
-    {
-        switch ($language) {
-            case 'en':
-                return 'English';
-            case 'pt':
-                return 'Portuguese';
-            default:
-                return $language;
-        }
-    }
-
-    public static function parseSource(string $source)
-    {
-        switch ($source) {
-            case 'free_text':
-                return 'Free text';
-            case 'youtube':
-                return 'Youtube';
-            default:
-                return $source;
-        }
-    }
-
     public static function parseOutlineToRawStructure(string $text)
     {
         $lines = explode(PHP_EOL, $text);

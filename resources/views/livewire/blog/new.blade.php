@@ -4,6 +4,7 @@
             <h1 class="text-4xl font-bold">New blog post</h1>
         </div>
     </div>
+
     <div class="flex flex-col md:grid md:grid-cols-5 gap-6">
         <div class="col-span-3">
             <div class="flex flex-col gap-4 p-4 border rounded">
@@ -78,8 +79,9 @@
                             wire:model="language"
                             class="p-3 rounded-lg border border-zinc-200"
                         >
-                            <option value="en">English</option>
-                            <option value="pt">Portuguese</option>
+                        @foreach ($languages as $option)
+                            <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
+                        @endforeach
                         </select>
                     </div>
                 </div>

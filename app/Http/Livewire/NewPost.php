@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Enums\DocumentType;
+use App\Enums\Language;
 use App\Jobs\Blog\CreateBlogPost;
 use Illuminate\Validation\Rule;
 use WireUi\Traits\Actions;
@@ -16,6 +17,7 @@ class NewPost extends Component
     public string $source_url;
     public string $source;
     public string $language;
+    public array $languages;
     public string $keyword;
     public string $tone;
     public string $targetHeadersCount;
@@ -28,6 +30,7 @@ class NewPost extends Component
         $this->context = '';
         $this->source_url = '';
         $this->language = 'en';
+        $this->languages = Language::getLabels();
         $this->keyword = '';
         $this->targetHeadersCount = '3';
         $this->tone = '';
@@ -82,7 +85,7 @@ class NewPost extends Component
 
     public function setLanguageInfo()
     {
-        $this->instructions = "<h2 class='font-bold'>Language</h2><p>Define the main language of your blog post.</p><p>For example, if it's a youtube video, then it should be the main language of the video. If it's based on free text, then it's the language used in the 'context' field.<p>";
+        $this->instructions = "<h2 class='font-bold'>Language</h2><p>Define the main language of your blog post.</p>";
     }
 
     public function setSubtopicsInfo()
