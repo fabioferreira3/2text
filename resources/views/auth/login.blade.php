@@ -52,7 +52,7 @@
                             <span class="font-">Sign-in with Google</span>
                     </button>
                 </div>
-                <div class="border border-zinc-300 rounded-lg px-3 py-3 flex justify-center">
+                {{-- <div class="border border-zinc-300 rounded-lg px-3 py-3 flex justify-center">
                     <button type="submit" class="btn btn-primary flex items-center gap-2">
                         <img width="20px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
                             <span class="font-">Sign-in with Linkedin</span>
@@ -63,7 +63,7 @@
                         <img width="20px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
                             <span class="font-">Sign-in with Medium</span>
                     </button>
-                </div>
+                </div> --}}
             </div>
 
         </form>

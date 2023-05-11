@@ -5,9 +5,9 @@ namespace App\Http\Livewire;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
-use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Filters\MultiSelectFilter;
 use WireUi\Traits\Actions;
 
@@ -89,7 +89,18 @@ class MyDocumentsTable extends DataTableComponent
                 ->options(
                     [
                         'en' => 'English',
-                        'pt' => 'Portuguese'
+                        'ar' => 'Arabic',
+                        'ch' => 'Chinese',
+                        'de' => 'German',
+                        'fr' => 'French',
+                        'it' => 'Italian',
+                        'pl' => 'Polnish',
+                        'pt' => 'Portuguese',
+                        'es' => 'Spanish',
+                        'tr' => 'Turkish',
+                        'el' => 'Greek',
+                        'ja' => 'Japanese',
+                        'ko' => 'Korean',
                     ]
                 )->filter(function (Builder $builder, array $value) {
                     $builder->whereIn('language', $value);
