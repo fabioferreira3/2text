@@ -83,6 +83,9 @@
                             <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
                         @endforeach
                         </select>
+                        @if($errors->has('language'))
+                            <span class="text-red-500 text-sm">{{ $errors->first('language') }}</span>
+                        @endif
                     </div>
                 </div>
                 <div class="flex flex-col gap-3">

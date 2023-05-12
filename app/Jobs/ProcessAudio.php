@@ -12,7 +12,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -68,7 +67,7 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
                 Storage::disk('local')->delete('compressed_' . $this->document->meta['audio_file_path']);
             }
 
-            $this->document->update(['meta' => [...$this->document->meta, 'context' => $response['text']]]);
+            $this->document->update(['meta' => [...$this->document->meta, 'context' => $response['text'], 'original_text' => $response['text']]]);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Audio download error: ' . $e->getMessage());

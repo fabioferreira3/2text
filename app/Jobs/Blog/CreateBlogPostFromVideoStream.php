@@ -39,39 +39,58 @@ class CreateBlogPostFromVideoStream implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         $repo = new DocumentRepository($this->document);
-        $repo->createTask(DocumentTaskEnum::DOWNLOAD_AUDIO, ['source_url' => $this->params['source_url'], 'order' => 1]);
+        $repo->createTask(
+            DocumentTaskEnum::DOWNLOAD_AUDIO,
+            [
+                'meta' => [
+                    'source_url' => $this->params['meta']['source_url']
+                ],
+                'order' => 1
+            ]
+        );
         $repo->createTask(DocumentTaskEnum::PROCESS_AUDIO, ['order' => 2]);
         $repo->createTask(DocumentTaskEnum::SUMMARIZE_DOC, ['order' => 3]);
         $repo->createTask(DocumentTaskEnum::CREATE_OUTLINE, [
-            'target_headers_count' => $this->params['target_headers_count'],
-            'keyword' => $this->params['keyword'],
-            'tone' => $this->params['tone'],
+            'meta' => [
+                'target_headers_count' => $this->params['meta']['target_headers_count'],
+                'keyword' => $this->params['meta']['keyword'],
+                'tone' => $this->params['meta']['tone'],
+            ],
             'order' => 4
         ]);
         $repo->createTask(DocumentTaskEnum::EXPAND_OUTLINE, [
-            'keyword' => $this->params['keyword'],
-            'tone' => $this->params['tone'], 'order' => 5
+            'meta' => [
+                'keyword' => $this->params['meta']['keyword'],
+                'tone' => $this->params['meta']['tone']
+            ],
+            'order' => 5
         ]);
         $repo->createTask(
             DocumentTaskEnum::EXPAND_TEXT,
             [
-                'tone' => $this->params['tone'],
+                'meta' => [
+                    'tone' => $this->params['meta']['tone']
+                ],
                 'order' => 6
             ]
         );
         $repo->createTask(
             DocumentTaskEnum::CREATE_TITLE,
             [
-                'keyword' => $this->params['keyword'],
-                'tone' => $this->params['tone'],
+                'meta' => [
+                    'keyword' => $this->params['meta']['keyword'],
+                    'tone' => $this->params['meta']['tone'],
+                ],
                 'order' => 7
             ]
         );
         $repo->createTask(
             DocumentTaskEnum::CREATE_METADESCRIPTION,
             [
-                'keyword' => $this->params['keyword'],
-                'tone' => $this->params['tone'],
+                'meta' => [
+                    'keyword' => $this->params['meta']['keyword'],
+                    'tone' => $this->params['meta']['tone'],
+                ],
                 'order' => 8
             ]
         );

@@ -17,6 +17,7 @@ enum Language: string
     case JAPANESE = 'ja';
     case POLNISH = 'pl';
     case PORTUGUESE = 'pt';
+    case RUSSIAN = 'ru';
     case SPANISH = 'es';
     case TURKISH = 'tr';
 
@@ -34,6 +35,7 @@ enum Language: string
             self::KOREAN          => "Korean",
             self::POLNISH         => "Polnish",
             self::PORTUGUESE      => "Portuguese",
+            self::RUSSIAN         => "Russian",
             self::SPANISH         => "Spanish",
             self::TURKISH         => "Turkish",
         };

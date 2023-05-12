@@ -47,7 +47,7 @@ class SummarizeDocument implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            if (isset($this->document->meta['context']) && Str::wordCount($this->document->meta['context'] < 2000) && $this->taskId) {
+            if (isset($this->document->meta['context']) && Str::wordCount($this->document->meta['context'] < 2000)) {
                 $this->jobSkipped();
                 return;
             }

@@ -57,7 +57,7 @@ class MyDocumentsTable extends DataTableComponent
                 ->sortable(),
             Column::make('Status')
                 ->label(
-                    fn ($row) => $row->is_completed ? 'Ready' : 'In Progress'
+                    fn ($row) => $row->is_completed ? 'Finished' : 'In Progress'
                 ),
             Column::make("Language", "language")
                 ->format(fn ($value, $row) => $row->language->label())

@@ -53,6 +53,7 @@ class DocumentRepository
 
     public function updateMeta($attribute, $value)
     {
+        $this->document->refresh();
         $meta = $this->document->meta;
         $meta[$attribute] = $value;
         return $this->document->update(['meta' => $meta]);
@@ -78,11 +79,28 @@ class DocumentRepository
         DocumentTask::create([
             'name' => $task->value,
             'document_id' => $this->document->id,
-            'process_id' => $params['process_id'],
+            'process_id' => $params['process_id'] ?? null,
             'job' => $task->getJob(),
             'status' => $params['status'] ?? 'ready',
             'meta' => $params['meta'] ?? [],
             'order' => $params['order'] ?? 1,
+        ]);
+    }
+
+    public function defineDefaultMetaVideoStream()
+    {
+        $this->document->refresh();
+        $this->document->update([
+            'meta' => [
+                ...$this->document->meta,
+                'title' => "",
+                'original_text' => "",
+                'context' => "",
+                'raw_structure' => [],
+                'summary' => "",
+                'outline' => "",
+                'meta_description' => ""
+            ]
         ]);
     }
 }

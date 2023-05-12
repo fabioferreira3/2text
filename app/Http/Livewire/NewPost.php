@@ -57,7 +57,7 @@ class NewPost extends Component
         'source_url' => 'required_if:source,youtube',
         'context' => 'required_if:source,free_text|nullable',
         'keyword' => 'required',
-        'language' => 'required|in:en,pt',
+        'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
         'targetHeadersCount' => 'required|numeric|min:1|max:15',
         'tone' => 'nullable'
     ];
