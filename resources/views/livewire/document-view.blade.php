@@ -3,10 +3,10 @@
         <div class="flex justify-between">
             <label for="title" class="font-bold text-xl">Title</label>
             <div class="flex gap-2">
-                <button class="px-2 py-1 bg-secondary rounded-lg text-white text-sm">Regenerate title</button>
-                <button class="px-2 py-1 bg-zinc-500 rounded-lg text-white text-sm">View history</button>
-                <button class="px-2 py-1 bg-zinc-300 rounded-lg text-zinc-800 text-sm">Copy</button>
-                <button class="px-2 py-1 bg-black rounded-lg text-white text-sm">Save</button>
+                <button wire:click='regenerateTitle' class="px-3 py-2 bg-zinc-300 rounded-lg text-zinc-800 text-sm">Regenerate</button>
+                <button class="px-3 py-2 bg-zinc-300 rounded-lg text-zinc-800 text-sm">View history</button>
+                <button class="px-3 py-2 bg-zinc-300 rounded-lg text-zinc-800 text-sm">Copy</button>
+                <button wire:click='saveTitle' class="px-3 py-2 bg-black rounded-lg text-white text-sm">Save</button>
             </div>
         </div>
         <input class="p-3 rounded-lg border border-zinc-200" wire:model="title" type="text" name="title"/>
@@ -15,9 +15,9 @@
         <div class="flex justify-between">
             <label for="title" class="font-bold text-xl">Meta description</label>
             <div class="flex gap-2">
-                <button class="px-2 py-1 bg-secondary rounded-lg text-white text-sm">Regenerate meta description</button>
-                <button class="px-2 py-1 bg-zinc-500 rounded-lg text-white text-sm">View history</button>
-                <button class="px-2 py-1 bg-zinc-300 rounded-lg text-zinc-800 text-sm">Copy</button>
+                <button class="px-3 py-2 bg-zinc-300 rounded-lg text-zinc-800 text-sm">Regenerate</button>
+                <button class="px-3 py-2 bg-zinc-300 rounded-lg text-zinc-800 text-sm">View history</button>
+                <button class="px-3 py-2 bg-zinc-300 rounded-lg text-zinc-800 text-sm">Copy</button>
                 <button class="px-2 py-1 bg-black rounded-lg text-white text-sm">Save</button>
             </div>
         </div>
@@ -27,9 +27,9 @@
         <div class="flex justify-between">
             <label for="title" class="font-bold text-xl">Content</label>
             <div class="flex gap-2">
-                <button class="px-2 py-1 bg-secondary rounded-lg text-white text-sm">Regenerate content</button>
-                <button class="px-2 py-1 bg-zinc-500 rounded-lg text-white text-sm">View history</button>
-                <button class="px-2 py-1 bg-zinc-300 rounded-lg text-zinc-800 text-sm">Copy</button>
+                <button class="px-3 py-2 bg-zinc-300 rounded-lg text-zinc-800 text-sm">Regenerate</button>
+                <button class="px-3 py-2 bg-zinc-300 rounded-lg text-zinc-800 text-sm">View history</button>
+                <button class="px-3 py-2 bg-zinc-300 rounded-lg text-zinc-800 text-sm">Copy</button>
                 <button class="px-2 py-1 bg-black rounded-lg text-white text-sm">Save</button>
             </div>
         </div>

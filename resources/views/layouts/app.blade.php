@@ -26,10 +26,10 @@
         <x-notifications />
         <x-jet-banner />
         @if (session()->has('message'))
-                        <div class="alert alert-success">
-                            {{ session('message') }}
-                        </div>
-                    @endif
+            <div class="alert alert-success">
+                 {{ session('message') }}
+            </div>
+        @endif
 
         <div class="flex min-h-screen bg-gray-100 relative">
             <div class="hidden md:block md:w-1/5 h-full fixed p-6 bg-white border-r-2">
