@@ -37,17 +37,17 @@ class DocumentRepository
         ]);
     }
 
-    public function addHistory(array $payload, array $tokenUsage)
+    public function addHistory(array $payload, array $tokenUsage = [])
     {
         $content = is_array($payload['content']) ? json_encode($payload['content']) : $payload['content'];
         $this->document->history()->create([
             'description' => $payload['field'],
             'content' => $content,
             'word_count' => Str::wordCount($content),
-            'prompt_token_usage' => $tokenUsage['prompt'],
-            'completion_token_usage' => $tokenUsage['completion'],
-            'total_token_usage' => $tokenUsage['total'],
-            'model' => $tokenUsage['model']
+            'prompt_token_usage' => $tokenUsage['prompt'] ?? 0,
+            'completion_token_usage' => $tokenUsage['completion'] ?? 0,
+            'total_token_usage' => $tokenUsage['total'] ?? 0,
+            'model' => $tokenUsage['model'] ?? ''
         ]);
     }
 

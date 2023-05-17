@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Livewire\Dashboard;
-use App\Http\Livewire\DocumentView;
+use App\Http\Livewire\Blog\DocumentView;
 use App\Http\Livewire\MyDocuments;
 use App\Http\Livewire\NewPost;
 use App\Http\Livewire\PendingJobs;
