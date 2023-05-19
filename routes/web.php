@@ -2,10 +2,10 @@
 
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Blog\DocumentView;
-use App\Http\Livewire\MyDocuments;
 use App\Http\Livewire\NewPost;
-use App\Http\Livewire\PendingJobs;
 use App\Http\Livewire\Templates;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -34,10 +34,6 @@ Route::middleware([
     Route::get('/documents/{document}', DocumentView::class)->name('document-view');
 });
 
-Route::get('/google/auth/redirect', function () {
-    return Socialite::driver('google')->redirect();
-})->name('login.google');
-
 Route::get('/linkedin/auth/redirect', function () {
     return Socialite::driver('linkedin')->redirect();
 })->name('login.linkedin');
@@ -46,8 +42,23 @@ Route::get('/medium/auth/redirect', function () {
     return Socialite::driver('medium')->redirect();
 })->name('login.medium');
 
+/* Google Auth */
+
+Route::get('/google/auth/redirect', function () {
+    return Socialite::driver('google')->redirect();
+})->name('login.google');
+
 Route::get('/google/auth/callback', function () {
     $user = Socialite::driver('google')->user();
+    $user = User::updateOrCreate([
+        'email' => $user->getEmail(),
+    ], [
+        'name' => $user->getName(),
+        'email' => $user->getEmail(),
+        'provider' => 'google',
+        'provider_id' => $user->getId(),
+    ]);
+    Auth::login($user);
 
-    // $user->token
+    return redirect()->route('dashboard');
 });

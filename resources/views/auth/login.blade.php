@@ -45,12 +45,13 @@
                     {{ __('Log in') }}
                 </x-jet-button>
             </div>
+        </form>
             <div class="mt-6 flex flex-col gap-2">
                 <div class="border border-zinc-300 rounded-lg px-3 py-3 flex justify-center">
-                    <button type="submit" class="btn btn-primary flex items-center gap-2">
+                    <a href="{{ route('login.google') }}" class="btn btn-primary flex items-center gap-2">
                         <img width="20px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
                             <span class="font-">Sign-in with Google</span>
-                    </button>
+                    </a>
                 </div>
                 {{-- <div class="border border-zinc-300 rounded-lg px-3 py-3 flex justify-center">
                     <button type="submit" class="btn btn-primary flex items-center gap-2">
@@ -66,6 +67,6 @@
                 </div> --}}
             </div>
 
-        </form>
+
     </x-jet-authentication-card>
 </x-guest-layout>
