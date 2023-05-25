@@ -17,4 +17,9 @@ class DocumentHistory extends Model
     {
         return $this->belongsTo(Document::class);
     }
+
+    public function scopeOfField($query, $field)
+    {
+        return $query->where('description', $field);
+    }
 }

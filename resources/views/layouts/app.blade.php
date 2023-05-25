@@ -24,7 +24,7 @@
         <x-jet-banner />
         @livewire('common.notifications')
 
-        <div class="flex min-h-screen bg-gray-100 relative">
+        <div class="flex min-h-screen bg-gray-100 relative z-10">
             <div class="hidden md:block md:w-1/5 h-full fixed p-6 bg-white border-r-2">
                 @include('livewire.common.sidebar')
             </div>

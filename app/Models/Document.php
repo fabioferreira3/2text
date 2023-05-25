@@ -23,7 +23,7 @@ class Document extends Model
 
     public function history(): HasMany
     {
-        return $this->hasMany(DocumentHistory::class);
+        return $this->hasMany(DocumentHistory::class)->latest();
     }
 
     public function tasks(): HasMany

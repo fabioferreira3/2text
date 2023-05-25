@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Livewire\Dashboard;
-use App\Http\Livewire\Blog\DocumentView;
+use App\Http\Livewire\Blog\BlogPost;
 use App\Http\Livewire\NewPost;
 use App\Http\Livewire\Templates;
 use App\Models\User;
@@ -31,7 +31,7 @@ Route::middleware([
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/blog/new', NewPost::class)->name('new-post');
     Route::get('/templates', Templates::class)->name('templates');
-    Route::get('/documents/{document}', DocumentView::class)->name('document-view');
+    Route::get('/documents/blog-post/{document}', BlogPost::class)->name('blog-post');
 });
 
 Route::get('/linkedin/auth/redirect', function () {

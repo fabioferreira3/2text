@@ -27,7 +27,7 @@ class MyDocumentsTable extends DataTableComponent
 
     public function viewDoc($documentId)
     {
-        return redirect()->route('document-view', ['document' => $documentId]);
+        return redirect()->route('blog-post', ['document' => $documentId]);
     }
 
     public function deleteDoc($documentId)
