@@ -56,6 +56,7 @@ class DocumentRepository
         $this->document->refresh();
         $meta = $this->document->meta;
         $meta[$attribute] = $value;
+
         return $this->document->update(['meta' => $meta]);
     }
 

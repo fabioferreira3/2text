@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Blog;
 
 use App\Models\Document;
+use App\Repositories\DocumentRepository;
 use Livewire\Component;
 
 class ContentEditor extends Component
@@ -36,14 +37,23 @@ class ContentEditor extends Component
         $this->emit('refreshEditor');
     }
 
-    public function saveContent()
+    public function save()
     {
+        $repo = new DocumentRepository($this->document);
+
         $this->document->update(['content' => $this->content]);
+        $repo->addHistory(['field' => 'content', 'content' => $this->content]);
         $this->emit('refreshEditor');
 
         $this->dispatchBrowserEvent('alert', [
             'type' => 'success',
             'message' => "Content saved!"
         ]);
+    }
+
+    public function showHistoryModal()
+    {
+        $this->emit('showHistoryModal', 'content');
+        $this->emit('refreshEditor');
     }
 }

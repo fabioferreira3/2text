@@ -25,10 +25,10 @@ class BlogPost extends Component
         return view('livewire.blog.blog-post');
     }
 
-    public function showHistoryModal(string $field)
+    public function showHistoryModal(string $field, bool $isMeta = true)
     {
         $this->displayHistory = true;
-        $this->emit('listDocumentHistory', $field);
+        $this->emit('listDocumentHistory', $field, $isMeta);
     }
 
     public function closeHistoryModal()

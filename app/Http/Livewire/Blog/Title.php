@@ -2,23 +2,41 @@
 
 namespace App\Http\Livewire\Blog;
 
+use App\Models\Document;
+use App\Repositories\GenRepository;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
 class Title extends Component
 {
     public string $content;
+    public Document $document;
     public bool $copied = false;
     protected $listeners = ['refreshContent' => 'updateContent'];
 
-    public function mount(string $content)
+    public function mount(Document $document)
     {
-        $this->content = Str::of($content)->trim('"');
+        $this->document = $document;
+        $this->setContent($document);
+    }
+
+    private function setContent(Document $document)
+    {
+        $this->content = Str::of($document->meta['title'])->trim('"');
     }
 
     public function render()
     {
         return view('livewire.blog.title');
+    }
+
+    public function regenerate()
+    {
+        GenRepository::generateTitle($this->document, [
+            'tone' => $this->document->meta['tone'],
+            'keyword' => $this->document->meta['keyword']
+        ]);
+        $this->setContent($this->document->refresh());
     }
 
 

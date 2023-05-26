@@ -11,6 +11,7 @@ class HistoryModal extends Component
 {
     public Document $document;
     public string $field;
+    public bool $isMeta;
     public string $fieldTitle;
     public $history;
 
@@ -20,6 +21,7 @@ class HistoryModal extends Component
     {
         $this->document = $document;
         $this->field = '';
+        $this->isMeta = true;
         $this->fieldTitle = '';
         $this->history = collect([]);
     }
@@ -33,7 +35,12 @@ class HistoryModal extends Component
     {
         if ($this->field) {
             $repo = new DocumentRepository($this->document);
-            $repo->updateMeta($this->field, $content);
+            if ($this->isMeta) {
+                $repo->updateMeta($this->field, $content);
+            } else {
+                dd('eita');
+                $this->document->update([$this->field => $content]);
+            }
         }
         $this->emit('refresh', $this->field);
         $this->emit('closeHistoryModal');
@@ -43,9 +50,10 @@ class HistoryModal extends Component
         ]);
     }
 
-    public function listDocumentHistory($field)
+    public function listDocumentHistory(string $field, bool $isMeta = true)
     {
         $this->field = $field;
+        $this->isMeta = $isMeta;
         $this->fieldTitle = Str::title(str_replace('_', ' ', $field));
         $rawHistory = $this->document->history()->ofField($field)->get();
         $this->history = $rawHistory->map(function ($item) {
