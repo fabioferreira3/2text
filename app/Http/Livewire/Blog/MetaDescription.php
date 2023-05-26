@@ -2,8 +2,6 @@
 
 namespace App\Http\Livewire\Blog;
 
-use App\Repositories\DocumentRepository;
-use Exception;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
@@ -32,20 +30,7 @@ class MetaDescription extends Component
 
     public function save()
     {
-        try {
-            $repo = new DocumentRepository($this->document);
-            $repo->updateMeta('meta_description', $this->meta_description);
-            $repo->addHistory(['field' => 'meta_description', 'content' => $this->meta_description]);
-            $this->dispatchBrowserEvent('alert', [
-                'type' => 'success',
-                'message' => "Meta description updated!"
-            ]);
-        } catch (Exception $error) {
-            $this->dispatchBrowserEvent('alert', [
-                'type' => 'error',
-                'message' => "There was an error saving the meta description!"
-            ]);
-        }
+        $this->emitUp('saveField', ['field' => 'meta_description', 'content' => $this->content]);
     }
 
     public function showHistoryModal()

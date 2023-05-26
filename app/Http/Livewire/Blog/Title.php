@@ -2,8 +2,6 @@
 
 namespace App\Http\Livewire\Blog;
 
-use App\Repositories\DocumentRepository;
-use Exception;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
@@ -32,20 +30,7 @@ class Title extends Component
 
     public function save()
     {
-        try {
-            $repo = new DocumentRepository($this->document);
-            $repo->updateMeta('title', $this->title);
-            $repo->addHistory(['field' => 'title', 'content' => $this->title]);
-            $this->dispatchBrowserEvent('alert', [
-                'type' => 'success',
-                'message' => "Title updated!"
-            ]);
-        } catch (Exception $error) {
-            $this->dispatchBrowserEvent('alert', [
-                'type' => 'error',
-                'message' => "There was an error saving the title!"
-            ]);
-        }
+        $this->emitUp('saveField', ['field' => 'title', 'content' => $this->content]);
     }
 
     public function showHistoryModal()

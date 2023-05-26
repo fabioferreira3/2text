@@ -11,6 +11,7 @@ class HistoryModal extends Component
 {
     public Document $document;
     public string $field;
+    public string $fieldTitle;
     public $history;
 
     protected $listeners = ['listDocumentHistory'];
@@ -19,6 +20,7 @@ class HistoryModal extends Component
     {
         $this->document = $document;
         $this->field = '';
+        $this->fieldTitle = '';
         $this->history = collect([]);
     }
 
@@ -29,7 +31,6 @@ class HistoryModal extends Component
 
     public function apply($content)
     {
-        $fieldTitle = str_replace('_', ' ', $this->field);
         if ($this->field) {
             $repo = new DocumentRepository($this->document);
             $repo->updateMeta($this->field, $content);
@@ -38,13 +39,14 @@ class HistoryModal extends Component
         $this->emit('closeHistoryModal');
         $this->dispatchBrowserEvent('alert', [
             'type' => 'success',
-            'message' => Str::title($fieldTitle) . ' updated!'
+            'message' => $this->fieldTitle . ' updated!'
         ]);
     }
 
     public function listDocumentHistory($field)
     {
         $this->field = $field;
+        $this->fieldTitle = Str::title(str_replace('_', ' ', $field));
         $rawHistory = $this->document->history()->ofField($field)->get();
         $this->history = $rawHistory->map(function ($item) {
             return [
