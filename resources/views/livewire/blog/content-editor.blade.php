@@ -2,10 +2,7 @@
     <div class="flex justify-between mb-2">
         <label for="title" class="font-bold text-xl">Content</label>
         <div class="flex gap-2">
-            <x-button wire:loading.attr="disabled" white wire:click='regenerate' icon="refresh" label="Regenerate" class='border border-gray-300 rounded-lg'/>
-            <x-button wire:click='showHistoryModal' icon="book-open" label="View History" class='border border-gray-300 rounded-lg'/>
-            <x-button :disabled='$copied ? true : false' wire:click='copy' icon="clipboard-copy" :label='$copied ? "Copied" : "Copy"'  class='border border-gray-300 rounded-lg'/>
-            <x-button wire:click='save' icon="save" dark label='Save' class='border border-gray-300 rounded-lg'/>
+            @include('livewire.common.field-actions')
         </div>
     </div>
     <textarea class="editor" name="context" rows="30">{{$content}}</textarea>
@@ -36,11 +33,11 @@
 
     initEditor();
 
-    document.addEventListener('livewire:load', function () {
-        window.livewire.on('updateContent', function () {
+    document.addEventListener('livewire:load', function() {
+        window.livewire.on('updateContent', function() {
             initEditor();
         });
-        window.livewire.on('refreshEditor', function () {
+        window.livewire.on('refreshEditor', function() {
             initEditor();
         });
     });
