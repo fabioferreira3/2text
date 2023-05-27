@@ -13,6 +13,7 @@ enum DocumentTaskEnum: string
     case EXPAND_OUTLINE = 'expand_outline';
     case EXPAND_TEXT = 'expand_text';
     case EXPAND_TEXT_SECTION = 'expand_text_section';
+    case REGISTER_CONTENT_HISTORY = 'register_content_history';
 
     public function getJob()
     {
@@ -26,6 +27,7 @@ enum DocumentTaskEnum: string
             self::EXPAND_OUTLINE => "App\Jobs\ExpandOutline",
             self::EXPAND_TEXT => "App\Jobs\ExpandText",
             self::EXPAND_TEXT_SECTION => "App\Jobs\ExpandTextSection",
+            self::REGISTER_CONTENT_HISTORY => "App\Jobs\RegisterContentHistory",
         };
     }
 }

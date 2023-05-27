@@ -2,20 +2,25 @@
 
 namespace App\Http\Livewire\Blog;
 
+use App\Enums\DocumentTaskEnum;
+use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Livewire\Component;
+use Illuminate\Support\Str;
 
 class ContentEditor extends Component
 {
     public Document $document;
     public string $content;
     public bool $copied;
-    protected $listeners = ['updateContent'];
+    public $tone;
+    protected $listeners = ['refreshContent' => 'updateContent', 'editorUpdated'];
 
     public function mount(Document $document)
     {
         $this->document = $document;
+        $this->tone = $document->meta['tone'];
         $this->content = $document->content;
     }
 
@@ -24,10 +29,50 @@ class ContentEditor extends Component
         return view('livewire.blog.content-editor');
     }
 
-    public function updateContent($newContent)
+    public function regenerate()
+    {
+        $processId = Str::uuid();
+        $repo = new DocumentRepository($this->document);
+        $repo->createTask(DocumentTaskEnum::EXPAND_OUTLINE, [
+            'process_id' => $processId,
+            'meta' => [
+                'tone' => $this->tone,
+            ],
+            'tone' => $this->tone,
+            'order' => 1
+        ]);
+        $repo->createTask(
+            DocumentTaskEnum::EXPAND_TEXT,
+            [
+                'process_id' => $processId,
+                'meta' => [
+                    'tone' => $this->tone,
+                ],
+                'order' => 2
+            ]
+        );
+
+        DispatchDocumentTasks::dispatch();
+
+        $this->dispatchBrowserEvent('alert', [
+            'type' => 'success',
+            'message' => "Your post is being regenerated"
+        ]);
+
+        return redirect()->to('/dashboard');
+    }
+
+    public function editorUpdated($content)
     {
         $this->copied = false;
-        $this->content = $newContent;
+        $this->content = $content;
+    }
+
+    public function updateContent($content)
+    {
+        $this->copied = false;
+        $this->content = $content['content'];
+        $this->dispatchBrowserEvent('refresh-page');
     }
 
     public function copy()
@@ -53,7 +98,7 @@ class ContentEditor extends Component
 
     public function showHistoryModal()
     {
-        $this->emit('showHistoryModal', 'content');
+        $this->emitUp('showHistoryModal', 'content', false);
         $this->emit('refreshEditor');
     }
 }

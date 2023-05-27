@@ -33,12 +33,12 @@ class HistoryModal extends Component
 
     public function apply($content)
     {
+        $content = base64_decode($content);
         if ($this->field) {
             $repo = new DocumentRepository($this->document);
             if ($this->isMeta) {
                 $repo->updateMeta($this->field, $content);
             } else {
-                dd('eita');
                 $this->document->update([$this->field => $content]);
             }
         }

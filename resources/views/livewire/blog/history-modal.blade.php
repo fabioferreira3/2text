@@ -25,7 +25,7 @@
                         <td class="text-zinc-700 text-sm py-2 px-4 border border-zinc-300 rounded-lg">{{$item['created_at']}}</td>
                         <td class="text-zinc-700 py-2 px-4 border border-zinc-300 rounded-lg">{!!Str::limit($item['content'], 300, ' (...)')!!}</td>
                         <td class="text-zinc-700 py-2 px-4 border border-zinc-300 rounded-lg text-center">
-                            <x-button sky wire:click="apply('{{ $item['content'] }}')" icon="chevron-double-right" label="Apply" class='border border-gray-100 rounded-lg' />
+                            <x-button sky wire:click="apply('{{ base64_encode($item['content']) }}')" icon="chevron-double-right" label="Apply" class='border border-gray-100 rounded-lg' />
                         </td>
                     </tr>
                     @endforeach

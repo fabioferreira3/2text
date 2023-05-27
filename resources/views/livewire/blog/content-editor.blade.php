@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-2 p-4 bg-zinc-200 rounded-lg border border-gray-300">
     <div class="flex justify-between mb-2">
-        <label for="title" class="font-bold text-xl">Content</label>
+        <label for="content" class="font-bold text-xl">Content</label>
         <div class="flex gap-2">
             @include('livewire.common.field-actions')
         </div>
@@ -23,7 +23,7 @@
                 setup: function(editor) {
                     editor.on('blur', function(e) {
                         if (editor.isDirty()) {
-                            window.livewire.emit('updateContent', editor.getContent());
+                            window.livewire.emit('editorUpdated', editor.getContent());
                         }
                     });
                 }
