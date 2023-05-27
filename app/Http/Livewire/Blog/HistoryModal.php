@@ -42,7 +42,7 @@ class HistoryModal extends Component
                 $this->document->update([$this->field => $content]);
             }
         }
-        $this->emit('refresh', $this->field);
+        $this->emit('refresh', $this->field, $this->isMeta);
         $this->emit('closeHistoryModal');
         $this->dispatchBrowserEvent('alert', [
             'type' => 'success',

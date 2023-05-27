@@ -55,12 +55,12 @@ class BlogPost extends Component
         }
     }
 
-    public function refresh($field)
+    public function refresh($field, $isMeta = true)
     {
         $this->document->refresh();
         $this->emit('refreshContent', [
             'field' => $field,
-            'content' => $this->document->meta[$field]
+            'content' => $isMeta ? $this->document->meta[$field] : $this->document[$field]
         ]);
     }
 }

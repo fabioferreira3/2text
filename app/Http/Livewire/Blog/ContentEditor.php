@@ -70,9 +70,17 @@ class ContentEditor extends Component
 
     public function updateContent($content)
     {
-        $this->copied = false;
-        $this->content = $content['content'];
-        $this->dispatchBrowserEvent('refresh-page');
+        if (is_array($content)) {
+            if ($content['field'] === 'content') {
+                $this->content = $content['content'];
+            }
+            $this->emit('refreshEditor');
+        } else {
+            dd('eitaasd');
+            $this->copied = false;
+            $this->content = $content['content'];
+            $this->dispatchBrowserEvent('refresh-page');
+        }
     }
 
     public function copy()
