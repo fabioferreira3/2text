@@ -3,11 +3,6 @@ const colors = require("tailwindcss/colors");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    purge: [
-        "./resources/**/*.blade.php",
-        "./resources/**/*.js",
-        "./resources/**/*.vue",
-    ],
     content: [
         "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
         "./vendor/laravel/jetstream/**/*.blade.php",
@@ -17,7 +12,7 @@ module.exports = {
         "./app/Http/Livewire/**/*Table.php",
         "./vendor/rappasoft/laravel-livewire-tables/resources/views/**/*.blade.php",
     ],
-
+    safelist: ["bg-red-200", "bg-blue-200"],
     theme: {
         extend: {
             fontFamily: {
