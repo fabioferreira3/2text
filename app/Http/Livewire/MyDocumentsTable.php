@@ -70,7 +70,7 @@ class MyDocumentsTable extends DataTableComponent
                 ->collapseOnMobile(),
             Column::make('Actions')
                 ->label(
-                    fn ($row, Column $column) => view('livewire.tables.my-documents.view-action', ['rowId' => $row->id])
+                    fn ($row, Column $column) => view('livewire.tables.my-documents.view-action', ['rowId' => $row->id, 'isCompleted' => $row->is_completed])
                 ),
         ];
     }
@@ -91,16 +91,17 @@ class MyDocumentsTable extends DataTableComponent
                         'en' => 'English',
                         'ar' => 'Arabic',
                         'ch' => 'Chinese',
-                        'de' => 'German',
                         'fr' => 'French',
-                        'it' => 'Italian',
-                        'pl' => 'Polnish',
-                        'pt' => 'Portuguese',
-                        'es' => 'Spanish',
-                        'tr' => 'Turkish',
+                        'de' => 'German',
                         'el' => 'Greek',
+                        'it' => 'Italian',
                         'ja' => 'Japanese',
                         'ko' => 'Korean',
+                        'pl' => 'Polnish',
+                        'pt' => 'Portuguese',
+                        'ru' => 'Russian',
+                        'es' => 'Spanish',
+                        'tr' => 'Turkish'
                     ]
                 )->filter(function (Builder $builder, array $value) {
                     $builder->whereIn('language', $value);

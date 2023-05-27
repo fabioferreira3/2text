@@ -56,6 +56,9 @@ class Document extends Model
     public function getIsCompletedAttribute()
     {
         $finishedCount = $this->tasks->where('status', 'finished')->count();
+        if ($finishedCount === 0) {
+            return false;
+        }
         return $this->tasks->count() === $finishedCount;
     }
 
