@@ -25,7 +25,7 @@
                         <td class="text-zinc-700 text-sm py-2 px-4 border border-zinc-300 rounded-lg">{{$item['created_at']}}</td>
                         <td class="text-zinc-700 py-2 px-4 border border-zinc-300 rounded-lg">{!!Str::limit($item['content'], 300, ' (...)')!!}</td>
                         <td class="text-zinc-700 py-2 px-4 border border-zinc-300 rounded-lg text-center">
-                            <x-button sky wire:click="apply('{{ base64_encode($item['content']) }}')" icon="chevron-double-right" label="Apply" class='border border-gray-100 rounded-lg' />
+                            <x-button xs cyan wire:click="apply('{{ base64_encode($item['content']) }}')" icon="chevron-double-right" label="Apply" class='rounded-lg' />
                         </td>
                     </tr>
                     @endforeach
@@ -36,9 +36,7 @@
             No history available
             @endif
             <div class="flex justify-center pt-4 z-30">
-                <button wire:click="$emitUp('closeHistoryModal')" class="bg-secondary hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline" type="button">
-                    Close
-                </button>
+                <x-button label='Close' slate wire:click="$emitUp('closeHistoryModal')" class="py-2 px-4 rounded-lg" type="button"/>
             </div>
         </div>
     </div>
