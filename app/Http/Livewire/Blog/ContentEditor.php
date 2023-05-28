@@ -76,7 +76,6 @@ class ContentEditor extends Component
             }
             $this->emit('refreshEditor');
         } else {
-            dd('eitaasd');
             $this->copied = false;
             $this->content = $content['content'];
             $this->dispatchBrowserEvent('refresh-page');

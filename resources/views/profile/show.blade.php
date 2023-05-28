@@ -1,3 +1,8 @@
+@if(session('error'))
+    <div class="bg-warning-300 font-bold text-lg w-full text-center py-2">
+        {{ session('error') }}
+    </div>
+@endif
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -8,6 +13,9 @@
     <div>
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             @if (Laravel\Fortify\Features::canUpdateProfileInformation())
+                @livewire('profile.update-user-token')
+
+                <x-jet-section-border />
                 @livewire('profile.update-profile-information-form')
 
                 <x-jet-section-border />

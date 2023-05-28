@@ -23,7 +23,8 @@ use Laravel\Socialite\Facades\Socialite;
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
-    'verified'
+    'verified',
+    'checktoken'
 ])->group(function () {
     Route::get('/', function () {
         return redirect('/dashboard');
@@ -34,14 +35,6 @@ Route::middleware([
     Route::get('/documents/blog-post/{document}', BlogPost::class)->name('blog-post');
 });
 
-Route::get('/linkedin/auth/redirect', function () {
-    return Socialite::driver('linkedin')->redirect();
-})->name('login.linkedin');
-
-Route::get('/medium/auth/redirect', function () {
-    return Socialite::driver('medium')->redirect();
-})->name('login.medium');
-
 /* Google Auth */
 
 Route::get('/google/auth/redirect', function () {
@@ -50,6 +43,7 @@ Route::get('/google/auth/redirect', function () {
 
 Route::get('/google/auth/callback', function () {
     $user = Socialite::driver('google')->user();
+
     $user = User::updateOrCreate([
         'email' => $user->getEmail(),
     ], [
