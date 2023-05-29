@@ -81,11 +81,18 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
                 throw new Exception('Audio download error: unable to download');
             }
 
+            $video = $collection[0];
+            $duration = ceil($video->getDuration() / 60);
+
             $localFilePath = $collection[0]->getFile();
 
             Storage::disk('s3')->put($collection[0]->getFile()->getBasename(), file_get_contents($localFilePath));
 
-            $this->document->update(['meta' => [...$this->document->meta, 'audio_file_path' => $collection[0]->getFile()->getBasename()]]);
+            $this->document->update(['meta' => [
+                ...$this->document->meta,
+                'audio_file_path' => $collection[0]->getFile()->getBasename(),
+                'duration' => $duration
+            ]]);
 
             $this->jobSucceded();
         } catch (Exception $e) {

@@ -79,7 +79,7 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
                 ],
                 [
                     'model' => LanguageModels::WHISPER->value,
-                    'length' => 0
+                    'length' => $this->document->meta['duration']
                 ]
             );
             $this->jobSucceded();

@@ -45,7 +45,9 @@ class PublishTranscription implements ShouldQueue, ShouldBeUnique
                 'word_count' => Str::wordCount($meta['original_text']),
                 'meta' => [
                     'source' => $meta['source'],
-                    'source_url' => $meta['source_url']
+                    'source_url' => $meta['source_url'],
+                    'duration' => $meta['duration'],
+                    'audio_file_path' => $meta['audio_file_path'],
                 ]
             ]);
             $this->jobSucceded();
