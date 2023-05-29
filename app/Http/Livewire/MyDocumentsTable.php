@@ -59,7 +59,7 @@ class MyDocumentsTable extends DataTableComponent
                 ->sortable(),
             Column::make("Title", "meta")
                 ->format(function ($value, $row) {
-                    return $value['title'] ? Str::limit($value['title'], 15, '...') : Str::limit($row->content, 30, '...');
+                    return ($value['title'] ?? false) ? Str::limit($value['title'], 15, '...') : Str::limit($row->content, 30, '...');
                 })
                 ->searchable()
                 ->sortable(),
