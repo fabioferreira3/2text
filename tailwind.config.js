@@ -17,10 +17,11 @@ module.exports = {
     ],
     safelist: ["bg-red-200", "bg-blue-200"],
     theme: {
+        fontFamily: {
+            sans: ["Nunito", ...defaultTheme.fontFamily.sans],
+            courier: ['"Courier Prime"'],
+        },
         extend: {
-            fontFamily: {
-                sans: ["Nunito", ...defaultTheme.fontFamily.sans],
-            },
             colors: {
                 primary: colors.indigo,
                 secondary: "#B81717",

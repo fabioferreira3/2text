@@ -18,7 +18,7 @@ class SameAccountScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        if (Auth::check() && Auth::user()->account_id) {
+        if (Auth::check()) {
             $builder->where('account_id', Auth::user()->account_id);
         }
     }

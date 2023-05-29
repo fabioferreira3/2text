@@ -62,7 +62,8 @@ class MyDocumentsTable extends DataTableComponent
                     return ($value['title'] ?? false) ? Str::limit($value['title'], 15, '...') : Str::limit($row->content, 30, '...');
                 })
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->collapseOnMobile(),
             Column::make('Status')
                 ->label(function ($row) {
                     return view('livewire.tables.my-documents.document-status', ['isCompleted' => $row->is_completed]);

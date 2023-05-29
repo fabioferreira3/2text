@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DocumentViewController;
+use App\Http\Controllers\GoogleAuthController;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Blog\BlogPost;
 use App\Http\Livewire\Blog\NewPost;
@@ -9,6 +10,7 @@ use App\Http\Livewire\TextTranscription\NewTranscription;
 use App\Http\Livewire\TextTranscription\TextTranscription;
 use App\Models\Account;
 use App\Models\User;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
@@ -53,18 +55,4 @@ Route::get('/google/auth/redirect', function () {
     return Socialite::driver('google')->redirect();
 })->name('login.google');
 
-Route::get('/google/auth/callback', function () {
-    $googleUser = Socialite::driver('google')->user();
-
-    $user = User::updateOrCreate([
-        'email' => $googleUser->getEmail(),
-    ], [
-        'name' => $googleUser->getName(),
-        'email' => $googleUser->getEmail(),
-        'provider' => 'google',
-        'provider_id' => $googleUser->getId(),
-    ]);
-    Auth::login($user);
-
-    return redirect()->route('dashboard');
-});
+Route::get('/google/auth/callback', [GoogleAuthController::class, 'handleProviderCallback'])->name('login.google.callback');

@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Enums\DocumentTaskEnum;
-use App\Enums\DocumentType;
 use App\Enums\Tone;
 use App\Helpers\PromptHelper;
 use App\Models\Document;
