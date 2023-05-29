@@ -41,7 +41,7 @@ class CreateTranscription
             ]
         );
         $this->repo->createTask(DocumentTaskEnum::PROCESS_AUDIO, ['order' => 2]);
-        $this->repo->createTask(DocumentTaskEnum::PROCESS_TRANSCRIPTION, ['order' => 3]);
+        $this->repo->createTask(DocumentTaskEnum::PUBLISH_TRANSCRIPTION, ['order' => 3]);
 
         DispatchDocumentTasks::dispatch();
     }
