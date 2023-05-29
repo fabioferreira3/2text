@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Blog;
 
-use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Jobs\Blog\CreateBlogPost;
-use Illuminate\Validation\Rule;
 use WireUi\Traits\Actions;
 use Livewire\Component;
 
@@ -119,8 +117,7 @@ class NewPost extends Component
                 'target_headers_count' => $this->targetHeadersCount,
                 'tone' => $this->tone,
                 'keyword' => $this->keyword,
-            ],
-            'type' => DocumentType::BLOG_POST->value,
+            ]
         ]);
 
         return redirect()->to('/dashboard');

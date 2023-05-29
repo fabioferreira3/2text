@@ -16,8 +16,13 @@ class DocumentRepository
 
     public function __construct(Document $document = null)
     {
-        $this->document = $document;
+        $this->setDocument($document);
         $this->promptHelper = new PromptHelper();
+    }
+
+    public function setDocument(Document $document = null)
+    {
+        $this->document = $document;
     }
 
     public function create(array $params): Document
@@ -26,13 +31,13 @@ class DocumentRepository
             ...$params,
             'meta' => [
                 'title' => '',
-                'context' => $params['context'] ?? '',
+                'context' => $params['context'] ?? null,
                 'raw_structure' => [],
                 'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,
                 'source' => $params['source'],
                 'source_url' => $params['meta']['source_url'] ?? null,
-                'target_headers_count' => $params['meta']['target_headers_count'],
-                'keyword' => $params['meta']['keyword'] ?? '',
+                'target_headers_count' => $params['meta']['target_headers_count'] ?? null,
+                'keyword' => $params['meta']['keyword'] ?? null,
             ]
         ]);
     }

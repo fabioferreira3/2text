@@ -6,6 +6,7 @@ enum DocumentTaskEnum: string
 {
     case DOWNLOAD_AUDIO = 'download_audio';
     case PROCESS_AUDIO = 'process_audio';
+    case PUBLISH_TRANSCRIPTION = 'publish_transcription';
     case SUMMARIZE_DOC = 'summarize_doc';
     case CREATE_OUTLINE = 'create_outline';
     case CREATE_TITLE = 'create_title';
@@ -20,6 +21,7 @@ enum DocumentTaskEnum: string
         return match ($this) {
             self::DOWNLOAD_AUDIO => "App\Jobs\DownloadAudio",
             self::PROCESS_AUDIO => "App\Jobs\ProcessAudio",
+            self::PUBLISH_TRANSCRIPTION => "App\Jobs\TextTranscription\PublishTranscription",
             self::SUMMARIZE_DOC => "App\Jobs\SummarizeDocument",
             self::CREATE_OUTLINE => "App\Jobs\CreateOutline",
             self::CREATE_TITLE => "App\Jobs\CreateTitle",

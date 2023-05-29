@@ -2,8 +2,9 @@
 
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Blog\BlogPost;
-use App\Http\Livewire\NewPost;
+use App\Http\Livewire\Blog\NewPost;
 use App\Http\Livewire\Templates;
+use App\Http\Livewire\TextTranscription\NewTranscription;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -30,9 +31,15 @@ Route::middleware([
         return redirect('/dashboard');
     });
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
-    Route::get('/blog/new', NewPost::class)->name('new-post');
     Route::get('/templates', Templates::class)->name('templates');
+
+    /* Blog routes */
+    Route::get('/blog/new', NewPost::class)->name('new-post');
     Route::get('/documents/blog-post/{document}', BlogPost::class)->name('blog-post');
+
+    /* Text Transcription routes */
+    Route::get('/transcription/new', NewTranscription::class)->name('new-text-transcription');
+    Route::get('/documents/transcription/{document}', BlogPost::class)->name('blog-post');
 });
 
 /* Google Auth */

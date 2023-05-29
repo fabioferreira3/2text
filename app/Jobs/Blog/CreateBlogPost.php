@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Blog;
 
+use App\Enums\DocumentType;
 use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -16,7 +17,11 @@ class CreateBlogPost
 
     public function __construct(array $params)
     {
-        $this->params = [...$params, 'process_id' => Str::uuid()];
+        $this->params = [
+            ...$params,
+            'process_id' => Str::uuid(),
+            'type' => DocumentType::BLOG_POST->value
+        ];
         $this->repo = new DocumentRepository();
     }
 
