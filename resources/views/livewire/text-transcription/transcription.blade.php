@@ -1,14 +1,18 @@
-<div class="flex flex-col gap-2 p-4 bg-zinc-200 rounded-lg border border-gray-300">
-    <div class="flex justify-between mb-2">
-        <label for="content" class="font-bold text-xl">Content</label>
-        <div class="flex gap-2">
-            @include('livewire.common.field-actions', ['copyAction' => true, 'regenerateAction' => true, 'historyAction' => true])
+<div class="flex flex-col gap-12">
+    <div class="flex flex-col gap-2 p-4 bg-zinc-200 rounded-lg border border-gray-300">
+        <div class="flex justify-between mb-2">
+            <label for="content" class="font-bold text-xl">Content</label>
+            <div class="flex gap-2">
+                @include('livewire.common.field-actions', ['copyAction' => false, 'regenerateAction' => false, 'historyAction' => true])
+            </div>
         </div>
+        <textarea class="editor" name="context" rows="30">{{$content}}</textarea>
     </div>
-    <textarea class="editor" name="context" rows="30">{{$content}}</textarea>
+    @if($displayHistory)
+    @livewire('common.history-modal', [$document])
+    @endif
 </div>
 
-@stack('scripts')
 <script src="https://cdn.tiny.cloud/1/k28s5ifm759tzn9kbhh4i2dr9zo14vac4redj48xvb3shald/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
     function initEditor() {
@@ -42,3 +46,6 @@
         });
     });
 </script>
+
+
+@stack('scripts')

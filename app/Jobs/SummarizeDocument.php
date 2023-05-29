@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Enums\ChatGptModel;
+use App\Enums\LanguageModels;
 use App\Helpers\PromptHelper;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
@@ -52,7 +52,7 @@ class SummarizeDocument implements ShouldQueue, ShouldBeUnique
                 return;
             }
 
-            $chatGpt = new ChatGPT(ChatGptModel::GPT_3_TURBO->value);
+            $chatGpt = new ChatGPT(LanguageModels::GPT_3_TURBO->value);
 
             $sentences = collect(preg_split("/(?<=[.?!])\s+(?=([^\d\w]*[A-Z][^.?!]+))/", $this->document->meta['context'], -1, PREG_SPLIT_NO_EMPTY));
             $paragraphs = collect([]);

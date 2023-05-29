@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Enums\DocumentType;
 use App\Events\DocumentTaskFinished;
 use App\Models\DocumentTask;
 use App\Repositories\DocumentRepository;
@@ -26,6 +27,10 @@ class HandleFinishedProcess
      */
     public function handle(DocumentTaskFinished $event)
     {
+        if ($event->task->document->type !== DocumentType::BLOG_POST) {
+            return;
+        }
+
         $tasksByProcess = DocumentTask::ofProcess($event->task->process_id)->get();
         $finishedCount = $tasksByProcess->where('status', 'finished')->count();
 

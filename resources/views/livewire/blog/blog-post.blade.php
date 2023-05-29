@@ -4,7 +4,7 @@
     @livewire('blog.content-editor', [$document])
 
     @if($displayHistory)
-        @livewire('blog.history-modal', [$document])
+    @livewire('common.history-modal', [$document])
     @endif
 </div>
 

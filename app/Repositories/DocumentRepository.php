@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\DocumentTaskEnum;
+use App\Enums\DocumentType;
 use App\Enums\Tone;
 use App\Helpers\PromptHelper;
 use App\Models\Document;
@@ -52,6 +53,7 @@ class DocumentRepository
             'prompt_token_usage' => $tokenUsage['prompt'] ?? 0,
             'completion_token_usage' => $tokenUsage['completion'] ?? 0,
             'total_token_usage' => $tokenUsage['total'] ?? 0,
+            'audio_length' => $tokenUsage['length'] ?? 0,
             'model' => $tokenUsage['model'] ?? ''
         ]);
     }

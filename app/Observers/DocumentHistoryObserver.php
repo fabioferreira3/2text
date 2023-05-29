@@ -20,6 +20,7 @@ class DocumentHistoryObserver
             $documentHistory->cost = DocumentHelper::calculateModelCosts($documentHistory->model, [
                 'prompt' => $documentHistory->prompt_token_usage,
                 'completion' => $documentHistory->completion_token_usage,
+                'audio_length' => $documentHistory->audio_length,
                 'total' => $documentHistory->total_token_usage
             ]);
         }

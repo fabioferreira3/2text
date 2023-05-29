@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Blog;
+namespace App\Http\Livewire\Common;
 
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
@@ -28,7 +28,7 @@ class HistoryModal extends Component
 
     public function render()
     {
-        return view('livewire.blog.history-modal');
+        return view('livewire.common.history-modal');
     }
 
     public function apply($content)

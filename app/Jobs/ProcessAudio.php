@@ -2,9 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Enums\LanguageModels;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Packages\Whisper\Whisper;
+use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -68,6 +70,18 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
             }
 
             $this->document->update(['meta' => [...$this->document->meta, 'context' => $response['text'], 'original_text' => $response['text']]]);
+
+            $repo = new DocumentRepository($this->document);
+            $repo->addHistory(
+                [
+                    'field' => 'content',
+                    'content' => $response['text']
+                ],
+                [
+                    'model' => LanguageModels::WHISPER->value,
+                    'length' => 0
+                ]
+            );
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Audio download error: ' . $e->getMessage());

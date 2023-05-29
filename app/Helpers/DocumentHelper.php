@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Enums\ChatGptModel;
+use App\Enums\LanguageModels;
 
 class DocumentHelper
 {
@@ -51,12 +51,14 @@ class DocumentHelper
 
     public static function calculateModelCosts(string $model, array $tokenUsage)
     {
-        if (in_array($model, [ChatGptModel::GPT_3_TURBO->value, ChatGptModel::GPT_3_TURBO0301->value])) {
+        if (in_array($model, [LanguageModels::GPT_3_TURBO->value, LanguageModels::GPT_3_TURBO0301->value])) {
             return ($tokenUsage['total'] / 1000) * 0.002;
-        } else if (in_array($model, [ChatGptModel::GPT_4->value, ChatGptModel::GPT_4_0314->value])) {
+        } else if (in_array($model, [LanguageModels::GPT_4->value, LanguageModels::GPT_4_0314->value])) {
             return (($tokenUsage['prompt'] / 1000) * 0.03) + (($tokenUsage['completion'] / 1000) * 0.06);
-        } else if (in_array($model, [ChatGptModel::GPT_4_32->value, ChatGptModel::GPT_4_32_0314->value])) {
+        } else if (in_array($model, [LanguageModels::GPT_4_32->value, LanguageModels::GPT_4_32_0314->value])) {
             return (($tokenUsage['prompt'] / 1000) * 0.06) + (($tokenUsage['completion'] / 1000) * 0.12);
+        } else if (in_array($model, [LanguageModels::WHISPER->value])) {
+            return $tokenUsage['audio_length'] * 0.006;
         } else {
             return 0;
         }

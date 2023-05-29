@@ -5,6 +5,7 @@ use App\Http\Livewire\Blog\BlogPost;
 use App\Http\Livewire\Blog\NewPost;
 use App\Http\Livewire\Templates;
 use App\Http\Livewire\TextTranscription\NewTranscription;
+use App\Http\Livewire\TextTranscription\TextTranscription;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -39,7 +40,7 @@ Route::middleware([
 
     /* Text Transcription routes */
     Route::get('/transcription/new', NewTranscription::class)->name('new-text-transcription');
-    Route::get('/documents/transcription/{document}', BlogPost::class)->name('blog-post');
+    Route::get('/documents/transcription/{document}', TextTranscription::class)->name('transcription');
 });
 
 /* Google Auth */

@@ -2,7 +2,9 @@
 
 namespace App\Jobs\TextTranscription;
 
+use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,18 +15,20 @@ use Illuminate\Support\Str;
 
 class PublishTranscription implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
     protected Document $document;
+    public array $meta;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Document $document)
+    public function __construct(Document $document, array $meta)
     {
         $this->document = $document->fresh();
+        $this->meta = $meta;
     }
 
     /**
@@ -34,14 +38,19 @@ class PublishTranscription implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        $meta = $this->document->meta;
-        $this->document->update([
-            'content' => $this->document->meta['original_text'],
-            'word_count' => Str::wordCount($this->document->meta['original_text']),
-            'meta' => [
-                'source' => $meta['source'],
-                'source_url' => $meta['source_url']
-            ]
-        ]);
+        try {
+            $meta = $this->document->meta;
+            $this->document->update([
+                'content' => $meta['original_text'],
+                'word_count' => Str::wordCount($meta['original_text']),
+                'meta' => [
+                    'source' => $meta['source'],
+                    'source_url' => $meta['source_url']
+                ]
+            ]);
+            $this->jobSucceded();
+        } catch (Exception $e) {
+            $this->jobFailed($e);
+        }
     }
 }

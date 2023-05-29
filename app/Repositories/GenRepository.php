@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Packages\ChatGPT\ChatGPT;
-use App\Enums\ChatGptModel;
+use App\Enums\LanguageModels;
 use App\Helpers\PromptHelper;
 use App\Models\Document;
 use Illuminate\Support\Str;
@@ -14,7 +14,7 @@ class GenRepository
     {
         $repo = new DocumentRepository($document);
         $promptHelper = new PromptHelper($document->language->value);
-        $chatGpt = new ChatGPT(ChatGptModel::GPT_3_TURBO->value);
+        $chatGpt = new ChatGPT(LanguageModels::GPT_3_TURBO->value);
         $response = $chatGpt->request([[
             'role' => 'user',
             'content' => $promptHelper->writeTitle($document->normalized_structure, $meta['tone'], $meta['keyword'])
@@ -33,7 +33,7 @@ class GenRepository
     {
         $repo = new DocumentRepository($document);
         $promptHelper = new PromptHelper($document->language->value);
-        $chatGpt = new ChatGPT(ChatGptModel::GPT_3_TURBO->value);
+        $chatGpt = new ChatGPT(LanguageModels::GPT_3_TURBO->value);
         $response = $chatGpt->request([[
             'role' => 'user',
             'content' => $promptHelper->writeMetaDescription($document->normalized_structure, $meta['tone'], $meta['keyword'])
