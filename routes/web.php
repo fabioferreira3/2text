@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\DocumentViewController;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Blog\BlogPost;
 use App\Http\Livewire\Blog\NewPost;
 use App\Http\Livewire\Templates;
 use App\Http\Livewire\TextTranscription\NewTranscription;
 use App\Http\Livewire\TextTranscription\TextTranscription;
+use App\Models\Account;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -36,11 +38,13 @@ Route::middleware([
 
     /* Blog routes */
     Route::get('/blog/new', NewPost::class)->name('new-post');
-    Route::get('/documents/blog-post/{document}', BlogPost::class)->name('blog-post');
+    Route::get('/documents/blog-post/{document}', BlogPost::class)->name('blog-post-view');
 
     /* Text Transcription routes */
     Route::get('/transcription/new', NewTranscription::class)->name('new-text-transcription');
-    Route::get('/documents/transcription/{document}', TextTranscription::class)->name('transcription');
+    Route::get('/documents/transcription/{document}', TextTranscription::class)->name('transcription-view');
+
+    Route::get('/documents/{document}', [DocumentViewController::class, 'index'])->name('document-view');
 });
 
 /* Google Auth */
@@ -50,15 +54,15 @@ Route::get('/google/auth/redirect', function () {
 })->name('login.google');
 
 Route::get('/google/auth/callback', function () {
-    $user = Socialite::driver('google')->user();
+    $googleUser = Socialite::driver('google')->user();
 
     $user = User::updateOrCreate([
-        'email' => $user->getEmail(),
+        'email' => $googleUser->getEmail(),
     ], [
-        'name' => $user->getName(),
-        'email' => $user->getEmail(),
+        'name' => $googleUser->getName(),
+        'email' => $googleUser->getEmail(),
         'provider' => 'google',
-        'provider_id' => $user->getId(),
+        'provider_id' => $googleUser->getId(),
     ]);
     Auth::login($user);
 

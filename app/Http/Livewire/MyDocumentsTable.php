@@ -5,11 +5,12 @@ namespace App\Http\Livewire;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\MultiSelectFilter;
 use WireUi\Traits\Actions;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 class MyDocumentsTable extends DataTableComponent
 {
@@ -27,7 +28,8 @@ class MyDocumentsTable extends DataTableComponent
 
     public function viewDoc($documentId)
     {
-        return redirect()->route('blog-post', ['document' => $documentId]);
+        $document = Document::findOrFail($documentId);
+        return redirect()->route('document-view', ['document' => $document]);
     }
 
     public function deleteDoc($documentId)
@@ -55,10 +57,16 @@ class MyDocumentsTable extends DataTableComponent
                 ->format(fn ($value, $row) => $row->type->label())
                 ->searchable()
                 ->sortable(),
+            Column::make("Title", "meta")
+                ->format(function ($value, $row) {
+                    return $value['title'] ? Str::limit($value['title'], 15, '...') : Str::limit($row->content, 30, '...');
+                })
+                ->searchable()
+                ->sortable(),
             Column::make('Status')
-                ->label(
-                    fn ($row) => $row->is_completed ? 'Finished' : 'In Progress'
-                ),
+                ->label(function ($row) {
+                    return view('livewire.tables.my-documents.document-status', ['isCompleted' => $row->is_completed]);
+                }),
             Column::make("Language", "language")
                 ->format(fn ($value, $row) => $row->language->label())
                 ->searchable()
