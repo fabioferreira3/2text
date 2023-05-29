@@ -47,7 +47,7 @@ RUN apt-get update \
     && chmod a+rx /usr/local/bin/yt-dlp \
     && yt-dlp -U \
     && ln -s /usr/bin/python3 /usr/local/bin/python \
-    && pip install tiktoken
+    && pip install tiktoken requests beautifulsoup4
 
 
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.2
