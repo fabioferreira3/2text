@@ -1,6 +1,6 @@
 <div>
     <div class="mb-8 flex justify-between">
-        <h1 class="text-3xl font-bold">Dashboard</h1>
+        @include('livewire.common.header', ['icon' => 'desktop-computer', 'label' => 'Dashboard'])
         <livewire:common.create-document />
     </div>
     <div class="p-6 bg-white rounded-lg">

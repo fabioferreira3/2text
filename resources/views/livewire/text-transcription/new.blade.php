@@ -1,9 +1,5 @@
 <div class="flex flex-col gap-6">
-    <div>
-        <div class="flex flex-col gap-4">
-            <h1 class="text-4xl font-bold">New Transcription</h1>
-        </div>
-    </div>
+    @include('livewire.common.header', ['icon' => 'chat-alt', 'label' => 'New Transcription'])
 
     <div class="flex flex-col md:grid md:grid-cols-5 gap-6">
         <div class="col-span-3">

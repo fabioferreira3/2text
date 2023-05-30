@@ -24,7 +24,7 @@ class NewTranscription extends Component
         $this->source_url = '';
         $this->language = 'en';
         $this->languages = Language::getLabels();
-        $this->instructions = '<h3 class="font-bold">Welcome!</h3><p>Please fill out the following information to help our AI generate a unique and high-quality blog post for you.</p>';
+        $this->instructions = '<p>Please fill out the following information to help our AI generate a unique and high-quality blog post for you.</p>';
     }
 
     public function render()
@@ -46,12 +46,12 @@ class NewTranscription extends Component
 
     public function setSourceInfo()
     {
-        $this->instructions = "<h2 class='font-bold'>Source</h2> Choose between free text input, a youtube link or a video file to be the source of knowledge of your blog post.";
+        $this->instructions = "<h2 class='font-bold'>Source</h2> Define the Youtube link that you want me to transcribe for you";
     }
 
     public function setLanguageInfo()
     {
-        $this->instructions = "<h2 class='font-bold'>Language</h2><p>You need to select the language of the video since currently our tool does not auto-discover its main language.</p>";
+        $this->instructions = "<h2 class='font-bold'>Language</h2><p>You need to select the language of the video since I'm currently not able to auto-discover its main language.</p>";
     }
 
     public function process()

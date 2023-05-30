@@ -62,7 +62,7 @@ class NewPost extends Component
 
     protected $messages = [
         'context.required_if' => 'You need to provide some context for the AI to generate your blog post.',
-        'source_url.required_if' => 'You need to provide a Youtube link for the AI to generate your blog post.',
+        'source_url.required_if' => 'You need to provide a link for me to use as context for your blog post.',
         'keyword.required' => 'You need to provide a keyword.',
         'source.required' => 'Source is a required field.',
         'language.required' => 'Language is a required field.',
@@ -80,7 +80,7 @@ class NewPost extends Component
         <p>Enter a youtube link and I'll write a blog post based on the content of the video.</p>
         <h3 class='mt-4 font-bold'>Website URL</h3>
         <p>Enter an external website url to be used as context, like another blog post or page.
-        I'll do my best to extract as much information as possible from that page and use it as context for the creation of your blog post</p>
+        I'll do my best to extract as much information as possible from that page and use it as context for the creation of your blog post.</p>
         <h3 class='mt-4 font-bold'>Free text</h3>
         <p>Just enter any text that you want as context and I'll write a blog post based on the
         information you provide.</p>";
@@ -93,7 +93,7 @@ class NewPost extends Component
 
     public function setLanguageInfo()
     {
-        $this->instructions = "<h2 class='font-bold'>Language</h2><p>Define the main language of your blog post.</p>";
+        $this->instructions = "<h2 class='font-bold'>Language</h2><p>Define the main language of your blog post.</p><p>Take into account that the selected language must be the same language of the context you're using, ie: the language of the youtube video, the web page or free text you provided.</p>";
     }
 
     public function setSubtopicsInfo()

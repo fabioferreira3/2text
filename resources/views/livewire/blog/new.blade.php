@@ -1,11 +1,6 @@
 <div class="flex flex-col gap-6">
-    <div>
-        <div class="flex flex-col gap-4">
-            <h1 class="text-4xl font-bold">New blog post</h1>
-        </div>
-    </div>
-
-    <div class="flex flex-col md:grid md:grid-cols-6 gap-6">
+    @include('livewire.common.header', ['icon' => 'newspaper', 'label' => 'New blog post'])
+    <div class="flex flex-col md:grid md:grid-cols-6 gap-6 mt-6">
         <div class="col-span-2">
             <div class="p-4 bg-zinc-200 rounded-lg">
                 <h2 class="font-bold text-xl">Instructions</h2>
