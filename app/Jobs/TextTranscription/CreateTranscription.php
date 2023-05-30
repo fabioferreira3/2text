@@ -29,7 +29,7 @@ class CreateTranscription
 
     public function handle()
     {
-        $document = $this->repo->create($this->params);
+        $document = $this->repo->createGeneric($this->params);
         $this->repo->setDocument($document);
         $this->repo->createTask(
             DocumentTaskEnum::DOWNLOAD_AUDIO,

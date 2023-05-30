@@ -25,7 +25,7 @@ class DocumentRepository
         $this->document = $document;
     }
 
-    public function create(array $params): Document
+    public function createBlogPost(array $params): Document
     {
         return Document::create([
             ...$params,
@@ -38,6 +38,18 @@ class DocumentRepository
                 'source_url' => $params['meta']['source_url'] ?? null,
                 'target_headers_count' => $params['meta']['target_headers_count'] ?? null,
                 'keyword' => $params['meta']['keyword'] ?? null,
+            ]
+        ]);
+    }
+
+    public function createGeneric(array $params): Document
+    {
+        return Document::create([
+            ...$params,
+            'meta' => [
+                'context' => $params['context'] ?? null,
+                'source' => $params['source'],
+                'source_url' => $params['meta']['source_url'] ?? null
             ]
         ]);
     }

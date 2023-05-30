@@ -27,8 +27,9 @@ class CreateBlogPost
 
     public function handle()
     {
-        $document = $this->repo->create($this->params);
+        $document = $this->repo->createBlogPost($this->params);
         CreateBlogPostFromVideoStream::dispatchIf($this->params['source'] === 'youtube', $document, $this->params);
         CreateBlogPostFromFreeText::dispatchIf($this->params['source'] === 'free_text', $document, $this->params);
+        CreateBlogPostFromWebsite::dispatchIf($this->params['source'] === 'website_url', $document, $this->params);
     }
 }

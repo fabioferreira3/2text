@@ -32,17 +32,17 @@ class NewPost extends Component
         $this->keyword = '';
         $this->targetHeadersCount = '3';
         $this->tone = '';
-        $this->instructions = '<h3 class="font-bold">Welcome!</h3><p>Please fill out the following information to help our AI generate a unique and high-quality blog post for you.</p>
+        $this->instructions = '<p>Please fill out the following information so I can understand your requirements and write you an unique and high-quality blog post.</p>
 
-        <h3 class="font-bold">Source</h3><p class="text-sm">Enter the source of the content you would like to use for the blog post. You can provide free text, a YouTube link, or an audio file.</p>
+        <h3 class="font-bold">Source</h3><p class="text-sm">Provide a source of the context that your blog post should be based on. It could be a YouTube link, an external web page or just free text.</p>
 
-        <h3 class="font-bold">Keyword</h3><p class="text-sm">Provide a keyword that you would like our AI to use throughout the blog post. This keyword will help our AI to generate a relevant and focused article.</p>
+        <h3 class="font-bold">Keyword</h3><p class="text-sm">Provide a keyword that you would like me to use throughout your blog post. This keyword will help me generate a relevant and focused article.</p>
 
-        <h3 class="font-bold">Number of Topics</h3><p class="text-sm">Indicate the number of topics you would like our AI to cover in the blog post. You can select a minimum of one topic and a maximum of fifteen topics.</p>
+        <h3 class="font-bold">Number of Topics</h3><p class="text-sm">Indicate the number of topics you would like me to cover in your blog post. You may define a minimum of one and a maximum of fifteen topics.</p>
 
         <h3 class="font-bold">Language</h3><p class="text-sm">Select the language you would like the blog post to be generated in. If you have provided a YouTube link, please ensure that the selected language matches the main language of the video.</p>
 
-        <h3 class="font-bold">Tone</h3><p class="text-sm">Select the tone you would like the blog post to have. You can choose from casual, funny, sarcastic, dramatic, academic, and other tones. This will help our AI to generate a blog post that is in line with your preferences.</p>';
+        <h3 class="font-bold">Tone</h3><p class="text-sm">Define the tone of your blog post. You may pick from casual, funny, sarcastic, dramatic, academic, and other tones. This will help me write a blog post that is in line with your preference and your audience\'s.</p>';
     }
 
     public function render()
@@ -51,8 +51,8 @@ class NewPost extends Component
     }
 
     protected $rules = [
-        'source' => 'required|in:free_text,youtube,video',
-        'source_url' => 'required_if:source,youtube',
+        'source' => 'required|in:free_text,youtube,website_url',
+        'source_url' => 'required_if:source,youtube,website_url|url',
         'context' => 'required_if:source,free_text|nullable',
         'keyword' => 'required',
         'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
@@ -73,7 +73,17 @@ class NewPost extends Component
 
     public function setSourceInfo()
     {
-        $this->instructions = "<h2 class='font-bold'>Source</h2> Choose between free text input, a youtube link or a video file to be the source of knowledge of your blog post.";
+        $this->instructions = "
+        <h2 class='font-bold text-lg'>Source</h2>
+        <p>Define where I should extract the base context of your blog post. Choose between free text input, youtube link or a website url.</p>
+        <h3 class='mt-4 font-bold'>Youtube</h3>
+        <p>Enter a youtube link and I'll write a blog post based on the content of the video.</p>
+        <h3 class='mt-4 font-bold'>Website URL</h3>
+        <p>Enter an external website url to be used as context, like another blog post or page.
+        I'll do my best to extract as much information as possible from that page and use it as context for the creation of your blog post</p>
+        <h3 class='mt-4 font-bold'>Free text</h3>
+        <p>Just enter any text that you want as context and I'll write a blog post based on the
+        information you provide.</p>";
     }
 
     public function setKeywordInfo()

@@ -28,14 +28,12 @@ class Crawl extends Command
     public function handle()
     {
         $python = app()->environment('production') ? '/usr/bin/python' : '/usr/local/bin/python';
-
         $script = app()->environment('production') ? '/app/crawler.py' : '/var/www/html/crawler.py';
-
         $url = $this->argument('url');
 
         $output = [];
         exec("$python $script \"$url\"", $output);
 
-        return implode(PHP_EOL, $output);
+        $this->line(implode(PHP_EOL, $output));
     }
 }

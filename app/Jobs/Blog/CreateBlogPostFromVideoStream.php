@@ -49,51 +49,10 @@ class CreateBlogPostFromVideoStream implements ShouldQueue, ShouldBeUnique
             ]
         );
         $repo->createTask(DocumentTaskEnum::PROCESS_AUDIO, ['order' => 2]);
-        $repo->createTask(DocumentTaskEnum::SUMMARIZE_DOC, ['order' => 3]);
-        $repo->createTask(DocumentTaskEnum::CREATE_OUTLINE, [
-            'meta' => [
-                'target_headers_count' => $this->params['meta']['target_headers_count'],
-                'keyword' => $this->params['meta']['keyword'],
-                'tone' => $this->params['meta']['tone'],
-            ],
-            'order' => 4
+        RegisterBlogPostCreationTasks::dispatchSync($this->document, [
+            ...$this->params,
+            'next_order' => 3
         ]);
-        $repo->createTask(DocumentTaskEnum::EXPAND_OUTLINE, [
-            'meta' => [
-                'keyword' => $this->params['meta']['keyword'],
-                'tone' => $this->params['meta']['tone']
-            ],
-            'order' => 5
-        ]);
-        $repo->createTask(
-            DocumentTaskEnum::EXPAND_TEXT,
-            [
-                'meta' => [
-                    'tone' => $this->params['meta']['tone']
-                ],
-                'order' => 6
-            ]
-        );
-        $repo->createTask(
-            DocumentTaskEnum::CREATE_TITLE,
-            [
-                'meta' => [
-                    'keyword' => $this->params['meta']['keyword'],
-                    'tone' => $this->params['meta']['tone'],
-                ],
-                'order' => 7
-            ]
-        );
-        $repo->createTask(
-            DocumentTaskEnum::CREATE_METADESCRIPTION,
-            [
-                'meta' => [
-                    'keyword' => $this->params['meta']['keyword'],
-                    'tone' => $this->params['meta']['tone'],
-                ],
-                'order' => 8
-            ]
-        );
 
         DispatchDocumentTasks::dispatch();
     }

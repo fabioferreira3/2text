@@ -2,18 +2,17 @@
 
 namespace App\Jobs\Blog;
 
-use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
-use App\Repositories\DocumentRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Artisan;
 
-class CreateBlogPostFromFreeText implements ShouldQueue, ShouldBeUnique
+class CreateBlogPostFromWebsite implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -38,6 +37,15 @@ class CreateBlogPostFromFreeText implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
+        Artisan::call('crawl', ['url' => $this->params['meta']['source_url']]);
+        $websiteContent = Artisan::output();
+        $this->document->update([
+            'meta' => [
+                ...$this->document->meta,
+                'context' => $websiteContent,
+                'original_text' => $websiteContent
+            ]
+        ]);
         RegisterBlogPostCreationTasks::dispatchSync($this->document, [
             ...$this->params,
             'next_order' => 1
@@ -50,6 +58,6 @@ class CreateBlogPostFromFreeText implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'create_blog_post_from_free_text_' . $this->document->id;
+        return 'create_blog_post_from_website_url_' . $this->document->id;
     }
 }
