@@ -36,7 +36,6 @@ class Tokenize extends Command
         $output = [];
         exec("$python $script \"$string\"", $output);
 
-
-        return implode(PHP_EOL, $output);
+        $this->line(implode(PHP_EOL, $output));
     }
 }

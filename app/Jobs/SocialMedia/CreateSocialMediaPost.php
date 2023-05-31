@@ -2,6 +2,7 @@
 
 namespace App\Jobs\SocialMedia;
 
+use App\Enums\DocumentTaskEnum;
 use App\Enums\DocumentType;
 use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -28,13 +29,42 @@ class CreateSocialMediaPost
     public function handle()
     {
         $document = $this->repo->createSocialMediaPost($this->params);
+        $this->repo->setDocument($document);
+        $this->repo->createTask(DocumentTaskEnum::SUMMARIZE_DOC, [
+            'order' => 1,
+            'process_id' => $this->params['process_id']
+        ]);
+
+        $document->refresh();
+
         $platforms = collect($document->meta['platforms'])
             ->filter(function ($value, $key) {
                 return $value;
             })
-            ->keys()
-            ->toArray();;
-        CreateFromFreeText::dispatchIf($this->params['source'] === 'free_text', $document, $this->params);
-        //CreateBlogPostFromVideoStream::dispatchIf($this->params['source'] === 'youtube', $document, $this->params);
+            ->keys();
+        $platforms->each(function ($platform) use ($document) {
+            CreateFromFreeText::dispatchIf(
+                $this->params['source'] === 'free_text',
+                $document,
+                [...$this->params, 'platform' => $platform]
+            );
+            CreateFromWebsite::dispatchIf(
+                $this->params['source'] === 'website_url',
+                $document,
+                [...$this->params, 'platform' => $platform]
+            );
+        });
+
+        $this->repo->createTask(
+            DocumentTaskEnum::CREATE_TITLE,
+            [
+                'process_id' => $this->params['process_id'],
+                'meta' => [
+                    'keyword' => $document->meta['keyword'],
+                    'tone' => $document->meta['tone'],
+                ],
+                'order' => 99
+            ]
+        );
     }
 }

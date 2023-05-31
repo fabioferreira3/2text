@@ -68,6 +68,7 @@ class ChatGPT
 
     public function countTokens($string)
     {
-        return Artisan::call('count:token', ['string' => addslashes($string)]);
+        Artisan::call('count:token', ['string' => addslashes($string)]);
+        return (int) Artisan::output();
     }
 }

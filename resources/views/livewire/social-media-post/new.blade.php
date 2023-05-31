@@ -20,17 +20,17 @@
                         </div>
                         <div class='grid grid-cols-2 gap-8 mt-2'>
                             <div class='flex flex-col gap-2'>
-                                <x-checkbox md id="facebook" name="facebook" label="Facebook" wire:model.defer="platforms.facebook" />
-                                <x-checkbox md id="instagram" name="instagram" label="Instagram" wire:model.defer="platforms.instagram" />
-                                <x-checkbox md id="twitter" name="twitter" label="Twitter" wire:model.defer="platforms.twitter" />
+                                <x-checkbox md id="facebook" name="facebook" label="Facebook" wire:model.defer="platforms.Facebook" />
+                                <x-checkbox md id="instagram" name="instagram" label="Instagram" wire:model.defer="platforms.Instagram" />
+                                <x-checkbox md id="twitter" name="twitter" label="Twitter" wire:model.defer="platforms.Twitter" />
                             </div>
                             <div class='flex flex-col gap-2'>
-                                <x-checkbox md id="linkedin" name="linkedin" label="Linkedin" wire:model.defer="platforms.linkedin" />
-                                <x-checkbox md id="tiktoken" name="tiktok" label="TikTok" wire:model.defer="platforms.tiktok" />
+                                <x-checkbox md id="linkedin" name="linkedin" label="Linkedin" wire:model.defer="platforms.Linkedin" />
+                                <x-checkbox md id="tiktoken" name="tiktok" label="TikTok" wire:model.defer="platforms.TikTok" />
                             </div>
                         </div>
                         @if($errors->has('platforms'))
-                            <span class="text-red-500 text-sm">{{ $errors->first('platforms') }}</span>
+                        <span class="text-red-500 text-sm">{{ $errors->first('platforms') }}</span>
                         @endif
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                             @endforeach
                         </select>
                         @if($errors->has('language'))
-                            <span class="text-red-500 text-sm">{{ $errors->first('language') }}</span>
+                        <span class="text-red-500 text-sm">{{ $errors->first('language') }}</span>
                         @endif
                     </div>
                     <div class="flex flex-col gap-3">
@@ -85,9 +85,10 @@
                             <option value="dramatic">Dramatic</option>
                             <option value="formal">Formal</option>
                             <option value="funny">Funny</option>
-                            <option value="misterious">Misterious</option>
-                            <option value="pessimistic">Pessimistic</option>
+                            <option value="mysterious">Mysterious</option>
                             <option value="optimistic">Optimistic</option>
+                            <option value="pessimistic">Pessimistic</option>
+                            <option value="sarcastic">Sarcastic</option>
                         </select>
                     </div>
                 </div>
@@ -111,17 +112,17 @@
                 </div>
                 @endif
                 @if ($source === 'website_url' || $source === 'youtube')
-                    <div class="flex flex-col gap-3">
-                        <div class="flex flex-col gap-1">
-                            <label class="font-bold text-lg text-zinc-700">Further instructions (optional):</label>
-                            <small>Feel free to provide any other guidelines so I can write a post that meets your expectation. (max 5000 chars)</small>
-                        </div>
-
-                        <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="5000" wire:model="more_instructions"></textarea>
-                        @if($errors->has('more_instructions'))
-                        <span class="text-red-500 text-sm">{{ $errors->first('more_instructions') }}</span>
-                        @endif
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-col gap-1">
+                        <label class="font-bold text-lg text-zinc-700">Further instructions (optional):</label>
+                        <small>Feel free to provide any other guidelines so I can write a post that meets your expectation. (max 5000 chars)</small>
                     </div>
+
+                    <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="5000" wire:model="more_instructions"></textarea>
+                    @if($errors->has('more_instructions'))
+                    <span class="text-red-500 text-sm">{{ $errors->first('more_instructions') }}</span>
+                    @endif
+                </div>
                 @endif
                 @if ($source === 'free_text')
                 <div class="flex flex-col gap-3">
@@ -138,15 +139,11 @@
                 </div>
                 @endif
                 <div class="flex justify-center mt-4">
-                    <button
-                        wire:click="process"
-                        wire:loading.remove
-                        class="bg-red-700 text-white font-bold px-4 py-2 rounded-lg"
-                    >
+                    <button wire:click="process" wire:loading.remove class="bg-red-700 text-white font-bold px-4 py-2 rounded-lg">
                         Generate!
                     </button>
                 </div>
             </div>
         </div>
     </div>
-    </div>
+</div>

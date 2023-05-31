@@ -35,11 +35,11 @@ class NewSocialMediaPost extends Component
         $this->tone = '';
         $this->more_instructions = null;
         $this->platforms = [
-            'linkedin' => false,
-            'facebook' => false,
-            'instagram' => false,
-            'twitter' => false,
-            'tiktok' => false
+            'Linkedin' => false,
+            'Facebook' => false,
+            'Instagram' => false,
+            'Twitter' => false,
+            'TikTok' => false
         ];
         $this->instructions = '<p>Please fill out the following information so I can understand your requirements and write you an unique and high-quality post.</p>
 

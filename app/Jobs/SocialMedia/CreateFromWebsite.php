@@ -12,8 +12,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Artisan;
 
-class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
+class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -38,6 +39,17 @@ class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
+        Artisan::call('crawl', ['url' => $this->params['meta']['source_url']]);
+        $websiteContent = Artisan::output();
+
+        $this->document->update([
+            'meta' => [
+                ...$this->document->meta,
+                'context' => $websiteContent,
+                'original_text' => $websiteContent
+            ]
+        ]);
+
         $repo = new DocumentRepository($this->document);
         $repo->createTask(
             DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST,

@@ -93,9 +93,10 @@
                         <option value="dramatic">Dramatic</option>
                         <option value="formal">Formal</option>
                         <option value="funny">Funny</option>
-                        <option value="misterious">Misterious</option>
-                        <option value="pessimistic">Pessimistic</option>
+                        <option value="mysterious">Mysterious</option>
                         <option value="optimistic">Optimistic</option>
+                        <option value="pessimistic">Pessimistic</option>
+                        <option value="sarcastic">Sarcastic</option>
                     </select>
                 </div>
 

@@ -2,6 +2,7 @@
 
 namespace App\Enums;
 
+use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
 
 enum Tone: string

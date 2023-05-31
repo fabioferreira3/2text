@@ -2,7 +2,6 @@
 
 namespace App\Jobs\SocialMedia;
 
-use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelper;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
@@ -47,35 +46,30 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            Log::debug($this->promptHelper->writeSocialMediaPost([
-                'context' => $this->document->meta['summary'] ?? $this->document->meta['context'],
-                'platform' => $this->meta['platform'],
-                'tone' => $this->meta['tone'],
-                'more_instructions' => $this->document->meta['more_instructions'] ?? null
-            ]));
-            // $chatGpt = new ChatGPT();
-            // $response = $chatGpt->request([
-            //     [
-            //         'role' => 'user',
-            //         'content' =>   $this->promptHelper->writeSocialMediaPost([
-            //             'context' => $this->document->meta['summary'] ?? $this->document->meta['context'],
-            //             'platform' => $this->meta['platform'],
-            //             'tone' => $this->meta['tone'],
-            //             'more_instructions' => $this->document->meta['more_instructions'] ?? null
-            //         ])
-            //     ]
-            // ]);
-            // $this->repo->updateMeta('post', $response['content']);
-            // $this->repo->addHistory(
-            //     [
-            //         'field' => 'outline',
-            //         'content' => $response['content']
-            //     ],
-            //     $response['token_usage']
-            // );
+            $chatGpt = new ChatGPT();
+            $response = $chatGpt->request([
+                [
+                    'role' => 'user',
+                    'content' =>   $this->promptHelper->writeSocialMediaPost([
+                        'context' => $this->document->meta['summary'] ?? $this->document->meta['context'],
+                        'keyword' => $this->document->meta['keyword'] ?? null,
+                        'platform' => $this->meta['platform'],
+                        'tone' => $this->document->meta['tone'],
+                        'more_instructions' => $this->document->meta['more_instructions'] ?? null
+                    ])
+                ]
+            ]);
+            $this->repo->updateMeta($this->meta['platform'], $response['content']);
+            $this->repo->addHistory(
+                [
+                    'field' => $this->meta['platform'],
+                    'content' => $response['content']
+                ],
+                $response['token_usage']
+            );
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to generate social media post: ' . $e->getMessage());
+            $this->jobFailed('Failed to generate ' . $this->meta['platform'] . ' post: ' . $e->getMessage());
         }
     }
 
