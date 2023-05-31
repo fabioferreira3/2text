@@ -5,6 +5,7 @@ use App\Http\Controllers\GoogleAuthController;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Blog\BlogPost;
 use App\Http\Livewire\Blog\NewPost;
+use App\Http\Livewire\SocialMediaPost\NewSocialMediaPost;
 use App\Http\Livewire\Templates;
 use App\Http\Livewire\TextTranscription\NewTranscription;
 use App\Http\Livewire\TextTranscription\TextTranscription;
@@ -45,6 +46,9 @@ Route::middleware([
     /* Text Transcription routes */
     Route::get('/transcription/new', NewTranscription::class)->name('new-text-transcription');
     Route::get('/documents/transcription/{document}', TextTranscription::class)->name('transcription-view');
+
+    /* Social media posts routes */
+    Route::get('/social-media-post/new', NewSocialMediaPost::class)->name('new-social-media-post');
 
     Route::get('/documents/{document}', [DocumentViewController::class, 'index'])->name('document-view');
 });

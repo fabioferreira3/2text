@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+select,
+input,
+textarea {
+    -webkit-appearance: none !important; /* Safari and Chrome */
+    -moz-appearance: none !important; /* Firefox */
+    appearance: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}

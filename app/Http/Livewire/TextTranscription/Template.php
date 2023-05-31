@@ -8,7 +8,7 @@ class Template extends Component
 {
     public string $icon = 'chat-alt';
     public string $title = 'Text Transcription';
-    public string $description = 'Transcription of audio to text using AI';
+    public string $description = 'Transcribe audio into text using AI';
 
     public function render()
     {

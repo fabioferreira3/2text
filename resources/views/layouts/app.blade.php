@@ -37,12 +37,11 @@
             @include('livewire.common.sidebar')
         </div>
         <!-- Page Content -->
-        <main class="mx-auto w-full md:w-4/5 absolute right-0 min-h-screen bg-white px-6">
+        <main class="mx-auto w-full md:w-4/5 h-full absolute right-0 bg-white px-6">
             @livewire('navigation-menu')
             <div class="p-6 rounded-lg bg-zinc-100">
                 {{ $slot }}
             </div>
-            <footer class="fixed bottom-0 left-0 w-full z-20 text-start py-2 px-4 bg-white border border-t text-xs font-bold border-gray-200">2Text.ai (beta)</footer>
         </main>
     </div>
 
@@ -84,6 +83,7 @@
             });
         });
     </script>
+    <footer class="w-full text-start py-2 px-4 bg-white border border-t text-xs font-bold border-gray-200">2Text.ai (beta)</footer>
 </body>
 
 </html>

@@ -42,6 +42,22 @@ class DocumentRepository
         ]);
     }
 
+    public function createSocialMediaPost(array $params): Document
+    {
+        return Document::create([
+            ...$params,
+            'meta' => [
+                'context' => $params['context'] ?? null,
+                'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,
+                'source' => $params['source'],
+                'source_url' => $params['meta']['source_url'] ?? null,
+                'keyword' => $params['meta']['keyword'] ?? null,
+                'platforms' => $params['meta']['platforms'],
+                'more_instructions' => $params['meta']['more_instructions'] ?? null
+            ]
+        ]);
+    }
+
     public function createGeneric(array $params): Document
     {
         return Document::create([

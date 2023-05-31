@@ -19,6 +19,7 @@
                 <div class="flex items-center h-5">
                     <input {{ $attributes->class([
                         $getClasses($errors->has($name)),
+                        'text-secondary'
                     ])->merge([
                         'type'  => 'checkbox',
                     ]) }} />

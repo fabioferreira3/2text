@@ -2,6 +2,14 @@
     @include('livewire.common.header', ['icon' => 'chat-alt', 'label' => 'New Transcription'])
 
     <div class="flex flex-col md:grid md:grid-cols-5 gap-6">
+        <div class="col-span-2">
+            <div class="p-4 bg-zinc-200 rounded-lg">
+                <h2 class="font-bold text-lg">Instructions</h2>
+                <div class="flex flex-col gap-2 mt-2">
+                    {!! $this->instructions !!}
+                </div>
+            </div>
+        </div>
         <div class="col-span-3">
             <div class="flex flex-col gap-4 p-4 border rounded">
                 <div class="grid grid-cols-2 gap-6">
@@ -52,7 +60,6 @@
                         @endif
                     </div>
                 </div>
-
                 <div class="flex justify-center mt-4">
                     <button
                         wire:click="process"
@@ -61,14 +68,6 @@
                     >
                         Transcript!
                     </button>
-                </div>
-            </div>
-        </div>
-        <div class="col-span-2">
-            <div class="p-4 bg-zinc-200 rounded-lg">
-                <h2 class="font-bold text-lg">Instructions</h2>
-                <div class="flex flex-col gap-2 mt-2">
-                    {!! $this->instructions !!}
                 </div>
             </div>
         </div>

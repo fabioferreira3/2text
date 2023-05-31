@@ -12,3 +12,10 @@
 </x-badge>
 @endif
 
+@if($type->value === 'social_media_post')
+<x-badge icon="hashtag" md blue label="{{$type->label()}}">
+    <x-slot name="prepend" class="relative flex items-center">
+    </x-slot>
+</x-badge>
+@endif
+

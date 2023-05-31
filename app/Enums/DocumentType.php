@@ -15,8 +15,8 @@ enum DocumentType: string
     {
         return match ($this) {
             self::BLOG_POST => "Blog Post",
-            self::TEXT_TRANSCRIPTION => "Text Transcription",
-            self::SOCIAL_MEDIA_POST => "Social Media Post"
+            self::TEXT_TRANSCRIPTION => "Transcription",
+            self::SOCIAL_MEDIA_POST => "Media Post"
         };
     }
 

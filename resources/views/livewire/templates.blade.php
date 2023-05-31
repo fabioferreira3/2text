@@ -5,6 +5,7 @@
         <small class="text-lg font-thin">Choose a template and let's write some content!</small>
     </div>
     <div class="grid md:grid-cols-3 xl:grid-cols-4 gap-6">
+        @livewire('social-media-post.template')
         @livewire('blog.template')
         @livewire('text-transcription.template')
     </div>

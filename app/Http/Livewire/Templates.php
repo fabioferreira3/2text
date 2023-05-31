@@ -16,9 +16,4 @@ class Templates extends Component
     {
         return view('livewire.templates');
     }
-
-    public function newBlogPost()
-    {
-        return redirect()->to('/blog/new');
-    }
 }

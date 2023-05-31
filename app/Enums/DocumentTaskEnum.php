@@ -8,6 +8,7 @@ enum DocumentTaskEnum: string
     case PROCESS_AUDIO = 'process_audio';
     case PUBLISH_TRANSCRIPTION = 'publish_transcription';
     case SUMMARIZE_DOC = 'summarize_doc';
+    case CREATE_SOCIAL_MEDIA_POST = 'create_social_media_post';
     case CREATE_OUTLINE = 'create_outline';
     case CREATE_TITLE = 'create_title';
     case CREATE_METADESCRIPTION = 'create_meta_description';
@@ -23,9 +24,10 @@ enum DocumentTaskEnum: string
             self::PROCESS_AUDIO => "App\Jobs\ProcessAudio",
             self::PUBLISH_TRANSCRIPTION => "App\Jobs\TextTranscription\PublishTranscription",
             self::SUMMARIZE_DOC => "App\Jobs\SummarizeDocument",
-            self::CREATE_OUTLINE => "App\Jobs\CreateOutline",
+            self::CREATE_SOCIAL_MEDIA_POST => "App\Jobs\SocialMedia\CreatePost",
+            self::CREATE_OUTLINE => "App\Jobs\Blog\CreateOutline",
             self::CREATE_TITLE => "App\Jobs\CreateTitle",
-            self::CREATE_METADESCRIPTION => "App\Jobs\CreateMetaDescription",
+            self::CREATE_METADESCRIPTION => "App\Jobs\Blog\CreateMetaDescription",
             self::EXPAND_OUTLINE => "App\Jobs\ExpandOutline",
             self::EXPAND_TEXT => "App\Jobs\ExpandText",
             self::EXPAND_TEXT_SECTION => "App\Jobs\ExpandTextSection",

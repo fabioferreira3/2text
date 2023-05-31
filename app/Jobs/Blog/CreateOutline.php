@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Blog;
 
 use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelper;

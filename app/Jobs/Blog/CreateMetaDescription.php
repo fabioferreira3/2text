@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Blog;
 
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;

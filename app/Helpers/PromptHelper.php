@@ -360,6 +360,22 @@ class PromptHelper
         }
     }
 
+    public function writeSocialMediaPost(array $params)
+    {
+        $tone = Tone::fromLanguage($params['tone'], $this->language);
+        switch ($this->language) {
+            case 'en':
+                $withKeyword = ($params['keyword'] ?? false) ? ", using the keyword " . $params['keyword'] . "," : "";
+                $basePrompt = "Write a social media post for " . $params['platform'] . $withKeyword . ". The post must have a " . $tone . " tone. The post should be based on the following context: \n\n" . $params['context'] . "\n\n\n\n";
+                if ($params['more_instructions']) {
+                    $basePrompt . "\n\n More instructions on the post creation:\n\n" . $params['more_instructions'];
+                }
+                return $basePrompt;
+            default:
+                return "";
+        }
+    }
+
     public function setLanguage(string $language)
     {
         $this->language = $language;
