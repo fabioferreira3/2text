@@ -1,4 +1,4 @@
-python-3.10.6
+python-3.10
 tiktoken
 requests
 beautifulsoup4
