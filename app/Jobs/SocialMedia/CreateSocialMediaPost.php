@@ -30,10 +30,10 @@ class CreateSocialMediaPost
     {
         $document = $this->repo->createSocialMediaPost($this->params);
         $this->repo->setDocument($document);
-        // $this->repo->createTask(DocumentTaskEnum::SUMMARIZE_DOC, [
-        //     'order' => 1,
-        //     'process_id' => $this->params['process_id']
-        // ]);
+        $this->repo->createTask(DocumentTaskEnum::SUMMARIZE_DOC, [
+            'order' => 1,
+            'process_id' => $this->params['process_id']
+        ]);
 
         $document->refresh();
 
@@ -55,16 +55,16 @@ class CreateSocialMediaPost
             );
         });
 
-        // $this->repo->createTask(
-        //     DocumentTaskEnum::CREATE_TITLE,
-        //     [
-        //         'process_id' => $this->params['process_id'],
-        //         'meta' => [
-        //             'keyword' => $document->meta['keyword'],
-        //             'tone' => $document->meta['tone'],
-        //         ],
-        //         'order' => 99
-        //     ]
-        // );
+        $this->repo->createTask(
+            DocumentTaskEnum::CREATE_TITLE,
+            [
+                'process_id' => $this->params['process_id'],
+                'meta' => [
+                    'keyword' => $document->meta['keyword'],
+                    'tone' => $document->meta['tone'],
+                ],
+                'order' => 99
+            ]
+        );
     }
 }
