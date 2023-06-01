@@ -25,17 +25,14 @@ title_text = "Title: "
 if title_tag is not None:
     title_text += title_tag.get_text()
 
-# find the 'main' tag and then find 'h1', 'h2', and 'p' tags inside it
 main_tag = soup.find('body')
 content_text = ""
 if main_tag is not None:
-    tags = main_tag.find_all(['h1', 'h2', 'h3', 'h4', 'h5' 'p'])
+    tags = main_tag.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'span', 'ul'])
 
-    # iterate over each tag and extract the text
     for tag in tags:
         content_text += "\n\n" + tag.get_text()
 
-# merge title and content
 full_text = title_text + "\n" + content_text
 
 print(full_text)

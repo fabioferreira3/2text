@@ -46,27 +46,34 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $chatGpt = new ChatGPT();
-            $response = $chatGpt->request([
-                [
-                    'role' => 'user',
-                    'content' =>   $this->promptHelper->writeSocialMediaPost([
-                        'context' => $this->document->meta['summary'] ?? $this->document->meta['context'],
-                        'keyword' => $this->document->meta['keyword'] ?? null,
-                        'platform' => $this->meta['platform'],
-                        'tone' => $this->document->meta['tone'],
-                        'more_instructions' => $this->document->meta['more_instructions'] ?? null
-                    ])
-                ]
-            ]);
-            $this->repo->updateMeta($this->meta['platform'], $response['content']);
-            $this->repo->addHistory(
-                [
-                    'field' => $this->meta['platform'],
-                    'content' => $response['content']
-                ],
-                $response['token_usage']
-            );
+            Log::debug($this->promptHelper->writeSocialMediaPost([
+                'context' => $this->document->meta['summary'] ?? $this->document->meta['context'],
+                'keyword' => $this->document->meta['keyword'] ?? null,
+                'platform' => $this->meta['platform'],
+                'tone' => $this->document->meta['tone'],
+                'more_instructions' => $this->document->meta['more_instructions'] ?? null
+            ]));
+            // $chatGpt = new ChatGPT();
+            // $response = $chatGpt->request([
+            //     [
+            //         'role' => 'user',
+            //         'content' =>   $this->promptHelper->writeSocialMediaPost([
+            //             'context' => $this->document->meta['summary'] ?? $this->document->meta['context'],
+            //             'keyword' => $this->document->meta['keyword'] ?? null,
+            //             'platform' => $this->meta['platform'],
+            //             'tone' => $this->document->meta['tone'],
+            //             'more_instructions' => $this->document->meta['more_instructions'] ?? null
+            //         ])
+            //     ]
+            // ]);
+            // $this->repo->updateMeta($this->meta['platform'], $response['content']);
+            // $this->repo->addHistory(
+            //     [
+            //         'field' => $this->meta['platform'],
+            //         'content' => $response['content']
+            //     ],
+            //     $response['token_usage']
+            // );
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to generate ' . $this->meta['platform'] . ' post: ' . $e->getMessage());
