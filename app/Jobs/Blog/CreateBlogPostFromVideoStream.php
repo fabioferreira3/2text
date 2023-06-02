@@ -42,13 +42,17 @@ class CreateBlogPostFromVideoStream implements ShouldQueue, ShouldBeUnique
         $repo->createTask(
             DocumentTaskEnum::DOWNLOAD_AUDIO,
             [
+                'process_id' => $this->params['process_id'],
                 'meta' => [
                     'source_url' => $this->params['meta']['source_url']
                 ],
                 'order' => 1
             ]
         );
-        $repo->createTask(DocumentTaskEnum::PROCESS_AUDIO, ['order' => 2]);
+        $repo->createTask(DocumentTaskEnum::PROCESS_AUDIO, [
+            'process_id' => $this->params['process_id'],
+            'order' => 2
+        ]);
         RegisterBlogPostCreationTasks::dispatchSync($this->document, [
             ...$this->params,
             'next_order' => 3
