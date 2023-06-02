@@ -64,7 +64,7 @@ class Document extends Model
 
     public function getContextAttribute()
     {
-        return $this->meta['summary'] ?? $this->meta['context'] ?? '';
+        return $this->meta['summary'] ?? $this->meta['context'];
     }
 
     protected static function booted(): void

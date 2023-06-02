@@ -8,7 +8,7 @@ use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class RegisterBlogPostCreationTasks
+class RegisterCreationTasks
 {
     use Dispatchable, SerializesModels;
 
@@ -33,6 +33,7 @@ class RegisterBlogPostCreationTasks
                 'target_headers_count' => $this->params['meta']['target_headers_count'],
                 'keyword' => $this->params['meta']['keyword'],
                 'tone' => $this->params['meta']['tone'],
+                'style' => $this->params['meta']['style'] ?? null,
             ],
             'order' => $this->params['next_order'] + 1
         ]);
@@ -40,8 +41,10 @@ class RegisterBlogPostCreationTasks
             'process_id' => $this->params['process_id'],
             'meta' => [
                 'tone' => $this->params['meta']['tone'],
+                'style' => $this->params['meta']['style'] ?? null,
             ],
             'tone' => $this->params['meta']['tone'],
+            'style' => $this->params['meta']['style'] ?? null,
             'order' => $this->params['next_order'] + 2
         ]);
         $this->repo->createTask(
@@ -50,6 +53,7 @@ class RegisterBlogPostCreationTasks
                 'process_id' => $this->params['process_id'],
                 'meta' => [
                     'tone' => $this->params['meta']['tone'],
+                    'style' => $this->params['meta']['style'] ?? null,
                 ],
                 'order' => $this->params['next_order'] + 3
             ]
@@ -60,7 +64,7 @@ class RegisterBlogPostCreationTasks
                 'process_id' => $this->params['process_id'],
                 'meta' => [
                     'keyword' => $this->params['meta']['keyword'],
-                    'tone' => $this->params['meta']['tone'],
+                    'tone' => $this->params['meta']['tone']
                 ],
                 'order' => $this->params['next_order'] + 4
             ]
@@ -71,7 +75,7 @@ class RegisterBlogPostCreationTasks
                 'process_id' => $this->params['process_id'],
                 'meta' => [
                     'keyword' => $this->params['meta']['keyword'],
-                    'tone' => $this->params['meta']['tone'],
+                    'tone' => $this->params['meta']['tone']
                 ],
                 'order' => $this->params['next_order'] + 5
             ]

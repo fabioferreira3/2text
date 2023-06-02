@@ -2,9 +2,6 @@
 
 namespace App\Enums;
 
-use App\Http\Livewire\Blog\BlogPost;
-use App\Http\Livewire\TextTranscription\TextTranscription;
-
 enum DocumentType: string
 {
     case BLOG_POST = 'blog_post';

@@ -17,9 +17,9 @@ class GenRepository
         $chatGpt = new ChatGPT(LanguageModels::GPT_3_TURBO->value);
         $response = $chatGpt->request([[
             'role' => 'user',
-            'content' => $promptHelper->writeTitle($document->normalized_structure, $meta['tone'], $meta['keyword'])
+            'content' => $promptHelper->writeTitle($document->normalized_structure, ['tone' => $meta['tone'], 'keyword' => $meta['keyword']])
         ]]);
-        $repo->updateMeta('title', Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"'));
+        $document->update(['title' => Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"')]);
         $repo->addHistory(
             [
                 'field' => 'title',
@@ -36,7 +36,7 @@ class GenRepository
         $chatGpt = new ChatGPT(LanguageModels::GPT_3_TURBO->value);
         $response = $chatGpt->request([[
             'role' => 'user',
-            'content' => $promptHelper->writeMetaDescription($document->normalized_structure, $meta['tone'], $meta['keyword'])
+            'content' => $promptHelper->writeMetaDescription($document->normalized_structure, ['tone' => $meta['tone'], 'keyword' => $meta['keyword']])
         ]]);
         $repo->updateMeta('meta_description', Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"'));
         $repo->addHistory(

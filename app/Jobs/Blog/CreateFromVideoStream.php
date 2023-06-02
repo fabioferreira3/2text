@@ -13,7 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class CreateBlogPostFromVideoStream implements ShouldQueue, ShouldBeUnique
+class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -53,7 +53,7 @@ class CreateBlogPostFromVideoStream implements ShouldQueue, ShouldBeUnique
             'process_id' => $this->params['process_id'],
             'order' => 2
         ]);
-        RegisterBlogPostCreationTasks::dispatchSync($this->document, [
+        RegisterCreationTasks::dispatchSync($this->document, [
             ...$this->params,
             'next_order' => 3
         ]);

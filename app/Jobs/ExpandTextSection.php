@@ -53,7 +53,9 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
             $response = $chatGpt->request([
                 [
                     'role' => 'user',
-                    'content' =>  $prompt . $this->promptHelper->expandOn($this->meta['text_section'], $this->meta['tone'])
+                    'content' =>  $prompt . $this->promptHelper->expandOn($this->meta['text_section'], [
+                        'tone' => $this->meta['tone']
+                    ])
                 ]
             ]);
             $rawStructure[$this->meta['section_key']]['content'] = $response['content'];

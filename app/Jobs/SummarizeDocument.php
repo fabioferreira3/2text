@@ -109,7 +109,7 @@ class SummarizeDocument implements ShouldQueue, ShouldBeUnique
                 );
             });
             $allRewrittenParagraphs = $rewrittenParagraphs->join(' ');
-            $this->document->update(['meta' => [...$this->document['meta'], 'summary' => $allRewrittenParagraphs]]);
+            $this->document->update(['meta' => [...$this->document['meta'], 'summary' => $allRewrittenParagraphs !== "" ? $allRewrittenParagraphs : null]]);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to generate summary: ' . $e->getMessage());

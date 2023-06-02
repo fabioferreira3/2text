@@ -12,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Artisan;
 
-class CreateBlogPostFromWebsite implements ShouldQueue, ShouldBeUnique
+class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -46,7 +46,7 @@ class CreateBlogPostFromWebsite implements ShouldQueue, ShouldBeUnique
                 'original_text' => $websiteContent
             ]
         ]);
-        RegisterBlogPostCreationTasks::dispatchSync($this->document, [
+        RegisterCreationTasks::dispatchSync($this->document, [
             ...$this->params,
             'next_order' => 1
         ]);

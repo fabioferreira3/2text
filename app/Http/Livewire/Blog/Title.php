@@ -22,7 +22,7 @@ class Title extends Component
 
     private function setContent(Document $document)
     {
-        $this->content = Str::of($document->meta['title'])->trim('"');
+        $this->content = Str::of($document->title)->trim('"');
     }
 
     public function render()

@@ -29,11 +29,12 @@ class DocumentRepository
     {
         return Document::create([
             ...$params,
+            'title' => '',
             'meta' => [
-                'title' => '',
                 'context' => $params['context'] ?? null,
                 'raw_structure' => [],
                 'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,
+                'style' => $params['meta']['style'] ?? null,
                 'source' => $params['source'],
                 'source_url' => $params['meta']['source_url'] ?? null,
                 'target_headers_count' => $params['meta']['target_headers_count'] ?? null,
@@ -49,6 +50,7 @@ class DocumentRepository
             'meta' => [
                 'context' => $params['context'] ?? null,
                 'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,
+                'style' => $params['meta']['style'] ?? null,
                 'source' => $params['source'],
                 'source_url' => $params['meta']['source_url'] ?? null,
                 'keyword' => $params['meta']['keyword'] ?? null,
@@ -119,23 +121,6 @@ class DocumentRepository
             'status' => $params['status'] ?? 'ready',
             'meta' => $params['meta'] ?? [],
             'order' => $params['order'] ?? 1,
-        ]);
-    }
-
-    public function defineDefaultMetaVideoStream()
-    {
-        $this->document->refresh();
-        $this->document->update([
-            'meta' => [
-                ...$this->document->meta,
-                'title' => "",
-                'original_text' => "",
-                'context' => "",
-                'raw_structure' => [],
-                'summary' => "",
-                'outline' => "",
-                'meta_description' => ""
-            ]
         ]);
     }
 }

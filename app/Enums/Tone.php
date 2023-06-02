@@ -2,7 +2,8 @@
 
 namespace App\Enums;
 
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 
 enum Tone: string
@@ -17,24 +18,26 @@ enum Tone: string
     case OPTIMISTIC = 'optimistic';
     case PESSIMISTIC = 'pessimistic';
     case SARCASTIC = 'sarcastic';
+    case SIMPLISTIC = 'simplistic';
 
-    public function labels(): string
+    public function labels($language = 'en'): string
     {
         return match ($this) {
-            self::ACADEMIC => "Academic",
-            self::ADVENTUROUS => "Adventurous",
-            self::CASUAL => "Casual",
-            self::DRAMATIC => "Dramatic",
-            self::FORMAL => "Formal",
-            self::FUNNY => "Funny",
-            self::MYSTERIOUS => "Mysterious",
-            self::PESSIMISTIC => "Pessimistic",
-            self::OPTIMISTIC => "Optimistic",
-            self::SARCASTIC => "Sarcastic",
+            self::ACADEMIC => $this->parseLabel('academic', $language),
+            self::ADVENTUROUS => $this->parseLabel('adventurous', $language),
+            self::CASUAL => $this->parseLabel('casual', $language),
+            self::DRAMATIC => $this->parseLabel('dramatic', $language),
+            self::FORMAL => $this->parseLabel('formal', $language),
+            self::FUNNY => $this->parseLabel('funny', $language),
+            self::MYSTERIOUS => $this->parseLabel('mysterious', $language),
+            self::PESSIMISTIC => $this->parseLabel('pessimistic', $language),
+            self::OPTIMISTIC => $this->parseLabel('optimistic', $language),
+            self::SARCASTIC => $this->parseLabel('sarcastic', $language),
+            self::SIMPLISTIC => $this->parseLabel('simplistic', $language),
         };
     }
 
-    public static function fromLanguage($tone, $language)
+    public static function fromLanguage($tone, $language = 'en')
     {
         $enumTone = self::tryFrom($tone);
 
@@ -42,27 +45,11 @@ enum Tone: string
             throw new InvalidArgumentException('Invalid tone provided');
         }
 
-        return match ($language) {
-            'en' => $enumTone->value,
-            'pt' => self::translateToPortuguese($enumTone),
-            default => $enumTone->value,
-        };
+        return Lang::get('tones.' . $enumTone->value, [], $language);
     }
 
-    private static function translateToPortuguese(Tone $tone): string
+    private function parseLabel($toneValue, $language = 'en')
     {
-        return match ($tone) {
-            self::ACADEMIC => "Acadêmico",
-            self::ADVENTUROUS => "Aventureiro",
-            self::CASUAL => "Casual",
-            self::DRAMATIC => "Dramático",
-            self::FORMAL => "Formal",
-            self::FUNNY => "Engraçado",
-            self::MYSTERIOUS => "Misterioso",
-            self::PESSIMISTIC => "Pessimista",
-            self::OPTIMISTIC => "Otimista",
-            self::SARCASTIC => "Sarcástico",
-            default => $tone->value,
-        };
+        return Str::ucfirst(Lang::get('tones.' . $toneValue, [], $language));
     }
 }

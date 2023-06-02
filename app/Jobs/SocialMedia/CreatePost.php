@@ -49,11 +49,11 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
             $response = $chatGpt->request([
                 [
                     'role' => 'user',
-                    'content' =>   $this->promptHelper->writeSocialMediaPost([
-                        'context' => $this->document->meta['summary'] ?? $this->document->meta['context'],
+                    'content' =>   $this->promptHelper->writeSocialMediaPost($this->document->context, [
                         'keyword' => $this->document->meta['keyword'] ?? null,
                         'platform' => $this->meta['platform'],
                         'tone' => $this->document->meta['tone'],
+                        'style' => $this->document->meta['style'] ?? null,
                         'more_instructions' => $this->document->meta['more_instructions'] ?? null
                     ])
                 ]

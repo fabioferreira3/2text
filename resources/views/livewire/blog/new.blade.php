@@ -80,24 +80,39 @@
                         @endif
                     </div>
                 </div>
-                <div class="flex flex-col gap-3">
-                    <div class="flex gap-2 items-center">
-                        <label>Tone:</label>
-                        <x-icon solid name="question-mark-circle" class="text-zinc-500 cursor-pointer h-5 w-5" wire:click="setToneInfo()" />
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="flex flex-col gap-3">
+                        <div class="flex gap-2 items-center">
+                            <label>Writing style:</label>
+                            <x-icon solid name="question-mark-circle" class="text-zinc-500 cursor-pointer h-5 w-5" wire:click="setStyleInfo()" />
+                        </div>
+                        <select name="style" wire:model="style" class="p-3 rounded-lg border border-zinc-200">
+                            <option value="">Default</option>
+                            <option value="descriptive">Descriptive</option>
+                            <option value="expository">Expository</option>
+                            <option value="narrative">Narrative</option>
+                            <option value="persuasive">Persuasive</option>
+                        </select>
                     </div>
-                    <select name="tone" wire:model="tone" class="p-3 rounded-lg border border-zinc-200">
-                        <option value="">Default</option>
-                        <option value="academic">Academic</option>
-                        <option value="adventurous">Adventurous</option>
-                        <option value="casual">Casual</option>
-                        <option value="dramatic">Dramatic</option>
-                        <option value="formal">Formal</option>
-                        <option value="funny">Funny</option>
-                        <option value="mysterious">Mysterious</option>
-                        <option value="optimistic">Optimistic</option>
-                        <option value="pessimistic">Pessimistic</option>
-                        <option value="sarcastic">Sarcastic</option>
-                    </select>
+                    <div class="flex flex-col gap-3">
+                        <div class="flex gap-2 items-center">
+                            <label>Tone:</label>
+                            <x-icon solid name="question-mark-circle" class="text-zinc-500 cursor-pointer h-5 w-5" wire:click="setToneInfo()" />
+                        </div>
+                        <select name="tone" wire:model="tone" class="p-3 rounded-lg border border-zinc-200">
+                            <option value="">Default</option>
+                            <option value="academic">Academic</option>
+                            <option value="adventurous">Adventurous</option>
+                            <option value="casual">Casual</option>
+                            <option value="dramatic">Dramatic</option>
+                            <option value="formal">Formal</option>
+                            <option value="funny">Funny</option>
+                            <option value="mysterious">Mysterious</option>
+                            <option value="optimistic">Optimistic</option>
+                            <option value="pessimistic">Pessimistic</option>
+                            <option value="sarcastic">Sarcastic</option>
+                        </select>
+                    </div>
                 </div>
 
                 @if ($source === 'free_text')

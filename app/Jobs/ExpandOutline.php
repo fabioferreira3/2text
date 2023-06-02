@@ -51,7 +51,10 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
             $response = $chatGpt->request([
                 [
                     'role' => 'user',
-                    'content' => $this->promptHelper->writeFirstPass($this->document->meta['outline'], $this->meta['tone'])
+                    'content' => $this->promptHelper->writeFirstPass($this->document->meta['outline'], [
+                        'tone' => $this->meta['tone'],
+                        'style' => $this->meta['style']
+                    ])
                 ]
             ]);
             $this->repo->updateMeta('raw_structure', DocumentHelper::parseHtmlTagsToRawStructure($response['content']));

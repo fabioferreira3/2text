@@ -2,10 +2,8 @@
 
 namespace App\Jobs\Blog;
 
-use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
-use App\Repositories\DocumentRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,7 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class CreateBlogPostFromFreeText implements ShouldQueue, ShouldBeUnique
+class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -38,7 +36,7 @@ class CreateBlogPostFromFreeText implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        RegisterBlogPostCreationTasks::dispatchSync($this->document, [
+        RegisterCreationTasks::dispatchSync($this->document, [
             ...$this->params,
             'next_order' => 1
         ]);

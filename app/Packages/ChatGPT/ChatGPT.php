@@ -27,6 +27,8 @@ class ChatGPT
 
     public function request(array $messages)
     {
+        Log::debug($messages);
+        return ['content' => "", 'token_usage' => []];
         try {
             $factory = new OpenAI();
             $client = $factory

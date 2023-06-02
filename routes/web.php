@@ -6,6 +6,7 @@ use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Blog\BlogPost;
 use App\Http\Livewire\Blog\NewPost;
 use App\Http\Livewire\SocialMediaPost\NewSocialMediaPost;
+use App\Http\Livewire\SocialMediaPost\Post;
 use App\Http\Livewire\Templates;
 use App\Http\Livewire\TextTranscription\NewTranscription;
 use App\Http\Livewire\TextTranscription\TextTranscription;
@@ -49,6 +50,7 @@ Route::middleware([
 
     /* Social media posts routes */
     Route::get('/social-media-post/new', NewSocialMediaPost::class)->name('new-social-media-post');
+    Route::get('/documents/social-media-post/{document}', Post::class)->name('social-media-post-view');
 
     Route::get('/documents/{document}', [DocumentViewController::class, 'index'])->name('document-view');
 });

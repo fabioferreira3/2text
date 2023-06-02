@@ -18,6 +18,7 @@ class NewPost extends Component
     public array $languages;
     public string $keyword;
     public string $tone;
+    public string $style;
     public string $targetHeadersCount;
     public string $instructions;
     public bool $modal;
@@ -32,6 +33,7 @@ class NewPost extends Component
         $this->keyword = '';
         $this->targetHeadersCount = '3';
         $this->tone = '';
+        $this->style = '';
         $this->instructions = '<p>Please fill out the following information so I can understand your requirements and write you an unique and high-quality blog post.</p>
 
         <h3 class="font-bold">Source</h3><p class="text-sm">Provide a source of the context that your blog post should be based on. It could be a YouTube link, an external web page or just free text.</p>
@@ -103,9 +105,38 @@ class NewPost extends Component
         <p class='text-sm'>As an estimate, 1 subtopic covers around 350 words.</p>";
     }
 
+    public function setStyleInfo()
+    {
+        $this->instructions = "<h2 class='font-bold'>Style</h2><p>Define the writing style.<p>
+        <div class='font-bold'>Descriptive</div>
+            <ul class='list-disc px-4 text-sm'>
+                <li>Used to depict imagery to create a clear picture in the mind of the reader.</li>
+                <li>Employs literary techniques such as similes, metaphors, allegory, etc to engage the audience.</li>
+                <li>Poetry; fictional novels or plays; memoirs or first-hand accounts of events</li>
+            </ul>
+        <div class='font-bold'>Expository</div>
+            <ul class='list-disc px-4 text-sm'>
+                <li>Used to explain a concept and share information to a broader audience.</li>
+                <li>This type is not meant to express opinions.</li>
+                <li>How-to articles; textbooks; news stories; business, technical, or scientific writing</li>
+            </ul>
+        <div class='font-bold'>Narrative</div>
+            <ul class='list-disc px-4 text-sm'>
+                <li>Share information in the context of a story.</li>
+                <li>Usually includes characters, conflicts, and settings.</li>
+                <li>Short stories; novels; poetry; historical accounts </li>
+            </ul>
+        <div class='font-bold'>Persuasive</div>
+            <ul class='list-disc px-4 text-sm'>
+                <li>Aims to convince the reader of the validity of a certain position or argument.</li>
+                <li>Includes the writers’ opinions, and provides justifications and evidence to support their claims.</li>
+                <li>Letters of recommendation; cover letters; newspaper articles; argumentative essays for academic papers</li>
+            </ul>";
+    }
+
     public function setToneInfo()
     {
-        $this->instructions = "<h2 class='font-bold'>Tone</h2><p>Define the tone/style of the writing.<p>
+        $this->instructions = "<h2 class='font-bold'>Tone</h2><p>Define the tone of the writing.<p>
         <h3 class='font-bold text-sm'>Useful guidelines</h3>
             <ul>
                 <li>Take into account your readers.</li>
@@ -126,6 +157,7 @@ class NewPost extends Component
                 'source_url' => $this->source_url,
                 'target_headers_count' => $this->targetHeadersCount,
                 'tone' => $this->tone,
+                'style' => $this->style,
                 'keyword' => $this->keyword,
             ]
         ]);

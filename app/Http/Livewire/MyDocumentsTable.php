@@ -59,11 +59,9 @@ class MyDocumentsTable extends DataTableComponent
                 })
                 ->searchable()
                 ->sortable(),
-            Column::make("Content", "content")
-                ->hideIf(true),
-            Column::make("Title", "meta")
-                ->format(function ($meta, $row) {
-                    return ($meta['title'] ?? false) ? Str::limit($meta['title'], 20, '...') : Str::limit($row->content, 30, '...');
+            Column::make("Title", "title")
+                ->format(function ($value, $row) {
+                    return $value ? Str::limit($value, 20, '...') : "";
                 })
                 ->searchable()
                 ->sortable()
