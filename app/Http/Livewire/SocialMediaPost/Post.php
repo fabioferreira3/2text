@@ -3,20 +3,32 @@
 namespace App\Http\Livewire\SocialMediaPost;
 
 use App\Models\Document;
-use App\Repositories\DocumentRepository;
+use App\Repositories\GenRepository;
 use Livewire\Component;
+use Illuminate\Support\Str;
 
 class Post extends Component
 {
     public Document $document;
     public string $content;
-    public bool $displayHistory = false;
+    public string $initialContent;
+    public bool $copied = false;
+    public string $platform;
+    public int $rows;
+    protected $listeners = ['refreshContent' => 'updateContent'];
 
-    protected $listeners = ['refreshContent' => 'updateContent', 'editorUpdated', 'closeHistoryModal', 'refresh'];
-
-    public function mount(Document $document)
+    public function mount(Document $document, $platform, $rows = 12)
     {
         $this->document = $document;
+        $this->platform = $platform;
+        $this->rows = $rows;
+        $this->setContent($document);
+        $this->initialContent = $this->content;
+    }
+
+    private function setContent(Document $document)
+    {
+        $this->content = Str::of($document->meta[$this->platform])->trim('"');
     }
 
     public function render()
@@ -24,60 +36,39 @@ class Post extends Component
         return view('livewire.social-media-post.post');
     }
 
-    public function showHistoryModal()
+    public function regenerate()
     {
-        $this->displayHistory = true;
-        $this->emit('listDocumentHistory', 'content', false);
+        // GenRepository::generateMetaDescription($this->document, [
+        //     'tone' => $this->document->meta['tone'],
+        //     'keyword' => $this->document->meta['keyword']
+        // ]);
+        $this->setContent($this->document->refresh());
     }
 
-    public function closeHistoryModal()
-    {
-        $this->displayHistory = false;
-    }
 
-    public function updateContent($content)
+    public function copy()
     {
-        if (is_array($content)) {
-            if ($content['field'] === 'content') {
-                $this->content = $content['content'];
-            }
-            $this->emit('refreshEditor');
-        } else {
-            $this->content = $content['content'];
-            $this->dispatchBrowserEvent('refresh-page');
-        }
-    }
-
-    public function editorUpdated($content)
-    {
-        $this->content = $content;
+        $this->emit('addToClipboard', $this->content);
+        $this->copied = true;
     }
 
     public function save()
     {
-        $repo = new DocumentRepository($this->document);
-
-        $this->document->update(['content' => $this->content]);
-        $repo->addHistory(
-            [
-                'field' => 'content',
-                'content' => $this->content
-            ]
-        );
-        $this->emit('refreshEditor');
-
-        $this->dispatchBrowserEvent('alert', [
-            'type' => 'success',
-            'message' => "Content saved!"
-        ]);
+        if ($this->content !== $this->initialContent) {
+            $this->emitUp('saveField', ['field' => 'meta_description', 'content' => $this->content]);
+            $this->initialContent = $this->content;
+        }
     }
 
-    public function refresh($field, $isMeta)
+    public function showHistoryModal()
     {
-        $this->document->refresh();
-        $this->emit('refreshContent', [
-            'field' => 'content',
-            'content' => $this->document->content
-        ]);
+        $this->emit('showHistoryModal', $this->platform);
+    }
+
+    public function updateContent($params)
+    {
+        if ($params['field'] === $this->platform) {
+            $this->setContent($this->document);
+        }
     }
 }

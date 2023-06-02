@@ -42,7 +42,7 @@ enum Tone: string
         $enumTone = self::tryFrom($tone);
 
         if (!$enumTone) {
-            throw new InvalidArgumentException('Invalid tone provided');
+            throw new InvalidArgumentException('Invalid tone provided: ' . $tone);
         }
 
         return Lang::get('tones.' . $enumTone->value, [], $language);
