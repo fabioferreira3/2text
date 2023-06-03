@@ -27,23 +27,25 @@
 
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased w-full">
     <x-notifications />
     <x-jet-banner />
     @livewire('common.notifications')
 
-    <div class="flex min-h-screen bg-gray-100 relative z-10">
-        <div class="hidden md:block md:w-1/5 h-full fixed p-6 bg-white border-r-2">
+    <main class="flex md:grid md:grid-cols-5 w-full min-h-screen bg-gray-100 z-10">
+        <div class="hidden md:block col-span-5 md:col-span-1 h-full p-6 bg-white border-r-2">
             @include('livewire.common.sidebar')
         </div>
         <!-- Page Content -->
-        <main class="mx-auto w-full md:w-4/5 h-full absolute right-0 bg-white px-6">
+        <div class="mx-auto col-span-5 md:col-span-4 h-full bg-white px-0 md:px-6 mb-8 pb-6">
             @livewire('navigation-menu')
-            <div class="p-6 rounded-lg bg-zinc-100">
+            <div class="p-3 mdp-6 md:rounded-lg bg-zinc-100">
                 {{ $slot }}
             </div>
-        </main>
-    </div>
+        </div>
+
+        <footer class="w-full fixed bottom-0 left-0 text-start h-8 py-2 px-4 bg-white border border-t text-xs font-bold border-gray-200">2Text.ai (beta)</footer>
+    </main>
 
     @livewireScripts
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -83,7 +85,6 @@
             });
         });
     </script>
-    <footer class="w-full text-start py-2 px-4 bg-white border border-t text-xs font-bold border-gray-200">2Text.ai (beta)</footer>
 </body>
 
 </html>

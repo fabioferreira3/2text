@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Blog;
 
 use App\Models\Document;
 use App\Repositories\GenRepository;
+use Exception;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
@@ -32,11 +33,22 @@ class Title extends Component
 
     public function regenerate()
     {
-        GenRepository::generateTitle($this->document, [
-            'tone' => $this->document->meta['tone'],
-            'keyword' => $this->document->meta['keyword']
-        ]);
-        $this->setContent($this->document->refresh());
+        try {
+            GenRepository::generateTitle($this->document, [
+                'tone' => $this->document->meta['tone'],
+                'keyword' => $this->document->meta['keyword']
+            ]);
+            $this->setContent($this->document->refresh());
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'success',
+                'message' => "New title generated!"
+            ]);
+        } catch (Exception $e) {
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'error',
+                'message' => "There was an error generating a new title!"
+            ]);
+        }
     }
 
 

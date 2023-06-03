@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Blog;
 
 use App\Models\Document;
 use App\Repositories\GenRepository;
+use Exception;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
@@ -34,11 +35,22 @@ class MetaDescription extends Component
 
     public function regenerate()
     {
-        GenRepository::generateMetaDescription($this->document, [
-            'tone' => $this->document->meta['tone'],
-            'keyword' => $this->document->meta['keyword']
-        ]);
-        $this->setContent($this->document->refresh());
+        try {
+            GenRepository::generateMetaDescription($this->document, [
+                'tone' => $this->document->meta['tone'],
+                'keyword' => $this->document->meta['keyword']
+            ]);
+            $this->setContent($this->document->refresh());
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'success',
+                'message' => "New meta description generated!"
+            ]);
+        } catch (Exception $e) {
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'error',
+                'message' => "There was an error generating a new meta description!"
+            ]);
+        }
     }
 
 
