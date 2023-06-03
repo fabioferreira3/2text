@@ -13,9 +13,9 @@ return [
     'simplify_text' => "Simplify the following text:\n\n:text",
     /* */    'style_instructions' => "- Use a :style writing style\n",
     'summarize_text' => "Summarize the following text:\n\n :text",
-    /* */    'tone_instructions' => "- Use a :tone tone\n",
-    'write_meta_description' => "Write a meta description of a maximum of 20 words. Use the following instructions to guide your writing:\n\n",
-    'write_outline' => "Create an indept and comprehensive blog post outline, with maximum of two levels, using roman numerals indicating main topics and alphabet letters to indicate subtopics. The outline must have only :maxsubtopics topics. The outline must have a :tone tone. The outline must have a concluding topic in the end. Do not nest a third level of topics. Do not add inner topics inside the subtopics indicated by alphabet letters, for example: \n\nGood output:\nI. Main Topic \n A. Subtopic 1 \n B. Subtopic 2 \n C. Subtopic 3 \n\nBad output:\nI. Main Topic \nA. Subtopic 1 \nB. Subtopic 2\n   1. Inner topic 1\n   2. Inner topic 2\nC. Subtopic 3\n\n\n The outline should be based on the following text: \n\n:context",
+    /* */    'tone_instructions' => "- Use a :tone tone",
+    'write_meta_description' => "Write a meta description using a maximum of 20 words.\n Follow these instructions to guide your writing:\n\n",
+    'write_outline' => "Create an indept and comprehensive blog post outline, with maximum of two levels, using roman numerals indicating main topics and alphabet letters to indicate subtopics. The outline must have only :maxsubtopics topics, being the last topic the concluding one. The outline must have a :tone tone. Do not nest a third level of topics. Do not add inner topics inside the subtopics indicated by alphabet letters, for example: \n\nGood output:\nI. Main Topic \n A. Subtopic 1 \n B. Subtopic 2 \n C. Subtopic 3 \n\nBad output:\nI. Main Topic \nA. Subtopic 1 \nB. Subtopic 2\n   1. Inner topic 1\n   2. Inner topic 2\nC. Subtopic 3\n\n\n The outline should be based on the following text: \n\n:context",
     'write_social_media_post' => "Write a social media post for :platform. Use the following instructions to guide your writing:\n\n",
     'write_title' => "Write a title, with a maximum of 7 words, for the following text: \n\n:context\n\n\nExamples of good and bad outputs:\n\nBad output:\nTitle: This is the title\n\nGood output:\nThis is the title\n\nFurther instructions:\n\n- The title must have a :tone tone.\n",
 ];

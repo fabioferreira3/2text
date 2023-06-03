@@ -32,7 +32,7 @@ class HandleFinishedProcess
         }
 
         $tasksByProcess = DocumentTask::ofProcess($event->task->process_id)->get();
-        $finishedCount = $tasksByProcess->where('status', 'finished')->count();
+        $finishedCount = $tasksByProcess->whereIn('status', ['finished', 'skipped'])->count();
 
         if ($tasksByProcess->count() === $finishedCount) {
             $repo = new DocumentRepository($event->task->document);

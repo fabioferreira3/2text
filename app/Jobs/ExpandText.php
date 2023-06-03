@@ -60,7 +60,6 @@ class ExpandText implements ShouldQueue, ShouldBeUnique
                     'process_id' => $this->meta['process_id'],
                     'order' => $order,
                     'meta' => [
-                        'tone' => $this->meta['tone'],
                         'text_section' => $section['content'],
                         'section_key' => $key,
                     ]

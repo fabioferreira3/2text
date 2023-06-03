@@ -31,32 +31,19 @@ class RegisterCreationTasks
         ]);
         $this->repo->createTask(DocumentTaskEnum::CREATE_OUTLINE, [
             'process_id' => $this->params['process_id'],
-            'meta' => [
-                'target_headers_count' => $this->document->meta['target_headers_count'],
-                'keyword' => $this->document->meta['keyword'],
-                'tone' => $this->document->meta['tone'],
-                'style' => $this->document->meta['style'] ?? null,
-            ],
+            'meta' => [],
             'order' => $this->params['next_order'] + 1
         ]);
         $this->repo->createTask(DocumentTaskEnum::EXPAND_OUTLINE, [
             'process_id' => $this->params['process_id'],
-            'meta' => [
-                'tone' => $this->document->meta['tone'],
-                'style' => $this->document->meta['style'] ?? null,
-            ],
-            'tone' => $this->document->meta['tone'],
-            'style' => $this->document->meta['style'] ?? null,
+            'meta' => [],
             'order' => $this->params['next_order'] + 2
         ]);
         $this->repo->createTask(
             DocumentTaskEnum::EXPAND_TEXT,
             [
                 'process_id' => $this->params['process_id'],
-                'meta' => [
-                    'tone' => $this->document->meta['tone'],
-                    'style' => $this->document->meta['style'] ?? null,
-                ],
+                'meta' => [],
                 'order' => $this->params['next_order'] + 3
             ]
         );
@@ -64,10 +51,7 @@ class RegisterCreationTasks
             DocumentTaskEnum::CREATE_TITLE,
             [
                 'process_id' => $this->params['process_id'],
-                'meta' => [
-                    'keyword' => $this->document->meta['keyword'],
-                    'tone' => $this->document->meta['tone'],
-                ],
+                'meta' => [],
                 'order' => $this->params['next_order'] + 4
             ]
         );
@@ -75,10 +59,7 @@ class RegisterCreationTasks
             DocumentTaskEnum::CREATE_METADESCRIPTION,
             [
                 'process_id' => $this->params['process_id'],
-                'meta' => [
-                    'keyword' => $this->document->meta['keyword'],
-                    'tone' => $this->document->meta['tone'],
-                ],
+                'meta' => [],
                 'order' => $this->params['next_order'] + 5
             ]
         );

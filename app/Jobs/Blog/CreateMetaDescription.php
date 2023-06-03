@@ -39,7 +39,7 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            GenRepository::generateMetaDescription($this->document, $this->meta);
+            GenRepository::generateMetaDescription($this->document);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to create meta description: ' . $e->getMessage());

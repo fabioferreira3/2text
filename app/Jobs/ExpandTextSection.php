@@ -54,7 +54,8 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
                 [
                     'role' => 'user',
                     'content' =>  $prompt . $this->promptHelper->expandOn($this->meta['text_section'], [
-                        'tone' => $this->meta['tone']
+                        'tone' => $this->document['meta']['tone'],
+                        'style' => $this->document['meta']['style'] ?? null
                     ])
                 ]
             ]);

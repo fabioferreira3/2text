@@ -52,8 +52,8 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
                 [
                     'role' => 'user',
                     'content' => $this->promptHelper->writeFirstPass($this->document->meta['outline'], [
-                        'tone' => $this->meta['tone'],
-                        'style' => $this->meta['style']
+                        'tone' => $this->document->meta['tone'],
+                        'style' => $this->document->meta['style'] ?? null
                     ])
                 ]
             ]);
