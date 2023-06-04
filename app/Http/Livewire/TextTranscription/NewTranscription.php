@@ -46,7 +46,7 @@ class NewTranscription extends Component
 
     public function setSourceInfo()
     {
-        $this->instructions = "<h2 class='font-bold'>Source</h2> Define the Youtube link that you want me to transcribe for you";
+        $this->instructions = "<h2 class='font-bold'>Source</h2> Define the source of the transcription. Currently, only Youtube videos are supported.";
     }
 
     public function setLanguageInfo()

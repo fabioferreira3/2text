@@ -102,6 +102,12 @@ class DocumentRepository
         return $document->delete();
     }
 
+    public function restore($documentId)
+    {
+        $document = Document::withTrashed()->findOrFail($documentId);
+        return $document->restore();
+    }
+
     public function publishText()
     {
         $content = str_replace(["\r", "\n"], '', $this->document->normalized_structure);

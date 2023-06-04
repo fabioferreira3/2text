@@ -32,14 +32,14 @@
     <x-jet-banner />
     @livewire('common.notifications')
 
-    <main class="flex md:grid md:grid-cols-5 w-full min-h-screen bg-gray-100 z-10">
-        <div class="hidden md:block col-span-5 md:col-span-1 h-full p-6 bg-white border-r-2">
+    <main class="flex w-full md:grid md:grid-cols-5 min-h-screen bg-zinc-100">
+        <div class="hidden md:block md:col-span-1 h-full p-6 bg-white border-r-2">
             @include('livewire.common.sidebar')
         </div>
         <!-- Page Content -->
-        <div class="mx-auto col-span-5 md:col-span-4 h-full bg-white px-0 md:px-6 mb-8 pb-6">
+        <div class="col-span-5 md:col-span-4 h-full px-0 mb-8 pb-6">
             @livewire('navigation-menu')
-            <div class="p-3 mdp-6 md:rounded-lg bg-zinc-100">
+            <div class="p-3 md:p-6 md:rounded-lg bg-zinc-100">
                 {{ $slot }}
             </div>
         </div>

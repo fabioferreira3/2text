@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-2 p-4 bg-zinc-200 rounded-lg border border-gray-300">
+<div class="flex flex-col gap-2 p-4 bg-white rounded-lg border border-gray-200">
     <div class="flex justify-between mb-2">
         <label for="content" class="font-bold text-xl">Content</label>
         <div class="flex gap-2">

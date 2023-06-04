@@ -12,7 +12,7 @@ use WireUi\Traits\Actions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
-class MyDocumentsTable extends DataTableComponent
+class TrashTable extends DataTableComponent
 {
     use Actions;
 
@@ -26,25 +26,19 @@ class MyDocumentsTable extends DataTableComponent
         $this->setRefreshTime(8000);
     }
 
-    public function viewDoc($documentId)
-    {
-        $document = Document::findOrFail($documentId);
-        return redirect()->route('document-view', ['document' => $document]);
-    }
-
-    public function deleteDoc($documentId)
+    public function restoreDoc($documentId)
     {
         try {
-            $this->repo->delete($documentId);
-            $this->notification(['icon' => 'success', 'iconColor' => 'text-green-400', 'timeout' => 5000, 'title' => 'Document moved to the trash can!']);
+            $this->repo->restore($documentId);
+            $this->notification(['icon' => 'success', 'iconColor' => 'text-green-400', 'timeout' => 5000, 'title' => 'Document restored!']);
         } catch (Exception) {
-            $this->notification(['icon' => 'error', 'iconColor' => 'text-red-700', 'timeout' => 5000, 'title' => 'There was an error while deleting this document']);
+            $this->notification(['icon' => 'error', 'iconColor' => 'text-red-700', 'timeout' => 5000, 'title' => 'There was an error while restoring this document']);
         }
     }
 
     public function builder(): Builder
     {
-        return Document::query()->latest();
+        return Document::query()->onlyTrashed()->latest();
     }
 
     public function columns(): array
@@ -66,10 +60,6 @@ class MyDocumentsTable extends DataTableComponent
                 ->searchable()
                 ->sortable()
                 ->collapseOnMobile(),
-            Column::make('Status')
-                ->label(function ($row) {
-                    return view('livewire.tables.my-documents.document-status', ['isCompleted' => $row->is_completed]);
-                }),
             Column::make("Language", "language")
                 ->format(fn ($value, $row) => $row->language->label())
                 ->searchable()
@@ -81,7 +71,7 @@ class MyDocumentsTable extends DataTableComponent
                 ->collapseOnMobile(),
             Column::make('Actions')
                 ->label(
-                    fn ($row, Column $column) => view('livewire.tables.my-documents.view-action', ['rowId' => $row->id, 'isCompleted' => $row->is_completed])
+                    fn ($row, Column $column) => view('livewire.tables.my-documents.view-action-trash', ['rowId' => $row->id])
                 ),
         ];
     }

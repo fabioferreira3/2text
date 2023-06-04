@@ -9,7 +9,7 @@
         <textarea class="editor" name="context" rows="30">{{$content}}</textarea>
     </div>
     @if($displayHistory)
-    @livewire('common.history-modal', [$document])
+        @livewire('common.history-modal', [$document])
     @endif
 </div>
 

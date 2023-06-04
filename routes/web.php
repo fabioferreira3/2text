@@ -10,6 +10,7 @@ use App\Http\Livewire\SocialMediaPost\PostsList;
 use App\Http\Livewire\Templates;
 use App\Http\Livewire\TextTranscription\NewTranscription;
 use App\Http\Livewire\TextTranscription\TextTranscription;
+use App\Http\Livewire\Trash;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -34,6 +35,7 @@ Route::middleware([
         return redirect('/dashboard');
     });
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/dashboard/trash', Trash::class)->name('trash');
     Route::get('/templates', Templates::class)->name('templates');
 
     /* Blog routes */

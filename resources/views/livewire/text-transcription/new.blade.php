@@ -2,20 +2,12 @@
     @include('livewire.common.header', ['icon' => 'chat-alt', 'label' => 'New Transcription'])
 
     <div class="flex flex-col md:grid md:grid-cols-5 gap-6">
-        <div class="col-span-2">
-            <div class="p-4 bg-zinc-200 rounded-lg">
-                <h2 class="font-bold text-lg">Instructions</h2>
-                <div class="flex flex-col gap-2 mt-2">
-                    {!! $this->instructions !!}
-                </div>
-            </div>
-        </div>
         <div class="col-span-3">
-            <div class="flex flex-col gap-4 p-4 border rounded">
+            <div class="flex flex-col gap-4 p-4 border-zinc-200 border rounded-lg bg-white">
                 <div class="grid grid-cols-2 gap-6">
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
-                            <label>Source:</label>
+                            <label class="font-bold text-lg text-zinc-700">Source:</label>
                             <x-icon solid name="question-mark-circle" class="text-zinc-500 cursor-pointer h-5 w-5" wire:click="setSourceInfo()"/>
                         </div>
                         <select
@@ -29,7 +21,7 @@
                 </div>
                 @if ($source === 'youtube')
                     <div class="flex flex-col gap-3">
-                        <label>Youtube url:</label>
+                        <label class="font-bold text-lg text-zinc-700">Youtube url:</label>
                         <input
                             name="url"
                             wire:model="source_url"
@@ -43,7 +35,7 @@
                 <div class="grid grid-cols-2 gap-6">
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
-                            <label>Language of the video:</label>
+                            <label class="font-bold text-lg text-zinc-700">Language of the video:</label>
                             <x-icon solid name="question-mark-circle" class="text-zinc-500 cursor-pointer h-5 w-5" wire:click="setLanguageInfo()"/>
                         </div>
                         <select
@@ -68,6 +60,14 @@
                     >
                         Transcript!
                     </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-2">
+            <div class="p-4 bg-zinc-200 rounded-lg">
+                <h2 class="font-bold text-lg">Instructions</h2>
+                <div class="flex flex-col gap-2 mt-2">
+                    {!! $this->instructions !!}
                 </div>
             </div>
         </div>

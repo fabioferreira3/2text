@@ -8,7 +8,7 @@
     </div>
     <div class="flex flex-col gap-5 mt-12">
         <div class="hidden sm:flex">
-            @include('livewire.common.navlink', ['route' => 'dashboard', 'name' => 'Dashboard', 'icon' => 'home'])
+            @include('livewire.common.navlink', ['route' => 'dashboard', 'activeRoutes' => ['dashboard', 'trash'], 'name' => 'Dashboard', 'icon' => 'home'])
         </div>
         <div class="hidden sm:flex">
             @include('livewire.common.navlink', ['route' => 'templates', 'name' => 'Templates', 'icon' => 'puzzle'])
