@@ -22,9 +22,11 @@ class NewPost extends Component
     public string $targetHeadersCount;
     public string $instructions;
     public bool $modal;
+    public string $title;
 
     public function __construct()
     {
+        $this->title = 'New Blog Post';
         $this->source = 'free_text';
         $this->context = '';
         $this->source_url = '';
@@ -49,7 +51,7 @@ class NewPost extends Component
 
     public function render()
     {
-        return view('livewire.blog.new');
+        return view('livewire.blog.new')->layout('layouts.app', ['title' => $this->title]);
     }
 
     protected $rules = [

@@ -20,7 +20,7 @@ enum Tone: string
     case SARCASTIC = 'sarcastic';
     case SIMPLISTIC = 'simplistic';
 
-    public function labels($language = 'en'): string
+    public function label($language = 'en'): string
     {
         return match ($this) {
             self::ACADEMIC => $this->parseLabel('academic', $language),

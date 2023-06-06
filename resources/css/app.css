@@ -11,3 +11,17 @@ textarea {
     outline: none !important;
     box-shadow: none !important;
 }
+
+.accordion-header {
+    border-bottom: 1px solid #e5e7eb;
+    border-bottom-right-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+}
+.accordion-header.active {
+    border-bottom: none !important;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.accordion-content {
+    border-top: none !important;
+}

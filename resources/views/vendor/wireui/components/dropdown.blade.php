@@ -9,7 +9,7 @@
         @else
             <x-dynamic-component
                 :component="WireUi::component('icon')"
-                class="w-4 h-4 text-secondary-500 hover:text-secondary-700
+                class="w-6 h-6 text-secondary-500 hover:text-secondary-700
                      dark:hover:text-secondary-600 transition duration-150 ease-in-out"
                 name="dots-vertical"
             />

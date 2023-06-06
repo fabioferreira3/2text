@@ -5,7 +5,7 @@
     </div>
     <div class="p-6 bg-white rounded-lg">
         <div class='flex justify-between mb-6'>
-            <h2 class="text-xl font-bold">My Documents</h2>
+            <h2 class="text-xl font-bold text-zinc-700">My Documents</h2>
             <x-button href='/dashboard/trash' icon='trash' white label="Trash" />
         </div>
         <livewire:my-documents-table />

@@ -17,9 +17,11 @@ class NewTranscription extends Component
     public array $languages;
     public string $instructions;
     public bool $modal;
+    public string $title;
 
     public function __construct()
     {
+        $this->title = 'New Transcription';
         $this->source = 'youtube';
         $this->source_url = '';
         $this->language = 'en';
@@ -29,7 +31,7 @@ class NewTranscription extends Component
 
     public function render()
     {
-        return view('livewire.text-transcription.new');
+        return view('livewire.text-transcription.new')->layout('layouts.app', ['title' => $this->title]);
     }
 
     protected $rules = [

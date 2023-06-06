@@ -12,17 +12,19 @@ class BlogPost extends Component
 {
     public Document $document;
     public bool $displayHistory = false;
+    public $title;
 
     protected $listeners = ['contentUpdated', 'showHistoryModal', 'closeHistoryModal', 'refresh', 'saveField'];
 
     public function mount(Document $document)
     {
         $this->document = $document;
+        $this->title = 'Blog post';
     }
 
     public function render()
     {
-        return view('livewire.blog.blog-post');
+        return view('livewire.blog.blog-post')->layout('layouts.app', ['title' => $this->title]);
     }
 
     public function showHistoryModal(string $field, bool $isMeta = true)

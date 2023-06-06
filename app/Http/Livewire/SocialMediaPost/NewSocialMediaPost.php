@@ -23,6 +23,12 @@ class NewSocialMediaPost extends Component
     public string $instructions;
     public mixed $more_instructions;
     public bool $modal;
+    public $title;
+
+    public function mount()
+    {
+        $this->title = 'New social media post';
+    }
 
     public function __construct()
     {
@@ -56,7 +62,7 @@ class NewSocialMediaPost extends Component
 
     public function render()
     {
-        return view('livewire.social-media-post.new');
+        return view('livewire.social-media-post.new')->layout('layouts.app', ['title' => $this->title]);
     }
 
     protected $rules = [

@@ -5,8 +5,8 @@ namespace App\Jobs\SocialMedia;
 use App\Helpers\PromptHelper;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
-use App\Packages\ChatGPT\ChatGPT;
 use App\Repositories\DocumentRepository;
+use App\Repositories\GenRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -45,27 +45,7 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $chatGpt = new ChatGPT();
-            $response = $chatGpt->request([
-                [
-                    'role' => 'user',
-                    'content' =>   $this->promptHelper->writeSocialMediaPost($this->document->context, [
-                        'keyword' => $this->document->meta['keyword'] ?? null,
-                        'platform' => $this->meta['platform'],
-                        'tone' => $this->document->meta['tone'],
-                        'style' => $this->document->meta['style'] ?? null,
-                        'more_instructions' => $this->document->meta['more_instructions'] ?? null
-                    ])
-                ]
-            ]);
-            $this->repo->updateMeta($this->meta['platform'], $response['content']);
-            $this->repo->addHistory(
-                [
-                    'field' => $this->meta['platform'],
-                    'content' => $response['content']
-                ],
-                $response['token_usage']
-            );
+            GenRepository::generateSocialMediaPost($this->document, $this->meta['platform']);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to generate ' . $this->meta['platform'] . ' post: ' . $e->getMessage());

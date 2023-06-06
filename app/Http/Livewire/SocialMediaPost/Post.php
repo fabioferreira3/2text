@@ -3,7 +3,9 @@
 namespace App\Http\Livewire\SocialMediaPost;
 
 use App\Models\Document;
+use App\Repositories\DocumentRepository;
 use App\Repositories\GenRepository;
+use Exception;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
@@ -15,7 +17,9 @@ class Post extends Component
     public bool $copied = false;
     public string $platform;
     public int $rows;
-    protected $listeners = ['refreshContent' => 'updateContent'];
+    public bool $displayHistory = false;
+
+    protected $listeners = ['refresh', 'showHistoryModal', 'closeHistoryModal', 'refreshContent' => 'updateContent'];
 
     public function mount(Document $document, $platform, $rows = 12)
     {
@@ -31,6 +35,12 @@ class Post extends Component
         $this->content = Str::of($document->meta[$this->platform])->trim('"');
     }
 
+    public function refresh()
+    {
+        $this->document->refresh();
+        $this->setContent($this->document);
+    }
+
     public function render()
     {
         return view('livewire.social-media-post.post');
@@ -38,11 +48,8 @@ class Post extends Component
 
     public function regenerate()
     {
-        // GenRepository::generateMetaDescription($this->document, [
-        //     'tone' => $this->document->meta['tone'],
-        //     'keyword' => $this->document->meta['keyword']
-        // ]);
-        $this->setContent($this->document->refresh());
+        GenRepository::generateSocialMediaPost($this->document, $this->platform);
+        $this->refresh();
     }
 
 
@@ -52,17 +59,41 @@ class Post extends Component
         $this->copied = true;
     }
 
-    public function save()
-    {
-        if ($this->content !== $this->initialContent) {
-            $this->emitUp('saveField', ['field' => 'meta_description', 'content' => $this->content]);
-            $this->initialContent = $this->content;
-        }
-    }
-
     public function showHistoryModal()
     {
-        $this->emit('showHistoryModal', $this->platform);
+        $this->displayHistory = true;
+        $this->emit('listDocumentHistory', $this->platform, true);
+    }
+
+    public function closeHistoryModal()
+    {
+        $this->displayHistory = false;
+    }
+
+    public function save()
+    {
+        if ($this->content === $this->initialContent) {
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'info',
+                'message' => "No changes needed to be saved"
+            ]);
+            return;
+        }
+        try {
+            $repo = new DocumentRepository($this->document);
+            $repo->updateMeta($this->platform, $this->content);
+            $repo->addHistory(['field' => $this->platform, 'content' => $this->content]);
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'success',
+                'message' => "$this->platform post updated!"
+            ]);
+            $this->initialContent = $this->content;
+        } catch (Exception $error) {
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'error',
+                'message' => "There was an error saving!"
+            ]);
+        }
     }
 
     public function updateContent($params)

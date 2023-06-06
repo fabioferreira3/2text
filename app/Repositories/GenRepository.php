@@ -47,4 +47,31 @@ class GenRepository
             $response['token_usage']
         );
     }
+
+    public static function generateSocialMediaPost(Document $document, string $platform)
+    {
+        $repo = new DocumentRepository($document);
+        $promptHelper = new PromptHelper($document->language->value);
+        $chatGpt = new ChatGPT();
+        $response = $chatGpt->request([
+            [
+                'role' => 'user',
+                'content' =>   $promptHelper->writeSocialMediaPost($document->context, [
+                    'keyword' => $document->meta['keyword'] ?? null,
+                    'platform' => $platform,
+                    'tone' => $document->meta['tone'],
+                    'style' => $document->meta['style'] ?? null,
+                    'more_instructions' => $document->meta['more_instructions'] ?? null
+                ])
+            ]
+        ]);
+        $repo->updateMeta($platform, $response['content']);
+        $repo->addHistory(
+            [
+                'field' => $platform,
+                'content' => $response['content']
+            ],
+            $response['token_usage']
+        );
+    }
 }

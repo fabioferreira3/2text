@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\DocumentType;
 use App\Enums\Language;
+use App\Enums\SourceProvider;
+use App\Enums\Tone;
 use App\Models\Scopes\SameAccountScope;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +21,7 @@ class Document extends Model
 
     protected $guarded = ['id'];
     protected $casts = ['type' => DocumentType::class, 'language' => Language::class, 'meta' => 'array'];
-    protected $appends = ['normalized_structure', 'context', 'is_completed'];
+    protected $appends = ['normalized_structure', 'context', 'is_completed', 'source'];
 
     public function history(): HasMany
     {
@@ -60,6 +62,26 @@ class Document extends Model
             return false;
         }
         return $this->tasks->count() === $finishedCount;
+    }
+
+    public function getSourceAttribute()
+    {
+        if (!isset($this->meta['source'])) {
+            return null;
+        }
+
+        $source = SourceProvider::tryFrom($this->meta['source']);
+        return $source->label();
+    }
+
+    public function getToneAttribute()
+    {
+        if (!isset($this->meta['tone'])) {
+            return null;
+        }
+
+        $tone = Tone::tryFrom($this->meta['tone']);
+        return $tone->label();
     }
 
     public function getContextAttribute()

@@ -13,6 +13,7 @@ class ContentEditor extends Component
 {
     public Document $document;
     public string $content;
+    public string $initialContent;
     public bool $copied;
     public $tone;
     protected $listeners = ['refreshContent' => 'updateContent', 'editorUpdated'];
@@ -22,6 +23,7 @@ class ContentEditor extends Component
         $this->document = $document;
         $this->tone = $document->meta['tone'];
         $this->content = $document->content;
+        $this->initialContent = $this->content;
     }
 
     public function render()
@@ -91,6 +93,14 @@ class ContentEditor extends Component
 
     public function save()
     {
+        if ($this->content === $this->initialContent) {
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'info',
+                'message' => "No changes needed to be saved"
+            ]);
+            $this->emit('refreshEditor');
+            return;
+        }
         $repo = new DocumentRepository($this->document);
 
         $this->document->update(['content' => $this->content]);
@@ -101,6 +111,7 @@ class ContentEditor extends Component
             'type' => 'success',
             'message' => "Content saved!"
         ]);
+        $this->initialContent = $this->content;
     }
 
     public function showHistoryModal()

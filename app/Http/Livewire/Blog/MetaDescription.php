@@ -62,10 +62,15 @@ class MetaDescription extends Component
 
     public function save()
     {
-        if ($this->content !== $this->initialContent) {
-            $this->emitUp('saveField', ['field' => 'meta_description', 'content' => $this->content]);
-            $this->initialContent = $this->content;
+        if ($this->content === $this->initialContent) {
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'info',
+                'message' => "No changes needed to be saved"
+            ]);
+            return;
         }
+        $this->emitUp('saveField', ['field' => 'meta_description', 'content' => $this->content]);
+        $this->initialContent = $this->content;
     }
 
     public function showHistoryModal()

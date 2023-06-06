@@ -12,6 +12,7 @@ class Title extends Component
 {
     public string $content;
     public Document $document;
+    public string $initialContent;
     public bool $copied = false;
     protected $listeners = ['refreshContent' => 'updateContent'];
 
@@ -19,6 +20,7 @@ class Title extends Component
     {
         $this->document = $document;
         $this->setContent($document);
+        $this->initialContent = $this->content;
     }
 
     private function setContent(Document $document)
@@ -60,7 +62,15 @@ class Title extends Component
 
     public function save()
     {
+        if ($this->content === $this->initialContent) {
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'info',
+                'message' => "No changes needed to be saved"
+            ]);
+            return;
+        }
         $this->emitUp('saveField', ['field' => 'title', 'content' => $this->content]);
+        $this->initialContent = $this->content;
     }
 
     public function showHistoryModal()

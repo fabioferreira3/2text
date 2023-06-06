@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-2 p-4 bg-white rounded-lg border border-gray-200">
     <div class="flex justify-between">
-        <label for="title" class="font-bold text-xl">Title</label>
+        @include('livewire.common.label', ['title' => 'Title'])
         <div class="flex gap-2">
             @include('livewire.common.field-actions', ['copyAction' => true, 'regenerateAction' => true, 'historyAction' => true])
         </div>

@@ -4,6 +4,7 @@
 /public/storage
 /storage/*.key
 /vendor
+app/Packages/StabilityAI/
 .env
 .env.backup
 .env.production
