@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "279e3a055b75d67c7a4dd139b5ec6f32",
+    "content-hash": "83381b1f016e3fa62be81acf22effbf9",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -263,6 +263,79 @@
                 }
             ],
             "time": "2023-01-15T23:15:59+00:00"
+        },
+        {
+            "name": "cion/laravel-text-to-speech",
+            "version": "v1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/meemalabs/laravel-text-to-speech.git",
+                "reference": "64791774f8aa5fe67f209ebc3c04ac259c5bc6ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/meemalabs/laravel-text-to-speech/zipball/64791774f8aa5fe67f209ebc3c04ac259c5bc6ec",
+                "reference": "64791774f8aa5fe67f209ebc3c04ac259c5bc6ec",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "^3.178",
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.0|^7.0",
+                "illuminate/support": "5.*|^6.0|^7.0|^8.0|^9.0",
+                "php": "^7.3|^7.4|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0",
+                "phpunit/phpunit": "^5.0|^6.0|^8.0|^9.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Cion\\TextToSpeech\\Providers\\TextToSpeechServiceProvider"
+                    ],
+                    "aliases": {
+                        "TTS": "Cion\\TextToSpeech\\Facades\\TextToSpeechFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Cion\\TextToSpeech\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CION Agency",
+                    "email": "chris@cion.agency"
+                },
+                {
+                    "name": "Rigel Kent Carbonel",
+                    "email": "rigel20.kent@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This package creates a shared API to easily use Text to Speech functionalities amongst different TTS providers.",
+            "homepage": "https://github.com/meemalabs/laravel-text-to-speech",
+            "keywords": [
+                "aws",
+                "cion",
+                "laravel",
+                "meemalabs",
+                "polly",
+                "text-to-speech",
+                "wavenet"
+            ],
+            "support": {
+                "issues": "https://github.com/meemalabs/laravel-text-to-speech/issues",
+                "source": "https://github.com/meemalabs/laravel-text-to-speech/tree/v1.5.0"
+            },
+            "time": "2022-05-13T14:17:47+00:00"
         },
         {
             "name": "clue/stream-filter",

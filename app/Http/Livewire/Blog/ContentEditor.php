@@ -54,7 +54,7 @@ class ContentEditor extends Component
             ]
         );
 
-        DispatchDocumentTasks::dispatch();
+        DispatchDocumentTasks::dispatch($this->document);
 
         $this->dispatchBrowserEvent('alert', [
             'type' => 'success',

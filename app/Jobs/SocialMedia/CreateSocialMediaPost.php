@@ -4,6 +4,7 @@ namespace App\Jobs\SocialMedia;
 
 use App\Enums\DocumentTaskEnum;
 use App\Enums\DocumentType;
+use App\Jobs\DispatchDocumentTasks;
 use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -59,12 +60,11 @@ class CreateSocialMediaPost
             DocumentTaskEnum::CREATE_TITLE,
             [
                 'process_id' => $this->params['process_id'],
-                'meta' => [
-                    'keyword' => $document->meta['keyword'],
-                    'tone' => $document->meta['tone'],
-                ],
+                'meta' => [],
                 'order' => 99
             ]
         );
+
+        DispatchDocumentTasks::dispatch($document);
     }
 }

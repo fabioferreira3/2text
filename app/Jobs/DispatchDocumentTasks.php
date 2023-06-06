@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Document;
 use App\Models\DocumentTask;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -16,13 +17,22 @@ class DispatchDocumentTasks implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public function __construct()
+    public Document $document;
+
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct(Document $document)
     {
+        $this->document = $document->fresh();
     }
 
     public function handle()
     {
-        $tasks = DocumentTask::available()->priorityFirst()->get();
+        $tasks = $this->document->tasks()->available()->priorityFirst()->get();
+
         if (!$tasks->count()) {
             return;
         }
@@ -52,6 +62,6 @@ class DispatchDocumentTasks implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'dispatching_tasks';
+        return 'dispatching_tasks_' . $this->document->id;
     }
 }

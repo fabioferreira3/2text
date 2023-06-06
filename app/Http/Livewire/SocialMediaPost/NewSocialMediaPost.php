@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\SocialMediaPost;
 
 use App\Enums\Language;
+use App\Enums\Tone;
 use App\Jobs\SocialMedia\CreateSocialMediaPost;
 use WireUi\Traits\Actions;
 use Livewire\Component;

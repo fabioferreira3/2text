@@ -13,7 +13,7 @@ enum Style: string
     case NARRATIVE = 'narrative';
     case PERSUASIVE = 'persuasive';
 
-    public function labels($language = 'en'): string
+    public function label($language = 'en'): string
     {
         return match ($this) {
             self::DESCRIPTIVE => $this->parseLabel('descriptive', $language),

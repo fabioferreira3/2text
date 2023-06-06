@@ -48,18 +48,6 @@
                     </div>
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
-                            <label class="font-bold text-lg text-zinc-700">Keyword:</label>
-                            <x-icon solid name="question-mark-circle" class="text-zinc-500 cursor-pointer h-5 w-5" wire:click="setKeywordInfo()" />
-                        </div>
-                        <input name="keyword" wire:model="keyword" class="p-3 rounded-lg border border-zinc-200" />
-                        @if($errors->has('keyword'))
-                        <span class="text-red-500 text-sm">{{ $errors->first('keyword') }}</span>
-                        @endif
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="flex flex-col gap-3">
-                        <div class="flex gap-2 items-center">
                             <label class="font-bold text-lg text-zinc-700">Language:</label>
                             <x-icon solid name="question-mark-circle" class="text-zinc-500 cursor-pointer h-5 w-5" wire:click="setLanguageInfo()" />
                         </div>
@@ -72,6 +60,8 @@
                         <span class="text-red-500 text-sm">{{ $errors->first('language') }}</span>
                         @endif
                     </div>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
                             <label class="font-bold text-lg text-zinc-700">Tone:</label>
@@ -79,18 +69,19 @@
                         </div>
                         <select name="tone" wire:model="tone" class="p-3 rounded-lg border border-zinc-200 focus:border focus:border-zinc-400">
                             <option class="hover:bg-red-200" value="">Default</option>
-                            <option value="academic">Academic</option>
-                            <option value="adventurous">Adventurous</option>
-                            <option value="casual">Casual</option>
-                            <option value="dramatic">Dramatic</option>
-                            <option value="formal">Formal</option>
-                            <option value="funny">Funny</option>
-                            <option value="mysterious">Mysterious</option>
-                            <option value="optimistic">Optimistic</option>
-                            <option value="pessimistic">Pessimistic</option>
-                            <option value="sarcastic">Sarcastic</option>
+                            @include('livewire.common.tones-options')
                         </select>
                     </div>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <div class="flex gap-2 items-center">
+                        <label class="font-bold text-lg text-zinc-700">Keyword:</label>
+                        <x-icon solid name="question-mark-circle" class="text-zinc-500 cursor-pointer h-5 w-5" wire:click="setKeywordInfo()" />
+                    </div>
+                    <input name="keyword" wire:model="keyword" class="p-3 rounded-lg border border-zinc-200" />
+                    @if($errors->has('keyword'))
+                    <span class="text-red-500 text-sm">{{ $errors->first('keyword') }}</span>
+                    @endif
                 </div>
                 @if ($source === 'youtube')
                 <div class="flex flex-col gap-3">

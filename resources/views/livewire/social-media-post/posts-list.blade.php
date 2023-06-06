@@ -62,13 +62,13 @@
             </div>
         @endif
 
-        @if($document->meta['Tiktok'] ?? false)
+        @if($document->meta['TikTok'] ?? false)
             <div class="accordion-item">
                 <div onclick="toggleAccordion(this)" class='h-20 accordion-header flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2 cursor-pointer'>
                     <img class="h-10" src="{{ Vite::asset('resources/images/tiktok-logo.png') }}">
                 </div>
                 <div class="accordion-content max-h-0 transition-all duration-300 overflow-hidden p-0 opacity-0 border border-zinc-200 bg-[#000000] rounded-b-lg">
-                    @livewire('social-media-post.post', [$document, 'Tiktok', 'rows' => 6])
+                    @livewire('social-media-post.post', [$document, 'TikTok', 'rows' => 6])
                 </div>
             </div>
         @endif

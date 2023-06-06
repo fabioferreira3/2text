@@ -94,6 +94,9 @@ class PromptHelper
     {
         $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
         $prompt = Lang::get('prompt.write_social_media_post', ['platform' => $params['platform']], $this->language);
+        if ($params['platform'] === 'Twitter') {
+            $prompt .= Lang::get('prompt.max_words', ['max' => 35], $this->language);
+        }
         if ($params['keyword'] ?? false) {
             $prompt .= Lang::get('prompt.keyword_instructions', ['keyword' => $params['keyword']], $this->language);
         }

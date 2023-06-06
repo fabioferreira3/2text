@@ -3,7 +3,6 @@
 namespace App\Jobs\SocialMedia;
 
 use App\Enums\DocumentTaskEnum;
-use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Illuminate\Bus\Queueable;
@@ -44,15 +43,11 @@ class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
             [
                 'process_id' => $this->params['process_id'],
                 'meta' => [
-                    'keyword' => $this->document->meta['keyword'],
-                    'tone' => $this->document->meta['tone'],
                     'platform' => $this->params['platform'],
                 ],
                 'order' => 2
             ]
         );
-
-        DispatchDocumentTasks::dispatch();
     }
 
     /**

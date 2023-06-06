@@ -58,7 +58,7 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
             'next_order' => 3
         ]);
 
-        DispatchDocumentTasks::dispatch();
+        DispatchDocumentTasks::dispatch($this->document);
     }
 
     /**

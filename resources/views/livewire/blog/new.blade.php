@@ -88,10 +88,7 @@
                         </div>
                         <select name="style" wire:model="style" class="p-3 rounded-lg border border-zinc-200">
                             <option value="">Default</option>
-                            <option value="descriptive">Descriptive</option>
-                            <option value="expository">Expository</option>
-                            <option value="narrative">Narrative</option>
-                            <option value="persuasive">Persuasive</option>
+                            @include('livewire.common.styles-options')
                         </select>
                     </div>
                     <div class="flex flex-col gap-3">
@@ -101,16 +98,7 @@
                         </div>
                         <select name="tone" wire:model="tone" class="p-3 rounded-lg border border-zinc-200">
                             <option value="">Default</option>
-                            <option value="academic">Academic</option>
-                            <option value="adventurous">Adventurous</option>
-                            <option value="casual">Casual</option>
-                            <option value="dramatic">Dramatic</option>
-                            <option value="formal">Formal</option>
-                            <option value="funny">Funny</option>
-                            <option value="mysterious">Mysterious</option>
-                            <option value="optimistic">Optimistic</option>
-                            <option value="pessimistic">Pessimistic</option>
-                            <option value="sarcastic">Sarcastic</option>
+                            @include('livewire.common.tones-options')
                         </select>
                     </div>
                 </div>

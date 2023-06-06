@@ -40,7 +40,7 @@ class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
             ...$this->params,
             'next_order' => 1
         ]);
-        DispatchDocumentTasks::dispatch();
+        DispatchDocumentTasks::dispatch($this->document);
     }
 
     /**
