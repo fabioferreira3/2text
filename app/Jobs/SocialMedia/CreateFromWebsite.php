@@ -5,17 +5,12 @@ namespace App\Jobs\SocialMedia;
 use App\Enums\DocumentTaskEnum;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Artisan;
 
-class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
+class CreateFromWebsite
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, SerializesModels;
 
     public Document $document;
     public array $params;
@@ -38,18 +33,17 @@ class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        Artisan::call('crawl', ['url' => $this->params['meta']['source_url']]);
-        $websiteContent = Artisan::output();
-
-        $this->document->update([
-            'meta' => [
-                ...$this->document->meta,
-                'context' => $websiteContent,
-                'original_text' => $websiteContent
-            ]
-        ]);
-
         $repo = new DocumentRepository($this->document);
+
+        $repo->createTask(
+            DocumentTaskEnum::CRAWL_WEBSITE,
+            [
+                'process_id' => $this->params['process_id'],
+                'meta' => [],
+                'order' => 2
+            ]
+        );
+
         $repo->createTask(
             DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST,
             [
@@ -57,16 +51,8 @@ class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     'platform' => $this->params['platform'],
                 ],
-                'order' => 2
+                'order' => 3
             ]
         );
-    }
-
-    /**
-     * The unique ID of the job.
-     */
-    public function uniqueId(): string
-    {
-        return 'create_social_media_post_from_free_text_' . $this->params['platform'] . $this->document->id;
     }
 }

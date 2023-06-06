@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\SocialMediaPost;
 
 use App\Enums\Language;
-use App\Enums\Tone;
+use App\Helpers\InstructionsHelper;
 use App\Jobs\SocialMedia\CreateSocialMediaPost;
 use WireUi\Traits\Actions;
 use Livewire\Component;
@@ -18,7 +18,8 @@ class NewSocialMediaPost extends Component
     public string $language;
     public array $languages;
     public string $keyword;
-    public string $tone;
+    public mixed $tone;
+    public mixed $style;
     public bool $linkedin;
     public array $platforms;
     public string $instructions;
@@ -39,7 +40,8 @@ class NewSocialMediaPost extends Component
         $this->language = 'en';
         $this->languages = Language::getLabels();
         $this->keyword = '';
-        $this->tone = '';
+        $this->tone = null;
+        $this->style = null;
         $this->more_instructions = null;
         $this->platforms = [
             'Linkedin' => false,
@@ -48,17 +50,7 @@ class NewSocialMediaPost extends Component
             'Twitter' => false,
             'TikTok' => false
         ];
-        $this->instructions = '<p>Please fill out the following information so I can understand your requirements and write you an unique and high-quality post.</p>
-
-        <h3 class="font-bold">Target platforms</h3><p class="text-sm">Choose for which platforms you would like me to write a post. For each selected platform I will create a different post.</p>
-
-        <h3 class="font-bold">Source</h3><p class="text-sm">Provide a source of the context that your post should be based on. It could be a YouTube link, an external web page or just free text.</p>
-
-        <h3 class="font-bold">Keyword</h3><p class="text-sm">Provide a keyword that you would like me to use throughout your post. This keyword will help me generate a relevant and focused article.</p>
-
-        <h3 class="font-bold">Language</h3><p class="text-sm">Select the language you would like the post to be generated in. If you have provided a YouTube link, please ensure that the selected language matches the main language of the video.</p>
-
-        <h3 class="font-bold">Tone</h3><p class="text-sm">Define the tone of your post. You may pick from casual, funny, sarcastic, dramatic, academic, and other tones. This will help me write a post that is in line with your preference and your audience\'s.</p>';
+        $this->instructions = InstructionsHelper::socialMediaGeneral();
     }
 
     public function render()
@@ -73,7 +65,8 @@ class NewSocialMediaPost extends Component
         'context' => 'required_if:source,free_text|nullable',
         'keyword' => 'required',
         'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
-        'tone' => 'nullable'
+        'tone' => 'nullable',
+        'style' => 'nullable'
     ];
 
     protected $messages = [
@@ -86,23 +79,12 @@ class NewSocialMediaPost extends Component
 
     public function setPlatformsInfo()
     {
-        $this->instructions = "
-        <h2 class='font-bold text-lg'>Target Platforms</h2><p>Choose for which platforms you would like me to write a post. For each selected platform I will create a different post.</p>";
+        $this->instructions = InstructionsHelper::socialMediaPlatforms();
     }
 
     public function setSourceInfo()
     {
-        $this->instructions = "
-        <h2 class='font-bold text-lg'>Source</h2>
-        <p>Define where I should extract the base context of your post. Choose between free text input, youtube link or a website url.</p>
-        <h3 class='mt-4 font-bold'>Youtube</h3>
-        <p>Enter a youtube link and I'll write a social media post based on the content of the video.</p>
-        <h3 class='mt-4 font-bold'>Website URL</h3>
-        <p>Enter an external website url to be used as context, like a blog post or page.
-        I'll do my best to extract as much information as possible from that page and use it as context for the creation of your social media post.</p>
-        <h3 class='mt-4 font-bold'>Free text</h3>
-        <p>Just enter any text that you want as context and I'll write a post based on the
-        information you provide.</p>";
+        $this->instructions = InstructionsHelper::sources();
     }
 
     public function setKeywordInfo()
@@ -117,13 +99,12 @@ class NewSocialMediaPost extends Component
 
     public function setToneInfo()
     {
-        $this->instructions = "<h2 class='font-bold'>Tone</h2><p>Define the tone/style of the writing.<p>
-        <h3 class='font-bold text-sm'>Useful guidelines</h3>
-            <ul>
-                <li>Take into account your readers.</li>
-                <li>Is it a serious topic? Or could be a fun one?</li>
-                <li>What is the reaction you expect from your readers?</li>
-            </ul>";
+        $this->instructions = InstructionsHelper::writingTones();
+    }
+
+    public function setStyleInfo()
+    {
+        $this->instructions = InstructionsHelper::writingStyles();
     }
 
     public function process()
@@ -136,6 +117,7 @@ class NewSocialMediaPost extends Component
             'meta' => [
                 'source_url' => $this->source_url,
                 'tone' => $this->tone,
+                'style' => $this->style,
                 'keyword' => $this->keyword,
                 'more_instructions' => $this->more_instructions,
                 'platforms' => $this->platforms

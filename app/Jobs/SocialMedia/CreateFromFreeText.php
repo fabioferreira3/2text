@@ -5,16 +5,12 @@ namespace App\Jobs\SocialMedia;
 use App\Enums\DocumentTaskEnum;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
+class CreateFromFreeText
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, SerializesModels;
 
     public Document $document;
     public array $params;
@@ -48,13 +44,5 @@ class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
                 'order' => 2
             ]
         );
-    }
-
-    /**
-     * The unique ID of the job.
-     */
-    public function uniqueId(): string
-    {
-        return 'create_social_media_post_from_free_text_' . $this->params['platform'] . $this->document->id;
     }
 }

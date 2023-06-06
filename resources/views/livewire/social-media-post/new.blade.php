@@ -64,6 +64,16 @@
                 <div class="grid grid-cols-2 gap-6">
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
+                            <label class="font-bold text-lg text-zinc-700">Writing style:</label>
+                            <x-icon solid name="question-mark-circle" class="text-zinc-500 cursor-pointer h-5 w-5" wire:click="setStyleInfo()" />
+                        </div>
+                        <select name="style" wire:model="style" class="p-3 rounded-lg border border-zinc-200 focus:border focus:border-zinc-400">
+                            <option class="hover:bg-red-200" value="">Default</option>
+                            @include('livewire.common.styles-options')
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <div class="flex gap-2 items-center">
                             <label class="font-bold text-lg text-zinc-700">Tone:</label>
                             <x-icon solid name="question-mark-circle" class="text-zinc-500 cursor-pointer h-5 w-5" wire:click="setToneInfo()" />
                         </div>
