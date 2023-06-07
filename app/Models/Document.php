@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Enums\SourceProvider;
+use App\Enums\Style;
 use App\Enums\Tone;
 use App\Models\Scopes\SameAccountScope;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -21,7 +22,7 @@ class Document extends Model
 
     protected $guarded = ['id'];
     protected $casts = ['type' => DocumentType::class, 'language' => Language::class, 'meta' => 'array'];
-    protected $appends = ['normalized_structure', 'context', 'is_completed', 'source'];
+    protected $appends = ['normalized_structure', 'context', 'is_completed', 'source', 'tone', 'style'];
 
     public function history(): HasMany
     {
@@ -82,6 +83,16 @@ class Document extends Model
 
         $tone = Tone::tryFrom($this->meta['tone']);
         return $tone->label();
+    }
+
+    public function getStyleAttribute()
+    {
+        if (!isset($this->meta['style'])) {
+            return null;
+        }
+
+        $style = Style::tryFrom($this->meta['style']);
+        return $style->label();
     }
 
     public function getContextAttribute()

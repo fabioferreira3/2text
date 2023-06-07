@@ -3,7 +3,6 @@
 namespace App\Enums;
 
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Str;
 use InvalidArgumentException;
 
 enum Tone: string
@@ -20,20 +19,20 @@ enum Tone: string
     case SARCASTIC = 'sarcastic';
     case SIMPLISTIC = 'simplistic';
 
-    public function label($language = 'en'): string
+    public function label(): string
     {
         return match ($this) {
-            self::ACADEMIC => $this->parseLabel('academic', $language),
-            self::ADVENTUROUS => $this->parseLabel('adventurous', $language),
-            self::CASUAL => $this->parseLabel('casual', $language),
-            self::DRAMATIC => $this->parseLabel('dramatic', $language),
-            self::FORMAL => $this->parseLabel('formal', $language),
-            self::FUNNY => $this->parseLabel('funny', $language),
-            self::MYSTERIOUS => $this->parseLabel('mysterious', $language),
-            self::PESSIMISTIC => $this->parseLabel('pessimistic', $language),
-            self::OPTIMISTIC => $this->parseLabel('optimistic', $language),
-            self::SARCASTIC => $this->parseLabel('sarcastic', $language),
-            self::SIMPLISTIC => $this->parseLabel('simplistic', $language),
+            self::ACADEMIC => __('tones.academic'),
+            self::ADVENTUROUS => __('tones.adventurous'),
+            self::CASUAL => __('tones.casual'),
+            self::DRAMATIC => __('tones.dramatic'),
+            self::FORMAL => __('tones.formal'),
+            self::FUNNY => __('tones.funny'),
+            self::MYSTERIOUS => __('tones.mysterious'),
+            self::PESSIMISTIC => __('tones.pessimistic'),
+            self::OPTIMISTIC => __('tones.optimistic'),
+            self::SARCASTIC => __('tones.sarcastic'),
+            self::SIMPLISTIC => __('tones.simplistic'),
         };
     }
 
@@ -46,10 +45,5 @@ enum Tone: string
         }
 
         return Lang::get('tones.' . $enumTone->value, [], $language);
-    }
-
-    private function parseLabel($toneValue, $language = 'en')
-    {
-        return Str::ucfirst(Lang::get('tones.' . $toneValue, [], $language));
     }
 }

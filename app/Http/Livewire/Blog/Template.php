@@ -6,9 +6,16 @@ use Livewire\Component;
 
 class Template extends Component
 {
-    public string $icon = 'newspaper';
-    public string $title = 'Blog Post';
-    public string $description = 'Create a full SEO friendly article with the help of AI';
+    public string $icon;
+    public string $title;
+    public string $description;
+
+    public function __construct()
+    {
+        $this->icon = 'newspaper';
+        $this->title = __('templates.blog_post');
+        $this->description = __('templates.create_blog_post');
+    }
 
     public function render()
     {

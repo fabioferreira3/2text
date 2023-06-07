@@ -89,12 +89,12 @@ class NewSocialMediaPost extends Component
 
     public function setKeywordInfo()
     {
-        $this->instructions = "<h2 class='font-bold'>Keyword</h2> Define a keyword so the AI may use it more often.";
+        $this->instructions = "<h2 class='font-bold'>" . __('social_media.keyword') . "</h2>" . __('social_media.define_keyword');
     }
 
     public function setLanguageInfo()
     {
-        $this->instructions = "<h2 class='font-bold'>Language</h2><p>Define the main language of your post.</p><p>Take into account that the selected language must be the same language of the context you're using, ie: the language of the youtube video, the web page or free text you provided.</p>";
+        $this->instructions = "<h2 class='font-bold'>" . __('social_media.language') . "</h2><p>" . __('social_media.define_language') . "</p><p>" . __('social_media.selected_language_info') . "</p>";
     }
 
     public function setToneInfo()

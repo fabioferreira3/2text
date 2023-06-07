@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\Repositories\UserRepository;
 
+
 class GoogleAuthController extends Controller
 {
     public function handleProviderCallback(UserRepository $userRepository)

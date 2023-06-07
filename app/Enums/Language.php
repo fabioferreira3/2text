@@ -24,25 +24,30 @@ enum Language: string
     public function label(): string
     {
         return match ($this) {
-            self::ENGLISH         => "English",
-            self::ARABIC          => "Arabic",
-            self::CHINESE         => "Chinese",
-            self::FRENCH          => "French",
-            self::GERMAN          => "German",
-            self::GREEK           => "Greek",
-            self::ITALIAN         => "Italian",
-            self::JAPANESE        => "Japanese",
-            self::KOREAN          => "Korean",
-            self::POLNISH         => "Polnish",
-            self::PORTUGUESE      => "Portuguese",
-            self::RUSSIAN         => "Russian",
-            self::SPANISH         => "Spanish",
-            self::TURKISH         => "Turkish",
+            self::ENGLISH         => __("languages.english"),
+            self::ARABIC          => __("languages.arabic"),
+            self::CHINESE         => __("languages.chinese"),
+            self::FRENCH          => __("languages.french"),
+            self::GERMAN          => __("languages.german"),
+            self::GREEK           => __("languages.greek"),
+            self::ITALIAN         => __("languages.italian"),
+            self::JAPANESE        => __("languages.japanese"),
+            self::KOREAN          => __("languages.korean"),
+            self::POLNISH         => __("languages.polnish"),
+            self::PORTUGUESE      => __("languages.portuguese"),
+            self::RUSSIAN         => __("languages.russian"),
+            self::SPANISH         => __("languages.spanish"),
+            self::TURKISH         => __("languages.turkish"),
         };
     }
 
     public static function getLabels(): array
     {
-        return collect(self::cases())->map(fn ($language) => ['value' => $language->value, 'name' => Str::of($language->name)->lower()->ucfirst()])->toArray();
+        return collect(self::cases())->map(fn ($language) => ['value' => $language->value, 'name' => $language->label()])->toArray();
+    }
+
+    public static function getKeyValues(): array
+    {
+        return collect(self::cases())->flatMap(fn ($language) => [$language->value => $language->label()])->toArray();
     }
 }

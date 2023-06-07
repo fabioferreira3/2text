@@ -71,9 +71,7 @@
                             <x-icon solid name="question-mark-circle" class="text-zinc-500 cursor-pointer h-5 w-5" wire:click="setLanguageInfo()" />
                         </div>
                         <select name="language" wire:model="language" class="p-3 rounded-lg border border-zinc-200">
-                            @foreach ($languages as $option)
-                            <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
-                            @endforeach
+                            @include('livewire.common.languages-options')
                         </select>
                         @if($errors->has('language'))
                         <span class="text-red-500 text-sm">{{ $errors->first('language') }}</span>

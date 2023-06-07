@@ -6,9 +6,16 @@ use Livewire\Component;
 
 class Template extends Component
 {
-    public string $icon = 'chat-alt';
-    public string $title = 'Text Transcription';
-    public string $description = 'Transcribe audio into text using AI';
+    public string $icon;
+    public string $title;
+    public string $description;
+
+    public function __construct()
+    {
+        $this->icon = 'chat-alt';
+        $this->title = __('templates.text_transcription');
+        $this->description = __('templates.transcribe_audio');
+    }
 
     public function render()
     {

@@ -32,7 +32,8 @@ class UserRepository
     public static function registerNewUserFromProvider(array $input): User
     {
         $account = Account::create([
-            'name' => $input['name']
+            'name' => $input['name'],
+            'settings' => ['language' => 'en']
         ]);
 
         $user = User::create([

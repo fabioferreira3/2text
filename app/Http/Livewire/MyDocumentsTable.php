@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire;
 
+use App\Enums\DocumentType;
+use App\Enums\Language;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Exception;
@@ -53,33 +55,33 @@ class MyDocumentsTable extends DataTableComponent
             Column::make("Id", "id")
                 ->format(fn ($value, $row) => $row->id)
                 ->hideIf(true),
-            Column::make("Type", "type")
+            Column::make(__('dashboard.type'), "type")
                 ->format(function ($value, $row) {
                     return view('livewire.tables.my-documents.document-type', ['type' => $row->type]);
                 })
                 ->searchable()
                 ->sortable(),
-            Column::make("Title", "title")
+            Column::make(__('dashboard.title'), "title")
                 ->format(function ($value, $row) {
                     return $value ? Str::limit($value, 20, '...') : "";
                 })
                 ->searchable()
                 ->sortable()
                 ->collapseOnMobile(),
-            Column::make('Status')
+            Column::make(__('dashboard.status'))
                 ->label(function ($row) {
                     return view('livewire.tables.my-documents.document-status', ['isCompleted' => $row->is_completed]);
                 }),
-            Column::make("Language", "language")
+            Column::make(__('dashboard.language'), "language")
                 ->format(fn ($value, $row) => $row->language->label())
                 ->searchable()
                 ->sortable()
                 ->collapseOnMobile(),
-            Column::make("Created at", "created_at")
+            Column::make(__('dashboard.created_at'), "created_at")
                 ->format(fn ($value, $row) => $row->created_at->setTimezone(session('user_timezone') ?? 'America/New_York')->format('m/d/Y - h:ia'))
                 ->sortable()
                 ->collapseOnMobile(),
-            Column::make('Actions')
+            Column::make(__('dashboard.actions'))
                 ->label(
                     fn ($row, Column $column) => view('livewire.tables.my-documents.view-action', ['rowId' => $row->id, 'isCompleted' => $row->is_completed])
                 ),
@@ -89,32 +91,13 @@ class MyDocumentsTable extends DataTableComponent
     public function filters(): array
     {
         return [
-            MultiSelectFilter::make('Type')
-                ->options([
-                    'blog_post' => 'Blog Post'
-                ])
+            MultiSelectFilter::make(__('dashboard.type'))
+                ->options(DocumentType::getKeyValues())
                 ->filter(function (Builder $builder, array $value) {
                     $builder->whereIn('type', $value);
                 }),
-            MultiSelectFilter::make('Languages')
-                ->options(
-                    [
-                        'en' => 'English',
-                        'ar' => 'Arabic',
-                        'ch' => 'Chinese',
-                        'fr' => 'French',
-                        'de' => 'German',
-                        'el' => 'Greek',
-                        'it' => 'Italian',
-                        'ja' => 'Japanese',
-                        'ko' => 'Korean',
-                        'pl' => 'Polnish',
-                        'pt' => 'Portuguese',
-                        'ru' => 'Russian',
-                        'es' => 'Spanish',
-                        'tr' => 'Turkish'
-                    ]
-                )->filter(function (Builder $builder, array $value) {
+            MultiSelectFilter::make(__('dashboard.language'))
+                ->options(Language::getKeyValues())->filter(function (Builder $builder, array $value) {
                     $builder->whereIn('language', $value);
                 }),
         ];
