@@ -52,11 +52,11 @@
                 </div>
             @endif
 
-            <div class="flex items-center font-courier justify-end gap-6 mt-8">
+            <div class="flex items-center justify-end gap-6 mt-8">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
                     {{ __('Already registered?') }}
                 </a>
-                <x-button type="submit" label="Register" red class="font-courier bg-secondary text-lg text-center rounded-lg"/>
+                <x-button type="submit" label="Register" red class="bg-primary text-lg text-center rounded-lg"/>
             </div>
         </form>
     </x-jet-authentication-card>

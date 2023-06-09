@@ -23,9 +23,9 @@
     </x-dropdown>
 </div>
 <div class="hidden md:block">
-    @if($regenerateAction)<x-button sm amber spinner="regenerate" wire:loading.attr="disabled" wire:click='regenerate' icon="refresh" label="Regenerate" class='rounded-lg' />@endif
+    @if($regenerateAction)<x-button sm spinner="regenerate" wire:loading.attr="disabled" wire:click='regenerate' icon="refresh" label="Regenerate" class='rounded-lg bg-secondary hover:bg-primary text-white border-0' />@endif
     @if($historyAction)<x-button sm slate wire:loading.attr="disabled" wire:target="regenerate,save" wire:click='showHistoryModal' icon="book-open" label="View History" class='rounded-lg' />@endif
     @if($copyAction) <x-button sm outline wire:loading.attr="disabled" wire:target="regenerate,save" :disabled='$copied ? true : false' wire:click='copy' icon="clipboard-copy" :label='$copied ? "Copied" : "Copy"' class='bg-zinc-200 border text-zinc-700 border-gray-400 rounded-lg' />@endif
-    <x-button sm dark spinner="save" wire:loading.attr="disabled" wire:target="regenerate,save" wire:click='save' icon="save" label='Save' class='font-bold rounded-lg' />
+    <x-button sm spinner="save" wire:loading.attr="disabled" wire:target="regenerate,save" wire:click='save' icon="save" label='Save' class='font-bold rounded-lg text-white border-white bg-zinc-900 hover:bg-primary' />
 </div>
 

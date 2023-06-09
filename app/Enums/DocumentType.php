@@ -11,9 +11,9 @@ enum DocumentType: string
     public function label()
     {
         return match ($this) {
-            self::BLOG_POST => "Blog Post",
-            self::TEXT_TRANSCRIPTION => "Transcription",
-            self::SOCIAL_MEDIA_POST => "Media Post"
+            self::BLOG_POST => __('common.blog_post'),
+            self::TEXT_TRANSCRIPTION => __('common.text_transcription'),
+            self::SOCIAL_MEDIA_POST => __('common.social_media_post')
         };
     }
 
@@ -24,5 +24,10 @@ enum DocumentType: string
             self::TEXT_TRANSCRIPTION->value => 'transcription-view',
             self::SOCIAL_MEDIA_POST->value => 'social-media-post-view'
         ];
+    }
+
+    public static function getKeyValues(): array
+    {
+        return collect(self::cases())->flatMap(fn ($type) => [$type->value => $type->label()])->toArray();
     }
 }

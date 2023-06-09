@@ -4,6 +4,7 @@ namespace App\Enums;
 
 enum DocumentTaskEnum: string
 {
+    case CRAWL_WEBSITE = 'crawl_website';
     case DOWNLOAD_AUDIO = 'download_audio';
     case PROCESS_AUDIO = 'process_audio';
     case PUBLISH_TRANSCRIPTION = 'publish_transcription';
@@ -20,6 +21,7 @@ enum DocumentTaskEnum: string
     public function getJob()
     {
         return match ($this) {
+            self::CRAWL_WEBSITE => "App\Jobs\CrawlWebsite",
             self::DOWNLOAD_AUDIO => "App\Jobs\DownloadAudio",
             self::PROCESS_AUDIO => "App\Jobs\ProcessAudio",
             self::PUBLISH_TRANSCRIPTION => "App\Jobs\TextTranscription\PublishTranscription",

@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-2 p-4 bg-white rounded-lg border border-gray-200">
+<div class="flex flex-col gap-2 p-4 bg-primary rounded-lg border border-gray-200">
     <div class="flex justify-between mb-2">
         @include('livewire.common.label', ['title' => 'Content'])
         <div class="flex gap-2">

@@ -1,10 +1,10 @@
 <x-jet-form-section submit="updateAccessToken">
     <x-slot name="title">
-        {{ __('Access token') }}
+        {{ __('profile.access_token') }}
     </x-slot>
 
     <x-slot name="description">
-        {{ __('Update your account\'s access token.') }}
+        {{ __('profile.update_account_access_token') }}
     </x-slot>
 
     <x-slot name="form">
@@ -18,13 +18,13 @@
 
     <x-slot name="actions">
         <x-jet-action-message class="mr-3" on="saved">
-            {{ __('Saved.') }}
+            {{ __('profile.saved') }}
         </x-jet-action-message>
 
         @if(is_null($state['token_id']))
-            <x-jet-button wire:loading.attr="disabled">
-                {{ __('Save') }}
-            </x-jet-button>
+        <x-jet-button wire:loading.attr="disabled">
+            {{ __('profile.save') }}
+        </x-jet-button>
         @endif
     </x-slot>
 </x-jet-form-section>

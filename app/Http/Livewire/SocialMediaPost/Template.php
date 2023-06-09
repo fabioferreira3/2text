@@ -6,9 +6,16 @@ use Livewire\Component;
 
 class Template extends Component
 {
-    public string $icon = 'hashtag';
-    public string $title = 'Social Media Post';
-    public string $description = 'Create social media posts using AI';
+    public string $icon;
+    public string $title;
+    public string $description;
+
+    public function __construct()
+    {
+        $this->icon = 'hashtag';
+        $this->title = __('templates.social_media_post');
+        $this->description = __('templates.create_social_media');
+    }
 
     public function render()
     {

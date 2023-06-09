@@ -17,7 +17,10 @@ class GenRepository
         $chatGpt = new ChatGPT(LanguageModels::GPT_3_TURBO->value);
         $response = $chatGpt->request([[
             'role' => 'user',
-            'content' => $promptHelper->writeTitle($document->normalized_structure, ['tone' => $document['meta']['tone'], 'keyword' => $document['meta']['keyword']])
+            'content' => $promptHelper->writeTitle($document->normalized_structure, [
+                'tone' => $document['meta']['tone'] ?? null,
+                'keyword' => $document['meta']['keyword']
+            ])
         ]]);
         $document->update(['title' => Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"')]);
         $repo->addHistory(
@@ -36,7 +39,13 @@ class GenRepository
         $chatGpt = new ChatGPT(LanguageModels::GPT_3_TURBO->value);
         $response = $chatGpt->request([[
             'role' => 'user',
-            'content' => $promptHelper->writeMetaDescription($document->normalized_structure, ['tone' => $document['meta']['tone'], 'keyword' => $document['meta']['keyword']])
+            'content' => $promptHelper->writeMetaDescription(
+                $document->normalized_structure,
+                [
+                    'tone' => $document['meta']['tone'] ?? null,
+                    'keyword' => $document['meta']['keyword']
+                ]
+            )
         ]]);
         $repo->updateMeta('meta_description', Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"'));
         $repo->addHistory(
@@ -59,7 +68,7 @@ class GenRepository
                 'content' =>   $promptHelper->writeSocialMediaPost($document->context, [
                     'keyword' => $document->meta['keyword'] ?? null,
                     'platform' => $platform,
-                    'tone' => $document->meta['tone'],
+                    'tone' => $document->meta['tone'] ?? null,
                     'style' => $document->meta['style'] ?? null,
                     'more_instructions' => $document->meta['more_instructions'] ?? null
                 ])

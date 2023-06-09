@@ -56,7 +56,7 @@
                     <button
                         wire:click="process"
                         wire:loading.remove
-                        class="bg-red-700 text-white font-bold px-4 py-2 rounded-lg"
+                        class="bg-secondary hover:bg-primary text-white font-bold px-4 py-2 rounded-lg"
                     >
                         Transcript!
                     </button>
