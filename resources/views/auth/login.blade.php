@@ -7,7 +7,7 @@
         </x-slot>
 
         <div class="flex flex-col mb-6">
-            <div class="text-3xl font-bold text-zinc-700">Sign-in</div>
+            <div class="text-3xl font-bold text-zinc-700 font-avenir">Sign-in</div>
             <div>or <a class="underline" href="{{ route('register') }}">create an account</a></div>
         </div>
 

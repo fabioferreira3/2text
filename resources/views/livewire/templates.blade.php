@@ -1,8 +1,8 @@
 <div>
-    <div class="flex flex-col gmb-8">
+    <div class="flex flex-col mb-8">
         @include('livewire.common.header', ['icon' => 'puzzle', 'label' => __('templates.templates')])
         <div class="mt-12">
-            <h2 class="text-3xl text-zinc-700 font-bold">{{__('templates.start_here')}}</h1>
+            <h2 class="text-3xl text-primary font-bold">{{__('templates.start_here')}}</h1>
                 <small class="text-zinc-700 text-lg">{{__('templates.choose_template')}}</small>
         </div>
     </div>

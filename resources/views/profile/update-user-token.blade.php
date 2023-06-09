@@ -22,7 +22,7 @@
         </x-jet-action-message>
 
         @if(is_null($state['token_id']))
-        <x-jet-button wire:loading.attr="disabled">
+        <x-jet-button class="bg-secondary" wire:loading.attr="disabled">
             {{ __('profile.save') }}
         </x-jet-button>
         @endif

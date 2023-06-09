@@ -52,7 +52,7 @@
         @endif
 
         <div class="flex items-center mt-5">
-            <x-jet-button wire:click="confirmLogout" wire:loading.attr="disabled">
+            <x-jet-button class="bg-primary" wire:click="confirmLogout" wire:loading.attr="disabled">
                 {{ __('profile.log_out_other') }}
             </x-jet-button>
 

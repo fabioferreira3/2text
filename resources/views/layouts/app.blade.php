@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>2Text AI - {{ $title ?? 'Welcome' }}</title>
+    <title>Experior AI - {{ $title ?? 'Welcome' }}</title>
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:weight@400;600;700&display=swap">
@@ -37,14 +37,19 @@
             @include('livewire.common.sidebar')
         </div>
         <!-- Page Content -->
-        <div class="col-span-5 md:col-span-4 h-full px-0 mb-8 pb-6">
+        <div class="w-full md:col-span-4 h-full px-0 mb-8 pb-6">
+            {{-- <div class="md:hidden bg-primary p-4">
+                <a href="{{ route('dashboard') }}">
+                    <img src="/logo.png" class="m-auto w-1/2 h-full" />
+                </a>
+            </div> --}}
             @livewire('navigation-menu')
-            <div class="p-3 md:p-6 md:rounded-lg bg-white">
+            <div class="p-8 md:p-6 md:rounded-lg bg-white">
                 {{ $slot }}
             </div>
         </div>
 
-        <footer class="w-full fixed bottom-0 left-0 text-start h-8 py-2 px-4 bg-white border border-t text-xs font-bold border-gray-200">2Text.ai (beta)</footer>
+        <footer class="w-full fixed bottom-0 left-0 text-start h-8 py-2 px-4 border-t border-zinc-100 bg-primary text-xs text-white">experior.ai (beta)</footer>
     </main>
 
     @livewireScripts

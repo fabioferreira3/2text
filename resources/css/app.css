@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: "Avenir Light";
+    src: url("/public/fonts/avenir-light.ttf") format("truetype");
+    font-weight: thin;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Avenir Regular";
+    src: url("/public/fonts/avenir-regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Avenir Black";
+    src: url("/public/fonts/avenir-black.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}
+
 select,
 input,
 textarea {

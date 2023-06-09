@@ -13,7 +13,6 @@ return [
     'describe_subject' => 'Describe the subject of the post using at least :minWords words (max. :maxChars chars)',
     'enter_youtube' => 'Enter a youtube link and I\'ll write text based on the content of the video.',
     'enter_website' => 'Enter an external website url to be used as context, like another blog post or page. I\'ll do my best to extract as much information as possible from that page and use it as context for the creation of your text.',
-    'fill_instructions' => 'Please fill out the following information so I can understand your requirements and write you an unique and high-quality post.',
     'free_text' => 'Just enter any text that you want as context and I\'ll write a text based on the information you provide.',
     'further_instructions' => 'Further instructions (optional)',
     'generate' => 'Generate',

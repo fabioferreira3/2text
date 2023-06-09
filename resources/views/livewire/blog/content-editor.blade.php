@@ -1,6 +1,6 @@
-<div class="flex flex-col gap-2 p-4 bg-primary rounded-lg border border-gray-200">
+<div class="flex flex-col gap-2 p-8 bg-zinc-300 rounded-xl border border-gray-200 border-primary border-opacity-10">
     <div class="flex justify-between mb-2">
-        @include('livewire.common.label', ['title' => 'Content'])
+        @include('livewire.common.label', ['title' => __('blog.content')])
         <div class="flex gap-2">
             @include('livewire.common.field-actions', ['copyAction' => true, 'regenerateAction' => true, 'historyAction' => true])
         </div>

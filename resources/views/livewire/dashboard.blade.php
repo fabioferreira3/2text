@@ -1,5 +1,5 @@
 <div>
-    <div class="mb-8 flex justify-between">
+    <div class="w-full mb-8 flex justify-between">
         @include('livewire.common.header', ['icon' => 'desktop-computer', 'label' => __('dashboard.dashboard')])
         <livewire:common.create-document />
     </div>

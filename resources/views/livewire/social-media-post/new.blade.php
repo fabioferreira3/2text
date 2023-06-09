@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-6">
     @include('livewire.common.header', ['icon' => 'hashtag', 'label' => __('social_media.new_social_media_post')])
 
-    <div class="flex flex-col md:grid md:grid-cols-6 gap-6 mt-12">
+    <div class="flex flex-col md:grid md:grid-cols-6 gap-6 md:mt-12">
         <div class="col-span-2">
             <div class="p-4 bg-zinc-300 text-zinc-800 rounded-lg">
                 <h2 class="font-bold text-lg">{{__('social_media.instructions')}}</h2>
@@ -12,7 +12,7 @@
         </div>
         <div class="col-span-4">
             <div class="flex flex-col gap-8 p-4 border rounded-lg bg-zinc-100">
-                <div class="grid grid-cols-2 gap-6">
+                <div class="w-full flex flex-col md:grid md:grid-cols-2 gap-6">
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
                             <label class="font-bold text-lg text-zinc-700">{{__('social_media.target_platforms')}}:</label>
@@ -34,7 +34,7 @@
                         @endif
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-6">
+                <div class="w-full flex flex-col md:grid md:grid-cols-2 gap-6">
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
                             <label class="font-bold text-lg text-zinc-700">{{__('social_media.source')}}:</label>
@@ -59,7 +59,7 @@
                         @endif
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-6">
+                <div class="w-full flex flex-col md:grid md:grid-cols-2 gap-6">
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
                             <label class="font-bold text-lg text-zinc-700">{{__('social_media.writing_style')}}:</label>

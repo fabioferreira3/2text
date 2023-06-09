@@ -84,7 +84,7 @@
             {{ __('profile.saved') }}
         </x-jet-action-message>
 
-        <x-jet-button wire:loading.attr="disabled" wire:target="photo">
+        <x-jet-button class="bg-secondary" wire:loading.attr="disabled" wire:target="photo">
             {{ __('profile.save') }}
         </x-jet-button>
     </x-slot>

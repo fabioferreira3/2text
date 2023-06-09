@@ -18,8 +18,9 @@ module.exports = {
     safelist: ["bg-red-200", "bg-blue-200"],
     theme: {
         fontFamily: {
-            sans: ["Nunito", ...defaultTheme.fontFamily.sans],
-            courier: ['"Courier Prime"'],
+            sans: ["Avenir Regular", ...defaultTheme.fontFamily.sans],
+            bold: ['"Avenir Black"'],
+            thin: ['"Avenir Light"'],
         },
         extend: {
             colors: {

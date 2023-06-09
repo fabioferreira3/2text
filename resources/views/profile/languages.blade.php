@@ -24,7 +24,7 @@
             {{ __('profile.saved') }}
         </x-jet-action-message>
 
-        <x-jet-button wire:loading.attr="disabled">
+        <x-jet-button class="bg-secondary" wire:loading.attr="disabled">
             {{ __('profile.save') }}
         </x-jet-button>
 

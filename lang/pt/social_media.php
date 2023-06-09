@@ -13,7 +13,6 @@ return [
     'describe_subject' => 'Descreva o assunto da postagem usando pelo menos :minWords palavras (máx. :maxChars caracteres).',
     'enter_youtube' => 'Insira um link do YouTube e eu escreverei um texto com base no conteúdo do vídeo.',
     'enter_website' => 'Insira um URL de um site externo para ser usado como contexto, como outro post de blog ou página. Farei o possível para extrair o máximo de informações possível dessa página e usá-las como contexto para a criação do seu texto.',
-    'fill_instructions' => 'Por favor, preencha as seguintes informações para que eu possa entender seus requisitos e escrever uma postagem única e de alta qualidade para você.',
     'free_text' => 'Apenas insira qualquer texto que você queira como contexto e eu escreverei um texto com base nas informações fornecidas.',
     'further_instructions' => 'Instruções adicionais (opcional)',
     'generate' => 'Gerar',

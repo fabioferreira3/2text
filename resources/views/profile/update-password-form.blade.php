@@ -32,7 +32,7 @@
             {{ __('profile.saved') }}
         </x-jet-action-message>
 
-        <x-jet-button>
+        <x-jet-button class="bg-secondary">
             {{ __('profile.save') }}
         </x-jet-button>
     </x-slot>
