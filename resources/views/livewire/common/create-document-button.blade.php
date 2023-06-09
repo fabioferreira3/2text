@@ -1,1 +1,1 @@
-<x-button red wire:click="templates" icon="plus" class="px-2 rounded-lg font-bold text-zinc-100" label="Create" />
+<x-button wire:click="templates" icon="plus" class="px-2 bg-secondary hover:bg-primary rounded-lg font-bold text-zinc-100" label="Create" />

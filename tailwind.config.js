@@ -23,8 +23,8 @@ module.exports = {
         },
         extend: {
             colors: {
-                primary: colors.indigo,
-                secondary: "#B81717",
+                primary: "#080B53",
+                secondary: "#EA1F88",
                 positive: colors.emerald,
                 negative: colors.red,
                 warning: colors.amber,

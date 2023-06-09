@@ -33,7 +33,7 @@
     @livewire('common.notifications')
 
     <main class="flex w-full md:grid md:grid-cols-5 min-h-screen bg-zinc-100">
-        <div class="hidden md:block md:col-span-1 h-full p-6 bg-white border-r-2">
+        <div class="hidden md:block md:col-span-1 h-full p-6 bg-primary border-r-2">
             @include('livewire.common.sidebar')
         </div>
         <!-- Page Content -->
