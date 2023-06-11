@@ -45,16 +45,14 @@
             </div>
 
             <div>
-                <x-button type="submit" label="Sign in" class="text-white font-bold bg-primary text-xl xl:text-lg w-full text-center rounded-lg" />
+                <x-button type="submit" label="Sign in" class="text-white font-bold bg-primary hover:bg-secondary text-xl xl:text-lg w-full text-center rounded-lg" />
             </div>
         </form>
         <div class="mt-6 flex flex-col gap-2">
-            <div class="border border-zinc-300 rounded-lg px-3 py-3 flex justify-center">
-                <a href="{{ route('login.google') }}" class="btn btn-primary flex items-center gap-2">
-                    <img width="20px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
-                    <span>Sign-in with Google</span>
-                </a>
-            </div>
+            <a href="{{ route('login.google') }}" class="border border-zinc-300 rounded-lg px-3 py-3 btn btn-primary flex items-center justify-center gap-2 w-full">
+                <img width="20px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+                <span class="text-center">Sign-in with Google</span>
+            </a>
         </div>
 
 

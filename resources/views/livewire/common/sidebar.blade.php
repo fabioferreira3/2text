@@ -1,8 +1,8 @@
 <nav class="flex flex-col min-h-screen">
     <div class="relative mb-4 h-full">
-        <div class="flex items-center">
+        <div class="flex items-center justify-center">
             <a href="{{ route('dashboard') }}">
-                <img src="/logo.png" class="w-full h-full" />
+                <img src="/logo.png" class="xl:w-2/3 h-full" />
             </a>
         </div>
     </div>

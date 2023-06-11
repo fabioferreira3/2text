@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\SocialMediaPost;
 
 use App\Enums\Language;
-use App\Helpers\InstructionsHelper;
 use App\Jobs\SocialMedia\CreateSocialMediaPost;
 use WireUi\Traits\Actions;
 use Livewire\Component;
@@ -22,7 +21,6 @@ class NewSocialMediaPost extends Component
     public mixed $style;
     public bool $linkedin;
     public array $platforms;
-    public string $instructions;
     public mixed $more_instructions;
     public bool $modal;
     public $title;
@@ -50,7 +48,6 @@ class NewSocialMediaPost extends Component
             'Twitter' => false,
             'TikTok' => false
         ];
-        $this->instructions = InstructionsHelper::socialMediaGeneral();
     }
 
     public function render()
@@ -76,36 +73,6 @@ class NewSocialMediaPost extends Component
         'source.required' => 'Source is a required field.',
         'language.required' => 'Language is a required field.',
     ];
-
-    public function setPlatformsInfo()
-    {
-        $this->instructions = InstructionsHelper::socialMediaPlatforms();
-    }
-
-    public function setSourceInfo()
-    {
-        $this->instructions = InstructionsHelper::sources();
-    }
-
-    public function setKeywordInfo()
-    {
-        $this->instructions = "<h2 class='font-bold'>" . __('social_media.keyword') . "</h2>" . __('social_media.define_keyword');
-    }
-
-    public function setLanguageInfo()
-    {
-        $this->instructions = "<h2 class='font-bold'>" . __('social_media.language') . "</h2><p>" . __('social_media.define_language') . "</p><p>" . __('social_media.selected_language_info') . "</p>";
-    }
-
-    public function setToneInfo()
-    {
-        $this->instructions = InstructionsHelper::writingTones();
-    }
-
-    public function setStyleInfo()
-    {
-        $this->instructions = InstructionsHelper::writingStyles();
-    }
 
     public function process()
     {

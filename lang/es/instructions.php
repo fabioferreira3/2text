@@ -18,11 +18,9 @@ return [
     'indicate_topics_number' => 'Indicate the number of topics you would like me to cover in your blog post. You may define a minimum of one and a maximum of fifteen topics.',
     'fill_information' => 'Please fill out the following information so I can understand your requirements and write you an unique and high-quality post.',
     'free_text' => 'Free text',
-    'includes_characters' => 'Usually includes characters, conflicts, and settings.',
-    'includes_opinions' => 'Includes the writers’ opinions, and provides justifications and evidence to support their claims.',
     'language' => 'Language',
     'letters_recommendation' => 'Letters of recommendation; cover letters; newspaper articles; argumentative essays for academic papers',
-    'literary_techniques' => 'Employs literary techniques such as similes, metaphors, allegory, etc to engage the audience.',
+
     'number_topics' => 'Number of topics',
     'keyword' => 'Keyword',
     'poetry' => 'Poetry; fictional novels or plays; memoirs or first-hand accounts of events',

@@ -27,24 +27,20 @@
 
 </head>
 
-<body class="font-sans antialiased w-full">
+<body class="font-sans antialiased w-full bg-primary">
     <x-notifications />
     <x-jet-banner />
     @livewire('common.notifications')
 
     <main class="flex w-full md:grid md:grid-cols-5 min-h-screen">
-        <div class="hidden md:block md:col-span-1 h-full p-6 bg-primary border-r-2">
+        <div class="hidden md:block md:col-span-1 h-full p-6 bg-primary">
             @include('livewire.common.sidebar')
         </div>
         <!-- Page Content -->
-        <div class="w-full md:col-span-4 h-full px-0 mb-8 pb-6">
-            {{-- <div class="md:hidden bg-primary p-4">
-                <a href="{{ route('dashboard') }}">
-                    <img src="/logo.png" class="m-auto w-1/2 h-full" />
-                </a>
-            </div> --}}
+        <div class="w-full md:col-span-4 h-screen px-0 mb-8 pb-6">
             @livewire('navigation-menu')
-            <div class="p-8 md:p-6 md:rounded-lg bg-white">
+            <div class='h-0.5 w-full mx-4 bg-secondary rounded-lg'></div>
+            <div class="p-8 md:p-6 md:rounded-l-lg h-full bg-white">
                 {{ $slot }}
             </div>
         </div>

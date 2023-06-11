@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'blog_post' => 'Post para Blog',
+    'blog_post' => 'Artigo de Blog',
     'choose_template' => 'Escolha um modelo e vamos começar a escrever!',
     'create_blog_post' => 'Crie um post completo otimizado para SEO com a ajuda de IA.',
     'create_social_media' => 'Crie postagens para redes sociais usando IA.',

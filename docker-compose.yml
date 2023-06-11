@@ -1,27 +1,27 @@
 version: "3"
 services:
-    whisper:
-        container_name: whisper-app
-        image: onerahmet/openai-whisper-asr-webservice:latest
-        extra_hosts:
-            - "host.docker.internal:host-gateway"
-        ports:
-            - "8010:9000"
-        networks:
-            - twotext
-        environment:
-            ASR_MODEL: "medium.en"
-    whisper-large:
-        container_name: whisper-large-app
-        image: onerahmet/openai-whisper-asr-webservice:latest
-        extra_hosts:
-            - "host.docker.internal:host-gateway"
-        ports:
-            - "8011:9000"
-        networks:
-            - twotext
-        environment:
-            ASR_MODEL: "large"
+    # whisper:
+    #     container_name: whisper-app
+    #     image: onerahmet/openai-whisper-asr-webservice:latest
+    #     extra_hosts:
+    #         - "host.docker.internal:host-gateway"
+    #     ports:
+    #         - "8010:9000"
+    #     networks:
+    #         - twotext
+    #     environment:
+    #         ASR_MODEL: "medium.en"
+    # whisper-large:
+    #     container_name: whisper-large-app
+    #     image: onerahmet/openai-whisper-asr-webservice:latest
+    #     extra_hosts:
+    #         - "host.docker.internal:host-gateway"
+    #     ports:
+    #         - "8011:9000"
+    #     networks:
+    #         - twotext
+    #     environment:
+    #         ASR_MODEL: "large"
     laravel.test:
         container_name: bloggable-app
         build:
@@ -62,19 +62,19 @@ services:
             - "./vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql"
         networks:
             - twotext
-        healthcheck:
-            test:
-                [
-                    "CMD",
-                    "pg_isready",
-                    "-q",
-                    "-d",
-                    "${DB_DATABASE}",
-                    "-U",
-                    "${DB_USERNAME}",
-                ]
-            retries: 3
-            timeout: 5s
+        # healthcheck:
+        #     test:
+        #         [
+        #             "CMD",
+        #             "pg_isready",
+        #             "-q",
+        #             "-d",
+        #             "${DB_DATABASE}",
+        #             "-U",
+        #             "${DB_USERNAME}",
+        #         ]
+        #     retries: 3
+        #     timeout: 5s
     redis:
         container_name: bloggable-redis
         image: "redis:alpine"

@@ -1,14 +1,14 @@
 <div class="flex flex-col gap-6">
     @include('livewire.common.header', ['icon' => 'chat-alt', 'label' => 'New Transcription'])
 
-    <div class="flex flex-col md:grid md:grid-cols-5 gap-6">
+    <div class="flex flex-col gap-6">
         <div class="col-span-3">
             <div class="flex flex-col gap-4 p-4 border-zinc-200 border rounded-lg bg-white">
                 <div class="grid grid-cols-2 gap-6">
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
                             <label class="font-bold text-lg text-zinc-700">Source:</label>
-                            <x-icon solid name="question-mark-circle" class="text-zinc-500 cursor-pointer h-5 w-5" wire:click="setSourceInfo()"/>
+                            @include('livewire.common.help-item', ['header' => __('transcription.source'), 'content' => App\Helpers\InstructionsHelper::transcriptionSource()])
                         </div>
                         <select
                             name="provider"
@@ -36,7 +36,7 @@
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
                             <label class="font-bold text-lg text-zinc-700">Language of the video:</label>
-                            <x-icon solid name="question-mark-circle" class="text-zinc-500 cursor-pointer h-5 w-5" wire:click="setLanguageInfo()"/>
+                            @include('livewire.common.help-item', ['header' => __('transcription.language'), 'content' => App\Helpers\InstructionsHelper::transcriptionLanguage()])
                         </div>
                         <select
                             name="language"
@@ -58,16 +58,8 @@
                         wire:loading.remove
                         class="bg-secondary hover:bg-primary text-white font-bold px-4 py-2 rounded-lg"
                     >
-                        Transcript!
+                        {{ __('transcription.transcript') }}
                     </button>
-                </div>
-            </div>
-        </div>
-        <div class="col-span-2">
-            <div class="p-4 bg-zinc-200 rounded-lg">
-                <h2 class="font-bold text-lg">Instructions</h2>
-                <div class="flex flex-col gap-2 mt-2">
-                    {!! $this->instructions !!}
                 </div>
             </div>
         </div>

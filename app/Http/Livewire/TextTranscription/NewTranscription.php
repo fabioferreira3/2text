@@ -15,7 +15,6 @@ class NewTranscription extends Component
     public string $source;
     public string $language;
     public array $languages;
-    public string $instructions;
     public bool $modal;
     public string $title;
 
@@ -26,7 +25,6 @@ class NewTranscription extends Component
         $this->source_url = '';
         $this->language = 'en';
         $this->languages = Language::getLabels();
-        $this->instructions = '<p>Please fill out the following information to help our AI generate a unique and high-quality blog post for you.</p>';
     }
 
     public function render()
@@ -45,16 +43,6 @@ class NewTranscription extends Component
         'source.required' => 'Source is a required field.',
         'language.required' => 'Language is a required field.',
     ];
-
-    public function setSourceInfo()
-    {
-        $this->instructions = "<h2 class='font-bold'>Source</h2> Define the source of the transcription. Currently, only Youtube videos are supported.";
-    }
-
-    public function setLanguageInfo()
-    {
-        $this->instructions = "<h2 class='font-bold'>Language</h2><p>You need to select the language of the video since I'm currently not able to auto-discover its main language.</p>";
-    }
 
     public function process()
     {

@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Blog;
 
 use App\Enums\Language;
-use App\Helpers\InstructionsHelper;
 use App\Jobs\Blog\CreateBlogPost;
 use WireUi\Traits\Actions;
 use Livewire\Component;
@@ -21,7 +20,6 @@ class NewPost extends Component
     public string $tone;
     public string $style;
     public string $targetHeadersCount;
-    public string $instructions;
     public bool $modal;
     public string $title;
 
@@ -37,7 +35,6 @@ class NewPost extends Component
         $this->targetHeadersCount = '3';
         $this->tone = '';
         $this->style = '';
-        $this->instructions = InstructionsHelper::blogGeneral();
     }
 
     public function render()
@@ -65,38 +62,6 @@ class NewPost extends Component
         'targetHeadersCount.max' => 'The maximum number of subtopics is 15.',
         'targetHeadersCount.required' => 'The number of subtopics is a required field.',
     ];
-
-    public function setSourceInfo()
-    {
-        $this->instructions = InstructionsHelper::sources();
-    }
-
-    public function setKeywordInfo()
-    {
-        $this->instructions = "<h2 class='font-bold'>Keyword</h2> Define a keyword so the AI may use it more often.";
-    }
-
-    public function setLanguageInfo()
-    {
-        $this->instructions = "<h2 class='font-bold'>Language</h2><p>Define the main language of your blog post.</p><p>Take into account that the selected language must be the same language of the context you're using, ie: the language of the youtube video, the web page or free text you provided.</p>";
-    }
-
-    public function setSubtopicsInfo()
-    {
-        $this->instructions = "<h2 class='font-bold'>Subtopics</h2><p>Define the number of subtopics of your blog post. The more subtopics, more content will be generated.<p>
-        <h3 class='font-bold text-sm'>Note</h3>
-        <p class='text-sm'>As an estimate, 1 subtopic covers around 350 words.</p>";
-    }
-
-    public function setStyleInfo()
-    {
-        $this->instructions = InstructionsHelper::writingStyles();
-    }
-
-    public function setToneInfo()
-    {
-        $this->instructions = InstructionsHelper::writingTones();
-    }
 
     public function process()
     {
