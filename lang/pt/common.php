@@ -1,10 +1,16 @@
 <?php
 
 return [
-    'blog_post' => 'Post de blog',
-    'free_text' => 'Texto livre',
-    'social_media_post' => 'Post de mídia social',
-    'text_transcription' => 'Transcrição',
+    'blog_post' => 'Postagem de Blog',
+    'copy' => 'Copiar',
+    'copied' => 'Copiado',
+    'close' => 'Fechar',
+    'free_text' => 'Texto Livre',
+    'regenerate' => 'Regenerar',
+    'save' => 'Salvar',
+    'social_media_post' => 'Publicação em Mídias Sociais',
+    'text_transcription' => 'Transcrição de Texto',
+    'view_history' => 'Ver Histórico',
     'youtube' => 'Youtube',
-    'website_url' => 'Website externo'
+    'website_url' => 'URL do Site'
 ];

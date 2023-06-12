@@ -1,6 +1,6 @@
 <nav x-data="{ open: false }" class="rounded-lg w-full">
     <!-- Primary Navigation Menu -->
-    <div class="rounded-l-lg px-4 sm:px-6 lg:px-8 flex items-center md:block md:bg-zinc-100 bg-primary">
+    <div class="rounded-l-lg px-4 sm:px-6 lg:px-8 flex items-center md:block md:bg-white bg-primary">
         <div class="md:hidden bg-primary p-4">
             <a href="{{ route('dashboard') }}">
                 <img src="/logo.png" class="m-auto w-1/2 h-full" />

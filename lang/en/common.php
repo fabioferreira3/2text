@@ -4,6 +4,7 @@ return [
     'blog_post' => 'Blog Post',
     'copy' => 'Copy',
     'copied' => 'Copied',
+    'close' => 'Close',
     'free_text' => 'Free Text',
     'regenerate' => 'Regenerate',
     'save' => 'Save',

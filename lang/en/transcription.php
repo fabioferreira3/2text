@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'source' => 'Source',
+    'new_transcription' => 'New audio transcription',
     'language' => 'Language of the video',
-    'transcript' => 'Transcript'
+    'transcript' => 'Transcript',
+    'source' => 'Source',
 ];

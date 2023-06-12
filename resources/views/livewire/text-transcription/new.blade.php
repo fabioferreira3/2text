@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-6">
-    @include('livewire.common.header', ['icon' => 'chat-alt', 'label' => 'New Transcription'])
+    @include('livewire.common.header', ['icon' => 'chat-alt', 'label' => __('transcription.new_transcription')])
 
     <div class="flex flex-col gap-6">
         <div class="col-span-3">
@@ -7,61 +7,45 @@
                 <div class="grid grid-cols-2 gap-6">
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
-                            <label class="font-bold text-lg text-zinc-700">Source:</label>
+                            <label class="font-bold text-lg text-zinc-700">{{__('transcription.source')}}:</label>
                             @include('livewire.common.help-item', ['header' => __('transcription.source'), 'content' => App\Helpers\InstructionsHelper::transcriptionSource()])
                         </div>
-                        <select
-                            name="provider"
-                            wire:model="source"
-                            class="p-3 rounded-lg border border-zinc-200"
-                        >
+                        <select name="provider" wire:model="source" class="p-3 rounded-lg border border-zinc-200">
                             <option value="youtube">Youtube</option>
                         </select>
                     </div>
                 </div>
                 @if ($source === 'youtube')
-                    <div class="flex flex-col gap-3">
-                        <label class="font-bold text-lg text-zinc-700">Youtube url:</label>
-                        <input
-                            name="url"
-                            wire:model="source_url"
-                            class="p-3 border border-zinc-200 rounded-lg"
-                        />
-                        @if($errors->has('source_url'))
-                            <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
-                        @endif
-                    </div>
+                <div class="flex flex-col gap-3">
+                    <label class="font-bold text-lg text-zinc-700">Youtube url:</label>
+                    <input name="url" wire:model="source_url" class="p-3 border border-zinc-200 rounded-lg" />
+                    @if($errors->has('source_url'))
+                    <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
+                    @endif
+                </div>
                 @endif
                 <div class="grid grid-cols-2 gap-6">
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
-                            <label class="font-bold text-lg text-zinc-700">Language of the video:</label>
+                            <label class="font-bold text-lg text-zinc-700">{{__('transcription.language')}}:</label>
                             @include('livewire.common.help-item', ['header' => __('transcription.language'), 'content' => App\Helpers\InstructionsHelper::transcriptionLanguage()])
                         </div>
-                        <select
-                            name="language"
-                            wire:model="language"
-                            class="p-3 rounded-lg border border-zinc-200"
-                        >
-                        @foreach ($languages as $option)
+                        <select name="language" wire:model="language" class="p-3 rounded-lg border border-zinc-200">
+                            @foreach ($languages as $option)
                             <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
-                        @endforeach
+                            @endforeach
                         </select>
                         @if($errors->has('language'))
-                            <span class="text-red-500 text-sm">{{ $errors->first('language') }}</span>
+                        <span class="text-red-500 text-sm">{{ $errors->first('language') }}</span>
                         @endif
                     </div>
                 </div>
                 <div class="flex justify-center mt-4">
-                    <button
-                        wire:click="process"
-                        wire:loading.remove
-                        class="bg-secondary hover:bg-primary text-white font-bold px-4 py-2 rounded-lg"
-                    >
+                    <button wire:click="process" wire:loading.remove class="bg-secondary hover:bg-primary text-white font-bold px-4 py-2 rounded-lg">
                         {{ __('transcription.transcript') }}
                     </button>
                 </div>
             </div>
         </div>
     </div>
-    </div>
+</div>

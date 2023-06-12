@@ -7,7 +7,7 @@ return [
     'create_social_media' => 'Crie postagens para redes sociais usando IA.',
     'text_transcription' => 'Transcrição de Texto',
     'transcribe_audio' => 'Transcreva áudio em texto usando IA.',
-    'social_media_post' => 'Post para Redes Sociais',
+    'social_media_post' => 'Post de Mídia Social',
     'start_here' => 'Comece aqui',
     'templates' => 'Modelos'
 ];

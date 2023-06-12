@@ -41,9 +41,9 @@ class InstructionsHelper
 
     public static function maxSubtopics()
     {
-        return "<p>Define the number of subtopics of your text. The more subtopics, more content will be generated.<p>
-        <h3 class='font-bold text-sm mt-3'>Note</h3>
-        <p class='text-sm'>As an estimate, 1 subtopic covers around 350 words.</p>";
+        return '<p>' . __('instructions.define_subtopics') . '<p><h3 class="font-bold text-sm mt-3">
+        ' . __('instructions.note') . '</h3>
+        <p class="text-sm">' . __('instructions.subtopics_estimate') . '</p>';
     }
 
     public static function socialMediaGeneral()
