@@ -2,7 +2,7 @@
     <div class="relative overflow-auto max-h-[75%] bg-white rounded-lg shadow-lg w-full sm:w-4/5 md:w-3/5 lg:w-3/5">
         <div class="py-4 text-left px-6">
             <div role='button' class="flex justify-between items-center pb-3">
-                <p class="text-2xl font-bold">History - "{{$fieldTitle}}"</p>
+                <p class="text-2xl font-bold">Log - {{$fieldTitle}}</p>
                 <div role="button" class="cursor-pointer z-50" id="close" wire:click="$emitUp('closeHistoryModal')">
                     <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 18 18">
                         <path d="M14.1 4.93l-1.4-1.4L9 6.59 5.3 3.53 3.9 4.93 7.59 8.5 3.9 12.07l1.4 1.43L9 10.41l3.7 3.07 1.4-1.43L10.41 8.5l3.7-3.57z"></path>
@@ -11,30 +11,19 @@
             </div>
 
             @if ($history->count())
-            <div>
-                
-            </div>
-            <table class="hidden md:block table-fixed border-separate w-full">
-                <thead>
-                    <tr class="bg-zinc-200">
-                        <th width="25%" class="text-zinc-700 py-2 px-4 border border-zinc-300 rounded-lg">Date</th>
-                        <th width="55%" class="text-zinc-700 py-2 px-4 border border-zinc-300 rounded-lg">Content</th>
-                        <th width="20%" class="text-zinc-700 py-2 px-4 border border-zinc-300 rounded-lg text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
+                <div class="flex flex-col gap-2">
                     @foreach($history as $item)
-                    <tr class="group">
-                        <td class="text-zinc-700 text-sm py-2 px-4 border border-zinc-300 rounded-lg">{{$item['created_at']}}</td>
-                        <td class="text-zinc-700 py-2 px-4 border border-zinc-300 rounded-lg">{!!Str::limit($item['content'], 300, ' (...)')!!}</td>
-                        <td class="text-zinc-700 py-2 px-4 border border-zinc-300 rounded-lg text-center">
-                            <x-button xs cyan wire:click="apply('{{ base64_encode($item['content']) }}')" icon="chevron-double-right" label="Apply" class='rounded-lg' />
-                        </td>
-                    </tr>
+                    <div class="flex flex-col gap-3 rounded-lg border border-zinc-200 p-2">
+                        <div class="flex items-center justify-between">
+                            <div class='font-bold'>{{$item['created_at']}}</div>
+                            <x-button sm class='rounded-lg text-white bg-secondary hover:bg-black' wire:click="apply('{{ base64_encode($item['content']) }}')" label="Apply"/>
+                        </div>
+                        <div class='italic text-sm'>
+                            {!!Str::limit($item['content'], 300, ' (...)')!!}
+                        </div>
+                    </div>
                     @endforeach
-
-                </tbody>
-            </table>
+                </div>
             @else
             No history available
             @endif
