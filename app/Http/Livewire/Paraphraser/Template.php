@@ -14,7 +14,7 @@ class Template extends Component
     {
         $this->icon = 'switch-horizontal';
         $this->title = __('templates.paraphraser');
-        $this->description = __('templates.create_blog_post');
+        $this->description = __('templates.create_paraphrase');
     }
 
     public function render()

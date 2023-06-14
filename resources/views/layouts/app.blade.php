@@ -34,7 +34,7 @@
 
     <main class="flex w-full md:grid md:grid-cols-5 xl:grid-c min-h-screen">
         <div class="hidden md:block md:col-span-1 h-full p-6 bg-main">
-            @include('livewire.common.sidebar')
+            @livewire('common.sidebar')
         </div>
         <!-- Page Content -->
         <div class="w-full md:col-span-4 h-full px-0 mb-8 pb-6">

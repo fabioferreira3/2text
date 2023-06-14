@@ -83,4 +83,26 @@ class GenRepository
             $response['token_usage']
         );
     }
+
+    public static function paraphraseText(Document $document, $text, $tone = null)
+    {
+        $repo = new DocumentRepository($document);
+        $promptHelper = new PromptHelper('en');
+        $chatGpt = new ChatGPT();
+        $response = $chatGpt->request([
+            [
+                'role' => 'user',
+                'content' =>   $promptHelper->paraphrase($text, $tone)
+            ]
+        ]);
+        $repo->addHistory(
+            [
+                'field' => 'partial_content',
+                'content' => $response['content']
+            ],
+            $response['token_usage']
+        );
+
+        return $response['content'];
+    }
 }

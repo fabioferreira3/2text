@@ -19,9 +19,10 @@ class NewParaphraser extends Component
     public function start()
     {
         $repo = new DocumentRepository();
-        $repo->createGeneric([
+        $document = $repo->createGeneric([
             'type' => DocumentType::PARAPHRASED_TEXT->value,
             'source' => $this->source
         ]);
+        redirect()->route('paraphrase-view', ['document' => $document]);
     }
 }

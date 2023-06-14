@@ -8,6 +8,7 @@ return [
     'origin' => 'Origin',
     'original_text' => 'Original text',
     'paraphrase' => 'Paraphrase',
+    'paraphrasing' => 'Paraphrasing...',
     'paraphrase_text' => 'Paraphrase text',
     'paraphrased_text' => 'Paraphrased text',
     'simple' => 'Simple',
