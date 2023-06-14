@@ -5,6 +5,7 @@ use App\Http\Controllers\GoogleAuthController;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Blog\BlogPost;
 use App\Http\Livewire\Blog\NewPost;
+use App\Http\Livewire\Paraphraser\NewParaphraser;
 use App\Http\Livewire\Paraphraser\Paraphraser;
 use App\Http\Livewire\SocialMediaPost\NewSocialMediaPost;
 use App\Http\Livewire\SocialMediaPost\PostsList;
@@ -52,8 +53,8 @@ Route::middleware([
     Route::get('/documents/social-media-post/{document}', PostsList::class)->name('social-media-post-view');
 
     /* Paraphraser routes */
-    Route::get('/paraphraser/new', Paraphraser::class)->name('new-paraphraser');
-    //Route::get('/documents/paraphraser/{document}', PostsList::class)->name('social-media-post-view');
+    Route::get('/paraphraser/new', NewParaphraser::class)->name('new-paraphraser');
+    Route::get('/documents/paraphraser/{document}', Paraphraser::class)->name('paraphrase-view');
 
     Route::get('/documents/{document}', [DocumentViewController::class, 'index'])->name('document-view');
 });

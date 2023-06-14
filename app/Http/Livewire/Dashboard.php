@@ -7,7 +7,6 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
-
     public $title;
 
     public function mount()

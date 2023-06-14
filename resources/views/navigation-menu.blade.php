@@ -1,12 +1,21 @@
 <nav x-data="{ open: false }" class="rounded-lg w-full">
     <!-- Primary Navigation Menu -->
-    <div class="rounded-l-lg px-4 sm:px-6 lg:px-8 flex items-center md:block md:bg-white bg-primary">
-        <div class="md:hidden bg-primary p-4">
+    <div class="rounded-l-lg px-4 sm:px-6 lg:px-8 flex items-center md:block md:bg-white bg-main">
+        <div class="md:hidden bg-main p-4">
             <a href="{{ route('dashboard') }}">
                 <img src="/logo.png" class="m-auto w-1/2 h-full" />
             </a>
         </div>
-        <div class="flex justify-end h-16">
+        <div class="flex w-full items-center justify-between h-16">
+            <div>
+                @if ((url()->current() !== url()->route('dashboard')))
+                <a href="{{url()->route('dashboard')}}" class="flex text-white text-sm items-center gap-2 bg-secondary px-4 py-1 rounded-full">
+                    <x-icon name="arrow-circle-left" class="w-4 h-4" />
+                    <span>Back</span>
+                </a>
+                @endif
+            </div>
+
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <!-- Settings Dropdown -->
                 <div class="ml-3 relative">

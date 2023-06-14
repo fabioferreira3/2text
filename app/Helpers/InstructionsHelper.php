@@ -80,11 +80,22 @@ class InstructionsHelper
     {
         return "<p>" . __('instructions.define_base_context') . "</p>
         <h3 class='mt-4 font-bold'>Youtube</h3>
-        <p>" . __('instructions.enter_youtube_link') . "</p>
+        <p>" . __('instructions.new_text_enter_youtube_link') . "</p>
         <h3 class='mt-4 font-bold'>" . __('instructions.website_url') . "</h3>
-        <p>" . __('instructions.enter_external_url') . "</p>
+        <p>" . __('instructions.new_text_enter_external_url') . "</p>
         <h3 class='mt-4 font-bold'>" . __('instructions.free_text') . "</h3>
-        <p>" . __('instructions.enter_text') . "</p>";
+        <p>" . __('instructions.new_text_enter_text') . "</p>";
+    }
+
+    public static function paraphraserSources()
+    {
+        return "<p>" . __('instructions.define_base_context_new_paraphraser') . "</p>
+        <h3 class='mt-4 font-bold'>Youtube</h3>
+        <p>" . __('instructions.new_paraphraser_enter_youtube_link') . "</p>
+        <h3 class='mt-4 font-bold'>" . __('instructions.website_url') . "</h3>
+        <p>" . __('instructions.new_paraphraser_enter_external_url') . "</p>
+        <h3 class='mt-4 font-bold'>" . __('instructions.free_text') . "</h3>
+        <p>" . __('instructions.new_paraphraser_enter_text') . "</p>";
     }
 
     public static function writingTones()

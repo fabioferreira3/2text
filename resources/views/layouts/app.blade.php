@@ -27,13 +27,13 @@
 
 </head>
 
-<body class="font-sans antialiased w-full bg-primary">
+<body class="font-sans antialiased w-full bg-main">
     <x-notifications />
     <x-jet-banner />
     @livewire('common.notifications')
 
     <main class="flex w-full md:grid md:grid-cols-5 xl:grid-c min-h-screen">
-        <div class="hidden md:block md:col-span-1 h-full p-6 bg-primary">
+        <div class="hidden md:block md:col-span-1 h-full p-6 bg-main">
             @include('livewire.common.sidebar')
         </div>
         <!-- Page Content -->
@@ -47,10 +47,12 @@
             </div>
         </div>
 
-        <footer class="w-full fixed bottom-0 left-0 text-start h-8 py-2 px-4 border-t border-zinc-100 bg-primary text-xs text-white">experior.ai (beta)</footer>
+        <footer class="w-full fixed bottom-0 left-0 text-start h-8 py-2 px-4 border-t border-zinc-100 bg-main text-xs text-white">experior.ai (beta)</footer>
     </main>
 
     @livewireScripts
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
         const Toast = Swal.mixin({

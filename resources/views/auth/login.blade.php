@@ -45,7 +45,7 @@
             </div>
 
             <div>
-                <x-button type="submit" label="Sign in" class="text-white font-bold bg-primary hover:bg-secondary text-xl xl:text-lg w-full text-center rounded-lg" />
+                <x-button type="submit" label="Sign in" class="text-white font-bold bg-main hover:bg-secondary text-xl xl:text-lg w-full text-center rounded-lg" />
             </div>
         </form>
         <div class="mt-6 flex flex-col gap-2">

@@ -10,5 +10,6 @@
         @livewire('social-media-post.template')
         @livewire('blog.template')
         @livewire('text-transcription.template')
+        @livewire('paraphraser.template')
     </div>
 </div>

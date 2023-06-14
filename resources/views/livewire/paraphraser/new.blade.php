@@ -1,24 +1,21 @@
-<div class="flex justify-between space-x-4">
-    <div class="w-1/2">
-        <textarea id="inputText" class="w-full h-full p-2 border rounded" wire:model="inputText" wire:keydown.enter.prevent="paraphraseSentence(array_key_last(sentences))">
-        </textarea>
-        <div id="inputContainer" class="p-2 border rounded mt-4">
-            @foreach($sentences as $hash => $sentence)
-            <p onclick="paraphraseSentence('{{ $hash }}')" class="cursor-pointer">{{ $sentence }}</p>
-            @endforeach
-        </div>
-    </div>
-    <div class="w-1/2">
-        <div id="outputContainer" class="p-2 border rounded">
-            @foreach($outputSentences as $sentence)
-            <p>{{ $sentence }}</p>
-            @endforeach
+<div class="flex flex-col gap-6">
+    @include('livewire.common.header', ['icon' => 'switch-horizontal', 'label' => __('paraphraser.new_paraphrase')])
+    <div class="flex flex-col">
+        <div class="flex flex-col gap-6 p-4 border rounded-lg">
+            <div class="w-full flex flex-col md:grid md:grid-cols-2 gap-6">
+                <div class="flex flex-col gap-3">
+                    <div class="flex gap-2 items-center">
+                        <label>{{__('paraphraser.origin')}}:</label>
+                        @include('livewire.common.help-item', ['header' => __('paraphraser.origin'), 'content' => App\Helpers\InstructionsHelper::paraphraserSources()])
+                    </div>
+                    <select name="provider" wire:model="source" class="p-3 rounded-lg border border-zinc-200">
+                        @include('livewire.common.source-providers-options')
+                    </select>
+                    <button wire:click="start" wire:loading.remove class="bg-secondary text-white font-bold px-4 py-2 rounded-lg">
+                        {{__('paraphraser.start')}}
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-<script>
-    function paraphraseSentence(hash) {
-        @this.call('paraphraseSentence', hash);
-    }
-</script>

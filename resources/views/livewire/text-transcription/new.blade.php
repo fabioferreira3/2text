@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="flex justify-center mt-4">
-                    <button wire:click="process" wire:loading.remove class="bg-secondary hover:bg-primary text-white font-bold px-4 py-2 rounded-lg">
+                    <button wire:click="process" wire:loading.remove class="bg-secondary hover:bg-main text-white font-bold px-4 py-2 rounded-lg">
                         {{ __('transcription.transcript') }}
                     </button>
                 </div>

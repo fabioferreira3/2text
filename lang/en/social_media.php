@@ -22,6 +22,7 @@ return [
     'new_social_media_post' => 'New Social Media Post',
     'provide_guidelines' => 'Feel free to provide any other guidelines so I can write a post that meets your expectation.',
     'selected_language_info' => 'Take into account that the selected language must be the same language of the context you\'re using',
+    'social_media_post' => 'Social media post',
     'source' => 'Source',
     'source_definition' => 'Define what would be the base context of your text. Choose between a youtube link, a website url, or just from free text.',
     'tone' => 'Tone',

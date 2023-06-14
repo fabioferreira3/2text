@@ -1,5 +1,8 @@
 <div class="flex flex-col">
-    @include('livewire.common.label', ['title' => $document->title])
+    @include('livewire.common.header', ['icon' => 'hashtag', 'label' => __('social_media.social_media_post')])
+    <div class=" mt-12">
+        @include('livewire.common.label', ['title' => $document->title])
+    </div>
     <div class="flex flex-col mt-4 border rounded-lg p-3">
         <div class="text-zinc-600">
             <span class="font-bold mr-2">Source: </span><span class="italic">{{$document->source}}</span>

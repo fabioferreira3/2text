@@ -1,5 +1,18 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 const colors = require("tailwindcss/colors");
+const presets = require("./vendor/wireui/wireui/tailwind.config.js");
+
+// Modify colors
+presets.theme.extend.colors = {
+    primary: "#080B53",
+    secondary: "#EA1F88",
+    positive: colors.emerald,
+    negative: colors.red,
+    warning: colors.amber,
+    info: colors.blue,
+    main: "#080B53",
+    second: "#EA1F88",
+};
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -22,16 +35,6 @@ module.exports = {
             bold: ['"Avenir Black"'],
             thin: ['"Avenir Light"'],
         },
-        extend: {
-            colors: {
-                primary: "#080B53",
-                secondary: "#EA1F88",
-                positive: colors.emerald,
-                negative: colors.red,
-                warning: colors.amber,
-                info: colors.blue,
-            },
-        },
     },
 
     plugins: [
@@ -39,5 +42,5 @@ module.exports = {
         require("@tailwindcss/typography"),
     ],
 
-    presets: [require("./vendor/wireui/wireui/tailwind.config.js")],
+    presets: [presets],
 };
