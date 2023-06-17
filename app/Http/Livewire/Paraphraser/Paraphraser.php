@@ -40,6 +40,14 @@ class Paraphraser extends Component
         }
     }
 
+    protected $rules = [
+        'inputText' => 'required|string'
+    ];
+
+    protected $validationAttributes = [
+        'inputText' => 'original text'
+    ];
+
     public function copy()
     {
         $this->emit('addToClipboard', $this->selectedSentence['paraphrased']);
@@ -67,6 +75,7 @@ class Paraphraser extends Component
 
     public function paraphraseAll()
     {
+        $this->validate();
         $repo = new DocumentRepository($this->document);
         $this->unselect();
 
