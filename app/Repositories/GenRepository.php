@@ -2,9 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Enums\DocumentTaskEnum;
 use App\Packages\ChatGPT\ChatGPT;
 use App\Enums\LanguageModels;
 use App\Helpers\PromptHelper;
+use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use Illuminate\Support\Str;
 
@@ -84,25 +86,31 @@ class GenRepository
         );
     }
 
-    public static function paraphraseText(Document $document, $text, $tone = null)
+    public static function paraphraseDocument(Document $document)
     {
+        $processId = Str::uuid();
         $repo = new DocumentRepository($document);
-        $promptHelper = new PromptHelper('en');
-        $chatGpt = new ChatGPT();
-        $response = $chatGpt->request([
-            [
-                'role' => 'user',
-                'content' =>   $promptHelper->paraphrase($text, $tone)
-            ]
-        ]);
-        $repo->addHistory(
-            [
-                'field' => 'partial_content',
-                'content' => $response['content']
-            ],
-            $response['token_usage']
-        );
+        foreach ($document->meta['original_sentences'] as $sentence) {
+            $repo->createTask(DocumentTaskEnum::PARAPHRASE_TEXT, [
+                'order' => 1,
+                'process_id' => $processId,
+                'meta' => [
+                    'text' => $sentence['content'],
+                    'sentence_order' => $sentence['order']
+                ]
+            ]);
+        }
+        DispatchDocumentTasks::dispatch($document);
+    }
 
-        return $response['content'];
+    public static function paraphraseText(Document $document, array $params)
+    {
+        $processId = Str::uuid();
+        $repo = new DocumentRepository($document);
+        $repo->createTask(DocumentTaskEnum::PARAPHRASE_TEXT, [
+            'order' => 1,
+            'process_id' => $processId
+        ]);
+        DispatchDocumentTasks::dispatch($document);
     }
 }

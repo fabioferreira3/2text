@@ -89,6 +89,10 @@
                 navigator.clipboard.writeText(message);
             });
         });
+
+        window.Echo.connector.pusher.connection.bind('connected', function() {
+    console.log('Realtime is active.');
+});
     </script>
 </body>
 

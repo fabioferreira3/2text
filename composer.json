@@ -24,6 +24,7 @@
         "livewire/livewire": "^2.11",
         "norkunas/youtube-dl-php": "dev-master",
         "openai-php/laravel": "^0.4.1",
+        "pusher/pusher-php-server": "^7.2",
         "rappasoft/laravel-livewire-tables": "^2.12",
         "sentry/sentry-laravel": "^3.3",
         "socialiteproviders/apple": "^5.4",

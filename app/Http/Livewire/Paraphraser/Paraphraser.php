@@ -88,18 +88,24 @@ class Paraphraser extends Component
         $this->inputTextArray = [];
         $this->outputText = [];
         $this->splitSentencesIntoArray($sentences);
+        $repo->updateMeta('tone', $this->tone);
+        $repo->updateMeta('original_text', $this->inputText);
+        $originalSentencesArray = collect($this->inputTextArray)->map(function ($sentenceStructure, $idx) {
+            return ['order' => $idx + 1, 'content' => $sentenceStructure[0] . $sentenceStructure[1]];
+        });
+        $repo->updateMeta('original_sentences', $originalSentencesArray);
+        GenRepository::paraphraseDocument($this->document);
 
         // Paraphrase each sentence
-        foreach ($this->inputTextArray as $sentence) {
-            $this->outputText[] = [
-                'original' => $sentence[0],
-                'paraphrased' => $this->paraphrase($sentence[0]),
-                'punctuation' => $sentence[1]
-            ];
-        }
-        $this->saveDoc();
-        $repo->updateMeta('original_text', implode('', array_column($this->outputText, 'original')));
-        $repo->updateMeta('tone', $this->tone);
+        // foreach ($this->inputTextArray as $sentence) {
+        //     $this->outputText[] = [
+        //         'original' => $sentence[0],
+        //         'paraphrased' => $this->paraphrase($sentence[0]),
+        //         'punctuation' => $sentence[1]
+        //     ];
+        // }
+        // $this->saveDoc();
+        //  $repo->updateMeta('original_text', implode('', $this->inputTextArray));
     }
 
     public function saveDoc()
