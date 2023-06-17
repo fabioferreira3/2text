@@ -1,11 +1,19 @@
 <div class="flex flex-col gap-8">
     @include('livewire.common.header', ['icon' => 'switch-horizontal', 'label' => __('paraphraser.paraphrase_text')])
-    <div class="flex flex-col md:flex-row items-center justify-center gap-4 border-b-2 pb-4">
-        <div class="mr-4 font-bold">Tone:</div>
-        <button wire:click="setTone(null)" class="duration-500 rounded-full text-sm px-4 py-1 hover:bg-main hover:text-white hover:font-bold {{$tone === null ? 'bg-main text-white font-bold' : 'bg-zinc-100 text-zinc-700'}}">{{ __('paraphraser.default') }}</button>
-        <button wire:click="setTone('simple')" class="duration-500 rounded-full text-sm px-4 py-1 hover:bg-main hover:text-white hover:font-bold {{$tone === 'simple' ? 'bg-main text-white font-bold' : 'bg-zinc-100 text-zinc-700'}}">{{ __('paraphraser.simple') }}</button>
-        <button wire:click="setTone('formal')" class="duration-500 rounded-full text-sm px-4 py-1 hover:bg-main hover:text-white hover:font-bold {{$tone === 'formal' ? 'bg-main text-white font-bold' : 'bg-zinc-100 text-zinc-700'}}">{{ __('paraphraser.formal') }}</button>
-        <button wire:click="setTone('funny')" class="duration-500 rounded-full  text-sm px-4 py-1 hover:bg-main hover:text-white hover:font-bold {{$tone === 'funny' ? 'bg-main text-white font-bold' : 'bg-zinc-100 text-zinc-700'}}">{{ __('paraphraser.funny') }}</button>
+    <div class="flex flex-col md:flex-row items-center justify-center gap-4 border-b-2 pb-2">
+        <div class="flex items-center">
+            <div class="mr-4 font-bold">Language:</div>
+            <select name="language" wire:model="language" class="p-3 rounded-lg border border-zinc-200">
+                @include('livewire.common.languages-options')
+            </select>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="mr-4 font-bold">Tone:</div>
+            <button wire:click="setTone(null)" class="duration-500 rounded-full text-sm px-4 py-1 hover:bg-main hover:text-white hover:font-bold {{$tone === null ? 'bg-main text-white font-bold' : 'bg-zinc-100 text-zinc-700'}}">{{ __('paraphraser.default') }}</button>
+            <button wire:click="setTone('simplistic')" class="duration-500 rounded-full text-sm px-4 py-1 hover:bg-main hover:text-white hover:font-bold {{$tone === 'simplistic' ? 'bg-main text-white font-bold' : 'bg-zinc-100 text-zinc-700'}}">{{ __('paraphraser.simple') }}</button>
+            <button wire:click="setTone('formal')" class="duration-500 rounded-full text-sm px-4 py-1 hover:bg-main hover:text-white hover:font-bold {{$tone === 'formal' ? 'bg-main text-white font-bold' : 'bg-zinc-100 text-zinc-700'}}">{{ __('paraphraser.formal') }}</button>
+            <button wire:click="setTone('funny')" class="duration-500 rounded-full  text-sm px-4 py-1 hover:bg-main hover:text-white hover:font-bold {{$tone === 'funny' ? 'bg-main text-white font-bold' : 'bg-zinc-100 text-zinc-700'}}">{{ __('paraphraser.funny') }}</button>
+        </div>
     </div>
     <div class="flex flex-col md:flex-row md:mt-4">
         <div class="w-full md:w-1/2 p-4">
@@ -56,10 +64,10 @@
             </div>
         </div>
     </div>
-    <div wire:loading.class="md:flex" class="hidden md:justify-center w-full p-4">
+    <div wire:target="paraphraseAll" wire:loading.class="md:flex" class="hidden md:justify-center w-full p-4">
         <x-button spinner disabled label="{{ __('paraphraser.paraphrasing') }}" class="mt-4 text-base bg-secondary duration-700 text-white font-bold py-2 px-4 rounded-lg" />
     </div>
-    <div wire:loading.remove class="hidden md:flex md:justify-center w-full p-4">
+    <div wire:target="paraphraseAll" wire:loading.remove class="hidden md:flex md:justify-center w-full p-4">
         <button class="mt-4 text-base bg-secondary duration-700 hover:bg-main text-white font-bold py-2 px-4 rounded-lg" wire:click="paraphraseAll">{{ __('paraphraser.paraphrase') }}</button>
     </div>
 </div>

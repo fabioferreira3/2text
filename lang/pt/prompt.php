@@ -9,6 +9,7 @@ return [
     'max_words' => "- O texto deve ter no máximo :max palavras\n",
     'more_instructions' => "- Siga essas outras instruções na criação do post:\n\n\n :instructions\n\n\n",
     'meta_description_context_instructions' => "- A meta descrição deve ser baseada no seguinte contexto:\n\n\n :context\n\n\n",
+    'paraphrase_text' => 'Parafraseie o seguinte texto, usando um tom :tone:\n\n:text',
     'post_context_instructions' => "- O post deve ser baseado no seguinte contexto:\n\n\n :context\n\n\n",
     'post_tone_instructions' => "- O post deve ter um tom :tone.\n",
     'simplify_text' => "Simplifique o seguinte texto:\n\n:text",

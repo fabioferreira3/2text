@@ -16,6 +16,7 @@ class Paraphraser extends Component
     public $selectedSentence;
     public $selectedSentenceIndex;
     public $tone = null;
+    public $language = null;
     public bool $copied = false;
     public bool $copiedAll = false;
 
@@ -24,6 +25,8 @@ class Paraphraser extends Component
     public function mount(Document $document)
     {
         $this->document = $document;
+        $this->language = $document->language ?? 'en';
+        $this->tone = $document->meta['tone'] ?? null;
         $this->inputText = $document->meta['original_text'] ?? '';
         $sentences = $document->content ? $this->splitIntoSentences($document->content) : [];
         if (count($sentences) > 0) {
@@ -41,11 +44,12 @@ class Paraphraser extends Component
     }
 
     protected $rules = [
-        'inputText' => 'required|string'
+        'inputText' => 'required|string',
+        'language' => 'required'
     ];
 
     protected $validationAttributes = [
-        'inputText' => 'original text'
+        'inputText' => 'original text',
     ];
 
     public function copy()
@@ -95,11 +99,15 @@ class Paraphraser extends Component
         }
         $this->saveDoc();
         $repo->updateMeta('original_text', implode('', array_column($this->outputText, 'original')));
+        $repo->updateMeta('tone', $this->tone);
     }
 
     public function saveDoc()
     {
-        $this->document->update(['content' => implode('', array_column($this->outputText, 'paraphrased'))]);
+        $this->document->update([
+            'content' => implode('', array_column($this->outputText, 'paraphrased')),
+            'language' => $this->language
+        ]);
     }
 
     public function splitIntoSentences($text)
