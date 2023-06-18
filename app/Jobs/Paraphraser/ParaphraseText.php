@@ -34,7 +34,8 @@ class ParaphraseText
     public function handle()
     {
         try {
-            $promptHelper = new PromptHelper('en');
+            $index = null;
+            $promptHelper = new PromptHelper($this->document->language->value);
             $chatGpt = new ChatGPT();
             $response = $chatGpt->request([
                 [
@@ -47,8 +48,6 @@ class ParaphraseText
                 'sentence_order' => $this->meta['sentence_order'],
                 'text' => $response['content']
             ];
-
-            $index = null;
 
             foreach ($this->paraphrasedSentences as $key => $item) {
                 if ($item['sentence_order'] === $paraphrasedSentence['sentence_order']) {
