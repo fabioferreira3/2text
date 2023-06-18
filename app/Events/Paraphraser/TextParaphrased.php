@@ -28,4 +28,9 @@ class TextParaphrased implements ShouldBroadcast
     {
         return new PrivateChannel('User.' . $this->userId);
     }
+
+    public function broadcastAs()
+    {
+        return 'TextParaphrased';
+    }
 }
