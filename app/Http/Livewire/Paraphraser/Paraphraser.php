@@ -25,23 +25,30 @@ class Paraphraser extends Component
     {
         $userId = Auth::user()->id;
         return [
-            "echo-private:User.$userId,TextParaphrased" => '$refresh',
+            "echo-private:User.$userId,.TextParaphrased" => 'notify',
             'select',
             //    'refreshComponent' => '$refresh'
         ];
     }
 
-    // public function notify()
-    // {
-    //     $this->$refresh;
-    // }
+    public function notify()
+    {
+        $this->document->refresh();
+        $this->setup($this->document);
+    }
 
     public function mount(Document $document)
+    {
+        $this->setup($document);
+    }
+
+    public function setup($document)
     {
         $this->document = $document;
         $this->language = $document->language ?? 'en';
         $this->tone = $document->meta['tone'] ?? null;
         $this->inputText = $document->meta['original_text'] ?? '';
+        $this->outputText = [];
         $originalSentences = collect($this->document['meta']['original_sentences'] ?? []);
         $paraphrasedSentences = collect($this->document['meta']['paraphrased_sentences'] ?? []);
         $paraphrasedTextArray = $paraphrasedSentences->map(function ($sentence) {

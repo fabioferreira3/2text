@@ -48,7 +48,10 @@
 
                     <!-- This is your popover -->
                     <div class="absolute right-0 flex gap-2 bg-zinc-200 border border-zinc-300 shadow-lg rounded-full z-40" x-show="open" @mouseover="open = true" style="display: none;">
-                        <button sm class="bg-secondary hover:bg-main text-white text-xs hover:font-bold rounded-full px-3 py-1" wire:click="paraphraseSentence">Rephrase</button>
+                        <button sm wire:target="paraphraseSentence" wire:loading.attr="disabled" class="bg-secondary hover:bg-main text-white text-xs hover:font-bold rounded-full px-3 py-1" wire:click="paraphraseSentence">
+                            <span wire:target="paraphraseSentence" wire:loading.remove>Rephrase</span>
+                            <span wire:target="paraphraseSentence" wire:loading>Processing...</span>
+                        </button>
                         <div @mouseenter="tooltip = true" @mouseleave="tooltip = false" x-data="{ tooltip: false }">
                             <x-button.circle sm icon="reply" class="bg-zinc-300 border border-zinc-400 text-zinc-700 font-bold rounded-full" wire:click="resetSentence" />
                             @include('livewire.tooltip', ['content' => __('common.undo')])
@@ -64,10 +67,10 @@
             </div>
         </div>
     </div>
-    <div wire:target="paraphraseAll" wire:loading.class="md:flex" class="hidden md:justify-center w-full p-4">
-        <x-button spinner disabled label="{{ __('paraphraser.paraphrasing') }}" class="mt-4 text-base bg-secondary duration-700 text-white font-bold py-2 px-4 rounded-lg" />
-    </div>
-    <div wire:target="paraphraseAll" wire:loading.remove class="hidden md:flex md:justify-center w-full p-4">
-        <button class="mt-4 text-base bg-secondary duration-700 hover:bg-main text-white font-bold py-2 px-4 rounded-lg" wire:click="paraphraseAll">{{ __('paraphraser.paraphrase') }}</button>
+    <div class="hidden md:flex md:justify-center w-full p-4">
+        <button wire:target="paraphraseAll,paraphraseSentence" wire:loading.attr="disabled" class="mt-4 text-base bg-secondary duration-700 hover:bg-main text-white font-bold py-2 px-4 rounded-lg" wire:click="paraphraseAll">
+            <span wire:loading.remove wire:target="paraphraseAll,paraphraseSentence">{{ __('paraphraser.paraphrase') }}</span>
+            <span wire:loading wire:target="paraphraseAll,paraphraseSentence">{{ __('paraphraser.paraphrasing') }}</span>
+        </button>
     </div>
 </div>
