@@ -5,13 +5,14 @@ namespace App\Http\Livewire\Paraphraser;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use App\Repositories\GenRepository;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Paraphraser extends Component
 {
     public $document;
+    protected $repo;
     public $inputText = '';
-    public $inputTextArray = [];
     public $outputText = [];
     public $selectedSentence;
     public $selectedSentenceIndex;
@@ -20,7 +21,20 @@ class Paraphraser extends Component
     public bool $copied = false;
     public bool $copiedAll = false;
 
-    protected $listeners = ['select'];
+    public function getListeners()
+    {
+        $userId = Auth::user()->id;
+        return [
+            "echo-private:User.$userId,TextParaphrased" => '$refresh',
+            'select',
+            //    'refreshComponent' => '$refresh'
+        ];
+    }
+
+    // public function notify()
+    // {
+    //     $this->$refresh;
+    // }
 
     public function mount(Document $document)
     {
@@ -28,16 +42,17 @@ class Paraphraser extends Component
         $this->language = $document->language ?? 'en';
         $this->tone = $document->meta['tone'] ?? null;
         $this->inputText = $document->meta['original_text'] ?? '';
-        $sentences = $document->content ? $this->splitIntoSentences($document->content) : [];
-        if (count($sentences) > 0) {
-            $this->splitSentencesIntoArray($sentences);
+        $originalSentences = collect($this->document['meta']['original_sentences'] ?? []);
+        $paraphrasedSentences = collect($this->document['meta']['paraphrased_sentences'] ?? []);
+        $paraphrasedTextArray = $paraphrasedSentences->map(function ($sentence) {
+            return $sentence['text'];
+        });
 
-            // Paraphrase each sentence
-            foreach ($this->inputTextArray as $sentence) {
+        if ($originalSentences->count() && $paraphrasedTextArray->count()) {
+            foreach ($paraphrasedTextArray as $key => $sentence) {
                 $this->outputText[] = [
-                    'original' => $sentence[0],
-                    'paraphrased' => $sentence[0],
-                    'punctuation' => $sentence[1]
+                    'original' => $originalSentences[$key]['text'],
+                    'paraphrased' => $sentence
                 ];
             }
         }
@@ -71,10 +86,12 @@ class Paraphraser extends Component
 
     public function paraphraseSentence()
     {
-        $paraphrasedSentence = $this->paraphrase($this->selectedSentence['original']);
-        $this->outputText[$this->selectedSentenceIndex]['paraphrased'] = $paraphrasedSentence;
         $this->copied = false;
-        $this->saveDoc();
+        GenRepository::paraphraseText($this->document, [
+            'text' => $this->selectedSentence['original'],
+            'sentence_order' => $this->selectedSentenceIndex + 1,
+            'tone' => $this->tone
+        ]);
     }
 
     public function paraphraseAll()
@@ -85,27 +102,15 @@ class Paraphraser extends Component
 
         // Break down inputText into sentences and punctuation
         $sentences = $this->splitIntoSentences($this->inputText);
-        $this->inputTextArray = [];
-        $this->outputText = [];
-        $this->splitSentencesIntoArray($sentences);
+        $sentencesArray = $this->splitSentencesIntoArray($sentences);
         $repo->updateMeta('tone', $this->tone);
         $repo->updateMeta('original_text', $this->inputText);
-        $originalSentencesArray = collect($this->inputTextArray)->map(function ($sentenceStructure, $idx) {
-            return ['order' => $idx + 1, 'content' => $sentenceStructure[0] . $sentenceStructure[1]];
+        $originalSentencesArray = collect($sentencesArray)->map(function ($sentenceStructure, $idx) {
+            return ['sentence_order' => $idx + 1, 'text' => $sentenceStructure[0] . $sentenceStructure[1]];
         });
         $repo->updateMeta('original_sentences', $originalSentencesArray);
-        GenRepository::paraphraseDocument($this->document);
 
-        // Paraphrase each sentence
-        // foreach ($this->inputTextArray as $sentence) {
-        //     $this->outputText[] = [
-        //         'original' => $sentence[0],
-        //         'paraphrased' => $this->paraphrase($sentence[0]),
-        //         'punctuation' => $sentence[1]
-        //     ];
-        // }
-        // $this->saveDoc();
-        //  $repo->updateMeta('original_text', implode('', $this->inputTextArray));
+        GenRepository::paraphraseDocument($this->document);
     }
 
     public function saveDoc()
@@ -123,19 +128,20 @@ class Paraphraser extends Component
 
     public function splitSentencesIntoArray(array $sentences)
     {
+        $array = [];
         for ($i = 0; $i < count($sentences); $i += 2) {
-            $this->inputTextArray[] = [$sentences[$i], $sentences[$i + 1] ?? '.'];
+            $array[] = [$sentences[$i], $sentences[$i + 1] ?? '.'];
         }
-    }
-
-    public function paraphrase($string)
-    {
-        return GenRepository::paraphraseText($this->document, $string, $this->tone);
+        return $array;
     }
 
     public function resetSentence()
     {
         $this->outputText[$this->selectedSentenceIndex]['paraphrased'] = $this->selectedSentence['original'];
+        $repo = new DocumentRepository($this->document);
+        $repo->updateMeta('paraphrased_sentences', collect($this->outputText)->map(function ($sentence, $idx) {
+            return ['sentence_order' => $idx + 1, 'text' => $sentence['paraphrased']];
+        })->toArray());
     }
 
     public function select($index)

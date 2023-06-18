@@ -14,9 +14,9 @@
         <x-jet-validation-errors class="mb-4" />
 
         @if (session('status'))
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ session('status') }}
-            </div>
+        <div class="mb-4 font-medium text-sm text-green-600">
+            {{ session('status') }}
+        </div>
         @endif
 
         <form method="POST" action="{{ route('login') }}">
@@ -45,7 +45,7 @@
             </div>
 
             <div>
-                <x-button type="submit" label="Sign in" class="text-white font-bold bg-main hover:bg-secondary text-xl xl:text-lg w-full text-center rounded-lg" />
+                <button type="submit" class="py-2 text-white font-bold bg-secondary hover:bg-main text-xl xl:text-lg w-full text-center rounded-lg">Sign In</button>
             </div>
         </form>
         <div class="mt-6 flex flex-col gap-2">

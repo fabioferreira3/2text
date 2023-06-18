@@ -8,6 +8,7 @@ use App\Enums\LanguageModels;
 use App\Helpers\PromptHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class GenRepository
@@ -88,15 +89,15 @@ class GenRepository
 
     public static function paraphraseDocument(Document $document)
     {
-        $processId = Str::uuid();
         $repo = new DocumentRepository($document);
         foreach ($document->meta['original_sentences'] as $sentence) {
             $repo->createTask(DocumentTaskEnum::PARAPHRASE_TEXT, [
                 'order' => 1,
-                'process_id' => $processId,
+                'process_id' => Str::uuid(),
                 'meta' => [
-                    'text' => $sentence['content'],
-                    'sentence_order' => $sentence['order']
+                    'text' => $sentence['text'],
+                    'sentence_order' => $sentence['sentence_order'],
+                    'user_id' => Auth::check() ? Auth::user()->id : null
                 ]
             ]);
         }
@@ -105,11 +106,16 @@ class GenRepository
 
     public static function paraphraseText(Document $document, array $params)
     {
-        $processId = Str::uuid();
         $repo = new DocumentRepository($document);
         $repo->createTask(DocumentTaskEnum::PARAPHRASE_TEXT, [
             'order' => 1,
-            'process_id' => $processId
+            'process_id' => Str::uuid(),
+            'meta' => [
+                'text' => $params['text'],
+                'sentence_order' => $params['sentence_order'],
+                'tone' => $params['tone'] ?? null,
+                'user_id' => Auth::check() ? Auth::user()->id : null
+            ]
         ]);
         DispatchDocumentTasks::dispatch($document);
     }
