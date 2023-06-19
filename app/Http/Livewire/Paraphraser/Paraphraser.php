@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Paraphraser;
 
+use App\Helpers\DocumentHelper;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use App\Repositories\GenRepository;
@@ -84,7 +85,7 @@ class Paraphraser extends Component
     {
         $outputAsText = '';
         foreach ($this->outputText as $sentence) {
-            $outputAsText .= $sentence['paraphrased'] . $sentence['punctuation'] . ' ';
+            $outputAsText .= $sentence['paraphrased'] . ' ';
         }
 
         $this->emit('addToClipboard', trim($outputAsText));
@@ -106,15 +107,11 @@ class Paraphraser extends Component
         $this->validate();
         $repo = new DocumentRepository($this->document);
         $this->unselect();
-
-        // Break down inputText into sentences and punctuation
-        $sentences = $this->splitIntoSentences($this->inputText);
-        $sentencesArray = $this->splitSentencesIntoArray($sentences);
         $repo->updateMeta('tone', $this->tone);
         $repo->updateMeta('original_text', $this->inputText);
-        $originalSentencesArray = collect($sentencesArray)->map(function ($sentenceStructure, $idx) {
-            return ['sentence_order' => $idx + 1, 'text' => $sentenceStructure[0] . $sentenceStructure[1]];
-        });
+
+        // Break down inputText into sentences
+        $originalSentencesArray = DocumentHelper::breakTextIntoSentences($this->inputText);
         $repo->updateMeta('original_sentences', $originalSentencesArray);
 
         GenRepository::paraphraseDocument($this->document);
@@ -126,20 +123,6 @@ class Paraphraser extends Component
             'content' => implode('', array_column($this->outputText, 'paraphrased')),
             'language' => $this->language
         ]);
-    }
-
-    public function splitIntoSentences($text)
-    {
-        return preg_split('/(\\.|\?|!)/', $text, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-    }
-
-    public function splitSentencesIntoArray(array $sentences)
-    {
-        $array = [];
-        for ($i = 0; $i < count($sentences); $i += 2) {
-            $array[] = [$sentences[$i], $sentences[$i + 1] ?? '.'];
-        }
-        return $array;
     }
 
     public function resetSentence()

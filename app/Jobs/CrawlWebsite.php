@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Helpers\DocumentHelper;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use Exception;
@@ -38,6 +39,17 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
+        function unicodeToPlainText($text)
+        {
+            $decodedText = json_decode(sprintf('"%s"', $text));
+
+            // Check if json_decode fails, which means the text probably didn't have unicode sequences
+            if ($decodedText === null) {
+                return $text;
+            }
+
+            return $decodedText;
+        }
         try {
             Artisan::call('crawl', ['url' => $this->document['meta']['source_url']]);
             $websiteContent = Artisan::output();
@@ -46,7 +58,8 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     ...$this->document->meta,
                     'context' => $websiteContent,
-                    'original_text' => $websiteContent
+                    'original_text' => $websiteContent,
+                    'original_sentences' => ($this->meta['parse_sentences'] ?? false) ? DocumentHelper::breakTextIntoSentences(unicodeToPlainText($websiteContent)) : null
                 ]
             ]);
             $this->jobSucceded();

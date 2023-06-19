@@ -65,9 +65,9 @@ class DocumentRepository
         return Document::create([
             ...$params,
             'meta' => [
+                ...$params['meta'] ?? [],
                 'context' => $params['context'] ?? null,
                 'source' => $params['source'],
-                'source_url' => $params['meta']['source_url'] ?? null
             ]
         ]);
     }

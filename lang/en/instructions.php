@@ -5,7 +5,7 @@ return [
     'consider_readers' => 'Take into account your readers.',
     'convince_reader' => 'Aims to convince the reader of the validity of a certain position or argument.',
     'define_base_context_new_text' => 'Define what would be the base context of your text. Choose between a youtube link, a website url, or just from free text.',
-    'define_base_context_new_paraphraser' => 'Define the text to be transcripted. Choose between a youtube link, a website url, or just free text.',
+    'define_base_context_new_paraphraser' => 'Set the origin of the text to be transcripted. Choose between a youtube link, a website url, or just free text.',
     'define_tone' => 'Define the tone of writing',
     'define_tone_info' => 'Define the tone of your post. You may pick from casual, funny, sarcastic, dramatic, academic, and other tones. This will help me write a post that is in line with your preference and your audience\'s.',
     'define_style' => 'Define the writing style.',

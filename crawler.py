@@ -19,20 +19,38 @@ response.raise_for_status()  # raise exception if invalid response
 # parse the HTML content
 soup = BeautifulSoup(response.content, 'html.parser')
 
+# remove all attributes from all tags
+for tag in soup.recursiveChildGenerator():
+    if tag.name:
+        tag.attrs = {}
+
 # find the 'title' tag
 title_tag = soup.find('title')
 title_text = "Title: "
 if title_tag is not None:
-    title_text += title_tag.get_text()
+    title_text += title_tag.prettify()
 
 main_tag = soup.find('body')
 content_text = ""
 if main_tag is not None:
-    tags = main_tag.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'span', 'ul'])
+    # remove all 'footer', 'nav', 'noscript', 'img', and 'figure' tags
+    for unwanted_tag in main_tag.find_all(['footer', 'nav', 'noscript', 'img', 'figure']):
+        unwanted_tag.extract()
+
+    # remove all tags that don't contain any content
+    for tag in main_tag.find_all():
+        if not tag.text.strip():
+            tag.extract()
+
+    # find all remaining content tags
+    tags = main_tag.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'ul'])
 
     for tag in tags:
-        content_text += "\n\n" + tag.get_text()
+        content_text += "\n\n" + tag.prettify()
 
 full_text = title_text + "\n" + content_text
+
+# replace newline characters
+full_text = full_text.replace('\n', '')
 
 print(full_text)

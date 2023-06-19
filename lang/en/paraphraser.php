@@ -4,7 +4,7 @@ return [
     'default' => 'Default',
     'formal' => 'Formal',
     'funny' => 'Funny',
-    'new_paraphrase' => 'New Paraphrased Text',
+    'new_paraphrase' => 'New Paraphraser',
     'origin' => 'Origin',
     'original_text' => 'Original text',
     'paraphrase' => 'Paraphrase',

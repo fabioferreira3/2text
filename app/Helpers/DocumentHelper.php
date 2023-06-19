@@ -65,4 +65,28 @@ class DocumentHelper
             return 0;
         }
     }
+
+    public static function breakTextIntoSentences($text)
+    {
+        $sentences = self::splitIntoSentences($text);
+        $sentencesArray = self::splitSentencesIntoArray($sentences);
+        $originalSentencesArray = collect($sentencesArray)->map(function ($sentenceStructure, $idx) {
+            return ['sentence_order' => $idx + 1, 'text' => $sentenceStructure[0] . $sentenceStructure[1]];
+        });
+        return $originalSentencesArray;
+    }
+
+    public static function splitIntoSentences($text)
+    {
+        return preg_split('/(\\.|\?|!)/', $text, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+    }
+
+    public static function splitSentencesIntoArray(array $sentences)
+    {
+        $array = [];
+        for ($i = 0; $i < count($sentences); $i += 2) {
+            $array[] = [$sentences[$i], $sentences[$i + 1] ?? '.'];
+        }
+        return $array;
+    }
 }

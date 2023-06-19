@@ -92,8 +92,8 @@ class GenRepository
         $repo = new DocumentRepository($document);
         foreach ($document->meta['original_sentences'] as $sentence) {
             $repo->createTask(DocumentTaskEnum::PARAPHRASE_TEXT, [
-                'order' => 1,
-                'process_id' => Str::uuid(),
+                'order' => $params['order'] ?? 1,
+                'process_id' => $params['process_id'] ?? Str::uuid(),
                 'meta' => [
                     'text' => $sentence['text'],
                     'sentence_order' => $sentence['sentence_order'],
@@ -108,8 +108,8 @@ class GenRepository
     {
         $repo = new DocumentRepository($document);
         $repo->createTask(DocumentTaskEnum::PARAPHRASE_TEXT, [
-            'order' => 1,
-            'process_id' => Str::uuid(),
+            'order' => $params['order'] ?? 1,
+            'process_id' => $params['process_id'] ?? Str::uuid(),
             'meta' => [
                 'text' => $params['text'],
                 'sentence_order' => $params['sentence_order'],
