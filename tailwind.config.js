@@ -4,14 +4,13 @@ const presets = require("./vendor/wireui/wireui/tailwind.config.js");
 
 // Modify colors
 presets.theme.extend.colors = {
-    primary: "#080B53",
-    secondary: "#EA1F88",
+    neutral: "#EA1F88",
+    primary: colors.indigo,
+    secondary: colors.gray,
     positive: colors.emerald,
     negative: colors.red,
     warning: colors.amber,
     info: colors.blue,
-    main: "#080B53",
-    second: "#EA1F88",
 };
 
 /** @type {import('tailwindcss').Config} */
@@ -30,6 +29,12 @@ module.exports = {
     ],
     safelist: ["bg-red-200", "bg-blue-200"],
     theme: {
+        extend: {
+            colors: {
+                main: "#080B53",
+                secondary: "#EA1F88",
+            },
+        },
         fontFamily: {
             sans: ["Avenir Regular", ...defaultTheme.fontFamily.sans],
             bold: ['"Avenir Black"'],

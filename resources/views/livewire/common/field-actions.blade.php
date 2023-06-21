@@ -23,9 +23,9 @@
     </x-dropdown>
 </div>
 <div class="hidden md:block">
-    @if($regenerateAction)<x-button sm spinner="regenerate" wire:loading.attr="disabled" wire:click='regenerate' icon="refresh" label="{{__('common.regenerate')}}" class='rounded-lg bg-secondary hover:bg-main text-white border-0' />@endif
-    @if($historyAction)<x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" wire:click='showHistoryModal' icon="book-open" label="{{__('common.view_history')}}" class='bg-zinc-100 text-zinc-700 rounded-lg border-primary border-opacity-20' />@endif
-    @if($copyAction) <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" :disabled='$copied ? true : false' wire:click='copy' icon="clipboard-copy" :label='$copied ? __("common.copied") : __("common.copy")' class='bg-zinc-100 text-zinc-700 rounded-lg border-primary border-opacity-20' />@endif
-    <x-button sm spinner="save" wire:loading.attr="disabled" wire:target="regenerate,save" wire:click='save' icon="save" label="{{__('common.save')}}" class='font-bold rounded-lg text-white bg-main hover:bg-secondary' />
+    @if($regenerateAction)<x-button neutral sm spinner="regenerate" wire:loading.attr="disabled" wire:click='regenerate' icon="refresh" label="{{__('common.regenerate')}}" class='rounded-lg bg-secondary hover:bg-main text-white border-0' />@endif
+    @if($historyAction)<x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" wire:click='showHistoryModal' icon="book-open" label="{{__('common.view_history')}}" class='bg-zinc-100 hover:bg-zinc-400 hover:text-white text-zinc-700 rounded-lg border-primary border-opacity-20' />@endif
+    @if($copyAction) <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" :disabled='$copied ? true : false' wire:click='copy' icon="clipboard-copy" :label='$copied ? __("common.copied") : __("common.copy")' class='bg-zinc-100 hover:bg-zinc-400 hover:text-white text-zinc-700 rounded-lg border-primary border-opacity-20' />@endif
+    <x-button neutral sm spinner="save" wire:loading.attr="disabled" wire:target="regenerate,save" wire:click='save' icon="save" label="{{__('common.save')}}" class='font-bold rounded-lg text-white bg-main hover:bg-secondary' />
 </div>
 

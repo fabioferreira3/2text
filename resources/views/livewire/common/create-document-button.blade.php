@@ -1,2 +1,2 @@
-<x-button href="{{ route('templates') }}" icon="plus" class="hidden md:flex h-full px-2 bg-secondary hover:bg-black rounded-lg font-bold text-zinc-100" label="{{__('dashboard.new')}}" />
+<x-button neutral href="{{ route('templates') }}" icon='plus' class="hidden md:flex bg-secondary hover:bg-main h-full rounded-lg text-white" label="{{__('dashboard.new')}}" />
 <x-button.circle href="{{ route('templates') }}" icon="plus" class="md:hidden bg-secondary hover:bg-black font-bold text-zinc-100" />

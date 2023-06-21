@@ -15,7 +15,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class SummarizeDocument implements ShouldQueue, ShouldBeUnique
@@ -48,12 +47,12 @@ class SummarizeDocument implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            if (isset($this->document->meta['context']) && Str::wordCount($this->document->meta['context']) < 2000) {
+            if (isset($this->document->meta['context']) && Str::wordCount($this->document->meta['context']) < 6000) {
                 $this->jobSkipped();
                 return;
             }
 
-            $chatGpt = new ChatGPT(LanguageModels::GPT_3_TURBO->value);
+            $chatGpt = new ChatGPT(LanguageModels::GPT_3_TURBO_16->value);
 
             $sentences = collect(preg_split("/(?<=[.?!])\s+(?=([^\d\w]*[A-Z][^.?!]+))/", $this->document->meta['context'], -1, PREG_SPLIT_NO_EMPTY));
             $paragraphs = collect([]);
@@ -81,7 +80,7 @@ class SummarizeDocument implements ShouldQueue, ShouldBeUnique
                     return $message['content'];
                 })->join("");
 
-                if ($tokenCount > 2000) {
+                if ($tokenCount > 8000) {
                     $messages = collect([]);
                     $rewrittenParagraphs = collect([]);
                     $response = $chatGpt->request([[
