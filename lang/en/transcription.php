@@ -2,7 +2,8 @@
 
 return [
     'new_transcription' => 'New audio transcription',
-    'language' => 'Language of the video',
+    'origin_language' => 'Source language',
+    'target_language' => 'Target language',
     'transcript' => 'Transcript',
     'source' => 'Source',
 ];

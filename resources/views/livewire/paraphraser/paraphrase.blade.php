@@ -29,6 +29,7 @@
                 <div class="flex items-center gap-2">
                     @if ($selectedSentenceIndex !== null) <x-button sm label="{{__('common.unselect')}}" icon="x" wire:click='unselect' class="hover:text-zinc-200 hover:bg-zinc-500 bg-zinc-200 text-zinc-500 border border-zinc-200 font-bold rounded-lg" /> @endif
                     <x-button sm :label="$copiedAll ? __('common.copied') : __('common.copy')" :icon="$copiedAll ? 'check' : 'clipboard-copy'" wire:click='copyAll' class="hover:text-zinc-200 hover:bg-zinc-500 bg-zinc-200 text-zinc-500 border border-zinc-200 font-bold rounded-lg" />
+                    <x-button sm :label="__('common.generate_audio')" icon="clipboard-copy" wire:click='copyAll' class="hover:text-zinc-200 hover:bg-zinc-500 bg-zinc-200 text-zinc-500 border border-zinc-200 font-bold rounded-lg" />
                 </div>
             </div>
             <div class="h-full border border-zinc-200 rounded-lg p-4 mt-4">

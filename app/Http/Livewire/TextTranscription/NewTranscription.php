@@ -13,7 +13,8 @@ class NewTranscription extends Component
 
     public string $source_url;
     public string $source;
-    public string $language;
+    public string $origin_language;
+    public string $target_language;
     public array $languages;
     public bool $modal;
     public string $title;
@@ -23,7 +24,8 @@ class NewTranscription extends Component
         $this->title = 'New Transcription';
         $this->source = 'youtube';
         $this->source_url = '';
-        $this->language = 'en';
+        $this->origin_language = 'en';
+        $this->target_language = 'same';
         $this->languages = Language::getLabels();
     }
 
@@ -35,13 +37,15 @@ class NewTranscription extends Component
     protected $rules = [
         'source' => 'required|in:youtube',
         'source_url' => 'required|url',
-        'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr'
+        'origin_language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
+        'target_language' => 'required|in:same,en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr'
     ];
 
     protected $messages = [
         'source_url.required' => 'You need to provide a Youtube link for the transcription.',
         'source.required' => 'Source is a required field.',
-        'language.required' => 'Language is a required field.',
+        'origin_language.required' => 'Source language is a required field.',
+        'target_language.required' => 'Target language is a required field.',
     ];
 
     public function process()
@@ -49,12 +53,20 @@ class NewTranscription extends Component
         $this->validate();
         CreateTranscription::dispatch([
             'source' => $this->source,
-            'language' => $this->language,
+            'language' => $this->origin_language,
+            'target_language' => $this->target_language,
             'meta' => [
                 'source_url' => $this->source_url
             ],
         ]);
 
         return redirect()->to('/dashboard');
+    }
+
+    public function updated()
+    {
+        if ($this->target_language === $this->origin_language) {
+            $this->target_language = 'same';
+        }
     }
 }

@@ -41,9 +41,10 @@ class PublishTranscription implements ShouldQueue, ShouldBeUnique
         try {
             $meta = $this->document->meta;
             $this->document->update([
-                'content' => $meta['original_text'],
-                'word_count' => Str::wordCount($meta['original_text']),
+                'content' => $meta['translated_text'] ?? $meta['original_text'],
+                'word_count' => Str::wordCount($meta['translated_text'] ?? $meta['original_text']),
                 'meta' => [
+                    ...$meta,
                     'source' => $meta['source'],
                     'source_url' => $meta['source_url'],
                     'duration' => $meta['duration'],

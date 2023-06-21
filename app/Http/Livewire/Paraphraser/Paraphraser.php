@@ -28,7 +28,6 @@ class Paraphraser extends Component
         return [
             "echo-private:User.$userId,.TextParaphrased" => 'notify',
             'select',
-            //    'refreshComponent' => '$refresh'
         ];
     }
 

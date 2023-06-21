@@ -6,8 +6,9 @@ enum DocumentType: string
 {
     case BLOG_POST = 'blog_post';
     case PARAPHRASED_TEXT = 'paraphrased_text';
-    case TEXT_TRANSCRIPTION = 'text_transcription';
     case SOCIAL_MEDIA_POST = 'social_media_post';
+    case TEXT_TO_SPEECH = 'text_to_speech';
+    case TEXT_TRANSCRIPTION = 'text_transcription';
 
     public function label()
     {
@@ -15,6 +16,7 @@ enum DocumentType: string
             self::BLOG_POST => __('common.blog_post'),
             self::PARAPHRASED_TEXT => __('common.paraphrased_text'),
             self::TEXT_TRANSCRIPTION => __('common.text_transcription'),
+            self::TEXT_TO_SPEECH => __('common.text_to_speech'),
             self::SOCIAL_MEDIA_POST => __('common.social_media_post')
         };
     }

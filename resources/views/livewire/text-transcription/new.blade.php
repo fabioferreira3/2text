@@ -27,16 +27,31 @@
                 <div class="grid grid-cols-2 gap-6">
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
-                            <label class="font-bold text-lg text-zinc-700">{{__('transcription.language')}}:</label>
-                            @include('livewire.common.help-item', ['header' => __('transcription.language'), 'content' => App\Helpers\InstructionsHelper::transcriptionLanguage()])
+                            <label class="font-bold text-lg text-zinc-700">{{__('transcription.origin_language')}}:</label>
+                            @include('livewire.common.help-item', ['header' => __('transcription.origin_language'), 'content' => App\Helpers\InstructionsHelper::transcriptionLanguage()])
                         </div>
-                        <select name="language" wire:model="language" class="p-3 rounded-lg border border-zinc-200">
+                        <select name="origin_language" wire:model="origin_language" class="p-3 rounded-lg border border-zinc-200">
                             @foreach ($languages as $option)
                             <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
                             @endforeach
                         </select>
                         @if($errors->has('language'))
-                        <span class="text-red-500 text-sm">{{ $errors->first('language') }}</span>
+                        <span class="text-red-500 text-sm">{{ $errors->first('origin_language') }}</span>
+                        @endif
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <div class="flex gap-2 items-center">
+                            <label class="font-bold text-lg text-zinc-700">{{__('transcription.target_language')}}:</label>
+                            @include('livewire.common.help-item', ['header' => __('transcription.target_language'), 'content' => App\Helpers\InstructionsHelper::transcriptionLanguage()])
+                        </div>
+                        <select name="target_language" wire:model="target_language" class="p-3 rounded-lg border border-zinc-200">
+                            <option value="same">Same as source</option>
+                            @foreach ($languages as $option)
+                            <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
+                            @endforeach
+                        </select>
+                        @if($errors->has('language'))
+                        <span class="text-red-500 text-sm">{{ $errors->first('target_language') }}</span>
                         @endif
                     </div>
                 </div>

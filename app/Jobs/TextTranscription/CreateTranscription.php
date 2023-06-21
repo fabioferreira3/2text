@@ -4,6 +4,7 @@ namespace App\Jobs\TextTranscription;
 
 use App\Enums\DocumentTaskEnum;
 use App\Enums\DocumentType;
+use App\Enums\Language;
 use App\Jobs\DispatchDocumentTasks;
 use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -41,7 +42,12 @@ class CreateTranscription
             ]
         );
         $this->repo->createTask(DocumentTaskEnum::PROCESS_AUDIO, ['order' => 2]);
-        $this->repo->createTask(DocumentTaskEnum::PUBLISH_TRANSCRIPTION, ['order' => 3]);
+        if ($this->params['target_language'] !== 'same') {
+            $this->repo->createTask(DocumentTaskEnum::TRANSLATE_TEXT, ['order' => 3, 'meta' => [
+                'target_language' => Language::from($this->params['target_language'])->name
+            ]]);
+        }
+        $this->repo->createTask(DocumentTaskEnum::PUBLISH_TRANSCRIPTION, ['order' => 4]);
         DispatchDocumentTasks::dispatch($document);
     }
 }

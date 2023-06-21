@@ -90,10 +90,11 @@ class GenRepository
     public static function paraphraseDocument(Document $document)
     {
         $repo = new DocumentRepository($document);
+        $processId = Str::uuid();
         foreach ($document->meta['original_sentences'] as $sentence) {
             $repo->createTask(DocumentTaskEnum::PARAPHRASE_TEXT, [
-                'order' => $params['order'] ?? 1,
-                'process_id' => $params['process_id'] ?? Str::uuid(),
+                'order' => 1,
+                'process_id' => $processId,
                 'meta' => [
                     'text' => $sentence['text'],
                     'sentence_order' => $sentence['sentence_order'],
@@ -101,6 +102,16 @@ class GenRepository
                 ]
             ]);
         }
+        $repo->createTask(DocumentTaskEnum::CREATE_TITLE, [
+            'order' => 99,
+            'process_id' => $processId,
+            'meta' => []
+        ]);
+        $repo->createTask(DocumentTaskEnum::CREATE_TITLE, [
+            'order' => 99,
+            'process_id' => $processId,
+            'meta' => []
+        ]);
         DispatchDocumentTasks::dispatch($document);
     }
 
@@ -118,5 +129,17 @@ class GenRepository
             ]
         ]);
         DispatchDocumentTasks::dispatch($document);
+    }
+
+    public static function textToSpeech($document, array $params = [])
+    {
+        $repo = new DocumentRepository($document);
+        $repo->createTask(DocumentTaskEnum::TEXT_TO_SPEECH, [
+            'order' => 1,
+            'process_id' => $params['process_id'] ?? Str::uuid(),
+            'meta' => [
+                'text' => $params['text']
+            ]
+        ]);
     }
 }

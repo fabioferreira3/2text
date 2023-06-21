@@ -63,7 +63,7 @@ class ParaphraseText
             }
             $this->repo->addHistory(
                 [
-                    'field' => 'partial_content',
+                    'field' => 'paraphrased_text',
                     'content' => $response['content']
                 ],
                 $response['token_usage']

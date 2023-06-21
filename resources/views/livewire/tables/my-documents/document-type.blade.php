@@ -20,7 +20,14 @@
 @endif
 
 @if($type->value === 'paraphrased_text')
-<x-badge icon="hashtag" class="font-thin" md fuchsia label="{{$type->label()}}">
+<x-badge icon="switch-horizontal" class="font-thin" md fuchsia label="{{$type->label()}}">
+    <x-slot name="prepend" class="relative flex items-center">
+    </x-slot>
+</x-badge>
+@endif
+
+@if($type->value === 'text_to_speech')
+<x-badge icon="volume-up" class="font-thin" md lime label="{{$type->label()}}">
     <x-slot name="prepend" class="relative flex items-center">
     </x-slot>
 </x-badge>

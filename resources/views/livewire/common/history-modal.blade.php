@@ -12,11 +12,12 @@
 
             @if ($history->count())
                 <div class="flex flex-col gap-2">
-                    @foreach($history as $item)
+                    @foreach($history as $key => $item)
                     <div class="flex flex-col gap-3 rounded-lg border border-zinc-200 p-2">
                         <div class="flex items-center justify-between">
                             <div class='font-bold'>{{$item['created_at']}}</div>
-                            <x-button sm class='rounded-lg text-white bg-secondary hover:bg-black' wire:click="apply('{{ base64_encode($item['content']) }}')" label="Apply"/>
+                            @if ($key === 0) <span>Current</span>@endif
+                            @if ($key > 0 )<x-button sm class='rounded-lg text-white bg-secondary hover:bg-black' wire:click="apply('{{ base64_encode($item['content']) }}')" label="Apply"/>@endif
                         </div>
                         <div class='italic text-sm'>
                             {!!Str::limit($item['content'], 300, ' (...)')!!}

@@ -55,6 +55,8 @@ class MyDocumentsTable extends DataTableComponent
             Column::make("Id", "id")
                 ->format(fn ($value, $row) => $row->id)
                 ->hideIf(true),
+            Column::make("Content", "content")
+                ->hideIf(true),
             Column::make(__('dashboard.type'), "type")
                 ->format(function ($value, $row) {
                     return view('livewire.tables.my-documents.document-type', ['type' => $row->type]);
@@ -63,7 +65,7 @@ class MyDocumentsTable extends DataTableComponent
                 ->sortable(),
             Column::make(__('dashboard.title'), "title")
                 ->format(function ($value, $row) {
-                    return $value ? Str::limit($value, 20, '...') : "";
+                    return Str::limit($value ?? $row['content'], 20, '...');
                 })
                 ->searchable()
                 ->sortable()

@@ -30,6 +30,11 @@ class PromptHelper
         return Lang::get('prompt.paraphrase_text', ['text' => $text, 'tone' => $tone], $this->language);
     }
 
+    public function translate($text, $targetLanguage)
+    {
+        return Lang::get('prompt.translate_text', ['text' => $text, 'target_language' => $targetLanguage], $this->language);
+    }
+
     public function writeFirstPass($outline, array $params)
     {
         $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
