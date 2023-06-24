@@ -3,7 +3,7 @@
         <div class="text-sm">{{__('common.generate_audio')}}</div>
     </div>
     <div class="text-zinc-600 overflow-auto flex flex-col absolute top-10 right-0 border rounded-lg w-64 text-sm bg-zinc-100">
-        <div class="flex justify-between w-full px-2 py-1 border-b bg-white">
+        <div class="flex justify-between w-full px-4 py-2 border-b bg-white">
             <div class="font-bold">{{__('audio.choose_voice')}}:</div>
             <x-icon solid name="x-circle" class="cursor-pointer w-5 h-5 text-zinc-500" />
         </div>
@@ -19,7 +19,7 @@
                 <audio id="{{ $voice['id'] }}" src="{{ $voice['url'] }}" preload="auto"></audio>
             </div>
         @endforeach
-        <x-button :disabled='$selectedVoice === null' neutral class="bg-secondary hover:bg-main" label="Generate!"/>
+        <x-button :disabled='$selectedVoice === null' neutral class="bg-secondary hover:bg-main" :label="$selectedVoice === null ? 'Select a voice' : 'Generate!'"/>
     </div>
 
 </div>

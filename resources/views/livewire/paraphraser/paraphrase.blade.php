@@ -3,7 +3,7 @@
     <div class="flex flex-col md:flex-row items-center justify-center gap-4 border-b-2 pb-2">
         <div class="flex items-center">
             <div class="mr-4 font-bold">Language:</div>
-            <select name="language" wire:model="language" class="p-3 rounded-lg border border-zinc-200">
+            <select name="language" wire:model="language" class="p-3 w-64 rounded-lg border border-zinc-200">
                 @include('livewire.common.languages-options')
             </select>
         </div>
@@ -29,7 +29,7 @@
                 <div class="flex items-center gap-2">
                     @if ($selectedSentenceIndex !== null) <x-button sm label="{{__('common.unselect')}}" icon="x" wire:click='unselect' class="hover:text-zinc-200 hover:bg-zinc-500 bg-zinc-200 text-zinc-500 border border-zinc-200 font-bold rounded-lg" /> @endif
                     <x-button sm :label="$copiedAll ? __('common.copied') : __('common.copy')" :icon="$copiedAll ? 'check' : 'clipboard-copy'" wire:click='copyAll' class="hover:text-zinc-200 hover:bg-zinc-500 bg-zinc-200 text-zinc-500 border border-zinc-200 font-bold rounded-lg" />
-                    @livewire('common.generate-audio', ['document' => $document])
+                    @livewire('common.generate-audio', ['document' => $document, 'language' => $language])
                 </div>
             </div>
             <div class="h-full border border-zinc-200 rounded-lg p-4 mt-4">

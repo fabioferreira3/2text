@@ -14,12 +14,31 @@ class GenerateAudio extends Component
     public bool $open = false;
     public $selectedVoice = null;
     public $selectedVoiceObj = null;
+    public $language;
     public $voices;
 
-    public function mount(Document $document)
+    public function mount(Document $document, $language = null)
     {
         $this->document = $document;
-        switch ($document->language) {
+        $this->setVoices($language ?? $document->language);
+    }
+
+    public function playAudio($id)
+    {
+        $this->dispatchBrowserEvent('play-audio', [
+            'id' => $id
+        ]);
+    }
+
+    public function toggle()
+    {
+        $this->open = !$this->open;
+        $this->emitSelf('refresh');
+    }
+
+    public function setVoices($language)
+    {
+        switch ($language) {
             case Language::ENGLISH:
                 $this->voices = collect([
                     ['id' => Str::uuid(), 'value' => 'Joanna', 'label' => 'Maura, Female', 'url' => $this->getAudioUrl('voice.eb8e8334-b965-443b-81e8-59799c9bc604.mp3')],
@@ -48,26 +67,12 @@ class GenerateAudio extends Component
                     ['id' => Str::uuid(), 'value' => 'Lupe', 'label' => 'Lupe, Femenino', 'url' => $this->getAudioUrl('voice-es.95920eb1-8105-43b2-9e51-8f102e3d2a53.mp3')],
                     ['id' => Str::uuid(), 'value' => 'Mia', 'label' => 'Mia, Femenino', 'url' => $this->getAudioUrl('voice-es.db96a087-da21-4c17-ab04-ee795e7a1289.mp3')],
                     ['id' => Str::uuid(), 'value' => 'Sergio', 'label' => 'Sergio, Masculino', 'url' => $this->getAudioUrl('voice-es.9f90e97b-80f0-46dc-9693-a7867a31c97c.mp3')],
-                    ['id' => Str::uuid(), 'value' => 'Andrés', 'label' => 'Andrés, Masculino', 'url' => $this->getAudioUrl('voice-es.556b93c4-2fca-4bc2-bfd0-3f1742b18cd0.mp3')],
                     ['id' => Str::uuid(), 'value' => 'Pedro', 'label' => 'Pedro, Masculino', 'url' => $this->getAudioUrl('voice-es.dde9d6bf-8d97-4c96-91ec-de3d17c09fbd.mp3')],
                 ]);
                 break;
             default:
                 $this->voices = [];
         }
-    }
-
-    public function playAudio($id)
-    {
-        $this->dispatchBrowserEvent('play-audio', [
-            'id' => $id
-        ]);
-    }
-
-    public function toggle()
-    {
-        $this->open = !$this->open;
-        $this->emitSelf('refresh');
     }
 
     public function render()

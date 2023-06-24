@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'choose_voice' => 'Choose a voice'
+    'choose_voice' => 'Select a voice'
 ];
