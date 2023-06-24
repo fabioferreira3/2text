@@ -205,7 +205,7 @@
                 :class="{
                     'bg-gray-200 dark:bg-gray-700': asyncData.fetching
                 }">
-                <div class="bg-primary-500 h-0.5 rounded-full absolute animate-linear-progress"
+                <div class="bg-black h-0.5 rounded-full absolute animate-linear-progress"
                     style="width: 30%"
                     x-show="asyncData.fetching">
                 </div>

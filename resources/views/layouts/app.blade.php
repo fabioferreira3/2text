@@ -82,7 +82,12 @@
 
         window.addEventListener('refresh-page', () => {
             window.location.reload();
-        })
+        });
+
+        window.addEventListener('play-audio', ({ detail: { id }}) => {
+            let audio = document.getElementById(id);
+            audio.play();
+        });
 
         document.addEventListener('livewire:load', function() {
             window.livewire.on('addToClipboard', function(message) {
@@ -90,9 +95,8 @@
             });
         });
 
-        window.Echo.connector.pusher.connection.bind('connected', function() {
-    console.log('Realtime is active.');
-});
+        window.Echo.connector.pusher.connection.bind('connected', function() {});
+
     </script>
 </body>
 

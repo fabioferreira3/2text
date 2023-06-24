@@ -1,5 +1,4 @@
-<div id="modal" class="fixed inset-0 w-full h-full z-20 bg-black bg-opacity-30 flex items-center justify-center backdrop-blur-sm">
-    <div class="relative overflow-auto max-h-[75%] bg-white rounded-lg shadow-lg w-full sm:w-4/5 md:w-3/5 lg:w-3/5">
+<x-experior::modal>
         <div class="py-4 text-left px-6">
             <div role='button' class="flex justify-between items-center pb-3">
                 <p class="text-2xl font-bold">Log - {{$fieldTitle}}</p>
@@ -31,7 +30,5 @@
             <div class="flex justify-center pt-4 z-30">
                 <x-button label='Close' slate wire:click="$emitUp('closeHistoryModal')" class="py-2 px-4 rounded-lg" type="button"/>
             </div>
-        </div>
-    </div>
+        </div></x-experior::modal>
 
-</div>
