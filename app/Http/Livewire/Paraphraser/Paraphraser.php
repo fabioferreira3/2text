@@ -7,7 +7,6 @@ use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use App\Repositories\GenRepository;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class Paraphraser extends Component
@@ -23,6 +22,15 @@ class Paraphraser extends Component
     public bool $copied = false;
     public bool $copiedAll = false;
     public bool $isSaving;
+
+    protected $rules = [
+        'inputText' => 'required|string',
+        'language' => 'required'
+    ];
+
+    protected $validationAttributes = [
+        'inputText' => 'original text',
+    ];
 
     public function getListeners()
     {
@@ -45,6 +53,11 @@ class Paraphraser extends Component
         $this->setup($document);
     }
 
+    public function checkCompleteness()
+    {
+        $this->isSaving = !$this->document->is_completed;
+    }
+
     public function setup($document)
     {
         $this->document = $document;
@@ -54,7 +67,7 @@ class Paraphraser extends Component
         $this->outputText = [];
         $originalSentences = collect($this->document['meta']['original_sentences'] ?? []);
         $paraphrasedSentences = collect($this->document['meta']['paraphrased_sentences'] ?? []);
-        $paraphrasedTextArray = $paraphrasedSentences->map(function ($sentence) {
+        $paraphrasedTextArray = $paraphrasedSentences->sortBy('sentence_order')->map(function ($sentence) {
             return $sentence['text'];
         });
 
@@ -67,15 +80,6 @@ class Paraphraser extends Component
             }
         }
     }
-
-    protected $rules = [
-        'inputText' => 'required|string',
-        'language' => 'required'
-    ];
-
-    protected $validationAttributes = [
-        'inputText' => 'original text',
-    ];
 
     public function copy()
     {

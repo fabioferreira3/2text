@@ -1,5 +1,8 @@
 <div class="relative">
-    <x-button md wire:click="toggle" :label="__('common.generate_audio')" icon="volume-up" class="hover:text-zinc-200 hover:bg-zinc-500 bg-zinc-200 text-zinc-500 border border-zinc-200 font-bold rounded-lg" />
+    <button class="flex items-center gap-2 bg-zinc-200 hover:text-zinc-200 hover:bg-zinc-500 px-4 py-2 rounded-lg text-sm text-zinc-600" wire:click='toggle'>
+        <x-icon class="w-5 h-5" name="volume-up"/>
+        <div class="font-bold">{{__('common.generate_audio')}}</div>
+    </button>
     @if($menuOpen)
     <div class="text-zinc-600 overflow-auto flex flex-col absolute z-40 top-12 right-0 border rounded-lg w-64 text-sm bg-zinc-100">
         <div class="flex items-center justify-between w-full px-4 py-2 border-b bg-main text-white">

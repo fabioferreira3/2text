@@ -87,27 +87,19 @@ class GenRepository
         );
     }
 
-    public static function paraphraseDocument(Document $document)
+    public static function paraphraseDocument(Document $document, $initialOrder = 1)
     {
         $repo = new DocumentRepository($document);
         $processId = Str::uuid();
-        foreach ($document->meta['original_sentences'] as $sentence) {
-            $repo->createTask(DocumentTaskEnum::PARAPHRASE_TEXT, [
-                'order' => 1,
-                'process_id' => $processId,
-                'meta' => [
-                    'text' => $sentence['text'],
-                    'sentence_order' => $sentence['sentence_order'],
-                    'user_id' => Auth::check() ? Auth::user()->id : null
-                ]
-            ]);
-        }
-        $repo->createTask(DocumentTaskEnum::CREATE_TITLE, [
-            'order' => 99,
+        $repo->createTask(DocumentTaskEnum::PARAPHRASE_DOCUMENT, [
+            'order' => $initialOrder,
             'process_id' => $processId,
-            'meta' => []
+            'meta' => [
+                'process_id' => $processId,
+                'initial_order' => $initialOrder,
+                'user_id' => Auth::check() ? Auth::user()->id : null
+            ]
         ]);
-        DispatchDocumentTasks::dispatch($document);
     }
 
     public static function paraphraseText(Document $document, array $params)

@@ -6,8 +6,10 @@ use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
+use App\Repositories\GenRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 
 class CreateFromWebsite
 {
@@ -40,31 +42,16 @@ class CreateFromWebsite
             DocumentTaskEnum::CRAWL_WEBSITE,
             [
                 'process_id' => $this->params['process_id'],
-                'meta' => ['parse_sentences' => true],
+                'meta' => [
+                    'parse_sentences' => true,
+                    'user_id' => Auth::check() ? Auth::user()->id : null
+                ],
                 'order' => 2
             ]
         );
 
+        GenRepository::paraphraseDocument($this->document, 3);
+
         DispatchDocumentTasks::dispatch($this->document);
-
-        // $repo->createTask(
-        //     DocumentTaskEnum::CRAWL_WEBSITE,
-        //     [
-        //         'process_id' => $this->params['process_id'],
-        //         'meta' => [],
-        //         'order' => 3
-        //     ]
-        // );
-
-        // $repo->createTask(
-        //     DocumentTaskEnum::PARAPHRASE_TEXT,
-        //     [
-        //         'process_id' => $this->params['process_id'],
-        //         'meta' => [
-        //             'platform' => $this->params['platform'],
-        //         ],
-        //         'order' => 4
-        //     ]
-        // );
     }
 }

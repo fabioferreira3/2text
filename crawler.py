@@ -1,10 +1,12 @@
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 import argparse
 
 # parser to handle command line arguments
 parser = argparse.ArgumentParser(description="Web scraping script")
 parser.add_argument("url", help="URL of the webpage to scrape")
+parser.add_argument(
+    "--html", help="Include HTML tags in output", action="store_true")
 args = parser.parse_args()
 
 # headers to mimic a browser visit
@@ -28,7 +30,7 @@ for tag in soup.recursiveChildGenerator():
 title_tag = soup.find('title')
 title_text = "Title: "
 if title_tag is not None:
-    title_text += title_tag.prettify()
+    title_text += title_tag.text if not args.html else title_tag.prettify()
 
 main_tag = soup.find('body')
 content_text = ""
@@ -46,7 +48,8 @@ if main_tag is not None:
     tags = main_tag.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'ul'])
 
     for tag in tags:
-        content_text += "\n\n" + tag.prettify()
+        content_text += "\n\n" + \
+            (tag.text if not args.html else tag.prettify())
 
 full_text = title_text + "\n" + content_text
 

@@ -27,8 +27,9 @@
                     </div>
                     @include('livewire.paraphraser.tones')
                     @endif
-                    <button wire:click="start" wire:loading.remove class="bg-secondary w-1/3 m-auto mt-2 text-white font-bold px-4 py-2 rounded-lg">
-                        {{__('paraphraser.start')}}
+                    <button wire:click="start" :disabled="$isProcessing" wire:loading.remove class="bg-secondary w-1/3 m-auto mt-2 text-white font-bold px-4 py-2 rounded-lg">
+                        @if ($isProcessing){{__('paraphraser.processing')}} @endif
+                        @if (!$isProcessing){{__('paraphraser.start')}} @endif
                     </button>
                 </div>
             </div>

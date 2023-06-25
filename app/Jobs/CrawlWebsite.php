@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\WebsiteCrawled;
 use App\Helpers\DocumentHelper;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
@@ -51,7 +52,7 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
             return $decodedText;
         }
         try {
-            Artisan::call('crawl', ['url' => $this->document['meta']['source_url']]);
+            Artisan::call('crawl', ['url' => $this->document['meta']['source_url'], '--html' => $this->meta['parse_html'] ?? false]);
             $websiteContent = Artisan::output();
 
             $this->document->update([
@@ -62,6 +63,9 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
                     'original_sentences' => ($this->meta['parse_sentences'] ?? false) ? DocumentHelper::breakTextIntoSentences(unicodeToPlainText($websiteContent)) : null
                 ]
             ]);
+
+            WebsiteCrawled::dispatchIf($this->meta['user_id'] ?? false, $this->meta['user_id']);
+
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to create title: ' . $e->getMessage());

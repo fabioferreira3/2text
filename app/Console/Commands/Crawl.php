@@ -11,7 +11,7 @@ class Crawl extends Command
      *
      * @var string
      */
-    protected $signature = 'crawl {url}';
+    protected $signature = 'crawl {url} {--html}';
 
     /**
      * The console command description.
@@ -30,9 +30,11 @@ class Crawl extends Command
         $python = app()->environment('production') ? '/usr/bin/python' : '/usr/local/bin/python';
         $script = app()->environment('production') ? '/app/crawler.py' : '/var/www/html/crawler.py';
         $url = $this->argument('url');
+        $html = $this->option('html');
+        $htmlFlag = $html ? '--html' : '';
 
         $output = [];
-        exec("$python $script \"$url\"", $output);
+        exec("$python $script \"$url\" $htmlFlag", $output);
 
         $this->line(implode(PHP_EOL, $output));
     }

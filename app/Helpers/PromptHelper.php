@@ -25,7 +25,7 @@ class PromptHelper
         return Lang::get('prompt.simplify_text', ['text' => $text], $this->language);
     }
 
-    public function paraphrase($text, $tone = null)
+    public function paraphrase($text, $tone = 'normal')
     {
         return Lang::get('prompt.paraphrase_text', ['text' => $text, 'tone' => $tone], $this->language);
     }

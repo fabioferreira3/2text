@@ -56,7 +56,7 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
                     'voice' => 'Kevin',
                     'engine' => 'neural'
                 ]);
-            Log::debug($path);
+            // Log::debug($path);
             $this->repo->updateMeta('audio_file', $path);
             // $chatGpt = new ChatGPT();
             // $response = $chatGpt->request([

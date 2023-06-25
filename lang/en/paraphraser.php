@@ -11,6 +11,7 @@ return [
     'paraphrasing' => 'Paraphrasing...',
     'paraphrase_text' => 'Paraphrase text',
     'paraphrased_text' => 'Paraphrased text',
+    'processing' => 'Processing...',
     'simple' => 'Simple',
     'start' => 'Start'
 ];

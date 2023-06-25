@@ -28,13 +28,14 @@ class ParaphraseText implements ShouldQueue
     {
         $this->document = $document;
         $this->meta = $params;
-        $this->repo = new DocumentRepository($this->document);
-        $this->paraphrasedSentences = $this->document->meta['paraphrased_sentences'] ?? [];
     }
 
     public function handle()
     {
         try {
+            $this->document = $this->document->fresh();
+            $this->paraphrasedSentences = $this->document->meta['paraphrased_sentences'] ?? [];
+            $this->repo = new DocumentRepository($this->document);
             $index = null;
             $promptHelper = new PromptHelper($this->document->language->value);
             $chatGpt = new ChatGPT();
