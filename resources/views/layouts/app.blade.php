@@ -84,9 +84,16 @@
             window.location.reload();
         });
 
+        let currentAudio = null;
+
         window.addEventListener('play-audio', ({ detail: { id }}) => {
-            let audio = document.getElementById(id);
-            audio.play();
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+
+            currentAudio = document.getElementById(id);
+            currentAudio.play();
         });
 
         document.addEventListener('livewire:load', function() {
