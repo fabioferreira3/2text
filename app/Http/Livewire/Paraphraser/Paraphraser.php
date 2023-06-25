@@ -7,6 +7,7 @@ use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use App\Repositories\GenRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class Paraphraser extends Component
@@ -21,6 +22,7 @@ class Paraphraser extends Component
     public $language = null;
     public bool $copied = false;
     public bool $copiedAll = false;
+    public bool $isSaving;
 
     public function getListeners()
     {
@@ -39,6 +41,7 @@ class Paraphraser extends Component
 
     public function mount(Document $document)
     {
+        $this->isSaving = false;
         $this->setup($document);
     }
 
@@ -93,6 +96,7 @@ class Paraphraser extends Component
 
     public function paraphraseSentence()
     {
+        $this->isSaving = true;
         $this->copied = false;
         GenRepository::paraphraseText($this->document, [
             'text' => $this->selectedSentence['original'],
@@ -104,6 +108,7 @@ class Paraphraser extends Component
     public function paraphraseAll()
     {
         $this->validate();
+        $this->isSaving = true;
         $repo = new DocumentRepository($this->document);
         $this->unselect();
         $repo->updateMeta('tone', $this->tone);

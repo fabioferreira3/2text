@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 class GenerateAudio extends Component
 {
     public Document $document;
-    public bool $open = false;
+    public bool $menuOpen = false;
     public $selectedVoice = null;
     public $selectedVoiceObj = null;
     public $language;
@@ -32,7 +32,7 @@ class GenerateAudio extends Component
 
     public function toggle()
     {
-        $this->open = !$this->open;
+        $this->menuOpen = !$this->menuOpen;
         $this->emitSelf('refresh');
     }
 
@@ -71,7 +71,7 @@ class GenerateAudio extends Component
                 ]);
                 break;
             default:
-                $this->voices = [];
+                $this->voices = collect([]);
         }
     }
 

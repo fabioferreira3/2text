@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-8">
+<div class="">
     @include('livewire.common.header', ['icon' => 'switch-horizontal', 'label' => __('paraphraser.paraphrase_text')])
     <div class="flex flex-col md:flex-row items-center justify-center gap-4 border-b-2 pb-2">
         <div class="flex items-center">
@@ -12,7 +12,7 @@
     <div class="flex flex-col md:flex-row md:mt-4">
         <div class="w-full md:w-1/2 p-4">
             @include('livewire.common.label', ['title' => __('paraphraser.original_text')])
-            <textarea class="mt-6 w-full h-80 md:h-full p-4 border border-zinc-200 rounded-lg" wire:model="inputText"></textarea>
+            <textarea rows="10" class="mt-6 w-full p-4 border border-zinc-200 rounded-lg" wire:model="inputText"></textarea>
             @if($errors->has('inputText'))
             <span class="text-red-500 text-sm">{{ $errors->first('inputText') }}</span>
             @endif
@@ -27,12 +27,14 @@
             <div class="flex flex-col md:flex-row items-center justify-between">
                 @include('livewire.common.label', ['title' => __('paraphraser.paraphrased_text')])
                 <div class="flex items-center gap-2">
-                    @if ($selectedSentenceIndex !== null) <x-button sm label="{{__('common.unselect')}}" icon="x" wire:click='unselect' class="hover:text-zinc-200 hover:bg-zinc-500 bg-zinc-200 text-zinc-500 border border-zinc-200 font-bold rounded-lg" /> @endif
-                    <x-button sm :label="$copiedAll ? __('common.copied') : __('common.copy')" :icon="$copiedAll ? 'check' : 'clipboard-copy'" wire:click='copyAll' class="hover:text-zinc-200 hover:bg-zinc-500 bg-zinc-200 text-zinc-500 border border-zinc-200 font-bold rounded-lg" />
+                    <x-button md :label="$copiedAll ? __('common.copied') : __('common.copy')" :icon="$copiedAll ? 'check' : 'clipboard-copy'" wire:click='copyAll' class="hover:text-zinc-200 hover:bg-zinc-500 bg-zinc-200 text-zinc-500 border border-zinc-200 font-bold rounded-lg" />
                     @livewire('common.generate-audio', ['document' => $document, 'language' => $language])
                 </div>
             </div>
-            <div class="h-full border border-zinc-200 rounded-lg p-4 mt-4">
+            <div class="flex justify-end mt-2">
+                @if ($selectedSentenceIndex !== null) <x-button sm label="{{__('common.unselect')}}" icon="x" wire:click='unselect' class="hover:text-zinc-200 hover:bg-zinc-500 bg-zinc-200 text-zinc-500 border border-zinc-200 font-bold rounded-lg" /> @endif
+            </div>
+            <div class="border border-zinc-200 rounded-lg p-4 mt-4">
                 @foreach ($outputText as $index => $sentence)
                 @if (trim($sentence['original']) !== '')
                 <div class="relative" x-data="{ open: false }" onclick="Livewire.emit('select', '{{ $index }}')" @click.away="open = false">
@@ -63,9 +65,9 @@
         </div>
     </div>
     <div class="hidden md:flex md:justify-center w-full p-4">
-        <button wire:target="paraphraseAll,paraphraseSentence" wire:loading.attr="disabled" class="mt-4 text-base bg-secondary duration-700 hover:bg-main text-white font-bold py-2 px-4 rounded-lg" wire:click="paraphraseAll">
-            <span wire:loading.remove wire:target="paraphraseAll,paraphraseSentence">{{ __('paraphraser.paraphrase') }}</span>
-            <span wire:loading wire:target="paraphraseAll,paraphraseSentence">{{ __('paraphraser.paraphrasing') }}</span>
+        <button wire:target="paraphraseAll,paraphraseSentence" :disabled="$isSaving" class="mt-4 text-base bg-secondary duration-700 hover:bg-main text-white font-bold py-2 px-4 rounded-lg" wire:click="paraphraseAll">
+            @if(!$isSaving)<span wire:target="paraphraseAll,paraphraseSentence">{{ __('paraphraser.paraphrase') }}</span>@endif
+            @if($isSaving)<span wire:target="paraphraseAll,paraphraseSentence">{{ __('paraphraser.paraphrasing') }}</span>@endif
         </button>
     </div>
 </div>

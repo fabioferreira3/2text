@@ -9,12 +9,13 @@ use App\Models\Document;
 use App\Packages\ChatGPT\ChatGPT;
 use App\Repositories\DocumentRepository;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class ParaphraseText
+class ParaphraseText implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 

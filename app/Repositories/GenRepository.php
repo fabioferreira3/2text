@@ -22,7 +22,7 @@ class GenRepository
             'role' => 'user',
             'content' => $promptHelper->writeTitle($document->normalized_structure, [
                 'tone' => $document['meta']['tone'] ?? null,
-                'keyword' => $document['meta']['keyword']
+                'keyword' => $document['meta']['keyword'] ?? null
             ])
         ]]);
         $document->update(['title' => Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"')]);
@@ -102,11 +102,6 @@ class GenRepository
                 ]
             ]);
         }
-        $repo->createTask(DocumentTaskEnum::CREATE_TITLE, [
-            'order' => 99,
-            'process_id' => $processId,
-            'meta' => []
-        ]);
         $repo->createTask(DocumentTaskEnum::CREATE_TITLE, [
             'order' => 99,
             'process_id' => $processId,
