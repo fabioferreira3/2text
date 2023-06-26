@@ -34,7 +34,7 @@
                                 <x-icon class="w-5 h-5" :name="$copiedAll ? 'check' : 'clipboard-copy'"/>
                                 <div class="font-bold">{{$copiedAll ? __('common.copied') : __('common.copy')}}</div>
                             </button>
-                            @livewire('common.generate-audio', ['document' => $document, 'language' => $language])
+                            @livewire('common.generate-audio', ['document' => $document, 'text' => $document->paraphrased_text, 'language' => $language])
                         </div>
                     @endif
                 </div>

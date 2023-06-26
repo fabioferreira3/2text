@@ -39,7 +39,7 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            GenRepository::generateTitle($this->document);
+            GenRepository::generateTitle($this->document, $this->meta['text'] ?? $this->document->normalized_structure);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to create title: ' . $e->getMessage());

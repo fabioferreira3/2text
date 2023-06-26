@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Common;
 
 use App\Enums\Language;
 use App\Models\Document;
+use App\Repositories\GenRepository;
 use Livewire\Component;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -14,13 +15,15 @@ class GenerateAudio extends Component
     public bool $menuOpen = false;
     public $selectedVoice = null;
     public $selectedVoiceObj = null;
+    public $text;
     public $language;
     public $voices;
 
-    public function mount(Document $document, $language = null)
+    public function mount(Document $document, $language = null, $text = null)
     {
         $this->document = $document;
-        $this->setVoices($language ?? $document->language);
+        $this->setOptions($language ?? $document->language);
+        $this->text = $text;
     }
 
     public function playAudio($id)
@@ -36,7 +39,7 @@ class GenerateAudio extends Component
         $this->emitSelf('refresh');
     }
 
-    public function setVoices($language)
+    public function setOptions($language)
     {
         switch ($language) {
             case Language::ENGLISH:
@@ -78,6 +81,11 @@ class GenerateAudio extends Component
     public function render()
     {
         return view('livewire.common.generate-audio');
+    }
+
+    public function generate()
+    {
+        GenRepository::textToSpeech($this->document);
     }
 
     public function updated()

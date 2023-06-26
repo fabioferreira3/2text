@@ -13,14 +13,14 @@ use Illuminate\Support\Str;
 
 class GenRepository
 {
-    public static function generateTitle(Document $document)
+    public static function generateTitle(Document $document, $context)
     {
         $repo = new DocumentRepository($document);
         $promptHelper = new PromptHelper($document->language->value);
         $chatGpt = new ChatGPT(LanguageModels::GPT_3_TURBO->value);
         $response = $chatGpt->request([[
             'role' => 'user',
-            'content' => $promptHelper->writeTitle($document->normalized_structure, [
+            'content' => $promptHelper->writeTitle($context, [
                 'tone' => $document['meta']['tone'] ?? null,
                 'keyword' => $document['meta']['keyword'] ?? null
             ])

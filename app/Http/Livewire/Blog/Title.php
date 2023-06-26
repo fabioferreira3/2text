@@ -36,10 +36,7 @@ class Title extends Component
     public function regenerate()
     {
         try {
-            GenRepository::generateTitle($this->document, [
-                'tone' => $this->document->meta['tone'],
-                'keyword' => $this->document->meta['keyword']
-            ]);
+            GenRepository::generateTitle($this->document, $this->document->normalized_structure);
             $this->setContent($this->document->refresh());
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'success',
