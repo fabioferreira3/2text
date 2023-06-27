@@ -68,6 +68,11 @@
             }
         });
 
+        // Define the 'ended' event handler.
+        function audioEndedHandler() {
+            window.livewire.emit('stop-audio');
+        }
+
         window.addEventListener('alert', ({
             detail: {
                 type,
@@ -88,12 +93,26 @@
 
         window.addEventListener('play-audio', ({ detail: { id }}) => {
             if (currentAudio) {
+                // Remove existing listener to avoid duplicate event triggers.
+                currentAudio.removeEventListener('ended', audioEndedHandler);
+
                 currentAudio.pause();
                 currentAudio.currentTime = 0;
             }
 
             currentAudio = document.getElementById(id);
+
+            // Add the 'ended' event listener to the current audio clip.
+            currentAudio.addEventListener('ended', audioEndedHandler);
+
             currentAudio.play();
+        });
+
+        window.addEventListener('stop-audio', () => {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
         });
 
         document.addEventListener('livewire:load', function() {

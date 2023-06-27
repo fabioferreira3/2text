@@ -6,7 +6,6 @@ use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
-use App\Repositories\GenRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
@@ -49,8 +48,15 @@ class CreateFromWebsite
                 'order' => 2
             ]
         );
-
-        GenRepository::paraphraseDocument($this->document, 3);
+        $repo->createTask(DocumentTaskEnum::PARAPHRASE_DOCUMENT, [
+            'order' => 3,
+            'process_id' => $this->params['process_id'],
+            'meta' => [
+                'process_id' => $this->params['process_id'],
+                'initial_order' => 3,
+                'user_id' => Auth::check() ? Auth::user()->id : null
+            ]
+        ]);
 
         DispatchDocumentTasks::dispatch($this->document);
     }

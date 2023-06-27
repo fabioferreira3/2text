@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\Document;
-use App\Models\DocumentTask;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,7 +11,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class DispatchDocumentTasks implements ShouldQueue, ShouldBeUnique
 {

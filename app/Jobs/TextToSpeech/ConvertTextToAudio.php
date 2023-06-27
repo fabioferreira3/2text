@@ -2,11 +2,9 @@
 
 namespace App\Jobs\TextToSpeech;
 
-use App\Helpers\DocumentHelper;
-use App\Helpers\PromptHelper;
+use App\Events\AudioGenerated;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
-use App\Packages\ChatGPT\ChatGPT;
 use App\Repositories\DocumentRepository;
 use Cion\TextToSpeech\Facades\TextToSpeech;
 use Exception;
@@ -25,7 +23,6 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
 
     protected Document $document;
     protected array $meta;
-    protected PromptHelper $promptHelper;
     protected DocumentRepository $repo;
 
     /**
@@ -37,7 +34,6 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->promptHelper = new PromptHelper($document->language->value);
         $this->repo = new DocumentRepository($this->document);
     }
 
@@ -53,34 +49,13 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
             $path = TextToSpeech::disk('s3')
                 ->saveTo($fileName)
                 ->convert($this->meta['text'], [
-                    'voice' => 'Kevin',
+                    'voice' => $this->meta['voice'],
                     'engine' => 'neural'
                 ]);
-            // Log::debug($path);
             $this->repo->updateMeta('audio_file', $path);
-            // $chatGpt = new ChatGPT();
-            // $response = $chatGpt->request([
-            //     [
-            //         'role' => 'user',
-            //         'content' =>   $this->promptHelper->writeOutline(
-            //             $this->document->context,
-            //             [
-            //                 'tone' => $this->document->meta['tone'],
-            //                 'style' => $this->document->meta['style'] ?? null,
-            //                 'maxsubtopics' => $this->document->meta['target_headers_count']
-            //             ]
-            //         )
-            //     ]
-            // ]);
-            // $this->repo->updateMeta('outline', $response['content']);
-            // $this->repo->updateMeta('raw_structure', DocumentHelper::parseOutlineToRawStructure($response['content']));
-            // $this->repo->addHistory(
-            //     [
-            //         'field' => 'outline',
-            //         'content' => $response['content']
-            //     ],
-            //     $response['token_usage']
-            // );
+
+            AudioGenerated::dispatchIf($this->meta['user_id'] ?? false, $this->document, $this->meta['user_id']);
+
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to convert text to audio: ' . $e->getMessage());

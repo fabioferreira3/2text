@@ -91,6 +91,7 @@ class GenRepository
     {
         $repo = new DocumentRepository($document);
         $processId = Str::uuid();
+        $repo->updateMeta('paraphrased_sentences', []);
         $repo->createTask(DocumentTaskEnum::PARAPHRASE_DOCUMENT, [
             'order' => $initialOrder,
             'process_id' => $processId,
@@ -100,6 +101,7 @@ class GenRepository
                 'user_id' => Auth::check() ? Auth::user()->id : null
             ]
         ]);
+        DispatchDocumentTasks::dispatch($document);
     }
 
     public static function paraphraseText(Document $document, array $params)
@@ -125,8 +127,12 @@ class GenRepository
             'order' => 1,
             'process_id' => $params['process_id'] ?? Str::uuid(),
             'meta' => [
-                'text' => $params['text']
+                'text' => $params['text'],
+                'voice' => $params['voice'],
+                'user_id' => Auth::check() ? Auth::user()->id : null
             ]
         ]);
+
+        DispatchDocumentTasks::dispatch($document);
     }
 }

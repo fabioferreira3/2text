@@ -21,7 +21,7 @@ class Paraphraser extends Component
     public $language = null;
     public bool $copied = false;
     public bool $copiedAll = false;
-    public bool $isSaving;
+    public $isSaving;
 
     protected $rules = [
         'inputText' => 'required|string',
@@ -51,11 +51,6 @@ class Paraphraser extends Component
     {
         $this->isSaving = false;
         $this->setup($document);
-    }
-
-    public function checkCompleteness()
-    {
-        $this->isSaving = !$this->document->is_completed;
     }
 
     public function setup($document)

@@ -1,4 +1,4 @@
-<div class="">
+<div>
     @include('livewire.common.header', ['icon' => 'switch-horizontal', 'label' => __('paraphraser.paraphrase_text')])
     <div class="flex flex-col md:flex-row items-center justify-center gap-4 border-b py-4">
         <div class="flex items-center gap-4 justify-between w-full md:justify-start md:w-auto">
@@ -34,7 +34,7 @@
                                 <x-icon class="w-5 h-5" :name="$copiedAll ? 'check' : 'clipboard-copy'"/>
                                 <div class="font-bold">{{$copiedAll ? __('common.copied') : __('common.copy')}}</div>
                             </button>
-                            @livewire('common.generate-audio', ['document' => $document, 'text' => $document->paraphrased_text, 'language' => $language])
+                            @livewire('common.generate-audio', ['document' => $document, 'language' => $language])
                         </div>
                     @endif
                 </div>
@@ -82,8 +82,8 @@
                         @endif
                     </div>
                     @if ($isSaving)
-                        <div class="absolute top-0 left-0 h-96 overflow-auto w-full bg-main rounded-lg opacity-70 z-50"></div>
-                        <div class="absolute top-4 left-4 text-white h-full text-3xl z-50">Paraphrasing...</div>
+                        <div class="absolute top-0 left-0 h-96 overflow-auto w-full bg-zinc-700 rounded-lg opacity-70 z-50"></div>
+                        <div class="absolute top-4 font-bold left-4 text-white h-full text-3xl z-50">Processing...</div>
                     @endif
                     <div class="relative border border-zinc-200 h-96 overflow-auto rounded-lg p-4">
                         @foreach ($outputText as $index => $sentence)
@@ -119,10 +119,10 @@
             @endif
         </div>
     </div>
-    <div wire:poll="checkCompleteness" class="hidden md:w-1/2 md:flex md:justify-center">
+    <div class="hidden md:w-1/2 md:flex md:justify-center">
         <button wire:target="paraphraseAll,paraphraseSentence" :disabled="$isSaving" class="mt-4 text-base bg-secondary duration-700 hover:bg-main text-white font-bold py-2 px-4 rounded-lg" wire:click="paraphraseAll">
             @if(!$isSaving)<span wire:target="paraphraseAll,paraphraseSentence">{{ __('paraphraser.paraphrase') }}</span>@endif
-            @if($isSaving)<span wire:target="paraphraseAll,paraphraseSentence">{{ __('paraphraser.paraphrasing') }}</span>@endif
+            @if($isSaving)<span wire:target="paraphraseAll,paraphraseSentence">{{ __('paraphraser.processing') }}</span>@endif
         </button>
     </div>
 </div>

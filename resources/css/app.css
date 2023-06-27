@@ -46,3 +46,22 @@ textarea {
 .accordion-content {
     border-top: none !important;
 }
+
+@layer components {
+    .loader {
+        border-top-color: #3498db;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loader {
+    animation: spin 2s linear infinite;
+}

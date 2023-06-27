@@ -22,7 +22,7 @@ class Document extends Model
 
     protected $guarded = ['id'];
     protected $casts = ['type' => DocumentType::class, 'language' => Language::class, 'meta' => 'array'];
-    protected $appends = ['normalized_structure', 'paraphrased_text', 'context', 'is_completed', 'source', 'tone', 'style'];
+    protected $appends = ['normalized_structure', 'content', 'context', 'is_completed', 'source', 'tone', 'style'];
 
     public function history(): HasMany
     {
@@ -58,13 +58,25 @@ class Document extends Model
 
     public function getParaphrasedTextAttribute()
     {
-        if ($this->type === DocumentType::PARAPHRASED_TEXT->value && ($this->meta['paraphrased_sentences'] ?? false)) {
+        if ($this->type === DocumentType::PARAPHRASED_TEXT && ($this->meta['paraphrased_sentences'] ?? false)) {
             return collect($this->meta['paraphrased_sentences'])->sortBy('sentence_order')->map(function ($sentence) {
                 return $sentence['text'];
             })->implode(' ');
         }
 
         return null;
+    }
+
+    public function getContentAttribute()
+    {
+        switch ($this->type) {
+            case DocumentType::PARAPHRASED_TEXT:
+                return ($this->meta['paraphrased_sentences'] ?? false) ? collect($this->meta['paraphrased_sentences'])->sortBy('sentence_order')->map(function ($sentence) {
+                    return $sentence['text'];
+                })->implode(' ') : null;
+            default:
+                return $this->content;
+        }
     }
 
     public function getIsCompletedAttribute()
