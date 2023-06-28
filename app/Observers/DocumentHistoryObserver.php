@@ -21,6 +21,7 @@ class DocumentHistoryObserver
                 'prompt' => $documentHistory->prompt_token_usage,
                 'completion' => $documentHistory->completion_token_usage,
                 'audio_length' => $documentHistory->audio_length,
+                'char_count' => $documentHistory->char_count,
                 'total' => $documentHistory->total_token_usage
             ]);
         }

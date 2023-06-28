@@ -95,7 +95,8 @@ class DocumentRepository
         $this->document->history()->create([
             'description' => $payload['field'],
             'content' => $content,
-            'word_count' => Str::wordCount($content),
+            'word_count' => $payload['word_count'] ?? Str::wordCount($content),
+            'char_count' => $payload['char_count'] ?? Str::wordCount($content),
             'prompt_token_usage' => $tokenUsage['prompt'] ?? 0,
             'completion_token_usage' => $tokenUsage['completion'] ?? 0,
             'total_token_usage' => $tokenUsage['total'] ?? 0,

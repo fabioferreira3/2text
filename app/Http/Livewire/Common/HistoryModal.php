@@ -61,6 +61,7 @@ class HistoryModal extends Component
                 'id' => $item->id,
                 'content' => $item->content,
                 'word_count' => $item->word_count,
+                'char_count' => $item->char_count,
                 'created_at' => $item->created_at->format('m/d/Y - h:ia')
             ];
         });

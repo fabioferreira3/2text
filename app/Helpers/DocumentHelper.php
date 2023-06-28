@@ -61,6 +61,8 @@ class DocumentHelper
             return (($tokenUsage['prompt'] / 1000) * 0.06) + (($tokenUsage['completion'] / 1000) * 0.12);
         } else if (in_array($model, [LanguageModels::WHISPER->value])) {
             return $tokenUsage['audio_length'] * 0.006;
+        } else if (in_array($model, [LanguageModels::POLLY->value])) {
+            return $tokenUsage['char_count'] * 0.000016;
         } else {
             return 0;
         }

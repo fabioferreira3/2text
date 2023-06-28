@@ -2,6 +2,7 @@
 
 namespace App\Jobs\TextToSpeech;
 
+use App\Enums\LanguageModels;
 use App\Events\AudioGenerated;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
@@ -45,15 +46,24 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
+            Log::debug($this->meta);
             $fileName = Str::uuid() . '.mp3';
             $path = TextToSpeech::disk('s3')
+                ->language($this->meta['iso_language'])
                 ->saveTo($fileName)
                 ->convert($this->meta['text'], [
                     'voice' => $this->meta['voice'],
                     'engine' => 'neural'
                 ]);
             $this->repo->updateMeta('audio_file', $path);
-
+            $this->repo->addHistory([
+                'field' => 'audio_generation',
+                'content' => $fileName,
+                'word_count' => Str::wordCount($this->meta['text']),
+                'char_count' => iconv_strlen($this->meta['text'])
+            ], [
+                'model' => LanguageModels::POLLY->value
+            ]);
             AudioGenerated::dispatchIf($this->meta['user_id'] ?? false, $this->document, $this->meta['user_id']);
 
             $this->jobSucceded();

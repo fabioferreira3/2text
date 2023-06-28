@@ -117,9 +117,11 @@ class TextToAudio extends Component
         } else {
             $this->document->update(['content' => $this->inputText]);
         }
+        $this->document->update(['language' => $this->language]);
 
         GenRepository::textToSpeech($this->document, [
             'voice' => $voice['value'],
+            'iso_language' => $voice['iso'],
             'text' => $this->inputText
         ]);
     }
