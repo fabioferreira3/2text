@@ -75,7 +75,7 @@ class Document extends Model
                     return $sentence['text'];
                 })->implode(' ') : null;
             default:
-                return $this->content;
+                return $this->attributes['content'];
         }
     }
 

@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Enums\DocumentTaskEnum;
+use App\Enums\DocumentType;
+use App\Enums\SourceProvider;
 use App\Enums\Tone;
 use App\Helpers\PromptHelper;
 use App\Models\Document;
@@ -56,6 +58,21 @@ class DocumentRepository
                 'keyword' => $params['meta']['keyword'] ?? null,
                 'platforms' => $params['meta']['platforms'],
                 'more_instructions' => $params['meta']['more_instructions'] ?? null
+            ]
+        ]);
+    }
+
+    public function createTextToSpeech(array $params): Document
+    {
+        return Document::create([
+            ...$params,
+            'title' => '',
+            'type' => DocumentType::TEXT_TO_SPEECH->value,
+            'content' => $params['text'],
+            'language' => $params['language'],
+            'meta' => [
+                'source' => SourceProvider::FREE_TEXT->value,
+                'voice' => $params['voice']
             ]
         ]);
     }
