@@ -3,7 +3,7 @@
     <div class="flex flex-col md:flex-row items-center justify-center gap-4 border-b py-4">
         <div class="flex items-center gap-4 justify-between w-full md:justify-start md:w-auto">
             <div class="mr-4 font-bold">Language:</div>
-            <select name="language" wire:model="language" wire:change="change" class="p-3 w-64 rounded-lg border border-zinc-200">
+            <select name="language" wire:model="language" wire:change="changeLanguage" class="p-3 w-64 rounded-lg border border-zinc-200">
                 <option value="en">English</option>
                 <option value="es">Spanish</option>
                 <option value="pt">Portuguese</option>
@@ -15,8 +15,11 @@
             <div class="flex items-center">
                 @include('livewire.common.label', ['title' => __('text-to-speech.input_text')])
             </div>
-            <textarea rows="10" class="w-full p-4 border border-zinc-200 rounded-lg" wire:model="inputText"></textarea>
-            <button class="bg-secondary transition-colors ease-in-out duration-500 delay-150 hover:bg-main text-xl font-bold px-4 py-2 rounded-lg text-sm text-zinc-200">
+            <textarea rows="10" wire:model="inputText" class="w-full p-4 border border-zinc-200 rounded-lg" wire:model="inputText"></textarea>
+            @if($errors->has('inputText'))
+                <span class="text-red-500 text-sm">{{ $errors->first('inputText') }}</span>
+            @endif
+            <button wire:click="generate" class="bg-secondary transition-colors ease-in-out duration-500 delay-150 hover:bg-main text-xl font-bold px-4 py-2 rounded-lg text-sm text-zinc-200">
                 Generate audio
             </button>
         </div>

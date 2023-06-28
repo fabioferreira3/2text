@@ -4,6 +4,7 @@ namespace App\Http\Livewire\TextToSpeech;
 
 use App\Enums\Language;
 use App\Helpers\AudioHelper;
+use App\Repositories\GenRepository;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 
@@ -13,6 +14,7 @@ class TextToAudio extends Component
     protected $repo;
     public $inputText = '';
     public $voices;
+    public $selectedVoice;
     public $language = null;
     public $isSaving;
     public $isPlaying;
@@ -70,9 +72,23 @@ class TextToAudio extends Component
         return Storage::download($this->currentAudioFile);
     }
 
-    public function change()
+    public function changeLanguage()
     {
         $this->voices = AudioHelper::getVoicesByLanguage(Language::from($this->language));
+    }
+
+    public function changeVoice()
+    {
+        //$this->selectedVoiceObj = $this->voices->where('value', $this->selectedVoice)->first();
+    }
+
+    public function generate()
+    {
+        $this->validate();
+        GenRepository::textToSpeech($this->document, [
+            'voice' => $this->selectedVoiceObj['value'],
+            'text' => $this->document->content
+        ]);
     }
 
     public function render()
