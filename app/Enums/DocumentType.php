@@ -27,7 +27,8 @@ enum DocumentType: string
             self::BLOG_POST->value => 'blog-post-view',
             self::PARAPHRASED_TEXT->value => 'paraphrase-view',
             self::TEXT_TRANSCRIPTION->value => 'transcription-view',
-            self::SOCIAL_MEDIA_POST->value => 'social-media-post-view'
+            self::TEXT_TO_SPEECH->value => 'text-to-speech-view',
+            self::SOCIAL_MEDIA_POST->value => 'social-media-post-view',
         ];
     }
 

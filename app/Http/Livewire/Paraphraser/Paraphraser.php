@@ -22,6 +22,7 @@ class Paraphraser extends Component
     public bool $copied = false;
     public bool $copiedAll = false;
     public $isSaving;
+    public string $processId = '';
 
     protected $rules = [
         'inputText' => 'required|string',
@@ -37,19 +38,15 @@ class Paraphraser extends Component
         $userId = Auth::user()->id;
         return [
             "echo-private:User.$userId,.TextParaphrased" => 'notify',
+            "echo-private:User.$userId,.ProcessFinished" => 'processFinished',
             'select',
         ];
-    }
-
-    public function notify()
-    {
-        $this->document->refresh();
-        $this->setup($this->document);
     }
 
     public function mount(Document $document)
     {
         $this->isSaving = false;
+        $this->processId;
         $this->setup($document);
     }
 
@@ -76,6 +73,18 @@ class Paraphraser extends Component
         }
     }
 
+    public function notify()
+    {
+        $this->document->refresh();
+        $this->setup($this->document);
+    }
+
+    public function processFinished(array $params)
+    {
+        $this->isSaving = !($params['process_id'] === $this->processId);
+        $this->processId = '';
+    }
+
     public function copy()
     {
         $this->emit('addToClipboard', $this->selectedSentence['paraphrased']);
@@ -97,7 +106,7 @@ class Paraphraser extends Component
     {
         $this->isSaving = true;
         $this->copied = false;
-        GenRepository::paraphraseText($this->document, [
+        $this->processId = GenRepository::paraphraseText($this->document, [
             'text' => $this->selectedSentence['original'],
             'sentence_order' => $this->selectedSentenceIndex + 1,
             'tone' => $this->tone
@@ -117,7 +126,7 @@ class Paraphraser extends Component
         $originalSentencesArray = DocumentHelper::breakTextIntoSentences($this->inputText);
         $repo->updateMeta('original_sentences', $originalSentencesArray);
 
-        GenRepository::paraphraseDocument($this->document);
+        $this->processId = GenRepository::paraphraseDocument($this->document);
     }
 
     public function saveDoc()

@@ -11,5 +11,6 @@
         @livewire('blog.template')
         @livewire('text-transcription.template')
         @livewire('paraphraser.template')
+        @livewire('text-to-speech.template')
     </div>
 </div>

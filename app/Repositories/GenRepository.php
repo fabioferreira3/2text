@@ -87,29 +87,44 @@ class GenRepository
         );
     }
 
-    public static function paraphraseDocument(Document $document, $initialOrder = 1)
+    public static function paraphraseDocument(Document $document)
     {
+        $document->refresh();
         $repo = new DocumentRepository($document);
         $processId = Str::uuid();
-        $repo->updateMeta('paraphrased_sentences', []);
-        $repo->createTask(DocumentTaskEnum::PARAPHRASE_DOCUMENT, [
-            'order' => $initialOrder,
+
+        foreach ($document->meta['original_sentences'] as $sentence) {
+            $repo->createTask(DocumentTaskEnum::PARAPHRASE_TEXT, [
+                'order' => 1,
+                'process_id' => $processId,
+                'meta' => [
+                    'text' => $sentence['text'],
+                    'sentence_order' => $sentence['sentence_order'],
+                    'user_id' => Auth::check() ? Auth::user()->id : null
+                ]
+            ]);
+        }
+
+        $repo->createTask(DocumentTaskEnum::REGISTER_FINISHED_PROCESS, [
+            'order' => 99,
             'process_id' => $processId,
             'meta' => [
-                'process_id' => $processId,
-                'initial_order' => $initialOrder,
                 'user_id' => Auth::check() ? Auth::user()->id : null
             ]
         ]);
+
         DispatchDocumentTasks::dispatch($document);
+
+        return $processId;
     }
 
     public static function paraphraseText(Document $document, array $params)
     {
+        $processId = $params['process_id'] ?? Str::uuid();
         $repo = new DocumentRepository($document);
         $repo->createTask(DocumentTaskEnum::PARAPHRASE_TEXT, [
             'order' => $params['order'] ?? 1,
-            'process_id' => $params['process_id'] ?? Str::uuid(),
+            'process_id' => $processId,
             'meta' => [
                 'text' => $params['text'],
                 'sentence_order' => $params['sentence_order'],
@@ -117,7 +132,10 @@ class GenRepository
                 'user_id' => Auth::check() ? Auth::user()->id : null
             ]
         ]);
+
         DispatchDocumentTasks::dispatch($document);
+
+        return $processId;
     }
 
     public static function textToSpeech($document, array $params = [])

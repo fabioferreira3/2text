@@ -1,4 +1,4 @@
-<div class="flex">
+<div class="flex" x-data="{}" x-on:click.away="window.livewire.emit('toggle-audio-menu')">
     <div class="relative">
     <button class="flex items-center gap-2 bg-zinc-200 hover:text-zinc-200 hover:bg-zinc-500 px-4 py-2 rounded-lg text-sm text-zinc-600" wire:click='toggle'>
         <x-icon class="w-5 h-5" name="volume-up"/>
@@ -11,7 +11,9 @@
                     <x-icon wire:click="toggle" solid name="x-circle" class="cursor-pointer w-5 h-5 text-white" />
                 </div>
                 @if ($isProcessing)
-                    <x-loader/>
+                    <div class="py-4">
+                        <x-loader/>
+                    </div>
                 @endif
 
                 @if ($currentAudioFile && !$isProcessing)

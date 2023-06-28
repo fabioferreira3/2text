@@ -10,9 +10,12 @@ use App\Http\Livewire\Paraphraser\Paraphraser;
 use App\Http\Livewire\SocialMediaPost\NewSocialMediaPost;
 use App\Http\Livewire\SocialMediaPost\PostsList;
 use App\Http\Livewire\Templates;
+use App\Http\Livewire\TextToSpeech\NewTextToSpeech;
+use App\Http\Livewire\TextToSpeech\TextToAudio;
 use App\Http\Livewire\TextTranscription\NewTranscription;
 use App\Http\Livewire\TextTranscription\TextTranscription;
 use App\Http\Livewire\Trash;
+use Cion\TextToSpeech\Facades\TextToSpeech;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -55,6 +58,10 @@ Route::middleware([
     /* Paraphraser routes */
     Route::get('/paraphraser/new', NewParaphraser::class)->name('new-paraphraser');
     Route::get('/documents/paraphraser/{document}', Paraphraser::class)->name('paraphrase-view');
+
+    /* Text to Speech routes */
+    Route::get('/text-to-speech/new', TextToAudio::class)->name('new-text-to-speech');
+    Route::get('/documents/text-to-speech/{document}', TextToAudio::class)->name('text-to-speech-view');
 
     Route::get('/documents/{document}', [DocumentViewController::class, 'index'])->name('document-view');
 });

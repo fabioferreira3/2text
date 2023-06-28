@@ -53,10 +53,10 @@
                     <span class="text-red-500 text-sm">{{ $errors->first('inputText') }}</span>
                     @endif
                 </div>
-                <div class="md:hidden border-b w-full py-6 flex justify-center">
-                    <button class="md:mt-4 flex items-center gap-2 bg-secondary duration-700 hover:bg-main text-white font-bold py-2 px-4 rounded-lg" wire:click="paraphraseAll">
-                        <x-icon name="arrow-circle-down" class="w-5 h-5" />
-                        <span>{{ __('paraphraser.paraphrase') }}</span>
+                <div class="hidden w-full md:flex md:justify-center">
+                    <button wire:target="paraphraseAll,paraphraseSentence" :disabled="$isSaving" class="mt-4 text-base bg-secondary duration-700 hover:bg-main text-white font-bold py-2 px-4 rounded-lg" wire:click="paraphraseAll">
+                        @if(!$isSaving)<span wire:target="paraphraseAll,paraphraseSentence">{{ __('paraphraser.paraphrase') }}</span>@endif
+                        @if($isSaving)<span wire:target="paraphraseAll,paraphraseSentence">{{ __('paraphraser.processing') }}</span>@endif
                     </button>
                 </div>
             </div>
@@ -82,8 +82,10 @@
                         @endif
                     </div>
                     @if ($isSaving)
-                        <div class="absolute top-0 left-0 h-96 overflow-auto w-full bg-zinc-700 rounded-lg opacity-70 z-50"></div>
-                        <div class="absolute top-4 font-bold left-4 text-white h-full text-3xl z-50">Processing...</div>
+                        <div class="absolute top-0 left-0 h-96 overflow-auto w-full bg-zinc-300 rounded-lg opacity-70 z-30"></div>
+                        <div class="z-40 absolute flex items-center justify-center h-full w-full">
+                            <x-loader color="zinc-700" height="14" width="14"/>
+                        </div>
                     @endif
                     <div class="relative border border-zinc-200 h-96 overflow-auto rounded-lg p-4">
                         @foreach ($outputText as $index => $sentence)
@@ -118,11 +120,5 @@
                 </div>
             @endif
         </div>
-    </div>
-    <div class="hidden md:w-1/2 md:flex md:justify-center">
-        <button wire:target="paraphraseAll,paraphraseSentence" :disabled="$isSaving" class="mt-4 text-base bg-secondary duration-700 hover:bg-main text-white font-bold py-2 px-4 rounded-lg" wire:click="paraphraseAll">
-            @if(!$isSaving)<span wire:target="paraphraseAll,paraphraseSentence">{{ __('paraphraser.paraphrase') }}</span>@endif
-            @if($isSaving)<span wire:target="paraphraseAll,paraphraseSentence">{{ __('paraphraser.processing') }}</span>@endif
-        </button>
     </div>
 </div>
