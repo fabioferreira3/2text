@@ -14,7 +14,6 @@ class GenerateAudio extends Component
     public Document $document;
     public $menuOpen;
     public $selectedVoice = null;
-    public $selectedVoiceObj = null;
     public $language;
     public $voices;
     public $isProcessing;
@@ -26,7 +25,7 @@ class GenerateAudio extends Component
     {
         $userId = Auth::user()->id;
         return [
-            "echo-private:User.$userId,.AudioGenerated" => 'ready',
+            "echo-private:User.$userId,.AlocaldioGenerated" => 'ready',
             'stop-audio' => 'stopAudio',
             'toggle-audio-menu' => 'toggle'
         ];
@@ -109,14 +108,11 @@ class GenerateAudio extends Component
             'message' => "Your audio is being generated!"
         ]);
         $this->isProcessing = true;
+        $voice = $this->voices->where('value', $this->selectedVoice)->first();
         GenRepository::textToSpeech($this->document, [
-            'voice' => $this->selectedVoiceObj['value'],
+            'voice' => $voice['value'],
+            'iso_language' => $voice['iso'],
             'text' => $this->document->content
         ]);
-    }
-
-    public function updated()
-    {
-        $this->selectedVoiceObj = $this->voices->where('value', $this->selectedVoice)->first();
     }
 }

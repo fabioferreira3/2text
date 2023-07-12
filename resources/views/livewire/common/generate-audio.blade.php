@@ -33,7 +33,7 @@
                     @foreach($voices as $key => $voice)
                     <div class="flex items-center justify-between px-4 py-2 border border-t-0 border-x-0 border-b">
                         <div class="flex items-center gap-2">
-                            <input value={{$voice['value']}} wire:model="selectedVoice" type="radio" name="garai" class="cursor-pointer border-zinc-500 checked:bg-secondary checked:hover:bg-secondary checked:active:bg-secondary checked:focus:bg-secondary focus:bg-secondary focus:outline-none focus:ring-1 focus:ring-secondary" />
+                            <input value={{$voice['value']}} wire:model="selectedVoice" type="radio" class="cursor-pointer border-zinc-500 checked:bg-secondary checked:hover:bg-secondary checked:active:bg-secondary checked:focus:bg-secondary focus:bg-secondary focus:outline-none focus:ring-1 focus:ring-secondary" />
                             <label class="text-zinc-500">{{$voice['label']}}</label>
                         </div>
                         <div wire:click="playAudio('{{$voice['id']}}')">
