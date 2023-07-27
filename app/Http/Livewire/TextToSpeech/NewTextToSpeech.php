@@ -52,7 +52,8 @@ class NewTextToSpeech extends Component
 
     public function render()
     {
-        return view('livewire.text-to-speech.text-to-speech')->layout('layouts.app', ['title' => $this->title]);
+        return view('livewire.text-to-speech.text-to-speech')
+            ->layout('layouts.app', ['title' => $this->title]);
     }
 
     protected $rules = [
