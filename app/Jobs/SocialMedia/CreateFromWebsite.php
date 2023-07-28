@@ -34,16 +34,6 @@ class CreateFromWebsite
     public function handle()
     {
         $repo = new DocumentRepository($this->document);
-
-        $repo->createTask(
-            DocumentTaskEnum::CRAWL_WEBSITE,
-            [
-                'process_id' => $this->params['process_id'],
-                'meta' => [],
-                'order' => 2
-            ]
-        );
-
         $repo->createTask(
             DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST,
             [

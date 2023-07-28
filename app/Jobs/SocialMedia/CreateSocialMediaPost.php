@@ -38,21 +38,31 @@ class CreateSocialMediaPost
 
         $document->refresh();
 
-        $platforms = collect($document->meta['platforms'])
-            ->filter(function ($value, $key) {
-                return $value;
-            })
-            ->keys();
-        $platforms->each(function ($platform) use ($document) {
-            CreateFromFreeText::dispatchIf(
-                $this->params['source'] === 'free_text',
-                $document,
-                [...$this->params, 'platform' => $platform]
+        if ($this->params['source'] === 'website_url') {
+            $this->repo->createTask(
+                DocumentTaskEnum::CRAWL_WEBSITE,
+                [
+                    'process_id' => $this->params['process_id'],
+                    'meta' => [],
+                    'order' => 2
+                ]
             );
-            CreateFromWebsite::dispatchIf(
-                $this->params['source'] === 'website_url',
-                $document,
-                [...$this->params, 'platform' => $platform]
+        }
+
+        $platforms = collect($document->meta['platforms'])
+            ->filter(function ($value) {
+                return $value;
+            })->keys();
+        $platforms->each(function ($platform, $index) {
+            $this->repo->createTask(
+                DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST,
+                [
+                    'process_id' => $this->params['process_id'],
+                    'meta' => [
+                        'platform' => $platform,
+                    ],
+                    'order' => 3 + $index
+                ]
             );
         });
 
