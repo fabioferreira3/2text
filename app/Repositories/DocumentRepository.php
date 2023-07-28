@@ -9,6 +9,7 @@ use App\Enums\Tone;
 use App\Helpers\PromptHelper;
 use App\Models\Document;
 use App\Models\DocumentTask;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class DocumentRepository
@@ -57,7 +58,8 @@ class DocumentRepository
                 'source_url' => $params['meta']['source_url'] ?? null,
                 'keyword' => $params['meta']['keyword'] ?? null,
                 'platforms' => $params['meta']['platforms'],
-                'more_instructions' => $params['meta']['more_instructions'] ?? null
+                'more_instructions' => $params['meta']['more_instructions'] ?? null,
+                'user_id' => Auth::check() ? Auth::id() : null,
             ]
         ]);
     }

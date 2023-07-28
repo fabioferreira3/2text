@@ -15,6 +15,7 @@ use App\Http\Livewire\TextToSpeech\TextToAudio;
 use App\Http\Livewire\TextTranscription\NewTranscription;
 use App\Http\Livewire\TextTranscription\TextTranscription;
 use App\Http\Livewire\Trash;
+use App\Mail\FinishedProcessEmail;
 use Cion\TextToSpeech\Facades\TextToSpeech;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
@@ -38,6 +39,14 @@ Route::middleware([
 ])->group(function () {
     Route::get('/', function () {
         return redirect('/dashboard');
+    });
+    Route::get('/email/preview', function () {
+        return new FinishedProcessEmail([
+            'name' => 'Fabio',
+            'link' => 'https://jw.org',
+            'subject' => 'eita',
+            'jobName' => 'Blog post'
+        ]);
     });
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/dashboard/trash', Trash::class)->name('trash');

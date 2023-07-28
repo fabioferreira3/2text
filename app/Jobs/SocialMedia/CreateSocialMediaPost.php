@@ -8,6 +8,8 @@ use App\Jobs\DispatchDocumentTasks;
 use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class CreateSocialMediaPost
@@ -74,6 +76,12 @@ class CreateSocialMediaPost
                 'order' => 99
             ]
         );
+
+        $this->repo->createTask(DocumentTaskEnum::REGISTER_FINISHED_PROCESS, [
+            'order' => 100,
+            'process_id' => $this->params['process_id'],
+            'meta' => []
+        ]);
 
         DispatchDocumentTasks::dispatch($document);
     }
