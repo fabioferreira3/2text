@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Events\UserCreated;
 use App\Models\Account;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -26,6 +27,8 @@ class UserRepository
             'account_id' => $account->id
         ]);
 
+        event(new UserCreated($user));
+
         return $user;
     }
 
@@ -40,6 +43,8 @@ class UserRepository
             'account_id' => $account->id,
             ...$input
         ]);
+
+        event(new UserCreated($user));
 
         return $user;
     }

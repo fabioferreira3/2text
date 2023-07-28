@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Events\DocumentTaskFailed;
 use App\Events\DocumentTaskFinished;
+use App\Events\UserCreated;
 use App\Listeners\HandleFailedDocumentTask;
 use App\Listeners\HandleFinishedDocumentTask;
 use App\Listeners\HandleFinishedProcess;
+use App\Listeners\HandleNewUserNotification;
 use App\Models\DocumentHistory;
 use App\Observers\DocumentHistoryObserver;
 use Illuminate\Auth\Events\Registered;
@@ -31,6 +33,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         DocumentTaskFailed::class => [
             HandleFailedDocumentTask::class
+        ],
+        UserCreated::class => [
+            HandleNewUserNotification::class
         ],
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
             \SocialiteProviders\Google\GoogleExtendSocialite::class . '@handle',
