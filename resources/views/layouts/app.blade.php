@@ -91,7 +91,11 @@
 
         let currentAudio = null;
 
-        window.addEventListener('play-audio', ({ detail: { id }}) => {
+        window.addEventListener('play-audio', ({
+            detail: {
+                id
+            }
+        }) => {
             if (currentAudio) {
                 // Remove existing listener to avoid duplicate event triggers.
                 currentAudio.removeEventListener('ended', audioEndedHandler);
@@ -121,8 +125,7 @@
             });
         });
 
-        window.Echo.connector.pusher.connection.bind('connected', function() {});
-
+        // window.Echo.connector.pusher.connection.bind('connected', function() {});
     </script>
 </body>
 
