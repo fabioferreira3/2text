@@ -23,7 +23,7 @@ services:
     #     environment:
     #         ASR_MODEL: "large"
     laravel.test:
-        container_name: bloggable-app
+        container_name: experior-app
         build:
             context: ./docker/8.2
             dockerfile: Dockerfile
@@ -48,7 +48,7 @@ services:
             - db
             - redis
     db:
-        container_name: bloggable-db
+        container_name: experior-db
         image: "postgres:15"
         ports:
             - "8006:5432"
@@ -63,7 +63,7 @@ services:
         networks:
             - twotext
     redis:
-        container_name: bloggable-redis
+        container_name: experior-redis
         image: "redis:alpine"
         ports:
             - "${FORWARD_REDIS_PORT:-6379}:6379"

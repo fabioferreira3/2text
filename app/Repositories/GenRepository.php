@@ -9,7 +9,6 @@ use App\Helpers\PromptHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class GenRepository
@@ -141,7 +140,6 @@ class GenRepository
 
     public static function textToSpeech($document, array $params = [])
     {
-        Log::debug($params);
         $repo = new DocumentRepository($document);
         $repo->createTask(DocumentTaskEnum::TEXT_TO_SPEECH, [
             'order' => 1,

@@ -47,7 +47,6 @@ class DispatchDocumentTasks implements ShouldQueue, ShouldBeUnique
                 $jobsChain[] = new $class($task->document, [
                     ...$task->meta,
                     'task_id' => $task->id,
-                    'user_id' => Auth::check() ? Auth::user()->id : null,
                     'process_id' => $task->process_id,
                     'order' => $task->order,
                 ]);

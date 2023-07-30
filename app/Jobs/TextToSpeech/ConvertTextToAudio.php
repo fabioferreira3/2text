@@ -15,7 +15,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
@@ -46,7 +45,6 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            Log::debug($this->meta);
             $fileName = Str::uuid() . '.mp3';
             $path = TextToSpeech::disk('s3')
                 ->language($this->meta['iso_language'])
