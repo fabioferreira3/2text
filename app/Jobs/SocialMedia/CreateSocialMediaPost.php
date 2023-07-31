@@ -8,8 +8,6 @@ use App\Jobs\DispatchDocumentTasks;
 use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class CreateSocialMediaPost
@@ -47,6 +45,25 @@ class CreateSocialMediaPost
                     'process_id' => $this->params['process_id'],
                     'meta' => [],
                     'order' => 2
+                ]
+            );
+        } elseif ($this->params['source'] === 'youtube') {
+            $this->repo->createTask(
+                DocumentTaskEnum::DOWNLOAD_AUDIO,
+                [
+                    'process_id' => $this->params['process_id'],
+                    'meta' => [
+                        'source_url' => $document['meta']['source_url']
+                    ],
+                    'order' => 2
+                ]
+            );
+            $this->repo->createTask(
+                DocumentTaskEnum::PROCESS_AUDIO,
+                [
+                    'process_id' => $this->params['process_id'],
+                    'meta' => [],
+                    'order' => 3
                 ]
             );
         }
