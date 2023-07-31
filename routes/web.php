@@ -40,14 +40,6 @@ Route::middleware([
     Route::get('/', function () {
         return redirect('/dashboard');
     });
-    Route::get('/email/preview', function () {
-        return new FinishedProcessEmail([
-            'name' => 'Fabio',
-            'link' => 'https://jw.org',
-            'subject' => 'eita',
-            'jobName' => 'Blog post'
-        ]);
-    });
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/dashboard/trash', Trash::class)->name('trash');
     Route::get('/templates', Templates::class)->name('templates');
