@@ -40,19 +40,11 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        function unicodeToPlainText($text)
-        {
-            $decodedText = json_decode(sprintf('"%s"', $text));
-
-            // Check if json_decode fails, which means the text probably didn't have unicode sequences
-            if ($decodedText === null) {
-                return $text;
-            }
-
-            return $decodedText;
-        }
         try {
-            Artisan::call('crawl', ['url' => $this->document['meta']['source_url'], '--html' => $this->meta['parse_html'] ?? false]);
+            Artisan::call('crawl', [
+                'url' => $this->document['meta']['source_url'],
+                '--html' => $this->meta['parse_html'] ?? false
+            ]);
             $websiteContent = Artisan::output();
 
             $this->document->update([
@@ -60,11 +52,12 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
                     ...$this->document->meta,
                     'context' => $websiteContent,
                     'original_text' => $websiteContent,
-                    'original_sentences' => ($this->meta['parse_sentences'] ?? false) ? DocumentHelper::breakTextIntoSentences(unicodeToPlainText($websiteContent)) : null
+                    'original_sentences' => ($this->meta['parse_sentences'] ?? false) ?
+                        DocumentHelper::breakTextIntoSentences($this->unicodeToPlainText($websiteContent)) : null
                 ]
             ]);
 
-            WebsiteCrawled::dispatchIf($this->meta['user_id'] ?? false, $this->meta['user_id']);
+            WebsiteCrawled::dispatchIf($this->document->meta['user_id'] ?? false, $this->document->meta['user_id']);
 
             $this->jobSucceded();
         } catch (Exception $e) {
@@ -78,5 +71,17 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
     public function uniqueId(): string
     {
         return 'crawl_website_' . $this->meta['process_id'] ?? $this->document->id;
+    }
+
+    private function unicodeToPlainText($text)
+    {
+        $decodedText = json_decode(sprintf('"%s"', $text));
+
+        // Check if json_decode fails, which means the text probably didn't have unicode sequences
+        if ($decodedText === null) {
+            return $text;
+        }
+
+        return $decodedText;
     }
 }
