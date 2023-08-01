@@ -69,7 +69,13 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
                 Storage::disk('local')->delete('compressed_' . $this->document->meta['audio_file_path']);
             }
 
-            $this->document->update(['meta' => [...$this->document->meta, 'context' => $response['text'], 'original_text' => $response['text']]]);
+            $this->document->update([
+                'meta' => [
+                    ...$this->document->meta,
+                    'context' => $response['text'],
+                    'original_text' => $response['text']
+                ]
+            ]);
 
             $repo = new DocumentRepository($this->document);
             $repo->addHistory(
@@ -84,7 +90,7 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
             );
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Audio download error: ' . $e->getMessage());
+            $this->jobFailed('Audio processing error: ' . $e->getMessage());
         }
     }
 

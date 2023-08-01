@@ -31,23 +31,31 @@ class CreateTranscription
     public function handle()
     {
         $document = $this->repo->createGeneric($this->params);
+        $processId = Str::uuid();
         $this->repo->setDocument($document);
         $this->repo->createTask(
             DocumentTaskEnum::DOWNLOAD_AUDIO,
             [
+                'process_id' => $processId,
                 'meta' => [
                     'source_url' => $document['meta']['source_url']
                 ],
                 'order' => 1
             ]
         );
-        $this->repo->createTask(DocumentTaskEnum::PROCESS_AUDIO, ['order' => 2]);
+        $this->repo->createTask(DocumentTaskEnum::PROCESS_AUDIO, [
+            'order' => 2,
+            'process_id' => $processId,
+        ]);
         if ($this->params['target_language'] !== 'same') {
-            $this->repo->createTask(DocumentTaskEnum::TRANSLATE_TEXT, ['order' => 3, 'meta' => [
-                'target_language' => Language::from($this->params['target_language'])->name
-            ]]);
+            $this->repo->createTask(DocumentTaskEnum::TRANSLATE_TEXT, [
+                'order' => 3,
+                'process_id' => $processId, 'meta' => [
+                    'target_language' => Language::from($this->params['target_language'])->name
+                ]
+            ]);
         }
-        $this->repo->createTask(DocumentTaskEnum::PUBLISH_TRANSCRIPTION, ['order' => 4]);
+        $this->repo->createTask(DocumentTaskEnum::PUBLISH_TRANSCRIPTION, ['order' => 4, 'process_id' => $processId]);
         DispatchDocumentTasks::dispatch($document);
     }
 }
