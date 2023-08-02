@@ -59,7 +59,7 @@ class PromptHelper
     public function writeOutline($context, array $params)
     {
         $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
-        $prompt = Lang::get('prompt.write_outline', ['tone' => $tone, 'maxsubtopics' => $params['maxsubtopics'], 'context' => $context]);
+        $prompt = Lang::get('prompt.write_outline', ['tone' => $tone, 'maxsubtopics' => $params['maxsubtopics'], 'context' => $context], $this->language);
         if ($params['style'] ?? false) {
             $prompt .= Lang::get('prompt.style_instructions', ['style' => $params['style']], $this->language);
         }
