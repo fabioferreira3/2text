@@ -41,8 +41,7 @@ class ParaphraseDocument implements ShouldQueue
                     'process_id' => $processId,
                     'meta' => [
                         'text' => $sentence['text'],
-                        'sentence_order' => $sentence['sentence_order'],
-                        'user_id' => $this->meta['user_id'] ?? null
+                        'sentence_order' => $sentence['sentence_order']
                     ]
                 ]);
             }

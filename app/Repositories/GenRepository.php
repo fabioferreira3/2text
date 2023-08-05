@@ -8,7 +8,6 @@ use App\Enums\LanguageModels;
 use App\Helpers\PromptHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class GenRepository
@@ -99,8 +98,7 @@ class GenRepository
                 'process_id' => $processId,
                 'meta' => [
                     'text' => $sentence['text'],
-                    'sentence_order' => $sentence['sentence_order'],
-                    'user_id' => Auth::check() ? Auth::user()->id : null
+                    'sentence_order' => $sentence['sentence_order']
                 ]
             ]);
         }
@@ -108,9 +106,7 @@ class GenRepository
         $repo->createTask(DocumentTaskEnum::REGISTER_FINISHED_PROCESS, [
             'order' => 99,
             'process_id' => $processId,
-            'meta' => [
-                'user_id' => Auth::check() ? Auth::user()->id : null
-            ]
+            'meta' => []
         ]);
 
         DispatchDocumentTasks::dispatch($document);
@@ -128,8 +124,7 @@ class GenRepository
             'meta' => [
                 'text' => $params['text'],
                 'sentence_order' => $params['sentence_order'],
-                'tone' => $params['tone'] ?? null,
-                'user_id' => Auth::check() ? Auth::user()->id : null
+                'tone' => $params['tone'] ?? null
             ]
         ]);
 
@@ -147,8 +142,7 @@ class GenRepository
             'meta' => [
                 'text' => $params['text'],
                 'voice' => $params['voice'],
-                'iso_language' => $params['iso_language'],
-                'user_id' => Auth::check() ? Auth::user()->id : null
+                'iso_language' => $params['iso_language']
             ]
         ]);
 

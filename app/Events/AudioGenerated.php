@@ -14,22 +14,20 @@ class AudioGenerated implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public Document $document;
-    public string $userId;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Document $document, string $userId)
+    public function __construct(Document $document)
     {
         $this->document = $document;
-        $this->userId = $userId;
     }
 
     public function broadcastOn()
     {
-        return new PrivateChannel('User.' . $this->userId);
+        return new PrivateChannel('User.' . $this->document->meta['user_id']);
     }
 
     /**

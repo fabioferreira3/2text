@@ -62,7 +62,10 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
             ], [
                 'model' => LanguageModels::POLLY->value
             ]);
-            AudioGenerated::dispatchIf($this->meta['user_id'] ?? false, $this->document, $this->meta['user_id']);
+            AudioGenerated::dispatchIf(
+                $this->document->meta['user_id'] ?? false,
+                $this->document
+            );
 
             $this->jobSucceded();
         } catch (Exception $e) {

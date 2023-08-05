@@ -71,7 +71,7 @@ class ParaphraseText implements ShouldQueue
                 $response['token_usage']
             );
             $this->repo->updateMeta('paraphrased_sentences', $this->paraphrasedSentences);
-            TextParaphrased::dispatch($this->meta['user_id']);
+            TextParaphrased::dispatch($this->document->meta['user_id']);
 
             $this->jobSucceded();
         } catch (\Exception $e) {

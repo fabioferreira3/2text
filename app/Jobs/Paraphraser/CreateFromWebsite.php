@@ -42,8 +42,7 @@ class CreateFromWebsite
             [
                 'process_id' => $this->params['process_id'],
                 'meta' => [
-                    'parse_sentences' => true,
-                    'user_id' => Auth::check() ? Auth::user()->id : null
+                    'parse_sentences' => true
                 ],
                 'order' => 2
             ]
@@ -53,8 +52,7 @@ class CreateFromWebsite
             'process_id' => $this->params['process_id'],
             'meta' => [
                 'process_id' => $this->params['process_id'],
-                'initial_order' => 3,
-                'user_id' => Auth::check() ? Auth::user()->id : null
+                'initial_order' => 3
             ]
         ]);
 

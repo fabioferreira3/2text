@@ -75,7 +75,8 @@ class DocumentRepository
             'language' => $params['language'],
             'meta' => [
                 'source' => SourceProvider::FREE_TEXT->value,
-                'voice' => $params['voice']
+                'voice' => $params['voice'],
+                'user_id' => Auth::check() ? Auth::id() : null,
             ]
         ]);
     }
@@ -87,7 +88,8 @@ class DocumentRepository
             'meta' => [
                 ...$params['meta'] ?? [],
                 'context' => $params['context'] ?? null,
-                'source' => $params['source']
+                'source' => $params['source'],
+                'user_id' => Auth::check() ? Auth::id() : null,
             ]
         ]);
     }
