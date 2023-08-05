@@ -86,7 +86,7 @@ class DocumentRepository
             'meta' => [
                 ...$params['meta'] ?? [],
                 'context' => $params['context'] ?? null,
-                'source' => $params['source'],
+                'source' => $params['source']
             ]
         ]);
     }

@@ -58,6 +58,7 @@ class NewParaphraser extends Component
             'meta' => [
                 'tone' => $this->tone,
                 'source_url' => $this->source_url,
+                'user_id' => Auth::check() ? Auth::user()->id : null
             ]
         ]);
         $this->document = $document;
