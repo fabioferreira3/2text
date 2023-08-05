@@ -2,8 +2,10 @@
 
 namespace App\Http\Livewire\TextTranscription;
 
+use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Jobs\TextTranscription\CreateTranscription;
+use App\Repositories\DocumentRepository;
 use WireUi\Traits\Actions;
 use Livewire\Component;
 
@@ -51,7 +53,9 @@ class NewTranscription extends Component
     public function process()
     {
         $this->validate();
-        CreateTranscription::dispatch([
+        $repo = new DocumentRepository();
+        $document = $repo->createGeneric(['type' => DocumentType::TEXT_TRANSCRIPTION->value]);
+        CreateTranscription::dispatch($document, [
             'source' => $this->source,
             'language' => $this->origin_language,
             'target_language' => $this->target_language,

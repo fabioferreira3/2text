@@ -3,9 +3,9 @@
 namespace App\Jobs\TextTranscription;
 
 use App\Enums\DocumentTaskEnum;
-use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Jobs\DispatchDocumentTasks;
+use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -15,30 +15,27 @@ class CreateTranscription
 {
     use Dispatchable, SerializesModels;
 
+    protected Document $document;
     protected $repo;
     protected array $params;
 
-    public function __construct(array $params)
+    public function __construct(Document $document, array $params)
     {
-        $this->params = [
-            ...$params,
-            'process_id' => Str::uuid(),
-            'type' => DocumentType::TEXT_TRANSCRIPTION->value
-        ];
         $this->repo = new DocumentRepository();
+        $this->document = $document;
+        $this->params = $params;
     }
 
     public function handle()
     {
-        $document = $this->repo->createGeneric($this->params);
         $processId = Str::uuid();
-        $this->repo->setDocument($document);
+        $this->repo->setDocument($this->document);
         $this->repo->createTask(
             DocumentTaskEnum::DOWNLOAD_AUDIO,
             [
                 'process_id' => $processId,
                 'meta' => [
-                    'source_url' => $document['meta']['source_url']
+                    'source_url' => $this->params['meta']['source_url']
                 ],
                 'order' => 1
             ]
@@ -56,6 +53,6 @@ class CreateTranscription
             ]);
         }
         $this->repo->createTask(DocumentTaskEnum::PUBLISH_TRANSCRIPTION, ['order' => 4, 'process_id' => $processId]);
-        DispatchDocumentTasks::dispatch($document);
+        DispatchDocumentTasks::dispatch($this->document);
     }
 }
