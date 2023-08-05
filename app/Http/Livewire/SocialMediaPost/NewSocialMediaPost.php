@@ -46,8 +46,7 @@ class NewSocialMediaPost extends Component
             'Linkedin' => false,
             'Facebook' => false,
             'Instagram' => false,
-            'Twitter' => false,
-            'TikTok' => false
+            'Twitter' => false
         ];
     }
 

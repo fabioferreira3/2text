@@ -17,7 +17,6 @@
                             </div>
                             <div class='flex flex-col gap-2'>
                                 <x-checkbox md id="linkedin" name="linkedin" label="Linkedin" wire:model.defer="platforms.Linkedin" />
-                                <x-checkbox md id="tiktoken" name="tiktok" label="TikTok" wire:model.defer="platforms.TikTok" />
                             </div>
                         </div>
                         @if($errors->has('platforms'))
