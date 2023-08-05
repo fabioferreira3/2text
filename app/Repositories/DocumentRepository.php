@@ -42,6 +42,7 @@ class DocumentRepository
                 'source_url' => $params['meta']['source_url'] ?? null,
                 'target_headers_count' => $params['meta']['target_headers_count'] ?? null,
                 'keyword' => $params['meta']['keyword'] ?? null,
+                'user_id' => Auth::check() ? Auth::id() : null,
             ]
         ]);
     }
