@@ -76,6 +76,7 @@ class ExpandText implements ShouldQueue, ShouldBeUnique
                 'process_id' => $this->meta['process_id'],
                 'meta' => []
             ]);
+            DispatchDocumentTasks::dispatch($this->document);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to expand text: ' . $e->getMessage());
