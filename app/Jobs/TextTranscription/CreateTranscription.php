@@ -35,7 +35,7 @@ class CreateTranscription
             [
                 'process_id' => $processId,
                 'meta' => [
-                    'source_url' => $this->params['meta']['source_url']
+                    'source_url' => $this->document->meta['source_url']
                 ],
                 'order' => 1
             ]
@@ -52,7 +52,10 @@ class CreateTranscription
                 ]
             ]);
         }
-        $this->repo->createTask(DocumentTaskEnum::PUBLISH_TRANSCRIPTION, ['order' => 4, 'process_id' => $processId]);
+        $this->repo->createTask(DocumentTaskEnum::PUBLISH_TRANSCRIPTION, [
+            'order' => 4,
+            'process_id' => $processId
+        ]);
         DispatchDocumentTasks::dispatch($this->document);
     }
 }

@@ -58,12 +58,12 @@ class NewTranscription extends Component
             'type' => DocumentType::TEXT_TRANSCRIPTION->value,
             'source' => $this->source,
             'language' => $this->origin_language,
-        ]);
-        CreateTranscription::dispatch($document, [
-            'target_language' => $this->target_language,
             'meta' => [
                 'source_url' => $this->source_url
-            ],
+            ]
+        ]);
+        CreateTranscription::dispatch($document, [
+            'target_language' => $this->target_language
         ]);
 
         return redirect()->to('/dashboard');
