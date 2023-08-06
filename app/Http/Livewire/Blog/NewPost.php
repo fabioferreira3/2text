@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Blog;
 
 use App\Enums\Language;
 use App\Jobs\Blog\CreateBlogPost;
+use App\Repositories\DocumentRepository;
 use WireUi\Traits\Actions;
 use Livewire\Component;
 
@@ -22,6 +23,7 @@ class NewPost extends Component
     public string $targetHeadersCount;
     public bool $modal;
     public string $title;
+    public $repo;
 
     public function __construct()
     {
@@ -35,6 +37,7 @@ class NewPost extends Component
         $this->targetHeadersCount = '3';
         $this->tone = '';
         $this->style = '';
+        $this->repo = new DocumentRepository();
     }
 
     public function render()
@@ -66,7 +69,7 @@ class NewPost extends Component
     public function process()
     {
         $this->validate();
-        CreateBlogPost::dispatch([
+        $params = [
             'source' => $this->source,
             'context' => $this->context,
             'language' => $this->language,
@@ -77,7 +80,9 @@ class NewPost extends Component
                 'style' => $this->style,
                 'keyword' => $this->keyword,
             ]
-        ]);
+        ];
+        $document = $this->repo->createBlogPost($params);
+        CreateBlogPost::dispatch($document, $params);
 
         return redirect()->to('/dashboard');
     }
