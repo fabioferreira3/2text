@@ -23,7 +23,6 @@ class NewPost extends Component
     public string $targetHeadersCount;
     public bool $modal;
     public string $title;
-    public $repo;
 
     public function __construct()
     {
@@ -37,7 +36,6 @@ class NewPost extends Component
         $this->targetHeadersCount = '3';
         $this->tone = '';
         $this->style = '';
-        $this->repo = new DocumentRepository();
     }
 
     public function render()
@@ -81,7 +79,8 @@ class NewPost extends Component
                 'keyword' => $this->keyword,
             ]
         ];
-        $document = $this->repo->createBlogPost($params);
+        $repo = new DocumentRepository();
+        $document = $repo->createBlogPost($params);
         CreateBlogPost::dispatch($document, $params);
 
         return redirect()->to('/dashboard');
