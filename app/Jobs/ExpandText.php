@@ -71,6 +71,11 @@ class ExpandText implements ShouldQueue, ShouldBeUnique
                 'order' => $order,
                 'meta' => []
             ]);
+            $this->repo->createTask(DocumentTaskEnum::REGISTER_FINISHED_PROCESS, [
+                'order' => 1000,
+                'process_id' => $this->meta['process_id'],
+                'meta' => []
+            ]);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to expand text: ' . $e->getMessage());

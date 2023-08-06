@@ -63,10 +63,5 @@ class RegisterCreationTasks
                 'order' => $this->params['next_order'] + 5
             ]
         );
-        $this->repo->createTask(DocumentTaskEnum::REGISTER_FINISHED_PROCESS, [
-            'order' => 100,
-            'process_id' => $this->params['process_id'],
-            'meta' => []
-        ]);
     }
 }
