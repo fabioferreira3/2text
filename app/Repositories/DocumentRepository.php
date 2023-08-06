@@ -33,6 +33,7 @@ class DocumentRepository
         return Document::create([
             ...$params,
             'title' => '',
+            'type' => DocumentType::BLOG_POST->value,
             'meta' => [
                 'context' => $params['context'] ?? null,
                 'raw_structure' => [],
