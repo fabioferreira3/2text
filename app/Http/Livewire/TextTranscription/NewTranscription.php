@@ -54,10 +54,12 @@ class NewTranscription extends Component
     {
         $this->validate();
         $repo = new DocumentRepository();
-        $document = $repo->createGeneric(['type' => DocumentType::TEXT_TRANSCRIPTION->value]);
-        CreateTranscription::dispatch($document, [
+        $document = $repo->createGeneric([
+            'type' => DocumentType::TEXT_TRANSCRIPTION->value,
             'source' => $this->source,
             'language' => $this->origin_language,
+        ]);
+        CreateTranscription::dispatch($document, [
             'target_language' => $this->target_language,
             'meta' => [
                 'source_url' => $this->source_url
