@@ -49,8 +49,9 @@ class NewPost extends Component
         'context' => 'required_if:source,free_text|nullable',
         'keyword' => 'required',
         'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
-        'targetHeadersCount' => 'required|numeric|min:1|max:15',
-        'tone' => 'nullable'
+        'targetHeadersCount' => 'required|numeric|min:2|max:15',
+        'tone' => 'nullable',
+        'style' => 'nullable'
     ];
 
     protected $messages = [
@@ -59,7 +60,7 @@ class NewPost extends Component
         'keyword.required' => 'You need to provide a keyword.',
         'source.required' => 'Source is a required field.',
         'language.required' => 'Language is a required field.',
-        'targetHeadersCount.min' => 'The minimum number of subtopics is 1.',
+        'targetHeadersCount.min' => 'The minimum number of subtopics is 2.',
         'targetHeadersCount.max' => 'The maximum number of subtopics is 15.',
         'targetHeadersCount.required' => 'The number of subtopics is a required field.',
     ];

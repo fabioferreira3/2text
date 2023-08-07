@@ -36,7 +36,7 @@ return [
     'share_information' => 'Compartilhe informações no contexto de uma história.',
     'short_stories' => 'Contos curtos; romances; poesia; relatos históricos.',
     'source' => 'Fonte',
-    'subtopics_estimate' => 'Como estimativa, 1 subtópico cobre cerca de 350 palavras.',
+    'subtopics_estimate' => 'Como estimativa, 1 subtópico cobre cerca de 400 ~ 500 palavras.',
     'target_platforms' => 'Plataformas-alvo',
     'telling_story' => 'Você está contando uma história? De qual gênero?',
     'textbooks' => 'Artigos instrutivos; livros didáticos; notícias; escrita científica.',

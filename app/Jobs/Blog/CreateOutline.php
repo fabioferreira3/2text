@@ -54,8 +54,9 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
                         $this->document->context,
                         [
                             'tone' => $this->document->meta['tone'],
+                            'keyword' => $this->document->meta['keyword'],
                             'style' => $this->document->meta['style'] ?? null,
-                            'maxsubtopics' => $this->document->meta['target_headers_count']
+                            'maxsubtopics' => $this->document->meta['target_headers_count'] ?? 2
                         ]
                     )
                 ]

@@ -36,7 +36,7 @@ return [
     'share_information' => 'Comparte información en el contexto de una historia.',
     'short_stories' => 'Relatos cortos; novelas; poesía; cuentas históricas.',
     'source' => 'Fuente',
-    'subtopics_estimate' => 'Como estimación, 1 subtema cubre alrededor de 350 palabras.',
+    'subtopics_estimate' => 'Como estimación, 1 subtema cubre alrededor de 400 ~ 500 palabras.',
     'target_platforms' => 'Plataformas objetivo',
     'telling_story' => '¿Estás contando una historia? ¿De qué género?',
     'textbooks' => 'Artículos instructivos; libros de texto; noticias; escritura científica.',

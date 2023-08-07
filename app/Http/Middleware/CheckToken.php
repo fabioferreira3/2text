@@ -17,7 +17,7 @@ class CheckToken
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->token_id == null) {
+        if (Auth::check() && !Auth::user()->hasRole('admin') && Auth::user()->token_id == null) {
             // Redirect to profile edit page if token_id is null
             if ($request->path() != 'user/profile') {
                 session()->flash('error', 'Please provide a valid access token to start using the app.');

@@ -36,7 +36,7 @@ return [
     'share_information' => 'Share information in the context of a story.',
     'short_stories' => 'Short stories; novels; poetry; historical accounts.',
     'source' => 'Source',
-    'subtopics_estimate' => 'As an estimate, 1 subtopic covers around 350 words.',
+    'subtopics_estimate' => 'As an estimate, 1 subtopic covers around 400 ~ 500 words.',
     'target_platforms' => 'Target Platforms',
     'telling_story' => 'Are you telling a story? Of what genre?',
     'textbooks' => 'How-to articles; textbooks; news stories; scientific writing',
