@@ -21,6 +21,8 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
 
     protected Document $document;
     protected array $meta;
+    public $timeout = 15;
+    public $failOnTimeout = true;
 
     /**
      * Create a new job instance.
