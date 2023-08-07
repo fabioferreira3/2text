@@ -61,7 +61,7 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
 
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to create title: ' . $e->getMessage());
+            $this->jobFailed('Failed to crawl website: ' . $e->getMessage());
         }
     }
 

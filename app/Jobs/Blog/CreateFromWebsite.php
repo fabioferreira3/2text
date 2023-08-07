@@ -2,21 +2,23 @@
 
 namespace App\Jobs\Blog;
 
+use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
+use App\Repositories\DocumentRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Artisan;
 
 class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public Document $document;
+    public DocumentRepository $repo;
     public array $params;
 
     /**
@@ -27,6 +29,7 @@ class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
     public function __construct(Document $document, array $params)
     {
         $this->document = $document;
+        $this->repo = new DocumentRepository($this->document);
         $this->params = $params;
     }
 
@@ -37,18 +40,19 @@ class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        Artisan::call('crawl', ['url' => $this->params['meta']['source_url']]);
-        $websiteContent = Artisan::output();
-        $this->document->update([
-            'meta' => [
-                ...$this->document->meta,
-                'context' => $websiteContent,
-                'original_text' => $websiteContent
+        $this->repo->createTask(
+            DocumentTaskEnum::CRAWL_WEBSITE,
+            [
+                'process_id' => $this->params['process_id'],
+                'meta' => [
+                    'parse_sentences' => false
+                ],
+                'order' => 1
             ]
-        ]);
+        );
         RegisterCreationTasks::dispatchSync($this->document, [
             ...$this->params,
-            'next_order' => 1
+            'next_order' => 2
         ]);
         DispatchDocumentTasks::dispatch($this->document);
     }
