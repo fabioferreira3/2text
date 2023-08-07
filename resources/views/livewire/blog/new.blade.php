@@ -97,7 +97,6 @@
                         @include('livewire.common.help-item', ['header' => __('blog.tone'), 'content' => App\Helpers\InstructionsHelper::writingTones()])
                     </div>
                     <select name="tone" wire:model="tone" class="p-3 rounded-lg border border-zinc-200">
-                        <option value="">{{__('blog.default')}}</option>
                         @include('livewire.common.tones-options')
                     </select>
                 </div>

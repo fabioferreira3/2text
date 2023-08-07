@@ -3,10 +3,10 @@
 namespace App\Enums;
 
 use Illuminate\Support\Facades\Lang;
-use InvalidArgumentException;
 
 enum Tone: string
 {
+    case DEFAULT = 'default';
     case ACADEMIC = 'academic';
     case ADVENTUROUS = 'adventurous';
     case CASUAL = 'casual';
@@ -22,6 +22,7 @@ enum Tone: string
     public function label(): string
     {
         return match ($this) {
+            self::DEFAULT => __('tones.default'),
             self::ACADEMIC => __('tones.academic'),
             self::ADVENTUROUS => __('tones.adventurous'),
             self::CASUAL => __('tones.casual'),
@@ -41,7 +42,7 @@ enum Tone: string
         $enumTone = self::tryFrom($tone);
 
         if (!$enumTone) {
-            throw new InvalidArgumentException('Invalid tone provided: ' . $tone);
+            $enumTone = self::DEFAULT;
         }
 
         return Lang::get('tones.' . $enumTone->value, [], $language);

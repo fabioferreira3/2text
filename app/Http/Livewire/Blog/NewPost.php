@@ -34,7 +34,7 @@ class NewPost extends Component
         $this->languages = Language::getLabels();
         $this->keyword = '';
         $this->targetHeadersCount = '3';
-        $this->tone = '';
+        $this->tone = 'default';
         $this->style = '';
     }
 
