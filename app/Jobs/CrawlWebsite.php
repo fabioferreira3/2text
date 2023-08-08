@@ -43,13 +43,13 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            Artisan::call('crawl', [
+            $exitCode = Artisan::call('crawl', [
                 'url' => $this->document['meta']['source_url'],
                 '--html' => $this->meta['parse_html'] ?? false
             ]);
 
-            if (Artisan::exitCode() !== 0) {
-                throw new \Exception('Crawl command failed with exit code: ' . Artisan::exitCode());
+            if ($exitCode !== 0) {
+                throw new \Exception('Crawl command failed with exit code: ' . $exitCode);
             }
 
             $websiteContent = Artisan::output();
