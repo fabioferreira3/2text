@@ -34,11 +34,12 @@ class Crawl extends Command
         $htmlFlag = $html ? '--html' : '';
 
         $output = [];
-        $timeoutInSeconds = 15;
+        $timeoutInSeconds = 10;
         exec("timeout $timeoutInSeconds $python $script \"$url\" $htmlFlag", $output, $return_var);
 
         if ($return_var == 124) {
-            throw new \RuntimeException("The script timed out after $timeoutInSeconds seconds.");
+            $this->error("The script timed out after $timeoutInSeconds seconds.");
+            return 1;
         }
 
         $this->line(implode(PHP_EOL, $output));
