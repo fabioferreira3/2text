@@ -47,6 +47,11 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
                 'url' => $this->document['meta']['source_url'],
                 '--html' => $this->meta['parse_html'] ?? false
             ]);
+
+            if (Artisan::exitCode() !== 0) {
+                throw new \Exception('Crawl command failed with exit code: ' . Artisan::exitCode());
+            }
+
             $websiteContent = Artisan::output();
 
             $this->document->update([
