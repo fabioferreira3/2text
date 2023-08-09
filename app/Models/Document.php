@@ -24,7 +24,6 @@ class Document extends Model
     protected $guarded = ['id'];
     protected $casts = [
         'type' => DocumentType::class,
-        'status' => DocumentStatus::class,
         'language' => Language::class,
         'meta' => 'array'
     ];
