@@ -38,7 +38,7 @@ class Crawl extends Command
         exec("timeout $timeoutInSeconds $python $script \"$url\" $htmlFlag", $output, $return_var);
 
         if ($return_var == 124) {
-            return 1;
+            return 5;
         }
 
         $this->line(implode(PHP_EOL, $output));

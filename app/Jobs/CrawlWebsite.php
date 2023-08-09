@@ -48,6 +48,10 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
                 '--html' => $this->meta['parse_html'] ?? false
             ]);
 
+            if ($exitCode === 5) {
+                throw new \Exception('Crawl failed due to timeout. Url: ' . $this->document['meta']['source_url']);
+            }
+
             if ($exitCode !== 0) {
                 throw new \Exception('Crawl command failed with exit code: ' . $exitCode);
             }

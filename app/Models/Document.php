@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DocumentStatus;
 use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Enums\SourceProvider;
@@ -21,8 +22,13 @@ class Document extends Model
     use HasFactory, HasUuids, SoftDeletes;
 
     protected $guarded = ['id'];
-    protected $casts = ['type' => DocumentType::class, 'language' => Language::class, 'meta' => 'array'];
-    protected $appends = ['normalized_structure', 'content', 'context', 'is_completed', 'source', 'tone', 'style'];
+    protected $casts = [
+        'type' => DocumentType::class,
+        'status' => DocumentStatus::class,
+        'language' => Language::class,
+        'meta' => 'array'
+    ];
+    protected $appends = ['normalized_structure', 'content', 'context', 'status', 'source', 'tone', 'style'];
 
     public function history(): HasMany
     {
@@ -79,18 +85,27 @@ class Document extends Model
         }
     }
 
-    public function getIsCompletedAttribute()
+    public function getStatusAttribute()
     {
-        if (!$this->tasks->count()) {
-            return false;
+        // if (!$this->tasks->count()) {
+        //     return DocumentStatus::ON_HOLD;
+        // }
+
+        $failedCount = $this->tasks->whereIn('status', ['failed'])->count();
+        if ($failedCount !== 0) {
+            return DocumentStatus::FAILED;
         }
 
         $finishedCount = $this->tasks->whereIn('status', ['finished', 'skipped'])->count();
         if ($finishedCount === 0) {
-            return false;
+            return DocumentStatus::IN_PROGRESS;
         }
 
-        return $this->tasks->count() === $finishedCount;
+        if ($this->tasks->count() === $finishedCount) {
+            return DocumentStatus::FINISHED;
+        }
+
+        return DocumentStatus::ON_HOLD;
     }
 
     public function getSourceAttribute()

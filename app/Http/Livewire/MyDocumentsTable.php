@@ -72,7 +72,7 @@ class MyDocumentsTable extends DataTableComponent
                 ->collapseOnMobile(),
             Column::make(__('dashboard.status'))
                 ->label(function ($row) {
-                    return view('livewire.tables.my-documents.document-status', ['isCompleted' => $row->is_completed]);
+                    return view('livewire.tables.my-documents.document-status', ['status' => $row->status]);
                 }),
             Column::make(__('dashboard.language'), "language")
                 ->format(fn ($value, $row) => $row->language->label())
@@ -85,7 +85,7 @@ class MyDocumentsTable extends DataTableComponent
                 ->collapseOnMobile(),
             Column::make(__('dashboard.actions'))
                 ->label(
-                    fn ($row, Column $column) => view('livewire.tables.my-documents.view-action', ['rowId' => $row->id, 'isCompleted' => $row->is_completed])
+                    fn ($row, Column $column) => view('livewire.tables.my-documents.view-action', ['rowId' => $row->id, 'status' => $row->status])
                 ),
         ];
     }
