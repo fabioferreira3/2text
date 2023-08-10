@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\DocumentTaskAborted;
 use App\Events\DocumentTaskFailed;
 use App\Events\DocumentTaskFinished;
 use App\Events\UserCreated;
+use App\Listeners\HandleAbortedDocumentTask;
 use App\Listeners\HandleFailedDocumentTask;
 use App\Listeners\HandleFinishedDocumentTask;
 use App\Listeners\HandleFinishedProcess;
@@ -33,6 +35,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         DocumentTaskFailed::class => [
             HandleFailedDocumentTask::class
+        ],
+        DocumentTaskAborted::class => [
+            HandleAbortedDocumentTask::class
         ],
         UserCreated::class => [
             HandleNewUserNotification::class

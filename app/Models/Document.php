@@ -86,19 +86,22 @@ class Document extends Model
 
     public function getStatusAttribute()
     {
-        // if (!$this->tasks->count()) {
-        //     return DocumentStatus::ON_HOLD;
-        // }
+        $abortedCount = $this->tasks->whereIn('status', ['aborted'])->count();
+        if ($abortedCount !== 0) {
+            return DocumentStatus::ABORTED;
+        }
 
         $failedCount = $this->tasks->whereIn('status', ['failed'])->count();
         if ($failedCount !== 0) {
             return DocumentStatus::FAILED;
         }
 
-        $finishedCount = $this->tasks->whereIn('status', ['finished', 'skipped'])->count();
-        if ($finishedCount === 0) {
+        $inProgressCount = $this->tasks->whereIn('status', ['in_progress'])->count();
+        if ($inProgressCount > 0) {
             return DocumentStatus::IN_PROGRESS;
         }
+
+        $finishedCount = $this->tasks->whereIn('status', ['finished', 'skipped'])->count();
 
         if ($this->tasks->count() === $finishedCount) {
             return DocumentStatus::FINISHED;

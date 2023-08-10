@@ -4,6 +4,7 @@ namespace App\Enums;
 
 enum DocumentStatus: string
 {
+    case ABORTED = 'aborted';
     case FAILED = 'failed';
     case FINISHED = 'finished';
     case IN_PROGRESS = 'in_progress';
@@ -12,6 +13,7 @@ enum DocumentStatus: string
     public function label()
     {
         return match ($this) {
+            self::ABORTED => __('common.document.aborted'),
             self::FAILED => __('common.document.failed'),
             self::FINISHED => __('common.document.finished'),
             self::IN_PROGRESS => __('common.document.in_progress'),

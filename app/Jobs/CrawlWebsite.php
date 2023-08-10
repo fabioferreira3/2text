@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Events\WebsiteCrawled;
+use App\Exceptions\BlockedCrawlerException;
 use App\Helpers\DocumentHelper;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
@@ -49,7 +50,8 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
             ]);
 
             if ($exitCode === 5) {
-                throw new \Exception('Crawl failed due to timeout. Url: ' . $this->document['meta']['source_url']);
+                throw new BlockedCrawlerException('Crawl failed due to timeout. Url: ' .
+                    $this->document['meta']['source_url']);
             }
 
             if ($exitCode !== 0) {
@@ -71,6 +73,9 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
             WebsiteCrawled::dispatchIf($this->document->meta['user_id'] ?? false, $this->document->meta['user_id']);
 
             $this->jobSucceded();
+        } catch (BlockedCrawlerException $bce) {
+            // Handle the specific exception here
+            $this->jobAborted('Blocker Crawler Exception: ' . $bce->getMessage());
         } catch (Exception $e) {
             $this->jobFailed('Failed to crawl website: ' . $e->getMessage());
         }

@@ -6,6 +6,7 @@ return [
     'copied' => 'Copied',
     'close' => 'Close',
     'download' => 'Download',
+    'document.aborted' => 'Aborted',
     'document.failed' => 'Failed',
     'document.finished' => 'Finished',
     'document.in_progress' => 'In Progress',
