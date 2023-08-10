@@ -7,6 +7,7 @@ use InvalidArgumentException;
 
 enum Style: string
 {
+    case DEFAULT = 'default';
     case DESCRIPTIVE = 'descriptive';
     case EXPOSITORY = 'expository';
     case NARRATIVE = 'narrative';
@@ -15,6 +16,7 @@ enum Style: string
     public function label(): string
     {
         return match ($this) {
+            self::DEFAULT => __('styles.default'),
             self::DESCRIPTIVE => __('styles.descriptive'),
             self::EXPOSITORY => __('styles.expository'),
             self::NARRATIVE => __('styles.narrative'),
