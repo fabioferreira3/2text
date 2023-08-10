@@ -103,7 +103,7 @@ class Document extends Model
 
         $finishedCount = $this->tasks->whereIn('status', ['finished', 'skipped'])->count();
 
-        if ($this->tasks->count() === $finishedCount) {
+        if ($this->tasks->count() === $finishedCount && $finishedCount > 0) {
             return DocumentStatus::FINISHED;
         }
 
