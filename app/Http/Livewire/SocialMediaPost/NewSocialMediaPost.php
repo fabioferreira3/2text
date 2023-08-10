@@ -39,8 +39,8 @@ class NewSocialMediaPost extends Component
         $this->language = 'en';
         $this->languages = Language::getLabels();
         $this->keyword = '';
-        $this->tone = null;
-        $this->style = null;
+        $this->tone = 'default';
+        $this->style = 'default';
         $this->more_instructions = null;
         $this->platforms = [
             'Linkedin' => false,
