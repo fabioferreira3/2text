@@ -87,7 +87,6 @@
                         @include('livewire.common.help-item', ['header' => __('blog.writing_style'), 'content' => App\Helpers\InstructionsHelper::writingStyles()])
                     </div>
                     <select name="style" wire:model="style" class="p-3 rounded-lg border border-zinc-200">
-                        <option value="">{{__('blog.default')}}</option>
                         @include('livewire.common.styles-options')
                     </select>
                 </div>

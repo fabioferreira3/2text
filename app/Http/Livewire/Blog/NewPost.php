@@ -35,7 +35,7 @@ class NewPost extends Component
         $this->keyword = '';
         $this->targetHeadersCount = '3';
         $this->tone = 'default';
-        $this->style = '';
+        $this->style = 'default';
     }
 
     public function render()
