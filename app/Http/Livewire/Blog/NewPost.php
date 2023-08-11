@@ -49,7 +49,7 @@ class NewPost extends Component
         'context' => 'required_if:source,free_text|nullable',
         'keyword' => 'required',
         'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
-        'targetHeadersCount' => 'required|numeric|min:2|max:15',
+        'targetHeadersCount' => 'required|numeric|min:2|max:10',
         'tone' => 'nullable',
         'style' => 'nullable'
     ];
@@ -61,7 +61,7 @@ class NewPost extends Component
         'source.required' => 'Source is a required field.',
         'language.required' => 'Language is a required field.',
         'targetHeadersCount.min' => 'The minimum number of subtopics is 2.',
-        'targetHeadersCount.max' => 'The maximum number of subtopics is 15.',
+        'targetHeadersCount.max' => 'The maximum number of subtopics is 10.',
         'targetHeadersCount.required' => 'The number of subtopics is a required field.',
     ];
 

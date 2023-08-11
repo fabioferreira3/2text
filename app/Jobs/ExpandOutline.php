@@ -57,6 +57,7 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
                     ])
                 ]
             ]);
+            $this->repo->updateMeta('first_pass', $response['content']);
             $this->repo->updateMeta('raw_structure', DocumentHelper::parseHtmlTagsToRawStructure($response['content']));
             $this->jobSucceded();
         } catch (Exception $e) {

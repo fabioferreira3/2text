@@ -6,7 +6,10 @@
                 <div class="flex flex-col gap-3">
                     <div class="flex gap-2 items-center">
                         <label>{{__('blog.source')}}:</label>
-                        @include('livewire.common.help-item', ['header' => __('blog.source'), 'content' => App\Helpers\InstructionsHelper::sources()])
+                        @include('livewire.common.help-item', [
+                            'header' => __('blog.source'),
+                            'content' => App\Helpers\InstructionsHelper::sources()
+                        ])
                     </div>
                     <select name="provider" wire:model="source" class="p-3 rounded-lg border border-zinc-200">
                         @include('livewire.common.source-providers-options')
@@ -15,7 +18,10 @@
                 <div class="flex flex-col gap-3">
                     <div class="flex gap-2 items-center">
                         <label>{{__('blog.keyword')}}:</label>
-                        @include('livewire.common.help-item', ['header' => __('blog.keyword'), 'content' => App\Helpers\InstructionsHelper::blogKeyword()])
+                        @include('livewire.common.help-item', [
+                            'header' => __('blog.keyword'),
+                            'content' => App\Helpers\InstructionsHelper::blogKeyword()
+                        ])
                     </div>
                     <input name="keyword" wire:model="keyword" class="p-3 rounded-lg border border-zinc-200" />
                     @if($errors->has('keyword'))
@@ -60,9 +66,13 @@
                 <div class="flex flex-col gap-3">
                     <div class="flex gap-2 items-center">
                         <label>{{__('blog.topics_number')}}:</label>
-                        @include('livewire.common.help-item', ['header' => __('blog.topics_number'), 'content' => App\Helpers\InstructionsHelper::maxSubtopics()])
+                        @include('livewire.common.help-item', [
+                            'header' => __('blog.topics_number'),
+                            'content' => App\Helpers\InstructionsHelper::maxSubtopics()
+                        ])
                     </div>
-                    <input type="number" max="15" name="target_headers_count" wire:model="targetHeadersCount" class="p-3 rounded-lg border border-zinc-200" />
+                    <input type="number" max="10" name="target_headers_count" wire:model="targetHeadersCount"
+                        class="p-3 rounded-lg border border-zinc-200" />
                     @if($errors->has('targetHeadersCount'))
                     <span class="text-red-500 text-sm">{{ $errors->first('targetHeadersCount') }}</span>
                     @endif
@@ -70,7 +80,10 @@
                 <div class="flex flex-col gap-3">
                     <div class="flex gap-2 items-center">
                         <label>{{__('blog.language')}}:</label>
-                        @include('livewire.common.help-item', ['header' => __('blog.language'), 'content' => App\Helpers\InstructionsHelper::blogLanguages()])
+                        @include('livewire.common.help-item', [
+                            'header' => __('blog.language'),
+                            'content' => App\Helpers\InstructionsHelper::blogLanguages()
+                        ])
                     </div>
                     <select name="language" wire:model="language" class="p-3 rounded-lg border border-zinc-200">
                         @include('livewire.common.languages-options')
@@ -84,7 +97,10 @@
                 <div class="flex flex-col gap-3">
                     <div class="flex gap-2 items-center">
                         <label>{{__('blog.writing_style')}}:</label>
-                        @include('livewire.common.help-item', ['header' => __('blog.writing_style'), 'content' => App\Helpers\InstructionsHelper::writingStyles()])
+                        @include('livewire.common.help-item', [
+                            'header' => __('blog.writing_style'),
+                            'content' => App\Helpers\InstructionsHelper::writingStyles()
+                        ])
                     </div>
                     <select name="style" wire:model="style" class="p-3 rounded-lg border border-zinc-200">
                         @include('livewire.common.styles-options')
@@ -93,7 +109,10 @@
                 <div class="flex flex-col gap-3">
                     <div class="flex gap-2 items-center">
                         <label>{{__('blog.tone')}}:</label>
-                        @include('livewire.common.help-item', ['header' => __('blog.tone'), 'content' => App\Helpers\InstructionsHelper::writingTones()])
+                        @include('livewire.common.help-item', [
+                            'header' => __('blog.tone'),
+                            'content' => App\Helpers\InstructionsHelper::writingTones()
+                        ])
                     </div>
                     <select name="tone" wire:model="tone" class="p-3 rounded-lg border border-zinc-200">
                         @include('livewire.common.tones-options')
@@ -101,7 +120,8 @@
                 </div>
             </div>
             <div class="flex justify-center mt-4">
-                <button wire:click="process" wire:loading.remove class="bg-secondary text-white font-bold px-4 py-2 rounded-lg">
+                <button wire:click="process" wire:loading.remove
+                    class="bg-secondary text-white font-bold px-4 py-2 rounded-lg">
                     {{__('blog.generate')}}!
                 </button>
             </div>

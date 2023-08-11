@@ -1,8 +1,33 @@
 <?php
 
 return [
-    'blog_first_pass' => "Write a blog article, using a :tone tone, using <p> tags to surround paragraphs, <h2> tags to surround main topics and <h3> tags to surround inner topics, based on the following outline: \n\n:outline\n\n\nFurther instructions: Do not surround h2 and h3 tags with p tags, for example: \n\n Bad output:\n<p><h2>Topic</h2></p>\n\nBad output:\n<p><h2>Topic</h2><h3>Inner topic</h3></p>\n\n\nThe outline structure should be parsed to html tags like this:\n\nInput:\nA. Topic 1\n\nOutput:<h3>A. Topic 1</h3>\n\nInput:\nB. Topic 2\n\nOutput:<h3>B. Topic 2</h3>\n\n",
-    'expand_text' => "Using a :tone tone,, and using <h3> tags for subtopics and <p> tags for paragraphs, expand on: \n\n:context\n\n\nFurther instructions:\n-When expanding the text, do not create new <h3> inner topics. Instead, increase the number of paragraphs.\n\n",
+    'blog_first_pass' => "Write a simple blog article, following these instructions:\n\n
+        - It must have a :tone tone\n
+        - Use <p> tags to surround paragraphs\n
+        - Use <h2> tags to surround topics\n
+        - Do not use <h3> tags\n
+        - Write only 1 paragraph <p> per topic <h2>\n
+        - Do not surround h2 tags with p tags, for example: \n\n
+            Bad output:\n
+                <p><h2>Topic</h2></p>\n\n
+        - Every roman number from the outline must be a <h2> tag. For example:\n\n
+           - Outline structure:\n
+           I. Topic 1\n
+           II. Topic 2\n
+           III. Topic 3\n\n
+           - Resulting blog post html structure:\n
+           <h2>Topic1</h2>\n
+           <h2>Topic2</h2>\n
+           <h2>Topic3</h2>\n\n
+        - The blog post must be based on the following outline: \n\n
+            :outline",
+    'expand_text' => "Expand a text following these instructions:\n\n
+         - Use a :tone tone\n
+         - Use <h3> tags for subtopics and <p> tags for paragraphs\n
+         - Do not create new <h2> topics.\n
+         - Increase the number of paragraphs during the expansion.\n
+         - This is the text that must be expanded:\n\n
+            :context",
     'given_following_text' => "Given the following text:\n\n:text\n\n",
     'given_following_context' => "And given the following context:\n\n:context\n\n\n",
     'keyword_instructions' => "- Use the keyword \":keyword\".\n",
