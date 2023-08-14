@@ -74,3 +74,6 @@ Route::get('/google/auth/redirect', function () {
 })->name('login.google');
 
 Route::get('/google/auth/callback', [GoogleAuthController::class, 'handleProviderCallback'])->name('login.google.callback');
+
+/* Stripe Webhook */
+Route::post('/stripe/payment', [GoogleAuthController::class, 'handleProviderCallback'])->name('payment.webhook');

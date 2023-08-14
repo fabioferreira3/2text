@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
-use App\Http\Livewire\Common\Modal;
 use App\Jobs\DownloadAudio;
+use App\Models\Account;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Cashier\Cashier;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,5 +30,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Blade::componentNamespace('App\\Http\\Livewire\\Common', 'experior');
+        Cashier::useCustomerModel(Account::class);
     }
 }

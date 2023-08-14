@@ -52,7 +52,10 @@ class TranslateText implements ShouldQueue, ShouldBeUnique
             $response = $chatGpt->request([
                 [
                     'role' => 'user',
-                    'content' => $this->promptHelper->translate($this->meta['text'] ?? $this->document->meta['original_text'], $this->meta['target_language'])
+                    'content' => $this->promptHelper->translate(
+                        $this->meta['text'] ?? $this->document->meta['original_text'],
+                        $this->meta['target_language']
+                    )
                 ]
             ]);
             $this->repo->updateMeta('translated_text', $response['content']);
