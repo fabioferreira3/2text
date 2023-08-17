@@ -11,7 +11,7 @@ class InstructionsHelper
 
     public static function transcriptionLanguage()
     {
-        return "<p>You need to select the language of the video since I'm currently not able to auto-discover its main language.</p>";
+        return "<p>You need to inform the language of the video since I'm currently not able to auto-discover its main language.</p>";
     }
 
     public static function socialMediaPlatforms()

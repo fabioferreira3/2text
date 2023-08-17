@@ -2,12 +2,14 @@
 
 namespace App\Http\Livewire\SocialMediaPost;
 
+use App\Enums\DocumentTaskEnum;
+use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
-use App\Repositories\GenRepository;
 use Exception;
-use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Livewire\Component;
 
 class Post extends Component
 {
@@ -18,11 +20,23 @@ class Post extends Component
     public string $platform;
     public int $rows;
     public bool $displayHistory = false;
+    public string $userId;
+    public bool $isProcessing = false;
 
-    protected $listeners = ['refresh', 'showHistoryModal', 'closeHistoryModal', 'refreshContent' => 'updateContent'];
+    public function getListeners()
+    {
+        return [
+            'refresh',
+            'showHistoryModal',
+            'closeHistoryModal',
+            'refreshContent' => 'updateContent',
+            "echo-private:User.$this->userId,.ProcessFinished" => 'finish',
+        ];
+    }
 
     public function mount(Document $document, $platform, $rows = 12)
     {
+        $this->userId = Auth::user()->id;
         $this->document = $document;
         $this->platform = $platform;
         $this->rows = $rows;
@@ -48,8 +62,28 @@ class Post extends Component
 
     public function regenerate()
     {
-        GenRepository::generateSocialMediaPost($this->document, $this->platform);
-        $this->refresh();
+        $this->isProcessing = true;
+        $processId = Str::uuid();
+        $repo = new DocumentRepository($this->document);
+        $repo->createTask(
+            DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST,
+            [
+                'process_id' => $processId,
+                'meta' => [
+                    'platform' => $this->platform,
+                ],
+                'order' => 1
+            ]
+        );
+        $repo->createTask(
+            DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
+            [
+                'process_id' => $processId,
+                'meta' => [],
+                'order' => 2
+            ]
+        );
+        DispatchDocumentTasks::dispatch($this->document);
     }
 
 
@@ -100,6 +134,14 @@ class Post extends Component
     {
         if ($params['field'] === $this->platform) {
             $this->setContent($this->document);
+        }
+    }
+
+    public function finish(array $params)
+    {
+        if ($this->document && $params['document_id'] === $this->document->id) {
+            $this->refresh();
+            $this->isProcessing = false;
         }
     }
 }

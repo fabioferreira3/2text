@@ -25,7 +25,7 @@ class GenerateAudio extends Component
     {
         $userId = Auth::user()->id;
         return [
-            "echo-private:User.$userId,.AlocaldioGenerated" => 'ready',
+            "echo-private:User.$userId,.AudioGenerated" => 'ready',
             'stop-audio' => 'stopAudio',
             'toggle-audio-menu' => 'toggle'
         ];

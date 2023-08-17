@@ -41,11 +41,11 @@
                     </div>
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
-                            <label class="font-bold text-lg text-zinc-700">{{__('transcription.target_language')}}:</label>
-                            @include('livewire.common.help-item', ['header' => __('transcription.target_language'), 'content' => App\Helpers\InstructionsHelper::transcriptionLanguage()])
+                            <label class="font-bold text-lg text-zinc-700">{{__('transcription.target_language')}}</label>
+                            {{-- @include('livewire.common.help-item', ['header' => __('transcription.target_language'), 'content' => App\Helpers\InstructionsHelper::transcriptionLanguage()]) --}}
                         </div>
                         <select name="target_language" wire:model="target_language" class="p-3 rounded-lg border border-zinc-200">
-                            <option value="same">Same as source</option>
+                            <option value="same">No</option>
                             @foreach ($languages as $option)
                             <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
                             @endforeach
