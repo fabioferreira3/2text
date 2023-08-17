@@ -22,6 +22,7 @@ class Post extends Component
     public bool $displayHistory = false;
     public string $userId;
     public bool $isProcessing = false;
+    public string $processId;
 
     public function getListeners()
     {
@@ -63,12 +64,12 @@ class Post extends Component
     public function regenerate()
     {
         $this->isProcessing = true;
-        $processId = Str::uuid();
+        $this->processId = Str::uuid();
         $repo = new DocumentRepository($this->document);
         $repo->createTask(
             DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST,
             [
-                'process_id' => $processId,
+                'process_id' => $this->processId,
                 'meta' => [
                     'platform' => $this->platform,
                 ],
@@ -78,7 +79,7 @@ class Post extends Component
         $repo->createTask(
             DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
             [
-                'process_id' => $processId,
+                'process_id' => $this->processId,
                 'meta' => [],
                 'order' => 2
             ]
@@ -139,7 +140,10 @@ class Post extends Component
 
     public function finish(array $params)
     {
-        if ($this->document && $params['document_id'] === $this->document->id) {
+        if (
+            $this->document && $params['document_id'] === $this->document->id
+            && $params['process_id'] === $this->processId
+        ) {
             $this->refresh();
             $this->isProcessing = false;
         }
