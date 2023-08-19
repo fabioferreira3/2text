@@ -24,6 +24,8 @@ class NewPost extends Component
     public bool $modal;
     public string $title;
 
+
+
     public function __construct()
     {
         $this->title = 'New Blog Post';

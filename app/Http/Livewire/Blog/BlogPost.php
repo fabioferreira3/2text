@@ -13,6 +13,7 @@ class BlogPost extends Component
     public Document $document;
     public bool $displayHistory = false;
     public $title;
+    public bool $isProcessing = false;
 
     protected $listeners = ['contentUpdated', 'showHistoryModal', 'closeHistoryModal', 'refresh', 'saveField'];
 

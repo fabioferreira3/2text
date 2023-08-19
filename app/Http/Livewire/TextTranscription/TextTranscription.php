@@ -11,6 +11,7 @@ class TextTranscription extends Component
     public Document $document;
     public string $content;
     public bool $displayHistory = false;
+    public bool $isProcessing = false;
 
     protected $listeners = ['refreshContent' => 'updateContent', 'editorUpdated', 'closeHistoryModal', 'refresh'];
 

@@ -17,6 +17,7 @@ class ContentEditor extends Component
     public bool $copied;
     public $tone;
     protected $listeners = ['refreshContent' => 'updateContent', 'editorUpdated'];
+    public bool $isProcessing = false;
 
     public function mount(Document $document)
     {

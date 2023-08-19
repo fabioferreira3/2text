@@ -15,6 +15,7 @@ class Title extends Component
     public string $initialContent;
     public bool $copied = false;
     protected $listeners = ['refreshContent' => 'updateContent'];
+    public bool $isProcessing = false;
 
     public function mount(Document $document)
     {
