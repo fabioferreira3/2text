@@ -47,7 +47,7 @@ class PrepareTextTranslation implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $sentencesChunks = DocumentHelper::chunkTextSentences($this->document->meta['original_text']);
+            $sentencesChunks = DocumentHelper::chunkTextSentences($this->document->meta['original_text'], 40);
             $order = $this->meta['order'] + 1;
             foreach ($sentencesChunks as $chunk) {
                 $this->repo->createTask(DocumentTaskEnum::TRANSLATE_TEXT, [
