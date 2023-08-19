@@ -3,7 +3,6 @@
 namespace App\Jobs\TextTranscription;
 
 use App\Enums\DocumentTaskEnum;
-use App\Enums\Language;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
@@ -45,17 +44,15 @@ class CreateTranscription
             'process_id' => $processId,
         ]);
         if ($this->params['target_language'] !== 'same') {
-            $this->repo->createTask(DocumentTaskEnum::TRANSLATE_TEXT, [
+            $this->repo->createTask(DocumentTaskEnum::PREPARE_TEXT_TRANSLATION, [
                 'order' => 3,
-                'process_id' => $processId, 'meta' => [
-                    'target_language' => Language::from($this->params['target_language'])->name
+                'process_id' => $processId,
+                'meta' => [
+                    'process_id' => $processId,
+                    'target_language' => $this->params['target_language'],
                 ]
             ]);
         }
-        $this->repo->createTask(DocumentTaskEnum::PUBLISH_TRANSCRIPTION, [
-            'order' => 4,
-            'process_id' => $processId
-        ]);
         DispatchDocumentTasks::dispatch($this->document);
     }
 }

@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Translation;
 
+use App\Enums\DocumentTaskEnum;
+use App\Enums\Language;
 use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelper;
+use App\Jobs\DispatchDocumentTasks;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
-use App\Packages\ChatGPT\ChatGPT;
 use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -15,9 +17,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
-class TranslateText implements ShouldQueue, ShouldBeUnique
+class PrepareTextTranslation implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
@@ -35,7 +36,6 @@ class TranslateText implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->promptHelper = new PromptHelper($document->language->value);
         $this->repo = new DocumentRepository($this->document);
     }
 
@@ -47,21 +47,27 @@ class TranslateText implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $chatGpt = new ChatGPT();
-
-            $response = $chatGpt->request([
-                [
-                    'role' => 'user',
-                    'content' => $this->promptHelper->translate(
-                        $this->meta['text'] ?? $this->document->meta['original_text'],
-                        $this->meta['target_language']
-                    )
-                ]
+            $sentencesChunks = DocumentHelper::chunkTextSentences($this->document->meta['original_text']);
+            $order = $this->meta['order'] + 1;
+            foreach ($sentencesChunks as $chunk) {
+                $this->repo->createTask(DocumentTaskEnum::TRANSLATE_TEXT, [
+                    'order' => $order,
+                    'process_id' => $this->meta['process_id'],
+                    'meta' => [
+                        'text' => $chunk,
+                        'target_language' => Language::from($this->meta['target_language'])->name
+                    ]
+                ]);
+                $order++;
+            }
+            $this->repo->createTask(DocumentTaskEnum::PUBLISH_TRANSCRIPTION, [
+                'order' => 1000,
+                'process_id' => $this->meta['process_id']
             ]);
-            $this->repo->updateMeta('translated_text', $response['content']);
+            DispatchDocumentTasks::dispatch($this->document);
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to translate text: ' . $e->getMessage());
+            $this->jobFailed('Failed to prepare text translation: ' . $e->getMessage());
         }
     }
 
@@ -70,6 +76,6 @@ class TranslateText implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'translating_text_' . $this->meta['process_id'] ?? $this->document->id;
+        return 'prepare_text_translation_' . $this->meta['process_id'] ?? $this->document->id;
     }
 }

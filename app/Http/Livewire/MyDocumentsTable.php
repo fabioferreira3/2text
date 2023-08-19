@@ -74,11 +74,7 @@ class MyDocumentsTable extends DataTableComponent
                 ->label(function ($row) {
                     return view('livewire.tables.my-documents.document-status', ['status' => $row->status]);
                 }),
-            Column::make(__('dashboard.language'), "language")
-                ->format(fn ($value, $row) => $row->language->label())
-                ->searchable()
-                ->sortable()
-                ->collapseOnMobile(),
+
             Column::make(__('dashboard.created_at'), "created_at")
                 ->format(fn ($value, $row) => $row->created_at->setTimezone(session('user_timezone') ?? 'America/New_York')->format('m/d/Y - h:ia'))
                 ->sortable()

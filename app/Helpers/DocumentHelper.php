@@ -91,4 +91,14 @@ class DocumentHelper
         }
         return $array;
     }
+
+    public static function chunkTextSentences($text, $amount = 80)
+    {
+        $sentences = preg_split('/(?<=[.!?])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+        $sentenceChunks = array_chunk($sentences, $amount);
+
+        return array_map(function ($chunk) {
+            return implode(' ', $chunk);
+        }, $sentenceChunks);
+    }
 }

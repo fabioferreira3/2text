@@ -18,6 +18,7 @@ enum DocumentTaskEnum: string
     case EXPAND_OUTLINE = 'expand_outline';
     case EXPAND_TEXT = 'expand_text';
     case EXPAND_TEXT_SECTION = 'expand_text_section';
+    case PREPARE_TEXT_TRANSLATION = 'prepare_text_translation';
     case REGISTER_FINISHED_PROCESS = 'register_finished_process';
     case REGISTER_CONTENT_HISTORY = 'register_content_history';
     case TRANSLATE_TEXT = 'translate_text';
@@ -40,10 +41,11 @@ enum DocumentTaskEnum: string
             self::EXPAND_OUTLINE => "App\Jobs\ExpandOutline",
             self::EXPAND_TEXT => "App\Jobs\ExpandText",
             self::EXPAND_TEXT_SECTION => "App\Jobs\ExpandTextSection",
+            self::PREPARE_TEXT_TRANSLATION => "App\Jobs\Translation\PrepareTextTranslation",
             self::REGISTER_FINISHED_PROCESS => "App\Jobs\RegisterFinishedProcess",
             self::REGISTER_CONTENT_HISTORY => "App\Jobs\RegisterContentHistory",
             self::TEXT_TO_SPEECH => "App\Jobs\TextToSpeech\ConvertTextToAudio",
-            self::TRANSLATE_TEXT => "App\Jobs\TranslateText",
+            self::TRANSLATE_TEXT => "App\Jobs\Translation\TranslateText",
         };
     }
 }
