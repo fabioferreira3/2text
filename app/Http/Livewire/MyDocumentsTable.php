@@ -81,7 +81,12 @@ class MyDocumentsTable extends DataTableComponent
                 ->collapseOnMobile(),
             Column::make(__('dashboard.actions'))
                 ->label(
-                    fn ($row, Column $column) => view('livewire.tables.my-documents.view-action', ['rowId' => $row->id, 'status' => $row->status])
+                    fn ($row, Column $column) => view('livewire.tables.my-documents.view-action', [
+                        'rowId' => $row->id,
+                        'status' => $row->status,
+                        'canView' => in_array($row->status->value, ['finished']),
+                        'canDelete' => in_array($row->status->value, ['finished', 'aborted', 'failed'])
+                    ])
                 ),
         ];
     }

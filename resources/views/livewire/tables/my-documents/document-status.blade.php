@@ -1,5 +1,5 @@
 @if ($status->value === 'finished')
-    <x-badge icon="thumb-up" class="font-sans py-1" md outline emerald :label="$status->label()">
+    <x-badge icon="check-circle" class="font-sans py-1" md outline emerald :label="$status->label()">
         <x-slot name="prepend" class="relative flex items-center">
         </x-slot>
     </x-badge>
