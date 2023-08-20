@@ -27,7 +27,7 @@ class GenerateAudio extends Component
         return [
             "echo-private:User.$userId,.AudioGenerated" => 'ready',
             'stop-audio' => 'stopAudio',
-            'toggle-audio-menu' => 'toggle'
+            'toggle-audio-menu' => 'toggleAway'
         ];
     }
 
@@ -82,6 +82,12 @@ class GenerateAudio extends Component
     public function downloadAudio()
     {
         return Storage::download($this->currentAudioFile);
+    }
+
+    public function toggleAway()
+    {
+        $this->stopAudio();
+        $this->menuOpen = false;
     }
 
     public function toggle()

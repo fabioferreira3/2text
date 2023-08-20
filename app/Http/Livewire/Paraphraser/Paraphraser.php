@@ -21,7 +21,7 @@ class Paraphraser extends Component
     public $language = null;
     public bool $copied = false;
     public bool $copiedAll = false;
-    public $isSaving;
+    public $isSaving = false;
     public string $processId = '';
 
     protected $rules = [
@@ -45,7 +45,6 @@ class Paraphraser extends Component
 
     public function mount(Document $document)
     {
-        $this->isSaving = false;
         $this->processId;
         $this->setup($document);
     }

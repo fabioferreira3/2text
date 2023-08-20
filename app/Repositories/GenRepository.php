@@ -106,7 +106,9 @@ class GenRepository
         $repo->createTask(DocumentTaskEnum::REGISTER_FINISHED_PROCESS, [
             'order' => 99,
             'process_id' => $processId,
-            'meta' => []
+            'meta' => [
+                'silently' => true
+            ]
         ]);
 
         DispatchDocumentTasks::dispatch($document);
@@ -118,6 +120,7 @@ class GenRepository
     {
         $processId = $params['process_id'] ?? Str::uuid();
         $repo = new DocumentRepository($document);
+        $order = $params['order'] ?? 1;
         $repo->createTask(DocumentTaskEnum::PARAPHRASE_TEXT, [
             'order' => $params['order'] ?? 1,
             'process_id' => $processId,
@@ -125,6 +128,13 @@ class GenRepository
                 'text' => $params['text'],
                 'sentence_order' => $params['sentence_order'],
                 'tone' => $params['tone'] ?? null
+            ]
+        ]);
+        $repo->createTask(DocumentTaskEnum::REGISTER_FINISHED_PROCESS, [
+            'order' => $order + 1,
+            'process_id' => $processId,
+            'meta' => [
+                'silently' => true
             ]
         ]);
 

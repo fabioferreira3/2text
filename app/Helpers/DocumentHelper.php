@@ -80,7 +80,12 @@ class DocumentHelper
 
     public static function splitIntoSentences($text)
     {
-        return preg_split('/(\\.|\?|!)/', $text, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        $whitespaceChars = ["\n", "\r", "\t", "\v", "\f"];
+        foreach ($whitespaceChars as $char) {
+            $cleanedText = str_replace($char, "", $text);
+        }
+        $sanitizedText = strip_tags($cleanedText);
+        return preg_split('/(\\.|\?|!)/', $sanitizedText, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
     }
 
     public static function splitSentencesIntoArray(array $sentences)
