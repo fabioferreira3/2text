@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\TitleGenerated;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Repositories\GenRepository;
@@ -40,6 +41,7 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
     {
         try {
             GenRepository::generateTitle($this->document, $this->meta['text'] ?? $this->document->normalized_structure);
+            event(new TitleGenerated($this->document, $this->meta['process_id']));
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to create title: ' . $e->getMessage());

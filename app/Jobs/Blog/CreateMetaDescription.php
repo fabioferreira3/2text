@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Blog;
 
+use App\Events\MetaDescriptionGenerated;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Repositories\GenRepository;
@@ -40,6 +41,7 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
     {
         try {
             GenRepository::generateMetaDescription($this->document);
+            event(new MetaDescriptionGenerated($this->document, $this->meta['process_id']));
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to create meta description: ' . $e->getMessage());

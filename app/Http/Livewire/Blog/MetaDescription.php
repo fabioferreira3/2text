@@ -2,9 +2,13 @@
 
 namespace App\Http\Livewire\Blog;
 
+use App\Enums\DocumentTaskEnum;
+use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
+use App\Repositories\DocumentRepository;
 use App\Repositories\GenRepository;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
@@ -14,7 +18,6 @@ class MetaDescription extends Component
     public string $content;
     public string $initialContent;
     public bool $copied = false;
-    protected $listeners = ['refreshContent' => 'updateContent'];
     public bool $isProcessing = false;
 
     public function mount(Document $document)
@@ -24,36 +27,39 @@ class MetaDescription extends Component
         $this->initialContent = $this->content;
     }
 
+    public function getListeners()
+    {
+        $userId = Auth::user()->id;
+        return [
+            "echo-private:User.$userId,.MetaDescriptionGenerated" => 'ready',
+            'refreshContent' => 'updateContent',
+        ];
+    }
+
     private function setContent(Document $document)
     {
         $this->content = Str::of($document->meta['meta_description'])->trim('"');
     }
 
-    public function render()
-    {
-        return view('livewire.blog.meta-description');
-    }
-
     public function regenerate()
     {
-        try {
-            GenRepository::generateMetaDescription($this->document, [
-                'tone' => $this->document->meta['tone'],
-                'keyword' => $this->document->meta['keyword']
-            ]);
+        $this->isProcessing = true;
+        $repo = new DocumentRepository($this->document);
+        $repo->createTask(DocumentTaskEnum::CREATE_METADESCRIPTION, []);
+        DispatchDocumentTasks::dispatch($this->document);
+    }
+
+    public function ready($params)
+    {
+        if ($params['document_id'] === $this->document->id) {
+            $this->isProcessing = false;
             $this->setContent($this->document->refresh());
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'success',
                 'message' => "New meta description generated!"
             ]);
-        } catch (Exception $e) {
-            $this->dispatchBrowserEvent('alert', [
-                'type' => 'error',
-                'message' => "There was an error generating a new meta description!"
-            ]);
         }
     }
-
 
     public function copy()
     {
@@ -84,5 +90,10 @@ class MetaDescription extends Component
         if ($params['field'] === 'meta_description') {
             $this->setContent($this->document);
         }
+    }
+
+    public function render()
+    {
+        return view('livewire.blog.meta-description');
     }
 }

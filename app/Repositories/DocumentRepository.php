@@ -146,7 +146,7 @@ class DocumentRepository
         DocumentTask::create([
             'name' => $task->value,
             'document_id' => $this->document->id,
-            'process_id' => $params['process_id'] ?? null,
+            'process_id' => $params['process_id'] ?? Str::uuid(),
             'job' => $task->getJob(),
             'status' => $params['status'] ?? 'ready',
             'meta' => $params['meta'] ?? [],

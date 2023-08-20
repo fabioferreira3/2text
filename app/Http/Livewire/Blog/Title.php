@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Blog;
 
+use App\Enums\DocumentTaskEnum;
+use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
-use App\Repositories\GenRepository;
-use Exception;
+use App\Repositories\DocumentRepository;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
@@ -14,7 +16,6 @@ class Title extends Component
     public Document $document;
     public string $initialContent;
     public bool $copied = false;
-    protected $listeners = ['refreshContent' => 'updateContent'];
     public bool $isProcessing = false;
 
     public function mount(Document $document)
@@ -24,31 +25,38 @@ class Title extends Component
         $this->initialContent = $this->content;
     }
 
-    private function setContent(Document $document)
+    public function getListeners()
     {
-        $this->content = Str::of($document->title)->trim('"');
+        $userId = Auth::user()->id;
+        return [
+            "echo-private:User.$userId,.TitleGenerated" => 'ready',
+            'refreshContent' => 'updateContent',
+        ];
     }
 
-    public function render()
+    public function ready($params)
     {
-        return view('livewire.blog.title');
-    }
-
-    public function regenerate()
-    {
-        try {
-            GenRepository::generateTitle($this->document, $this->document->normalized_structure);
+        if ($params['document_id'] === $this->document->id) {
+            $this->isProcessing = false;
             $this->setContent($this->document->refresh());
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'success',
                 'message' => "New title generated!"
             ]);
-        } catch (Exception $e) {
-            $this->dispatchBrowserEvent('alert', [
-                'type' => 'error',
-                'message' => "There was an error generating a new title!"
-            ]);
         }
+    }
+
+    private function setContent(Document $document)
+    {
+        $this->content = Str::of($document->title)->trim('"');
+    }
+
+    public function regenerate()
+    {
+        $this->isProcessing = true;
+        $repo = new DocumentRepository($this->document);
+        $repo->createTask(DocumentTaskEnum::CREATE_TITLE, []);
+        DispatchDocumentTasks::dispatch($this->document);
     }
 
 
@@ -81,5 +89,10 @@ class Title extends Component
         if ($params['field'] === 'title') {
             $this->content = Str::of($params['content'])->trim('"');
         }
+    }
+
+    public function render()
+    {
+        return view('livewire.blog.title');
     }
 }
