@@ -19,7 +19,7 @@ class NewParaphraser extends Component
     public $tone = null;
     public $displaySourceUrl = null;
     public $language = Language::ENGLISH->value;
-    public bool $isProcessing;
+    public $isProcessing;
 
     protected $rules = [
         'source_url' => 'nullable|url|required_if:source,website',

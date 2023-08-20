@@ -9,7 +9,9 @@
                         @include('livewire.common.help-item', ['header' => __('paraphraser.origin'), 'content' => App\Helpers\InstructionsHelper::paraphraserSources()])
                     </div>
                     <select name="provider" wire:model="source" class="p-3 rounded-lg border border-zinc-200">
-                        @include('livewire.common.source-providers-options')
+                        {{-- @include('livewire.common.source-providers-options') --}}
+                        <option value="free_text">Free Text</option>
+                        <option value="website_url">Website URL</option>
                     </select>
                     @if ($displaySourceUrl)
                     <div class="flex flex-col gap-3">
@@ -21,7 +23,7 @@
                     </div>
                     <div class="flex items-center">
                         <div class="mr-4 font-bold">Language:</div>
-                        <select name="language" wire:model="language" class="p-3 rounded-lg border border-zinc-200">
+                        <select name="language" wire:model="language" class="p-3 rounded-lg border border-zinc-200 w-64">
                             @include('livewire.common.languages-options')
                         </select>
                     </div>

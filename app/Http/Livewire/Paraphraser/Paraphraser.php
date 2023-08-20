@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Paraphraser;
 
+use App\Enums\DocumentStatus;
 use App\Helpers\DocumentHelper;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
@@ -35,7 +36,7 @@ class Paraphraser extends Component
     {
         $userId = Auth::user()->id;
         return [
-            "echo-private:User.$userId,.TextParaphrased" => 'notify',
+            "echo-private:User.$userId,.TextParaphrased" => 'ready',
             "echo-private:User.$userId,.ProcessFinished" => 'processFinished',
             'select',
         ];
@@ -50,6 +51,9 @@ class Paraphraser extends Component
     public function setup($document)
     {
         $this->document = $document;
+        if ($this->document->status !== DocumentStatus::FINISHED && $this->isSaving === false) {
+            $this->isSaving = true;
+        };
         $this->tone = $document->meta['tone'] ?? null;
         $this->inputText = $document->meta['original_text'] ?? '';
         $this->outputText = [];
@@ -69,7 +73,7 @@ class Paraphraser extends Component
         }
     }
 
-    public function notify()
+    public function ready()
     {
         $this->document->refresh();
         $this->setup($this->document);
@@ -79,6 +83,7 @@ class Paraphraser extends Component
     {
         $this->isSaving = !($params['process_id'] === $this->processId);
         $this->processId = '';
+        $this->ready();
     }
 
     public function copy()

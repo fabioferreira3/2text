@@ -46,6 +46,14 @@ class ParaphraseDocument implements ShouldQueue
                 ]);
             }
 
+            $repo->createTask(DocumentTaskEnum::REGISTER_FINISHED_PROCESS, [
+                'order' => 99999,
+                'process_id' => $processId,
+                'meta' => [
+                    'silently' => true,
+                ]
+            ]);
+
             DispatchDocumentTasks::dispatch($this->document);
             $this->jobSucceded();
         } catch (\Exception $e) {

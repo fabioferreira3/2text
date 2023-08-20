@@ -112,7 +112,7 @@ class TextToAudio extends Component
             $this->document = $repo->createTextToSpeech([
                 'text' => $this->inputText,
                 'voice' => $voice['value'],
-                'language' => $this->language->value
+                'language' => $this->language
             ]);
         } else {
             $this->document->update(['content' => $this->inputText]);

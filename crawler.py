@@ -35,8 +35,18 @@ if title_tag is not None:
 main_tag = soup.find('body')
 content_text = ""
 if main_tag is not None:
-    # remove all 'footer', 'nav', 'noscript', 'img', and 'figure' tags
-    for unwanted_tag in main_tag.find_all(['footer', 'nav', 'noscript', 'img', 'figure']):
+    # remove the following tags
+    for unwanted_tag in main_tag.find_all([
+        'footer',
+        'fieldset',
+        'canvas',
+        'aside',
+        'nav',
+        'noscript',
+        'img',
+        'figure',
+        'iframe'
+    ]):
         unwanted_tag.extract()
 
     # remove all tags that don't contain any content
