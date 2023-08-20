@@ -1,12 +1,6 @@
 <div>
     @include('livewire.common.header', ['icon' => 'switch-horizontal', 'label' => __('paraphraser.paraphrase_text')])
     <div class="flex flex-col md:flex-row items-center justify-center gap-4 border-b py-4">
-        <div class="flex items-center gap-4 justify-between w-full md:justify-start md:w-auto">
-            <div class="mr-4 font-bold">Language:</div>
-            <select name="language" wire:model="language" class="p-3 w-64 rounded-lg border border-zinc-200">
-                @include('livewire.common.languages-options')
-            </select>
-        </div>
         <div>
             @include('livewire.paraphraser.tones')
         </div>
@@ -34,7 +28,7 @@
                                 <x-icon class="w-5 h-5" :name="$copiedAll ? 'check' : 'clipboard-copy'"/>
                                 <div class="font-bold">{{$copiedAll ? __('common.copied') : __('common.copy')}}</div>
                             </button>
-                            @livewire('common.generate-audio', ['document' => $document, 'language' => $language])
+                            @livewire('common.generate-audio', ['document' => $document])
                         </div>
                     @endif
                 </div>

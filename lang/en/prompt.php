@@ -34,7 +34,7 @@ return [
     'max_words' => "- The text must have a maximum of :max words\n",
     'more_instructions' => "- Follow these others instructions on the post creation:\n\n\n :instructions\n\n\n",
     'meta_description_context_instructions' => "- The meta description must be based on the following context:\n\n\n :context\n\n\n",
-    'paraphrase_text' => 'Paraphrase the following text using a :tone tone:\n\n\n:text',
+    'paraphrase_text' => 'Paraphrase the following text using a :tone tone, maintaining in its original language:\n\n\n:text',
     'post_context_instructions' => "- The post must be based on the following context:\n\n\n :context\n\n\n",
     'post_tone_instructions' => "- The post must have a :tone tone.\n",
     'simplify_text' => "Simplify the following text:\n\n:text",

@@ -18,15 +18,13 @@ class Paraphraser extends Component
     public $selectedSentence;
     public $selectedSentenceIndex;
     public $tone = null;
-    public $language = null;
     public bool $copied = false;
     public bool $copiedAll = false;
     public $isSaving = false;
     public string $processId = '';
 
     protected $rules = [
-        'inputText' => 'required|string',
-        'language' => 'required'
+        'inputText' => 'required|string'
     ];
 
     protected $validationAttributes = [
@@ -52,7 +50,6 @@ class Paraphraser extends Component
     public function setup($document)
     {
         $this->document = $document;
-        $this->language = $document->language ?? 'en';
         $this->tone = $document->meta['tone'] ?? null;
         $this->inputText = $document->meta['original_text'] ?? '';
         $this->outputText = [];
@@ -125,14 +122,13 @@ class Paraphraser extends Component
         $originalSentencesArray = DocumentHelper::breakTextIntoSentences($this->inputText);
         $repo->updateMeta('original_sentences', $originalSentencesArray);
 
-        $this->processId = GenRepository::paraphraseDocument($this->document);
+        $this->processId = GenRepository::paraphraseDocument($this->document->fresh());
     }
 
     public function saveDoc()
     {
         $this->document->update([
-            'content' => implode('', array_column($this->outputText, 'paraphrased')),
-            'language' => $this->language
+            'content' => implode('', array_column($this->outputText, 'paraphrased'))
         ]);
     }
 

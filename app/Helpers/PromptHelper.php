@@ -32,7 +32,10 @@ class PromptHelper
 
     public function translate($text, $targetLanguage)
     {
-        return Lang::get('prompt.translate_text', ['text' => $text, 'target_language' => $targetLanguage], $this->language);
+        return Lang::get('prompt.translate_text', [
+            'text' => $text,
+            'target_language' => $targetLanguage
+        ], $this->language);
     }
 
     public function writeFirstPass($outline, array $params)

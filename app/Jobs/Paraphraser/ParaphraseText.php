@@ -42,7 +42,10 @@ class ParaphraseText implements ShouldQueue
             $response = $chatGpt->request([
                 [
                     'role' => 'user',
-                    'content' =>   $promptHelper->paraphrase($this->meta['text'], $this->meta['tone'] ?? $this->document->meta['tone'])
+                    'content' =>   $promptHelper->paraphrase(
+                        $this->meta['text'],
+                        $this->meta['tone'] ?? $this->document->meta['tone']
+                    )
                 ]
             ]);
 

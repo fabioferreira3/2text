@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Common;
 
+use App\Enums\Language;
 use App\Helpers\AudioHelper;
 use App\Models\Document;
 use App\Repositories\GenRepository;
@@ -14,8 +15,8 @@ class GenerateAudio extends Component
     public Document $document;
     public $menuOpen;
     public $selectedVoice = null;
-    public $language;
     public $voices;
+    public $language;
     public bool $isProcessing;
     public $isPlaying;
     public $currentAudioFile;
@@ -31,7 +32,7 @@ class GenerateAudio extends Component
         ];
     }
 
-    public function mount(Document $document, $language = null)
+    public function mount(Document $document)
     {
         $this->document = $document;
         $this->isProcessing = false;
@@ -39,7 +40,12 @@ class GenerateAudio extends Component
         $this->currentAudioUrl = ($this->document->meta['audio_file'] ?? false) ? AudioHelper::getAudioUrl($this->document->meta['audio_file']) : null;
         $this->isPlaying = false;
         $this->menuOpen = false;
-        $this->setOptions($language ?? $document->language);
+        $this->setOptions($this->language ?? $document->language->value);
+    }
+
+    public function updated()
+    {
+        $this->setOptions($this->language);
     }
 
     public function ready($params)
@@ -99,6 +105,7 @@ class GenerateAudio extends Component
 
     public function setOptions($language)
     {
+        $language = Language::tryFrom($language);
         $this->voices = AudioHelper::getVoicesByLanguage($language);
     }
 

@@ -15,6 +15,9 @@
                         <x-loader/>
                     </div>
                 @endif
+                <select name="language" wire:model="language" class="px-3 py-2 w-64 border-none w-full">
+                    @include('livewire.common.voice-languages-options')
+                </select>
 
                 @if ($currentAudioFile && !$isProcessing)
                     <div class="flex flex-col gap-1 px-4 py-2">
@@ -30,6 +33,7 @@
                     </div>
                 @endif
                 <div class="max-h-64 overflow-auto bg-zinc-100">
+
                     @foreach($voices as $key => $voice)
                     <div class="flex items-center justify-between px-4 py-2 border border-t-0 border-x-0 border-b">
                         <div class="flex items-center gap-2">

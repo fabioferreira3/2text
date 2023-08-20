@@ -48,4 +48,13 @@ enum Language: string
     {
         return collect(self::cases())->flatMap(fn ($language) => [$language->value => $language->label()])->toArray();
     }
+
+    public static function voiceEnabled(): array
+    {
+        return collect(self::cases())->filter(fn ($language) => in_array($language->value, [
+            'en',
+            'pt',
+            'es'
+        ]))->toArray();
+    }
 }
