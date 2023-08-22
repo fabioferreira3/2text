@@ -1,9 +1,11 @@
 <x-guest-layout>
     <x-jet-authentication-card>
         <x-slot name="logo">
-            <div class="h-full w-1/2 md:w-1/4 xl:w-1/5 m-auto mb-8">
-                <img src="/logo.png" class="pt-8 md:pt-0" />
-            </div>
+            <a href="https://go.experior.ai">
+                <div class="h-full w-1/2 md:w-1/4 xl:w-1/5 m-auto mb-8">
+                    <img src="/logo.png" class="pt-8 md:pt-0" />
+                </div>
+            </a>
         </x-slot>
 
         <x-jet-validation-errors class="mb-4" />
