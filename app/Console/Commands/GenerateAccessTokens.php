@@ -33,7 +33,7 @@ class GenerateAccessTokens extends Command
 
         for ($i = 0; $i < $count; $i++) {
             do {
-                $name = Str::random(22);
+                $name = Str::random(10);
             } while (AccessToken::where('name', $name)->exists());
 
             AccessToken::create(['name' => $name]);
