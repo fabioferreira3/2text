@@ -54,7 +54,6 @@
                     </button>
                 </div>
             </div>
-            @if ($outputText)
                 <div class="flex flex-col gap-4 mt-2 relative">
                     <div class="flex items-center justify-between md:hidden z-20">
                         @include('livewire.common.label', ['title' => __('paraphraser.paraphrased_text')])
@@ -112,7 +111,6 @@
                         @endforeach
                     </div>
                 </div>
-            @endif
         </div>
     </div>
 </div>

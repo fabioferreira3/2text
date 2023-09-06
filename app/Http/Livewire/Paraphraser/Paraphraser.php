@@ -128,6 +128,7 @@ class Paraphraser extends Component
         $this->unselect();
         $repo->updateMeta('tone', $this->tone);
         $repo->updateMeta('original_text', $this->inputText);
+        $repo->updateMeta('paraphrased_text', []);
 
         // Break down inputText into sentences
         $originalSentencesArray = DocumentHelper::breakTextIntoSentences($this->inputText);

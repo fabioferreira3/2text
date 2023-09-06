@@ -11,6 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DispatchDocumentTasks implements ShouldQueue, ShouldBeUnique
 {
@@ -31,7 +32,6 @@ class DispatchDocumentTasks implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         $tasks = $this->document->tasks()->available()->priorityFirst()->get();
-
         if (!$tasks->count()) {
             return;
         }
