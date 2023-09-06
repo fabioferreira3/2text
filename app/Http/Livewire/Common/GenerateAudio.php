@@ -16,7 +16,7 @@ class GenerateAudio extends Component
     public $menuOpen;
     public $selectedVoice = null;
     public $voices;
-    public $language;
+    public $language = 'en';
     public bool $isProcessing;
     public $isPlaying;
     public $currentAudioFile;

@@ -33,7 +33,6 @@
                     </div>
                 @endif
                 <div class="max-h-64 overflow-auto bg-zinc-100">
-
                     @foreach($voices as $key => $voice)
                     <div class="flex items-center justify-between px-4 py-2 border border-t-0 border-x-0 border-b">
                         <div class="flex items-center gap-2">
