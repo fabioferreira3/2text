@@ -51,7 +51,13 @@ class Paraphraser extends Component
     public function setup($document)
     {
         $this->document = $document;
-        if ($this->document->status !== DocumentStatus::FINISHED && $this->isSaving === false) {
+        if (!in_array(
+            $this->document->status,
+            [
+                DocumentStatus::FINISHED,
+                DocumentStatus::ON_HOLD
+            ]
+        ) && $this->isSaving === false) {
             $this->isSaving = true;
         };
         $this->tone = $document->meta['tone'] ?? null;
