@@ -10,13 +10,10 @@ use App\Http\Livewire\Paraphraser\Paraphraser;
 use App\Http\Livewire\SocialMediaPost\NewSocialMediaPost;
 use App\Http\Livewire\SocialMediaPost\PostsList;
 use App\Http\Livewire\Templates;
-use App\Http\Livewire\TextToSpeech\NewTextToSpeech;
 use App\Http\Livewire\TextToSpeech\TextToAudio;
 use App\Http\Livewire\TextTranscription\NewTranscription;
 use App\Http\Livewire\TextTranscription\TextTranscription;
 use App\Http\Livewire\Trash;
-use App\Mail\FinishedProcessEmail;
-use Cion\TextToSpeech\Facades\TextToSpeech;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -38,7 +35,7 @@ Route::middleware([
     'checktoken'
 ])->group(function () {
     Route::get('/', function () {
-        return redirect('/dashboard');
+        return redirect('/templates');
     });
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/dashboard/trash', Trash::class)->name('trash');
