@@ -45,16 +45,33 @@ class NewPost extends Component
         return view('livewire.blog.new')->layout('layouts.app', ['title' => $this->title]);
     }
 
-    protected $rules = [
-        'source' => 'required|in:free_text,youtube,website_url',
-        'source_url' => 'required_if:source,youtube,website_url|url',
-        'context' => 'required_if:source,free_text|nullable',
-        'keyword' => 'required',
-        'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
-        'targetHeadersCount' => 'required|numeric|min:2|max:10',
-        'tone' => 'nullable',
-        'style' => 'nullable'
-    ];
+    public function rules()
+    {
+        $rules = [
+            'source' => 'required|in:free_text,youtube,website_url',
+            'keyword' => 'required',
+            'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
+            'targetHeadersCount' => 'required|numeric|min:2|max:10',
+            'tone' => 'nullable',
+            'style' => 'nullable'
+        ];
+
+        // Dynamic rule for source_url based on source value
+        if ($this->source === 'youtube') {
+            $rules['source_url'] = ['required', 'url', new \App\Rules\YouTubeUrl()];
+        } elseif ($this->source === 'website_url') {
+            $rules['source_url'] = ['required', 'url'];
+        }
+
+        // Dynamic rule for context based on source value
+        if ($this->source === 'free_text') {
+            $rules['context'] = 'required';
+        } else {
+            $rules['context'] = 'nullable';
+        }
+
+        return $rules;
+    }
 
     protected $messages = [
         'context.required_if' => 'You need to provide some context for the AI to generate your blog post.',
@@ -69,7 +86,7 @@ class NewPost extends Component
 
     public function process()
     {
-        $this->validate();
+        $this->validate($this->rules());
         $params = [
             'source' => $this->source,
             'context' => $this->context,

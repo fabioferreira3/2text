@@ -55,7 +55,7 @@ class NewTranscription extends Component
 
     public function process()
     {
-        $this->validate();
+        $this->validate($this->rules());
         $repo = new DocumentRepository();
         $document = $repo->createGeneric([
             'type' => DocumentType::TEXT_TRANSCRIPTION->value,
