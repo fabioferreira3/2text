@@ -4,7 +4,6 @@ namespace App\Http\Livewire\SocialMediaPost;
 
 use App\Enums\Language;
 use App\Jobs\SocialMedia\CreateSocialMediaPost;
-use Illuminate\Support\Facades\Auth;
 use WireUi\Traits\Actions;
 use Livewire\Component;
 

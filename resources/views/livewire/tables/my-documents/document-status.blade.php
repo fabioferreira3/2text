@@ -19,7 +19,7 @@
         <x-slot name="prepend" class="relative flex items-center w-2 h-2"></x-slot>
     </x-badge>
 @else
-    <x-badge icon="minus-circle" class="font-sans py-1 border border-gray-300" md label="On hold">
+    <x-badge icon="clock" class="font-sans py-1 border border-gray-300" md label="Preparing...">
         <x-slot name="prepend" class="relative flex items-center w-2 h-2"></x-slot>
     </x-badge>
 @endif
