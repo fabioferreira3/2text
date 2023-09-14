@@ -38,61 +38,61 @@ class CreateSocialMediaPost
 
         $document->refresh();
 
-        if ($this->params['source'] === 'website_url') {
-            $this->repo->createTask(
-                DocumentTaskEnum::CRAWL_WEBSITE,
-                [
-                    'process_id' => $this->params['process_id'],
-                    'meta' => [],
-                    'order' => 2
-                ]
-            );
-        } elseif ($this->params['source'] === 'youtube') {
-            $this->repo->createTask(
-                DocumentTaskEnum::DOWNLOAD_AUDIO,
-                [
-                    'process_id' => $this->params['process_id'],
-                    'meta' => [
-                        'source_url' => $document['meta']['source_url']
-                    ],
-                    'order' => 2
-                ]
-            );
-            $this->repo->createTask(
-                DocumentTaskEnum::PROCESS_AUDIO,
-                [
-                    'process_id' => $this->params['process_id'],
-                    'meta' => [],
-                    'order' => 3
-                ]
-            );
-        }
+        // if ($this->params['source'] === 'website_url') {
+        //     $this->repo->createTask(
+        //         DocumentTaskEnum::CRAWL_WEBSITE,
+        //         [
+        //             'process_id' => $this->params['process_id'],
+        //             'meta' => [],
+        //             'order' => 2
+        //         ]
+        //     );
+        // } elseif ($this->params['source'] === 'youtube') {
+        //     $this->repo->createTask(
+        //         DocumentTaskEnum::DOWNLOAD_AUDIO,
+        //         [
+        //             'process_id' => $this->params['process_id'],
+        //             'meta' => [
+        //                 'source_url' => $document['meta']['source_url']
+        //             ],
+        //             'order' => 2
+        //         ]
+        //     );
+        //     $this->repo->createTask(
+        //         DocumentTaskEnum::PROCESS_AUDIO,
+        //         [
+        //             'process_id' => $this->params['process_id'],
+        //             'meta' => [],
+        //             'order' => 3
+        //         ]
+        //     );
+        // }
 
-        $platforms = collect($document->meta['platforms'])
-            ->filter(function ($value) {
-                return $value;
-            })->keys();
-        $platforms->each(function ($platform, $index) {
-            $this->repo->createTask(
-                DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST,
-                [
-                    'process_id' => $this->params['process_id'],
-                    'meta' => [
-                        'platform' => $platform,
-                    ],
-                    'order' => 3 + $index
-                ]
-            );
-        });
+        // $platforms = collect($document->meta['platforms'])
+        //     ->filter(function ($value) {
+        //         return $value;
+        //     })->keys();
+        // $platforms->each(function ($platform, $index) {
+        //     $this->repo->createTask(
+        //         DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST,
+        //         [
+        //             'process_id' => $this->params['process_id'],
+        //             'meta' => [
+        //                 'platform' => $platform,
+        //             ],
+        //             'order' => 3 + $index
+        //         ]
+        //     );
+        // });
 
-        $this->repo->createTask(
-            DocumentTaskEnum::CREATE_TITLE,
-            [
-                'process_id' => $this->params['process_id'],
-                'meta' => [],
-                'order' => 99
-            ]
-        );
+        // $this->repo->createTask(
+        //     DocumentTaskEnum::CREATE_TITLE,
+        //     [
+        //         'process_id' => $this->params['process_id'],
+        //         'meta' => [],
+        //         'order' => 99
+        //     ]
+        // );
 
         $this->repo->createTask(DocumentTaskEnum::REGISTER_FINISHED_PROCESS, [
             'order' => 100,

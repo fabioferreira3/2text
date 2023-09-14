@@ -32,7 +32,9 @@ class MyDocumentsTable extends DataTableComponent
     public function viewDoc($documentId)
     {
         $document = Document::findOrFail($documentId);
-        return redirect()->route('document-view', ['document' => $document]);
+        if ($document->status->value === 'finished') {
+            return redirect()->route('document-view', ['document' => $document]);
+        }
     }
 
     public function deleteDoc($documentId)
