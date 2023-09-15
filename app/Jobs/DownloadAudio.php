@@ -93,11 +93,47 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
             $duration = ceil($downloadedVideo->getDuration() / 60);
             $localFilePath = $downloadedVideo->getFile();
 
-            Storage::disk('s3')->put($downloadedVideo->getFile()->getBasename(), file_get_contents($localFilePath));
+            $fileSize = $localFilePath->getSize();
+            $maxSize = 23 * 1024 * 1024; // 25MB in bytes
 
+            $audioFilePaths = [];
+
+            if ($fileSize > $maxSize) {
+                // Get the duration of the MP3 file in seconds using ffmpeg
+                $durationCommand = "ffmpeg -i {$localFilePath} 2>&1 | grep Duration | awk '{print $2}' | tr -d ,";
+                $durationString = shell_exec($durationCommand);
+                list($hours, $minutes, $seconds) = sscanf($durationString, "%d:%d:%d");
+                $totalSeconds = $hours * 3600 + $minutes * 60 + $seconds;
+
+                // Determine chunk duration in seconds to approximate 25MB
+                $chunkDuration = floor(($maxSize / $fileSize) * $totalSeconds);
+
+                $partNumber = 0;
+                for ($start = 0; $start < $totalSeconds; $start += $chunkDuration) {
+                    $outputFile = "{$localFilePath}_part_" . sprintf('%03d', $partNumber) . ".mp3";
+                    $ffmpegCommand = "ffmpeg -i {$localFilePath} -ss {$start} -t {$chunkDuration} -c copy {$outputFile}";
+                    exec($ffmpegCommand);
+
+                    $basename = basename($outputFile);
+                    Storage::disk('s3')->put($basename, file_get_contents($outputFile));
+                    $audioFilePaths[] = $basename;
+
+                    // Delete the local split part after uploading to S3
+                    @unlink($outputFile);
+                    $partNumber++;
+                }
+                // Delete the original large file as well
+                @unlink($localFilePath);
+            } else {
+                // If not exceeding, just add the single path to our paths array
+                Storage::disk('s3')->put($downloadedVideo->getFile()->getBasename(), file_get_contents($localFilePath));
+                $audioFilePaths[] = $collection[0]->getFile()->getBasename();
+            }
+
+            // Update the document
             $this->document->update(['meta' => [
                 ...$this->document->meta,
-                'audio_file_path' => $collection[0]->getFile()->getBasename(),
+                'audio_file_path' => $audioFilePaths,
                 'duration' => $duration
             ]]);
 
