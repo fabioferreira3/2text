@@ -105,7 +105,7 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
                 list($hours, $minutes, $seconds) = sscanf($durationString, "%d:%d:%d");
                 $totalSeconds = $hours * 3600 + $minutes * 60 + $seconds;
 
-                // Determine chunk duration in seconds to approximate 25MB (this is an approximation and might need adjustments)
+                // Determine chunk duration in seconds to approximate 25MB
                 $chunkDuration = floor(($maxSize / $fileSize) * $totalSeconds);
 
                 $partNumber = 0;
