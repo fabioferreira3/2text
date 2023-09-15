@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -44,30 +45,39 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            // Get the file from S3 and store it locally if it doesn't exist
-            if (!Storage::disk('local')->exists($this->document->meta['audio_file_path'])) {
-                $fileUrl = Storage::disk('s3')->get($this->document->meta['audio_file_path']);
-                Storage::disk('local')->put($this->document->meta['audio_file_path'], $fileUrl);
-            }
+            $transcription = collect([]);
+            if (count($this->document->meta['audio_file_path'])) {
+                foreach ($this->document->meta['audio_file_path'] as $audioFilePath) {
+                    Log::debug($audioFilePath);
+                    // Get the file from S3 and store it locally if it doesn't exist
+                    if (!Storage::disk('local')->exists($audioFilePath)) {
+                        $fileUrl = Storage::disk('s3')->get($audioFilePath);
+                        Storage::disk('local')->put($audioFilePath, $fileUrl);
+                    }
 
-            // Check the file size and compress it if necessary
-            $localFilePath = Storage::disk('local')->path($this->document->meta['audio_file_path']);
-            $neededToCompress = $this->compressAndStoreMp3(new \Illuminate\Http\File($localFilePath));
+                    // Check the file size and compress it if necessary
+                    $localFilePath = Storage::disk('local')->path($audioFilePath);
+                    $neededToCompress = $this->compressAndStoreMp3(new \Illuminate\Http\File($localFilePath), $audioFilePath);
 
-            $whisper = new Whisper($localFilePath);
-            $response = $whisper->request();
+                    $whisper = new Whisper($localFilePath);
+                    $response = $whisper->request();
 
-            // Clean up the local files
-            Storage::disk('local')->delete($this->document->meta['audio_file_path']);
-            if ($neededToCompress) {
-                Storage::disk('local')->delete('compressed_' . $this->document->meta['audio_file_path']);
+                    // Clean up the local files
+                    Storage::disk('local')->delete($audioFilePath);
+                    if ($neededToCompress) {
+                        Storage::disk('local')->delete('compressed_' . $audioFilePath);
+                    }
+
+                    Log::debug($response['text']);
+                    $transcription->push($response['text']);
+                }
             }
 
             $this->document->update([
                 'meta' => [
                     ...$this->document->meta,
-                    'context' => $response['text'],
-                    'original_text' => $response['text']
+                    'context' => $transcription->implode(' '),
+                    'original_text' => $transcription->implode(' ')
                 ]
             ]);
 
@@ -88,15 +98,15 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
         }
     }
 
-    protected function compressAndStoreMp3($file)
+    protected function compressAndStoreMp3($localFile, $fileName)
     {
-        $maxFileSize = 25 * 1024 * 1024; // 25 MB in bytes
+        $maxFileSize = 22 * 1024 * 1024; // 25 MB in bytes
 
         // Check if the file size is greater than 25 MB
-        if ($file->getSize() > $maxFileSize) {
+        if ($localFile->getSize() > $maxFileSize) {
             // Compress the file using FFmpeg
-            $inputPath = $file->getRealPath();
-            $outputPath = Storage::disk('local')->path('compressed_' . $this->document->meta['audio_file_path']);
+            $inputPath = $localFile->getRealPath();
+            $outputPath = Storage::disk('local')->path('compressed_' . $fileName);
 
             $process = new Process([
                 'ffmpeg',
@@ -115,10 +125,10 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
             }
 
             // Replace the original file with the compressed one
-            $file = Storage::disk('local')->get('compressed_' . $this->document->meta['audio_file_path']);
+            $newLocalFile = Storage::disk('local')->get('compressed_' . $fileName);
 
             // Store the file using the Storage facade
-            Storage::disk('local')->put($this->document->meta['audio_file_path'], $file);
+            Storage::disk('local')->put($fileName, $newLocalFile);
             return true;
         }
 

@@ -49,10 +49,10 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
                 'order' => 1
             ]
         );
-        $repo->createTask(DocumentTaskEnum::PROCESS_AUDIO, [
-            'process_id' => $this->params['process_id'],
-            'order' => 2
-        ]);
+        // $repo->createTask(DocumentTaskEnum::PROCESS_AUDIO, [
+        //     'process_id' => $this->params['process_id'],
+        //     'order' => 2
+        // ]);
         RegisterCreationTasks::dispatchSync($this->document, [
             ...$this->params,
             'next_order' => 3
