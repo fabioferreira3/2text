@@ -54,12 +54,6 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
             $localFilePath = Storage::disk('local')->path($this->document->meta['audio_file_path']);
             $neededToCompress = $this->compressAndStoreMp3(new \Illuminate\Http\File($localFilePath));
 
-            // If the file was compressed, replace the local file with the compressed one
-            // if ($neededToCompress) {
-            //     Storage::disk('local')->delete($this->document->meta['audio_file_path']);
-            //     $localFilePath = Storage::disk('local')->path($compressedFilePath);
-            // }
-
             $whisper = new Whisper($localFilePath);
             $response = $whisper->request();
 
