@@ -53,6 +53,10 @@ class CreateTranscription
                 ]
             ]);
         }
+        $this->repo->createTask(DocumentTaskEnum::PUBLISH_TRANSCRIPTION, [
+            'order' => 1000,
+            'process_id' => $processId
+        ]);
         DispatchDocumentTasks::dispatch($this->document);
     }
 }

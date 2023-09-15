@@ -36,12 +36,15 @@ class NewTranscription extends Component
         return view('livewire.text-transcription.new')->layout('layouts.app', ['title' => $this->title]);
     }
 
-    protected $rules = [
-        'source' => 'required|in:youtube',
-        'source_url' => 'required|url',
-        'origin_language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
-        'target_language' => 'required|in:same,en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr'
-    ];
+    public function rules()
+    {
+        return [
+            'source' => 'required|in:youtube',
+            'source_url' => ['required', 'url', $this->source === 'youtube' ? new \App\Rules\YouTubeUrl() : ''],
+            'origin_language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
+            'target_language' => 'required|in:same,en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr'
+        ];
+    }
 
     protected $messages = [
         'source_url.required' => 'You need to provide a Youtube link for the transcription.',
@@ -52,7 +55,7 @@ class NewTranscription extends Component
 
     public function process()
     {
-        $this->validate();
+        $this->validate($this->rules());
         $repo = new DocumentRepository();
         $document = $repo->createGeneric([
             'type' => DocumentType::TEXT_TRANSCRIPTION->value,
@@ -62,6 +65,7 @@ class NewTranscription extends Component
                 'source_url' => $this->source_url
             ]
         ]);
+
         CreateTranscription::dispatch($document, [
             'target_language' => $this->target_language
         ]);

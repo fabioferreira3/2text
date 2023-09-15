@@ -12,6 +12,7 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\MultiSelectFilter;
 use WireUi\Traits\Actions;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MyDocumentsTable extends DataTableComponent
@@ -31,7 +32,9 @@ class MyDocumentsTable extends DataTableComponent
     public function viewDoc($documentId)
     {
         $document = Document::findOrFail($documentId);
-        return redirect()->route('document-view', ['document' => $document]);
+        if ($document->status->value === 'finished') {
+            return redirect()->route('document-view', ['document' => $document]);
+        }
     }
 
     public function deleteDoc($documentId)
@@ -81,12 +84,14 @@ class MyDocumentsTable extends DataTableComponent
                 ->collapseOnMobile(),
             Column::make(__('dashboard.actions'))
                 ->label(
-                    fn ($row, Column $column) => view('livewire.tables.my-documents.view-action', [
-                        'rowId' => $row->id,
-                        'status' => $row->status,
-                        'canView' => in_array($row->status->value, ['finished']),
-                        'canDelete' => in_array($row->status->value, ['finished', 'aborted', 'failed'])
-                    ])
+                    function ($row, Column $column) {
+                        return view('livewire.tables.my-documents.view-action', [
+                            'rowId' => $row->id,
+                            'status' => $row->status,
+                            'canView' => $row->status->value === 'finished',
+                            'canDelete' => in_array($row->status->value, ['finished', 'aborted', 'failed'])
+                        ]);
+                    }
                 ),
         ];
     }
