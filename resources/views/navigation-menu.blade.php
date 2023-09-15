@@ -1,13 +1,13 @@
 <nav x-data="{ open: false }" class="rounded-lg w-full">
     <!-- Primary Navigation Menu -->
-    <div class="rounded-l-lg px-4 sm:px-6 lg:px-8 flex items-center md:block md:bg-white bg-main">
-        <div class="md:hidden bg-main p-4">
+    <div class="rounded-l-lg px-4 sm:px-6 lg:px-8 flex items-center md:block bg-main sm:bg-white">
+        <div class="sm:hidden bg-main p-4">
             <a href="{{ route('dashboard') }}">
                 <img src="/logo.png" class="m-auto w-1/2 h-full" />
             </a>
         </div>
         <div class="flex w-full items-center justify-between h-16">
-            <div>
+            <div class="mr-8 sm:mr-0">
                 @if ((url()->current() !== url()->route('dashboard')))
                 <a href="{{url()->route('dashboard')}}" class="flex text-white text-sm items-center gap-2 bg-secondary px-4 py-1 rounded-full">
                     <x-icon name="arrow-circle-left" class="w-4 h-4" />
@@ -82,13 +82,28 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-white">
+    <div :class="{'block bg-white': open, 'hidden': ! open}">
         <div class="pt-2 pb-3 space-y-1">
             <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('menus.dashboard') }}
             </x-jet-responsive-nav-link>
             <x-jet-responsive-nav-link href="{{ route('templates') }}" :active="request()->routeIs('templates')">
                 {{ __('menus.templates') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('new-social-media-post') }}" :active="request()->routeIs('new-social-media-post')">
+                {{ __('menus.social_media_post') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('new-post') }}" :active="request()->routeIs('new-post')">
+                {{ __('menus.blog_post') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('new-text-transcription') }}" :active="request()->routeIs('new-text-transcription')">
+                {{ __('menus.text_transcription') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('new-paraphraser') }}" :active="request()->routeIs('new-paraphraser')">
+                {{ __('menus.paraphraser') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('new-text-to-speech') }}" :active="request()->routeIs('new-text-to-speech')">
+                {{ __('menus.text_to_audio') }}
             </x-jet-responsive-nav-link>
         </div>
 
