@@ -32,12 +32,12 @@
     <x-jet-banner />
     @livewire('common.notifications')
 
-    <main class="flex w-full md:grid md:grid-cols-6 xl:grid-c min-h-screen">
-        <div class="hidden sm:block md:col-span-1 h-full p-6 bg-main">
+    <main class="flex w-full md:grid md:grid-cols-7 xl:grid-cols-6 min-h-screen">
+        <div class="hidden sm:block md:col-span-2 xl:col-span-1 h-full p-6 bg-main">
             @livewire('common.sidebar')
         </div>
         <!-- Page Content -->
-        <div class="w-full md:col-span-5 h-full px-0 mb-8 pb-6">
+        <div class="w-full md:col-span-5 xl:col-span-5 h-full px-0 mb-8 pb-6">
             @livewire('navigation-menu')
             <div class='h-0.5 sm:px-8'>
                 <div class='h-full bg-secondary rounded-lg'></div>
