@@ -43,6 +43,7 @@ class Post extends Component
         $this->rows = $rows;
         $this->setContent($document);
         $this->initialContent = $this->content;
+        $this->processId = '';
     }
 
     private function setContent(Document $document)
