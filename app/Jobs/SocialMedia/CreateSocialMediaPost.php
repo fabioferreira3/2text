@@ -58,14 +58,14 @@ class CreateSocialMediaPost
                     'order' => 2
                 ]
             );
-            // $this->repo->createTask(
-            //     DocumentTaskEnum::PROCESS_AUDIO,
-            //     [
-            //         'process_id' => $this->params['process_id'],
-            //         'meta' => [],
-            //         'order' => 3
-            //     ]
-            // );
+            $this->repo->createTask(
+                DocumentTaskEnum::PROCESS_AUDIO,
+                [
+                    'process_id' => $this->params['process_id'],
+                    'meta' => [],
+                    'order' => 3
+                ]
+            );
         }
 
         $platforms = collect($document->meta['platforms'])

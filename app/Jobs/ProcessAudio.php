@@ -48,7 +48,6 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
             $transcription = collect([]);
             if (count($this->document->meta['audio_file_path'])) {
                 foreach ($this->document->meta['audio_file_path'] as $audioFilePath) {
-                    Log::debug($audioFilePath);
                     // Get the file from S3 and store it locally if it doesn't exist
                     if (!Storage::disk('local')->exists($audioFilePath)) {
                         $fileUrl = Storage::disk('s3')->get($audioFilePath);
@@ -68,7 +67,6 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
                         Storage::disk('local')->delete('compressed_' . $audioFilePath);
                     }
 
-                    Log::debug($response['text']);
                     $transcription->push($response['text']);
                 }
             }

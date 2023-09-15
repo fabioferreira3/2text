@@ -137,36 +137,6 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
                 'duration' => $duration
             ]]);
 
-            // if ($fileSize > $maxSize) {
-            //     // Split the file with mp3 extension
-            //     $splitCommand = "split -b {$maxSize} -d -a 3 --additional-suffix=.mp3 {$localFilePath} {$localFilePath}_part_";
-            //     exec($splitCommand);
-
-            //     // Gather all split parts
-            //     $splitFiles = glob("{$localFilePath}_part_*.mp3");
-            //     foreach ($splitFiles as $splitFile) {
-            //         $basename = basename($splitFile);
-            //         Storage::disk('s3')->put($basename, file_get_contents($splitFile));
-            //         $audioFilePaths[] = $basename;
-
-            //         // Delete the local split part after uploading to S3
-            //         @unlink($splitFile);
-            //     }
-            //     // Delete the original large file as well
-            //     @unlink($localFilePath);
-            // } else {
-            //     // If not exceeding, just add the single path to our paths array
-            //     Storage::disk('s3')->put($downloadedVideo->getFile()->getBasename(), file_get_contents($localFilePath));
-            //     $audioFilePaths[] = $collection[0]->getFile()->getBasename();
-            // }
-
-            // // Update the document
-            // $this->document->update(['meta' => [
-            //     ...$this->document->meta,
-            //     'audio_file_path' => $audioFilePaths,
-            //     'duration' => $duration
-            // ]]);
-
             $this->jobSucceded();
         } catch (Exception $e) {
             Log::error($e->getMessage());
