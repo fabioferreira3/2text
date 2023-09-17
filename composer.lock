@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3adab8bee9056c36a03bfdf52ae0ef83",
+    "content-hash": "84cfa06c6d4ca80d126fb0300dd3bbf5",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -9995,6 +9995,54 @@
                 }
             ],
             "time": "2023-07-31T07:08:24+00:00"
+        },
+        {
+            "name": "talendor/laravel-stability-ai",
+            "version": "v0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fabioferreira3/laravel-stability-ai.git",
+                "reference": "fbd4150c0c48d108d17f0fa6f23ab72bf5e97afa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fabioferreira3/laravel-stability-ai/zipball/fbd4150c0c48d108d17f0fa6f23ab72bf5e97afa",
+                "reference": "fbd4150c0c48d108d17f0fa6f23ab72bf5e97afa",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^9.19",
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Talendor\\StabilityAI\\StabilityAIServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Talendor\\StabilityAI\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabio Ferreira",
+                    "email": "fabio86ferreira@gmail.com"
+                }
+            ],
+            "description": "Stability AI package for Laravel",
+            "support": {
+                "issues": "https://github.com/fabioferreira3/laravel-stability-ai/issues",
+                "source": "https://github.com/fabioferreira3/laravel-stability-ai/tree/v0.2"
+            },
+            "time": "2023-09-17T22:40:04+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
