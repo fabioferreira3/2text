@@ -32,7 +32,8 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-    'checktoken'
+    'checktoken',
+    'maintenance'
 ])->group(function () {
     Route::get('/', function () {
         return redirect('/templates');
