@@ -51,7 +51,7 @@ class DocumentRepository
     public function createSocialMediaPost(array $params): Document
     {
         return Document::create([
-            ...$params,
+            'type' => DocumentType::SOCIAL_MEDIA_POST->value,
             'meta' => [
                 'context' => $params['context'] ?? null,
                 'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,

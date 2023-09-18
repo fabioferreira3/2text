@@ -3,7 +3,6 @@
 namespace App\Jobs\SocialMedia;
 
 use App\Enums\DocumentTaskEnum;
-use App\Enums\DocumentType;
 use App\Jobs\DispatchDocumentTasks;
 use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -22,7 +21,6 @@ class CreateSocialMediaPost
         $this->params = [
             ...$params,
             'process_id' => Str::uuid(),
-            'type' => DocumentType::SOCIAL_MEDIA_POST->value
         ];
         $this->repo = new DocumentRepository();
     }

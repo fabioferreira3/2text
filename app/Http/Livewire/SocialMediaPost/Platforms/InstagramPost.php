@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\SocialMediaPost;
+namespace App\Http\Livewire\SocialMediaPost\Platforms;
 
 use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
@@ -11,18 +11,19 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
-class Post extends Component
+class InstagramPost extends Component
 {
     public Document $document;
-    public string $content;
+    public string $image;
+    public string $text;
     public string $initialContent;
     public bool $copied = false;
-    public string $platform;
-    public int $rows;
     public bool $displayHistory = false;
     public string $userId;
     public bool $isProcessing = false;
     public string $processId;
+    private string $platform;
+    private $postData;
 
     public function getListeners()
     {
@@ -35,20 +36,20 @@ class Post extends Component
         ];
     }
 
-    public function mount(Document $document, $platform, $rows = 12)
+    public function mount(Document $document, $postData)
     {
+        $this->postData = $postData;
         $this->userId = Auth::user()->id;
         $this->document = $document;
-        $this->platform = $platform;
-        $this->rows = $rows;
-        $this->setContent($document);
-        $this->initialContent = $this->content;
+        $this->setContent();
+        $this->initialContent = $this->text;
         $this->processId = '';
     }
 
-    private function setContent(Document $document)
+    private function setContent()
     {
-        $this->content = Str::of($document->meta[$this->platform])->trim('"');
+        $this->image = Str::of($this->postData['image_url']);
+        $this->text = Str::of($this->postData['text'])->trim('"');
     }
 
     public function refresh()
@@ -59,7 +60,7 @@ class Post extends Component
 
     public function render()
     {
-        return view('livewire.social-media-post.post');
+        return view('livewire.social-media-post.platforms.instagram-post');
     }
 
     public function regenerate()
@@ -135,7 +136,7 @@ class Post extends Component
     public function updateContent($params)
     {
         if ($params['field'] === $this->platform) {
-            $this->setContent($this->document);
+            $this->setContent();
         }
     }
 
