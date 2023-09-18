@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\MaintenanceMode;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -38,6 +39,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\SetUserTimezone::class,
             \App\Http\Middleware\LocaleMiddleware::class,
+            MaintenanceMode::class
         ],
 
         'api' => [
@@ -66,5 +68,6 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'maintenance' => MaintenanceMode::class
     ];
 }
