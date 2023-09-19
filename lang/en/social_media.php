@@ -16,6 +16,7 @@ return [
     'free_text' => 'Just enter any text that you want as context and I\'ll write a text based on the information you provide.',
     'further_instructions' => 'Further instructions (optional)',
     'generate' => 'Generate',
+    'generating' => 'Generating with AI...',
     'instructions' => 'Instructions',
     'keyword' => 'Keyword',
     'language' => 'Language',

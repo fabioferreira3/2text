@@ -7,9 +7,15 @@
 
     <div class="flex flex-col mt-8 border-1 border rounded-lg bg-white p-8">
         <div class="flex justify-between items-center">
+            @include('livewire.common.label', ['title' => __('social_media.generating')])
+        </div>
+    </div>
+
+    <div class="flex flex-col mt-8 border-1 border rounded-lg bg-white p-8">
+        <div class="flex justify-between items-center">
             @include('livewire.common.label', ['title' => __('social_media.instructions')])
             <div class="cursor-pointer" wire:click="toggleInstructions">
-                <x-icon name="arrow-circle-down" class="w-8 h-8 text-secondary"/>
+                <x-icon :name="$showInstructions ? 'arrow-circle-up' : 'arrow-circle-down'" class="w-8 h-8 text-zinc-500"/>
             </div>
         </div>
         @if($showInstructions)
@@ -98,7 +104,7 @@
 
                                 @if ($source === 'youtube')
                                     <label class="font-bold text-lg text-zinc-700">Youtube url:</label>
-                                    <input name="url" wire:model="source_url" class="p-3 border border-zinc-200 rounded-lg" />
+                                    <input name="url" wire:model="sourceUrl" class="p-3 border border-zinc-200 rounded-lg" />
                                     @if($errors->has('source_url'))
                                         <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
                                     @endif
@@ -137,7 +143,7 @@
                                         <small>{{__('social_media.provide_guidelines')}}</small>
                                     </div>
 
-                                    <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="5000" wire:model="more_instructions"></textarea>
+                                    <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="5000" wire:model="moreInstructions"></textarea>
                                     @if($errors->has('more_instructions'))
                                     <span class="text-red-500 text-sm">{{ $errors->first('more_instructions') }}</span>
                                     @endif
@@ -155,75 +161,77 @@
         @endif
     </div>
 
-    <div class="flex flex-col md:grid md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
-        @if(count($document->meta['platforms_content']))
-        @foreach($document->meta['platforms_content'] as $postData)
-            @if($postData['platform'] === 'instagram')
-                <div>
-                    <div class='h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2 cursor-pointer'>
-                        <img class="h-12" src="{{ Vite::asset('resources/images/instagram-logo.png') }}">
+    @isset($document->meta['platforms_content'])
+        <div class="flex flex-col md:grid md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
+            @if(count($document->meta['platforms_content']))
+                @foreach($document->meta['platforms_content'] as $platform => $postData)
+                    @if($platform === 'Instagram')
+                        <div>
+                            <div class='h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2'>
+                                <img class="h-12" src="{{ Vite::asset('resources/images/instagram-logo.png') }}">
+                            </div>
+                            <div class="border-l border-r border-b border-zinc-200 rounded-b-lg overflow-hidden">
+                                @livewire('social-media-post.platforms.instagram-post', [$document, $postData])
+                            </div>
+                        </div>
+                    @endif
+                    {{-- @if($postData['platform'] === 'twitter')
+                        <div>
+                            <div class='h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2 cursor-pointer'>
+                                <img class="h-20" src="{{ asset('images/twitter-logo.svg') }}">
+                            </div>
+                            <div class="overflow-hidden p-0 opacity-0 border border-zinc-200 bg-[#1DA1F2] rounded-b-lg">
+                                @livewire('social-media-post.twitter-post', [$document, $postData])
+                            </div>
+                        </div>
+                    @endif --}}
+                @endforeach
+                {{-- @if($document->meta['platforms_content'] ?? false)
+                    <div class="accordion-item">
+                        <div onclick="toggleAccordion(this)" class='accordion-header h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2 cursor-pointer'>
+                            <img class="h-8" src="{{ Vite::asset('resources/images/linkedin-logo.png') }}">
+                        </div>
+                        <div class="accordion-content max-h-0 transition-all duration-300 overflow-hidden p-0 opacity-0 border border-zinc-200 bg-[#006193] rounded-b-lg">
+                            @livewire('social-media-post.social-media-post', [$document, 'Linkedin'])
+                        </div>
                     </div>
-                    <div class="border-l border-r border-b border-zinc-200 rounded-b-lg overflow-hidden">
-                        @livewire('social-media-post.platforms.instagram-post', [$document, $postData])
-                    </div>
-                </div>
-            @endif
-            {{-- @if($postData['platform'] === 'twitter')
-                <div>
-                    <div class='h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2 cursor-pointer'>
-                        <img class="h-20" src="{{ asset('images/twitter-logo.svg') }}">
-                    </div>
-                    <div class="overflow-hidden p-0 opacity-0 border border-zinc-200 bg-[#1DA1F2] rounded-b-lg">
-                        @livewire('social-media-post.twitter-post', [$document, $postData])
-                    </div>
-                </div>
-            @endif --}}
-        @endforeach
-            {{-- @if($document->meta['platforms_content'] ?? false)
-                <div class="accordion-item">
-                    <div onclick="toggleAccordion(this)" class='accordion-header h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2 cursor-pointer'>
-                        <img class="h-8" src="{{ Vite::asset('resources/images/linkedin-logo.png') }}">
-                    </div>
-                    <div class="accordion-content max-h-0 transition-all duration-300 overflow-hidden p-0 opacity-0 border border-zinc-200 bg-[#006193] rounded-b-lg">
-                        @livewire('social-media-post.social-media-post', [$document, 'Linkedin'])
-                    </div>
-                </div>
-            @endif
+                @endif
 
-            @if($document->meta['Twitter'] ?? false)
-                <div class="accordion-item">
-                    <div onclick="toggleAccordion(this)" class='accordion-header h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2 cursor-pointer'>
-                        <img class="h-20" src="{{ asset('images/twitter-logo.svg') }}">
+                @if($document->meta['Twitter'] ?? false)
+                    <div class="accordion-item">
+                        <div onclick="toggleAccordion(this)" class='accordion-header h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2 cursor-pointer'>
+                            <img class="h-20" src="{{ asset('images/twitter-logo.svg') }}">
+                        </div>
+                        <div class="accordion-content max-h-0 transition-all duration-300 overflow-hidden p-0 opacity-0 border border-zinc-200 bg-[#1DA1F2] rounded-b-lg">
+                            @livewire('social-media-post.social-media-post', [$document, 'Twitter', 'rows' => 6])
+                        </div>
                     </div>
-                    <div class="accordion-content max-h-0 transition-all duration-300 overflow-hidden p-0 opacity-0 border border-zinc-200 bg-[#1DA1F2] rounded-b-lg">
-                        @livewire('social-media-post.social-media-post', [$document, 'Twitter', 'rows' => 6])
-                    </div>
-                </div>
-            @endif
+                @endif
 
-            @if($document->meta['Instagram'] ?? false)
-                <div>
-                    <div class='h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2 cursor-pointer'>
-                        <img class="h-12" src="{{ Vite::asset('resources/images/instagram-logo.png') }}">
+                @if($document->meta['Instagram'] ?? false)
+                    <div>
+                        <div class='h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2 cursor-pointer'>
+                            <img class="h-12" src="{{ Vite::asset('resources/images/instagram-logo.png') }}">
+                        </div>
+                        <div class="border-l border-r border-b border-zinc-200 rounded-b-lg overflow-hidden">
+                            @livewire('social-media-post.platforms.instagram-post', [$document])
+                        </div>
                     </div>
-                    <div class="border-l border-r border-b border-zinc-200 rounded-b-lg overflow-hidden">
-                        @livewire('social-media-post.platforms.instagram-post', [$document])
-                    </div>
-                </div>
-            @endif
+                @endif
 
-            @if($document->meta['Facebook'] ?? false)
-                <div class="accordion-item">
-                    <div onclick="toggleAccordion(this)" class='accordion-header h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2 cursor-pointer'>
-                        <img class="h-20" src="{{ Vite::asset('resources/images/facebook-logo.png') }}">
+                @if($document->meta['Facebook'] ?? false)
+                    <div class="accordion-item">
+                        <div onclick="toggleAccordion(this)" class='accordion-header h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2 cursor-pointer'>
+                            <img class="h-20" src="{{ Vite::asset('resources/images/facebook-logo.png') }}">
+                        </div>
+                        <div class="accordion-content max-h-0 transition-all duration-300 overflow-hidden p-0 opacity-0 border border-zinc-200 bg-[#0078F6] rounded-b-lg">
+                            @livewire('social-media-post.socialmediapost', [$document, 'Facebook', 'rows' => 6])
+                        </div>
                     </div>
-                    <div class="accordion-content max-h-0 transition-all duration-300 overflow-hidden p-0 opacity-0 border border-zinc-200 bg-[#0078F6] rounded-b-lg">
-                        @livewire('social-media-post.socialmediapost', [$document, 'Facebook', 'rows' => 6])
-                    </div>
-                </div>
-            @endif --}}
-        @endif
-    </div>
+                @endif --}}
+            @endif
+        </div>
+    @endisset
     @if($displayHistory)
         @livewire('common.history-modal', [$document])
     @endif

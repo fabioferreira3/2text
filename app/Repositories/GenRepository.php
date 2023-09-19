@@ -76,7 +76,10 @@ class GenRepository
                 ])
             ]
         ]);
-        $repo->updateMeta($platform, $response['content']);
+        $platformsContent = $document->meta['platforms_content'] ?? [];
+        $platformsContent[$platform]['text'] = $response['content'];
+
+        $repo->updateMeta('platforms_content', $platformsContent);
         $repo->addHistory(
             [
                 'field' => $platform,

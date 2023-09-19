@@ -8,7 +8,7 @@ use App\Http\Livewire\Blog\NewPost;
 use App\Http\Livewire\Paraphraser\NewParaphraser;
 use App\Http\Livewire\Paraphraser\Paraphraser;
 use App\Http\Livewire\SocialMediaPost\NewSocialMediaPost;
-use App\Http\Livewire\SocialMediaPost\PostsList;
+use App\Http\Livewire\SocialMediaPost\SocialMediaPostsManager;
 use App\Http\Livewire\Templates;
 use App\Http\Livewire\TextToSpeech\TextToAudio;
 use App\Http\Livewire\TextTranscription\NewTranscription;
@@ -52,7 +52,7 @@ Route::middleware([
 
     /* Social media posts routes */
     Route::get('/social-media-post/new', NewSocialMediaPost::class)->name('new-social-media-post');
-    Route::get('/documents/social-media-post/{document}', PostsList::class)->name('social-media-post-view');
+    Route::get('/documents/social-media-post/{document}', SocialMediaPostsManager::class)->name('social-media-post-view');
 
     /* Paraphraser routes */
     Route::get('/paraphraser/new', NewParaphraser::class)->name('new-paraphraser');

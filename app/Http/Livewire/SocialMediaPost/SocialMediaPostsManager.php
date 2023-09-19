@@ -4,16 +4,19 @@ namespace App\Http\Livewire\SocialMediaPost;
 
 use App\Enums\DocumentStatus;
 use App\Enums\Language;
+use App\Enums\Tone;
+use App\Jobs\SocialMedia\CreateSocialMediaPost;
 use App\Models\Document;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class PostsList extends Component
+class SocialMediaPostsManager extends Component
 {
     public Document $document;
     public string $content;
     public bool $displayHistory = false;
     public string $context;
-    public string $source_url;
+    public string $sourceUrl;
     public string $source;
     public string $language;
     public array $languages;
@@ -22,14 +25,15 @@ class PostsList extends Component
     public mixed $style;
     public bool $linkedin;
     public array $platforms;
-    public mixed $more_instructions;
+    public mixed $moreInstructions;
     public bool $showInstructions;
     public bool $modal;
     public $title;
+    public bool $generating;
 
     protected $rules = [
         'source' => 'required|in:free_text,youtube,website_url',
-        'source_url' => 'required_if:source,youtube,website_url|url',
+        'sourceUrl' => 'required_if:source,youtube,website_url|url',
         'platforms' => 'required|array',
         'context' => 'required_if:source,free_text|nullable',
         'keyword' => 'required',
@@ -40,7 +44,7 @@ class PostsList extends Component
 
     protected $messages = [
         'context.required_if' => 'You need to provide some context for the AI to generate your social media post.',
-        'source_url.required_if' => 'You need to provide a link for me to use as context for your social media post.',
+        'sourceUrl.required_if' => 'You need to provide a link for me to use as context for your social media post.',
         'keyword.required' => 'You need to provide a keyword.',
         'source.required' => 'Source is a required field.',
         'language.required' => 'Language is a required field.',
@@ -52,29 +56,45 @@ class PostsList extends Component
         $this->showInstructions = $document->status == DocumentStatus::ON_HOLD ? true : false;
         $this->source = 'free_text';
         $this->context = '';
-        $this->source_url = '';
+        $this->sourceUrl = '';
         $this->language = 'en';
         $this->languages = Language::getLabels();
         $this->keyword = '';
         $this->tone = 'default';
         $this->style = 'default';
-        $this->more_instructions = null;
+        $this->moreInstructions = null;
         $this->platforms = [
             'Linkedin' => false,
             'Facebook' => false,
             'Instagram' => false,
             'Twitter' => false
         ];
+        $this->generating = false;
     }
 
     public function render()
     {
-        return view('livewire.social-media-post.posts-list');
+        return view('livewire.social-media-post.posts-manager');
     }
 
     public function process()
     {
         $this->validate();
+        $this->document->update([
+            'meta' => [
+                'context' => $this->context ?? null,
+                'tone' => $this->tone ?? Tone::CASUAL->value,
+                'style' => $this->style ?? null,
+                'source' => $this->source,
+                'source_url' => $this->sourceUrl ?? null,
+                'keyword' => $this->keyword ?? null,
+                'platforms' => $this->platforms,
+                'more_instructions' => $this->moreinstructions ?? null,
+                'user_id' => Auth::check() ? Auth::id() : null,
+            ]
+        ]);
+
+        CreateSocialMediaPost::dispatch($this->document);
     }
 
     public function toggleInstructions()

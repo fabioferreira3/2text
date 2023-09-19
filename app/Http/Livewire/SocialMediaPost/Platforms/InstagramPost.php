@@ -14,7 +14,7 @@ use Livewire\Component;
 class InstagramPost extends Component
 {
     public Document $document;
-    public string $image;
+    public $image;
     public string $text;
     public string $initialContent;
     public bool $copied = false;
@@ -48,7 +48,7 @@ class InstagramPost extends Component
 
     private function setContent()
     {
-        $this->image = Str::of($this->postData['image_url']);
+        $this->image = isset($this->postData['image_url']) ? Str::of($this->postData['image_url']) : null;
         $this->text = Str::of($this->postData['text'])->trim('"');
     }
 
