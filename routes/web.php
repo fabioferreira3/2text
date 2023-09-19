@@ -52,7 +52,7 @@ Route::middleware([
 
     /* Social media posts routes */
     Route::get('/social-media-post/new', NewSocialMediaPost::class)->name('new-social-media-post');
-    Route::get('/documents/social-media-post/{document}', SocialMediaPostsManager::class)->name('social-media-post-view');
+    Route::get('/documents/social-media/{document}', SocialMediaPostsManager::class)->name('social-media-view');
 
     /* Paraphraser routes */
     Route::get('/paraphraser/new', NewParaphraser::class)->name('new-paraphraser');

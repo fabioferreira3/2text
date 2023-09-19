@@ -44,6 +44,16 @@ class Document extends Model
         return $this->belongsTo(Account::class);
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(Document::class, 'parent_document_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Document::class, 'parent_document_id');
+    }
+
     public function getNormalizedStructureAttribute()
     {
         $text = '';

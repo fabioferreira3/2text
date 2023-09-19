@@ -68,18 +68,22 @@ class GenRepository
             [
                 'role' => 'user',
                 'content' =>   $promptHelper->writeSocialMediaPost($document->context, [
-                    'keyword' => $document->meta['keyword'] ?? null,
+                    'keyword' => $document->meta['keyword'] ?? $document->parent->meta['keyword'] ?? null,
                     'platform' => $platform,
-                    'tone' => $document->meta['tone'] ?? null,
-                    'style' => $document->meta['style'] ?? null,
-                    'more_instructions' => $document->meta['more_instructions'] ?? null
+                    'tone' => $document->meta['tone'] ?? $document->parent->meta['tone'] ?? null,
+                    'style' => $document->meta['style'] ?? $document->parent->meta['style'] ?? null,
+                    'more_instructions' => $document->meta['more_instructions'] ?? $document->parent->meta['more_instructions'] ?? null
                 ])
             ]
         ]);
-        $platformsContent = $document->meta['platforms_content'] ?? [];
-        $platformsContent[$platform]['text'] = $response['content'];
 
-        $repo->updateMeta('platforms_content', $platformsContent);
+        $repo->updateMeta('blocks', [
+            ...$document->meta['blocks'],
+            [
+                'type' => 'text',
+                'text' => $response['content'],
+            ]
+        ]);
         $repo->addHistory(
             [
                 'field' => $platform,

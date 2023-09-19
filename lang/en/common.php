@@ -18,6 +18,7 @@ return [
     'regenerate' => 'Regenerate',
     'save' => 'Save',
     'social_media_post' => 'Media Post',
+    'social_media' => 'Social Media',
     'stop' => 'Stop',
     'text_transcription' => 'Transcription',
     'text_to_speech' => 'Text to Speech',

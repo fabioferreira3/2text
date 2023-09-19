@@ -5,7 +5,7 @@ namespace App\Http\Livewire\SocialMediaPost;
 use App\Enums\DocumentStatus;
 use App\Enums\Language;
 use App\Enums\Tone;
-use App\Jobs\SocialMedia\CreateSocialMediaPost;
+use App\Jobs\SocialMedia\ProcessSocialMediaPosts;
 use App\Models\Document;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -80,6 +80,7 @@ class SocialMediaPostsManager extends Component
     public function process()
     {
         $this->validate();
+        $this->generating = true;
         $this->document->update([
             'meta' => [
                 'context' => $this->context ?? null,
@@ -88,13 +89,12 @@ class SocialMediaPostsManager extends Component
                 'source' => $this->source,
                 'source_url' => $this->sourceUrl ?? null,
                 'keyword' => $this->keyword ?? null,
-                'platforms' => $this->platforms,
                 'more_instructions' => $this->moreinstructions ?? null,
-                'user_id' => Auth::check() ? Auth::id() : null,
+                'user_id' => Auth::check() ? Auth::id() : null
             ]
         ]);
 
-        CreateSocialMediaPost::dispatch($this->document);
+        ProcessSocialMediaPosts::dispatch($this->document, $this->platforms);
     }
 
     public function toggleInstructions()

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\SocialMediaPost;
 
+use App\Enums\DocumentType;
 use App\Jobs\SocialMedia\CreateSocialMediaPost;
 use App\Repositories\DocumentRepository;
 use Livewire\Component;
@@ -27,7 +28,7 @@ class Template extends Component
     public function execute()
     {
         $repo = new DocumentRepository();
-        $document = $repo->createSocialMediaPost([
+        $document = $repo->createSocialMediaDoc([
             'source' => null,
             'context' => null,
             'language' => 'en',
@@ -36,11 +37,10 @@ class Template extends Component
                 'tone' => null,
                 'style' => null,
                 'keyword' => null,
-                'more_instructions' => null,
-                'platforms' => []
+                'more_instructions' => null
             ]
-        ]);
+        ], DocumentType::SOCIAL_MEDIA_GROUP);
 
-        return redirect()->route('social-media-post-view', ['document' => $document]);
+        return redirect()->route('social-media-view', ['document' => $document]);
     }
 }

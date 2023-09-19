@@ -48,10 +48,10 @@ class DocumentRepository
         ]);
     }
 
-    public function createSocialMediaPost(array $params): Document
+    public function createSocialMediaDoc(array $params, DocumentType $type): Document
     {
         return Document::create([
-            'type' => DocumentType::SOCIAL_MEDIA_POST->value,
+            'type' => $type->value,
             'meta' => [
                 'context' => $params['context'] ?? null,
                 'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,
@@ -59,7 +59,6 @@ class DocumentRepository
                 'source' => $params['source'],
                 'source_url' => $params['meta']['source_url'] ?? null,
                 'keyword' => $params['meta']['keyword'] ?? null,
-                'platforms' => $params['meta']['platforms'],
                 'more_instructions' => $params['meta']['more_instructions'] ?? null,
                 'user_id' => Auth::check() ? Auth::id() : null,
             ]
@@ -141,11 +140,11 @@ class DocumentRepository
         ]);
     }
 
-    public function createTask(DocumentTaskEnum $task, array $params)
+    public static function createTask(string $documentId, DocumentTaskEnum $task, array $params)
     {
         DocumentTask::create([
             'name' => $task->value,
-            'document_id' => $this->document->id,
+            'document_id' => $documentId,
             'process_id' => $params['process_id'] ?? Str::uuid(),
             'job' => $task->getJob(),
             'status' => $params['status'] ?? 'ready',

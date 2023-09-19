@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\TextToSpeech;
 
 use App\Enums\Language;
-use App\Jobs\SocialMedia\CreateSocialMediaPost;
+use App\Jobs\SocialMedia\ProcessSocialMediaPosts;
 use WireUi\Traits\Actions;
 use Livewire\Component;
 
@@ -77,7 +77,7 @@ class NewTextToSpeech extends Component
     public function process()
     {
         $this->validate();
-        CreateSocialMediaPost::dispatch([
+        ProcessSocialMediaPosts::dispatch([
             'source' => $this->source,
             'context' => $this->context,
             'language' => $this->language,
