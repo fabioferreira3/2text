@@ -1,1 +1,1 @@
-<textarea class="w-full text-base rounded-b-lg border border-zinc-200" name="text" wire:model="content" rows="12"></textarea>
+<textarea class="w-full text-base rounded-b-lg border border-zinc-200 p-4 bg-gray-100" name="text" wire:model="content" rows="12"></textarea>

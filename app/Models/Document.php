@@ -54,6 +54,16 @@ class Document extends Model
         return $this->hasMany(Document::class, 'parent_document_id');
     }
 
+    public function contentBlocks(): HasMany
+    {
+        return $this->hasMany(DocumentContentBlock::class);
+    }
+
+    public function getMeta($attribute)
+    {
+        return $this->meta[$attribute] ?? $this->parent->meta[$attribute] ?? null;
+    }
+
     public function getNormalizedStructureAttribute()
     {
         $text = '';

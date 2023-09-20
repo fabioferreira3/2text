@@ -89,7 +89,7 @@ class SocialMediaPostsManager extends Component
                 'source' => $this->source,
                 'source_url' => $this->sourceUrl ?? null,
                 'keyword' => $this->keyword ?? null,
-                'more_instructions' => $this->moreinstructions ?? null,
+                'more_instructions' => $this->moreInstructions ?? null,
                 'user_id' => Auth::check() ? Auth::id() : null
             ]
         ]);

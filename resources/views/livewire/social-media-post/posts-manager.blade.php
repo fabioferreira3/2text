@@ -166,16 +166,20 @@
         @endif
     </div>
     @endif
-    @if(false)<div>
-        <div class='h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2'>
-            <img class="h-12" src="{{ Vite::asset('resources/images/instagram-logo.png') }}">
+    @if(count($document->children))
+    <div class="grid grid-cols-3 mt-6">
+        @foreach($document->children as $post)
+        <div>
+            <div class='h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2'>
+                <img class="h-12" src="{{ Vite::asset('resources/images/instagram-logo.png') }}">
+            </div>
+            <div class="border-l border-r border-b border-zinc-200 rounded-b-lg overflow-hidden">
+                @livewire('social-media-post.platforms.instagram-post', [$post])
+            </div>
         </div>
-        <div class="border-l border-r border-b border-zinc-200 rounded-b-lg overflow-hidden">
-            @livewire('social-media-post.platforms.instagram-post', [$document, $postData])
-        </div>
+        @endforeach
     </div>
     @endif
-
 </div>
 @if($displayHistory)
 @livewire('common.history-modal', [$document])

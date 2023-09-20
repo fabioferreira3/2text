@@ -8,6 +8,7 @@ use App\Enums\LanguageModels;
 use App\Helpers\PromptHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
+use App\Models\DocumentContentBlock;
 use Illuminate\Support\Str;
 
 class GenRepository
@@ -20,8 +21,8 @@ class GenRepository
         $response = $chatGpt->request([[
             'role' => 'user',
             'content' => $promptHelper->writeTitle($context, [
-                'tone' => $document['meta']['tone'] ?? null,
-                'keyword' => $document['meta']['keyword'] ?? null
+                'tone' => $document->getMeta('tone'),
+                'keyword' => $document->getMeta('keyword')
             ])
         ]]);
         $document->update(['title' => Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"')]);
@@ -44,8 +45,8 @@ class GenRepository
             'content' => $promptHelper->writeMetaDescription(
                 $document->normalized_structure,
                 [
-                    'tone' => $document['meta']['tone'] ?? null,
-                    'keyword' => $document['meta']['keyword']
+                    'tone' => $document->getMeta('tone'),
+                    'keyword' => $document->getMeta('keyword')
                 ]
             )
         ]]);
@@ -68,22 +69,22 @@ class GenRepository
             [
                 'role' => 'user',
                 'content' =>   $promptHelper->writeSocialMediaPost($document->context, [
-                    'keyword' => $document->meta['keyword'] ?? $document->parent->meta['keyword'] ?? null,
+                    'keyword' => $document->getMeta('keyword'),
                     'platform' => $platform,
-                    'tone' => $document->meta['tone'] ?? $document->parent->meta['tone'] ?? null,
-                    'style' => $document->meta['style'] ?? $document->parent->meta['style'] ?? null,
-                    'more_instructions' => $document->meta['more_instructions'] ?? $document->parent->meta['more_instructions'] ?? null
+                    'tone' => $document->getMeta('tone'),
+                    'style' => $document->getMeta('style'),
+                    'more_instructions' => $document->getMeta('more_instructions')
                 ])
             ]
         ]);
 
-        $repo->updateMeta('blocks', [
-            ...$document->meta['blocks'],
-            [
+        $document->contentBlocks()->save(
+            new DocumentContentBlock([
                 'type' => 'text',
-                'text' => $response['content'],
-            ]
-        ]);
+                'content' => $response['content']
+            ])
+        );
+
         $repo->addHistory(
             [
                 'field' => $platform,

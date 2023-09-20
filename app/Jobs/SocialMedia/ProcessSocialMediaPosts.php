@@ -93,9 +93,7 @@ class ProcessSocialMediaPosts
             $post = Document::create([
                 'type' => DocumentType::SOCIAL_MEDIA_POST->value,
                 'meta' => [
-                    'platform' => $platformName,
-                    'title' => '',
-                    'blocks' => [],
+                    'platform' => $platformName
                 ]
             ]);
             $this->document->children()->save($post);

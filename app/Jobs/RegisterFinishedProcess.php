@@ -41,10 +41,10 @@ class RegisterFinishedProcess implements ShouldQueue
             ProcessFinished::dispatch([
                 'document_id' => $this->document->id,
                 'process_id' => $this->meta['process_id'],
-                'user_id' => $this->document->meta['user_id'] ?? $this->document->parent['user_id']
+                'user_id' => $this->document->getMeta('user_id')
             ]);
             if (!isset($this->meta['silently'])) {
-                NotifyFinished::dispatch($this->document, $this->document->meta['user_id'] ?? $this->document->parent['user_id']);
+                NotifyFinished::dispatch($this->document, $this->document->getMeta('user_id'));
             }
             $this->jobSucceded();
         } catch (Exception $e) {

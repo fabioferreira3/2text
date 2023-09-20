@@ -14,8 +14,6 @@ use Livewire\Component;
 class InstagramPost extends Component
 {
     public Document $document;
-    public $image;
-    public string $text;
     public string $initialContent;
     public bool $copied = false;
     public bool $displayHistory = false;
@@ -23,7 +21,8 @@ class InstagramPost extends Component
     public bool $isProcessing = false;
     public string $processId;
     private string $platform;
-    private $postData;
+    public $text;
+    public $image;
 
     public function getListeners()
     {
@@ -36,26 +35,29 @@ class InstagramPost extends Component
         ];
     }
 
-    public function mount(Document $document, $postData)
+    public function mount(Document $document)
     {
-        $this->postData = $postData;
         $this->userId = Auth::user()->id;
         $this->document = $document;
-        $this->setContent();
-        $this->initialContent = $this->text;
         $this->processId = '';
+        $imageBlock = optional($this->document->contentBlocks)->firstWhere('type', 'image');
+        $textBlock = optional($this->document->contentBlocks)->firstWhere('type', 'text');
+
+        $this->image = $imageBlock ? $imageBlock->content : null;
+        $this->text = $textBlock ? Str::of($textBlock->content)->trim('"') : null;
     }
 
-    private function setContent()
-    {
-        $this->image = isset($this->postData['image_url']) ? Str::of($this->postData['image_url']) : null;
-        $this->text = Str::of($this->postData['text'])->trim('"');
-    }
+    // private function setContent()
+    // {
+    //     $this->image = $this->document->contentBlocks->where('type', 'image')->first();
+    //     $this->image = isset($this->document->contentBlocks) ? Str::of($this->postData['image_url']) : null;
+    //     $this->text = Str::of($this->postData['text'])->trim('"');
+    // }
 
     public function refresh()
     {
         $this->document->refresh();
-        $this->setContent($this->document);
+        //   $this->setContent($this->document);
     }
 
     public function render()
@@ -109,34 +111,34 @@ class InstagramPost extends Component
 
     public function save()
     {
-        if ($this->content === $this->initialContent) {
-            $this->dispatchBrowserEvent('alert', [
-                'type' => 'info',
-                'message' => "No changes needed to be saved"
-            ]);
-            return;
-        }
-        try {
-            $repo = new DocumentRepository($this->document);
-            $repo->updateMeta($this->platform, $this->content);
-            $repo->addHistory(['field' => $this->platform, 'content' => $this->content]);
-            $this->dispatchBrowserEvent('alert', [
-                'type' => 'success',
-                'message' => "$this->platform post updated!"
-            ]);
-            $this->initialContent = $this->content;
-        } catch (Exception $error) {
-            $this->dispatchBrowserEvent('alert', [
-                'type' => 'error',
-                'message' => "There was an error saving!"
-            ]);
-        }
+        // if ($this->content === $this->initialContent) {
+        //     $this->dispatchBrowserEvent('alert', [
+        //         'type' => 'info',
+        //         'message' => "No changes needed to be saved"
+        //     ]);
+        //     return;
+        // }
+        // try {
+        //     $repo = new DocumentRepository($this->document);
+        //     $repo->updateMeta($this->platform, $this->content);
+        //     $repo->addHistory(['field' => $this->platform, 'content' => $this->content]);
+        //     $this->dispatchBrowserEvent('alert', [
+        //         'type' => 'success',
+        //         'message' => "$this->platform post updated!"
+        //     ]);
+        //     $this->initialContent = $this->content;
+        // } catch (Exception $error) {
+        //     $this->dispatchBrowserEvent('alert', [
+        //         'type' => 'error',
+        //         'message' => "There was an error saving!"
+        //     ]);
+        // }
     }
 
     public function updateContent($params)
     {
         if ($params['field'] === $this->platform) {
-            $this->setContent();
+            //    $this->setContent();
         }
     }
 
