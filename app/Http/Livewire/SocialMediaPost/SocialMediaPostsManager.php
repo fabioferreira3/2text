@@ -55,16 +55,16 @@ class SocialMediaPostsManager extends Component
     {
         $this->document = $document;
         $this->showInstructions = $document->status == DocumentStatus::DRAFT ? true : false;
-        $this->source = 'free_text';
-        $this->context = '';
-        $this->sourceUrl = '';
-        $this->language = 'en';
+        $this->source = $document->getMeta('source') ?? 'free_text';
+        $this->context = $document->getMeta('context') ?? '';
+        $this->sourceUrl = $document->getMeta('source_url') ?? '';
+        $this->language = $document->language->value ?? 'en';
         $this->languages = Language::getLabels();
         $this->generateImage = false;
-        $this->keyword = '';
-        $this->tone = 'default';
-        $this->style = 'default';
-        $this->moreInstructions = null;
+        $this->keyword = $document->getMeta('keyword') ?? '';
+        $this->tone = $document->getMeta('tone') ?? 'default';
+        $this->style = $document->getMeta('style') ?? 'default';
+        $this->moreInstructions = $document->getMeta('more_instructions') ?? null;
         $this->platforms = [
             'Linkedin' => false,
             'Facebook' => false,

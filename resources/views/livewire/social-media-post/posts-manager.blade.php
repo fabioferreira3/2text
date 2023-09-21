@@ -17,7 +17,7 @@
     @endif
 
     @if (!$generating)
-        <div class="flex flex-col mt-8 border-1 border rounded-lg bg-white p-8">
+        <div class="flex flex-col mt-8 border-1 border rounded-xl bg-white p-8">
             <div class="flex justify-between items-center cursor-pointer h-full" wire:click="toggleInstructions">
                 @include('livewire.common.label', ['title' => __('social_media.instructions')])
                 <div>
@@ -226,7 +226,7 @@
         </div>
     @endif
     @if (count($document->children))
-        <div class="grid grid-cols-3 mt-6 gap-6">
+        <div class="flex flex-col w-full md:grid md:grid-cols-2 xl:grid-cols-3 mt-6 gap-12 md:gap-6">
             @foreach ($document->children as $post)
                 @include('livewire.social-media-post.platforms.platform-post', [
                     'platform' => $post->meta['platform'],
@@ -238,24 +238,3 @@
 @if ($displayHistory)
     @livewire('common.history-modal', [$document])
 @endif
-</div>
-
-<script>
-    function toggleAccordion(header) {
-        var item = header.parentNode;
-        var content = item.getElementsByClassName('accordion-content')[0];
-        if (content.style.maxHeight && content.style.maxHeight !== '0px') {
-            // accordion is currently open, so close it
-            content.style.maxHeight = '0px';
-            content.style.padding = '0';
-            content.style.opacity = '0';
-            header.classList.remove("active");
-        } else {
-            // accordion is currently closed, so open it
-            content.style.maxHeight = "600px";
-            content.style.padding = '1rem';
-            content.style.opacity = '1';
-            header.classList.add("active");
-        }
-    }
-</script>

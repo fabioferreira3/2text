@@ -1,4 +1,4 @@
-<div class="relative rounded-b-lg border border-zinc-200 p-4 bg-gray-100">
+<div class="relative rounded-b-xl border border-zinc-200 p-4 bg-gray-100">
     <div class="flex mb-4 flex justify-end gap-2">
         <button wire:click="shorten" class="p1 font-bold text-gray-600 bg-gray-200 px-3 py-1 rounded-lg">shorten</button>
         <button wire:click="expand" class="p1 font-bold text-gray-600 bg-gray-200 px-3 py-1 rounded-lg">expand</button>
@@ -16,7 +16,7 @@
         <x-experior::modal>
             <div class="py-4 text-left px-6">
                 <div role='button' class="flex justify-between items-center pb-3">
-                    <p class="text-2xl font-bold">Ask to..</p>
+                    <p class="text-2xl font-bold">Ask to...</p>
                     <div role="button" class="cursor-pointer z-50" id="close" wire:click="toggleCustomPrompt">
                         <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="24"
                             height="24" viewBox="0 0 18 18">
@@ -26,14 +26,15 @@
                         </svg>
                     </div>
                 </div>
-                <input class="w-full text-base border-0 bg-gray-100 p-0 rounded-lg py-3 px-4" name="text"
+                <input placeholder="ie: Rewrite this text but with a funnier tone"
+                    class="w-full text-base border-0 bg-gray-100 p-0 rounded-xl py-3 px-4" name="text"
                     wire:model="customPrompt" />
                 @if ($errors->has('customPrompt'))
                     <span class="text-red-500 text-sm">{{ $errors->first('customPrompt') }}</span>
                 @endif
                 <div class="flex justify-start mt-8">
                     <button wire:click="runCustomPrompt" wire:loading.remove
-                        class="flex items-center gap-4 bg-secondary text-xl hover:bg-main text-white font-bold px-4 py-2 rounded-lg">
+                        class="flex items-center gap-4 bg-secondary text-xl hover:bg-main text-white font-bold px-4 py-2 rounded-xl">
                         <x-icon name="play" class="w-8 h-8" />
                         <span>{{ __('social_media.go') }}</span>
                     </button>

@@ -1,8 +1,8 @@
-<div class="flex flex-col h-full p-4 bg-[#006193] rounded-b-lg">
+<div class="flex flex-col h-full p-6 bg-[#006193] rounded-b-xl">
     {{-- @include('livewire.common.field-actions', ['copyAction' => true, 'regenerateAction' => true, 'historyAction' => true]) --}}
     <div class="flex-1">
         <div class="h-[200px]">
-            <img class="rounded-t-lg w-full h-full object-cover"
+            <img class="rounded-t-xl w-full h-full object-cover"
                 src={{ $image ?? '/images/placeholder-social-media.jpg' }} />
         </div>
         @livewire('common.blocks.text-block', ['content' => $text, 'contentBlockId' => $textBlockId])

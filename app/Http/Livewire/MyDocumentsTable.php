@@ -32,7 +32,7 @@ class MyDocumentsTable extends DataTableComponent
     public function viewDoc($documentId)
     {
         $document = Document::findOrFail($documentId);
-        if (in_array($document->status->value, ['finished', 'on_hold'])) {
+        if (in_array($document->status->value, ['finished', 'draft'])) {
             return redirect()->route('document-view', ['document' => $document]);
         }
     }
@@ -49,7 +49,13 @@ class MyDocumentsTable extends DataTableComponent
 
     public function builder(): Builder
     {
-        return Document::query()->latest();
+        return Document::whereIn('type', [
+            DocumentType::BLOG_POST,
+            DocumentType::PARAPHRASED_TEXT,
+            DocumentType::SOCIAL_MEDIA_GROUP,
+            DocumentType::TEXT_TO_SPEECH,
+            DocumentType::TEXT_TRANSCRIPTION
+        ])->latest();
     }
 
     public function columns(): array
@@ -88,8 +94,8 @@ class MyDocumentsTable extends DataTableComponent
                         return view('livewire.tables.my-documents.view-action', [
                             'rowId' => $row->id,
                             'status' => $row->status,
-                            'canView' => in_array($row->status->value, ['finished', 'on_hold']),
-                            'canDelete' => in_array($row->status->value, ['finished', 'aborted', 'failed'])
+                            'canView' => in_array($row->status->value, ['finished', 'draft']),
+                            'canDelete' => in_array($row->status->value, ['finished', 'aborted', 'failed', 'draft'])
                         ]);
                     }
                 ),
