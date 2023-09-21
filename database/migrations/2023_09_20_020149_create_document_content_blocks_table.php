@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignUuid('document_id')->constrained('documents')->cascadeOnDelete();
             $table->string('type');
             $table->text('content')->nullable();
+            $table->text('prompt')->nullable();
             $table->integer('order')->default(1);
             $table->timestamps();
         });

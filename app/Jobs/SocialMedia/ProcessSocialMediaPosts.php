@@ -105,6 +105,7 @@ class ProcessSocialMediaPosts
                     'process_id' => $processId,
                     'meta' => [
                         'platform' => $platformName,
+                        'generate_img' => $post->getMeta('generate_img')
                     ],
                     'order' => 1
                 ]

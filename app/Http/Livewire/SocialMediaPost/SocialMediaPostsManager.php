@@ -27,6 +27,7 @@ class SocialMediaPostsManager extends Component
     public array $platforms;
     public mixed $moreInstructions;
     public bool $showInstructions;
+    public bool $generateImage;
     public bool $modal;
     public $title;
     public bool $generating;
@@ -53,12 +54,13 @@ class SocialMediaPostsManager extends Component
     public function mount(Document $document)
     {
         $this->document = $document;
-        $this->showInstructions = $document->status == DocumentStatus::ON_HOLD ? true : false;
+        $this->showInstructions = $document->status == DocumentStatus::DRAFT ? true : false;
         $this->source = 'free_text';
         $this->context = '';
         $this->sourceUrl = '';
         $this->language = 'en';
         $this->languages = Language::getLabels();
+        $this->generateImage = false;
         $this->keyword = '';
         $this->tone = 'default';
         $this->style = 'default';
@@ -90,6 +92,8 @@ class SocialMediaPostsManager extends Component
                 'source_url' => $this->sourceUrl ?? null,
                 'keyword' => $this->keyword ?? null,
                 'more_instructions' => $this->moreInstructions ?? null,
+                'generate_img' => $this->generateImage,
+                'default_img_prompt' => '',
                 'user_id' => Auth::check() ? Auth::id() : null
             ]
         ]);

@@ -17,6 +17,7 @@ return [
     'further_instructions' => 'Further instructions (optional)',
     'generate' => 'Generate',
     'generating' => 'Generating with AI...',
+    'go' => 'Go!',
     'instructions' => 'Instructions',
     'keyword' => 'Keyword',
     'language' => 'Language',

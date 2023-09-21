@@ -7,6 +7,7 @@ return [
     'close' => 'Close',
     'download' => 'Download',
     'document.aborted' => 'Aborted',
+    'document.draft' => 'Draft',
     'document.failed' => 'Failed',
     'document.finished' => 'Finished',
     'document.in_progress' => 'In Progress',

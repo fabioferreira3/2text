@@ -127,7 +127,11 @@ class Document extends Model
             return DocumentStatus::FINISHED;
         }
 
-        return DocumentStatus::ON_HOLD;
+        if ($this->tasks->count()) {
+            return DocumentStatus::ON_HOLD;
+        }
+
+        return DocumentStatus::DRAFT;
     }
 
     public function getSourceAttribute()

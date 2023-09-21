@@ -14,8 +14,18 @@ use Illuminate\Support\Str;
 class TextBlock extends Component
 {
     public string $contentBlockId;
-    public $content;
+    public string $content;
+    public string $customPrompt;
+    public bool $showCustomPrompt = false;
     public bool $processing;
+
+    protected $rules = [
+        'customPrompt' => 'required|string'
+    ];
+
+    protected $messages = [
+        'customPrompt.required' => 'Please provide the instructions for me to rewrite the text'
+    ];
 
     public function getListeners()
     {
@@ -33,6 +43,19 @@ class TextBlock extends Component
     public function shorten()
     {
         $this->rewrite(__('prompt.shorten'));
+    }
+
+    public function runCustomPrompt()
+    {
+        $this->validate();
+        $this->showCustomPrompt = false;
+        $this->rewrite($this->customPrompt);
+    }
+
+    public function toggleCustomPrompt()
+    {
+        $this->customPrompt = '';
+        $this->showCustomPrompt = !$this->showCustomPrompt;
     }
 
     private function rewrite(string $prompt)
