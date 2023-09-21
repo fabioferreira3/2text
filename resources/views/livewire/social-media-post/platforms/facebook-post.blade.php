@@ -1,4 +1,4 @@
-<div class="flex flex-col h-full p-4 bg-[#B92A70] rounded-b-lg">
+<div class="flex flex-col h-full p-4 bg-[#0078F6] rounded-b-lg">
     {{-- @include('livewire.common.field-actions', ['copyAction' => true, 'regenerateAction' => true, 'historyAction' => true]) --}}
     <div class="flex-1">
         <div class="h-[200px]">
@@ -8,7 +8,7 @@
         @livewire('common.blocks.text-block', ['content' => $text, 'contentBlockId' => $textBlockId])
     </div>
 
-    {{-- @if ($displayHistory)
+    @if ($displayHistory)
         @livewire('common.history-modal', [$document])
-    @endif --}}
+    @endif
 </div>

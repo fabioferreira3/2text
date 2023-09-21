@@ -1,4 +1,4 @@
-<div class="flex flex-col h-full p-4 bg-[#B92A70] rounded-b-lg">
+<div class="flex flex-col h-full p-4 bg-[#006193] rounded-b-lg">
     {{-- @include('livewire.common.field-actions', ['copyAction' => true, 'regenerateAction' => true, 'historyAction' => true]) --}}
     <div class="flex-1">
         <div class="h-[200px]">

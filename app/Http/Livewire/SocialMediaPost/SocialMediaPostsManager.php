@@ -74,6 +74,11 @@ class SocialMediaPostsManager extends Component
         $this->generating = false;
     }
 
+    public function toggleInstructions()
+    {
+        $this->showInstructions = !$this->showInstructions;
+    }
+
     public function render()
     {
         return view('livewire.social-media-post.posts-manager');
@@ -99,10 +104,5 @@ class SocialMediaPostsManager extends Component
         ]);
 
         ProcessSocialMediaPosts::dispatch($this->document, $this->platforms);
-    }
-
-    public function toggleInstructions()
-    {
-        $this->showInstructions = !$this->showInstructions;
     }
 }

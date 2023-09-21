@@ -41,3 +41,4 @@
             </div>
         </x-experior::modal>
     @endif
+</div>
