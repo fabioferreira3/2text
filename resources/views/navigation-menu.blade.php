@@ -82,67 +82,70 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block bg-white': open, 'hidden': ! open}">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('menus.dashboard') }}
-            </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('templates') }}" :active="request()->routeIs('templates')">
-                {{ __('menus.templates') }}
-            </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('new-social-media-post') }}" :active="request()->routeIs('new-social-media-post')">
-                {{ __('menus.social_media_post') }}
-            </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('new-post') }}" :active="request()->routeIs('new-post')">
-                {{ __('menus.blog_post') }}
-            </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('new-text-transcription') }}" :active="request()->routeIs('new-text-transcription')">
-                {{ __('menus.text_transcription') }}
-            </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('new-paraphraser') }}" :active="request()->routeIs('new-paraphraser')">
-                {{ __('menus.paraphraser') }}
-            </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('new-text-to-speech') }}" :active="request()->routeIs('new-text-to-speech')">
-                {{ __('menus.text_to_audio') }}
-            </x-jet-responsive-nav-link>
-        </div>
-
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="flex items-center px-4">
-                @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                <div class="shrink-0 mr-3">
-                    <img class="h-10 w-10 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
-                </div>
-                @endif
-
-                <div>
-                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-                </div>
+    <div class="md:hidden">
+        <div :class="{'block bg-white': open, 'hidden': ! open}">
+            <div class="pt-2 pb-3 space-y-1">
+                <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                    {{ __('menus.dashboard') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('templates') }}" :active="request()->routeIs('templates')">
+                    {{ __('menus.templates') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('new-social-media-post') }}" :active="request()->routeIs('new-social-media-post')">
+                    {{ __('menus.social_media_post') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('new-post') }}" :active="request()->routeIs('new-post')">
+                    {{ __('menus.blog_post') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('new-text-transcription') }}" :active="request()->routeIs('new-text-transcription')">
+                    {{ __('menus.text_transcription') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('new-paraphraser') }}" :active="request()->routeIs('new-paraphraser')">
+                    {{ __('menus.paraphraser') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('new-text-to-speech') }}" :active="request()->routeIs('new-text-to-speech')">
+                    {{ __('menus.text_to_audio') }}
+                </x-jet-responsive-nav-link>
             </div>
 
-            <div class="mt-3 space-y-1">
-                <!-- Account Management -->
-                <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
-                    {{ __('menus.profile') }}
-                </x-jet-responsive-nav-link>
+            <!-- Responsive Settings Options -->
+            <div class="pt-4 pb-1 border-t border-gray-200">
+                <div class="flex items-center px-4">
+                    @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                    <div class="shrink-0 mr-3">
+                        <img class="h-10 w-10 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                    </div>
+                    @endif
 
-                @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                <x-jet-responsive-nav-link href="{{ route('api-tokens.index') }}" :active="request()->routeIs('api-tokens.index')">
-                    {{ __('menus.api_tokens') }}
-                </x-jet-responsive-nav-link>
-                @endif
+                    <div>
+                        <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                        <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                    </div>
+                </div>
 
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}" x-data>
-                    @csrf
-
-                    <x-jet-responsive-nav-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
-                        {{ __('menus.logout') }}
+                <div class="mt-3 space-y-1">
+                    <!-- Account Management -->
+                    <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
+                        {{ __('menus.profile') }}
                     </x-jet-responsive-nav-link>
-                </form>
+
+                    @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
+                    <x-jet-responsive-nav-link href="{{ route('api-tokens.index') }}" :active="request()->routeIs('api-tokens.index')">
+                        {{ __('menus.api_tokens') }}
+                    </x-jet-responsive-nav-link>
+                    @endif
+
+                    <!-- Authentication -->
+                    <form method="POST" action="{{ route('logout') }}" x-data>
+                        @csrf
+
+                        <x-jet-responsive-nav-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
+                            {{ __('menus.logout') }}
+                        </x-jet-responsive-nav-link>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
 </nav>

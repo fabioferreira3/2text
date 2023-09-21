@@ -55,6 +55,6 @@ return [
         --- START OF TEXT ---
         \n\n:context\n\n
         --- END OF TEXT ---",
-    'write_social_media_post' => "Write a social media post for :platform. Use the following instructions to guide your writing:\n\n",
+    'write_social_media_post' => "Write a brief social media post for :platform. Use the following instructions to guide your writing:\n\n",
     'write_title' => "Write a title, with a maximum of 7 words, for the following text: \n\n:context\n\n\nExamples of good and bad outputs:\n\nBad output:\nTitle: This is the title\n\nGood output:\nThis is the title\n\nFurther instructions:\n\n- The title must have a :tone tone.\n",
 ];

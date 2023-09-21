@@ -5,15 +5,15 @@
     'suffix' => $document->title
     ])
 
-    @if($generating)
-    <div class="flex flex-col mt-8 border-1 border rounded-lg bg-white p-8">
-        <div class="flex justify-between items-center">
-            @include('livewire.common.label', ['title' => __('social_media.generating')])
+    @if ($generating)
+        <div class="flex flex-col mt-8 border-1 border rounded-lg bg-white p-8">
+            <div class="flex justify-between items-center">
+                @include('livewire.common.label', ['title' => __('social_media.generating')])
+            </div>
         </div>
-    </div>
     @endif
 
-    @if(!$generating)
+    @if (!$generating)
     <div class="flex flex-col mt-8 border-1 border rounded-lg bg-white p-8">
         <div class="flex justify-between items-center cursor-pointer" wire:click="toggleInstructions">
             <div>
@@ -83,7 +83,7 @@
                             </div>
                             <select name="language" wire:model="language" class="p-3 rounded-lg border border-zinc-200">
                                 @foreach ($languages as $option)
-                                <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
+                                    <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
                                 @endforeach
                             </select>
                             @if($errors->has('language'))
@@ -103,24 +103,24 @@
                             </div>
                             <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="30000" wire:model="context"></textarea>
                             @if($errors->has('context'))
-                            <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
+                                <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
                             @endif
                             @endif
 
                             @if ($source === 'youtube')
-                            <label class="font-bold text-lg text-zinc-700">Youtube url:</label>
-                            <input name="url" wire:model="sourceUrl" class="p-3 border border-zinc-200 rounded-lg" />
-                            @if($errors->has('source_url'))
-                            <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
-                            @endif
+                                <label class="font-bold text-lg text-zinc-700">Youtube url:</label>
+                                <input name="url" wire:model="sourceUrl" class="p-3 border border-zinc-200 rounded-lg" />
+                                @if($errors->has('source_url'))
+                                    <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
+                                @endif
                             @endif
 
                             @if ($source === 'website_url')
-                            <label class="font-bold text-lg text-zinc-700">URL:</label>
-                            <input name="url" wire:model="source_url" class="p-3 border border-zinc-200 rounded-lg" />
-                            @if($errors->has('source_url'))
-                            <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
-                            @endif
+                                <label class="font-bold text-lg text-zinc-700">URL:</label>
+                                <input name="url" wire:model="source_url" class="p-3 border border-zinc-200 rounded-lg" />
+                                @if($errors->has('source_url'))
+                                    <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
+                                @endif
                             @endif
                         </div>
                         <div class="flex flex-col gap-3">
@@ -167,16 +167,16 @@
     </div>
     @endif
     @if(count($document->children))
-    <div class="grid grid-cols-3 mt-6">
+    <div class="grid grid-cols-3 mt-6 gap-6">
         @foreach($document->children as $post)
-        <div>
-            <div class='h-20 flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2'>
-                <img class="h-12" src="{{ Vite::asset('resources/images/instagram-logo.png') }}">
+            <div class="flex flex-col">
+                <div class='flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2'>
+                    <img class="h-12" src="{{ Vite::asset('resources/images/instagram-logo.png') }}">
+                </div>
+                <div class="border-l border-r border-b border-zinc-200 rounded-b-lg overflow-hidden flex-grow">
+                    @livewire('social-media-post.platforms.instagram-post', [$post])
+                </div>
             </div>
-            <div class="border-l border-r border-b border-zinc-200 rounded-b-lg overflow-hidden">
-                @livewire('social-media-post.platforms.instagram-post', [$post])
-            </div>
-        </div>
         @endforeach
     </div>
     @endif

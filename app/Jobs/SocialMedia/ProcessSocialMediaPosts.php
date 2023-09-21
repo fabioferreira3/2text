@@ -116,7 +116,9 @@ class ProcessSocialMediaPosts
                 [
                     'order' => 2,
                     'process_id' => $processId,
-                    'meta' => []
+                    'meta' => [
+                        'silently' => true
+                    ]
                 ]
             );
             DispatchDocumentTasks::dispatch($post);

@@ -30,7 +30,7 @@ enum DocumentType: string
             self::PARAPHRASED_TEXT->value => 'paraphrase-view',
             self::TEXT_TRANSCRIPTION->value => 'transcription-view',
             self::TEXT_TO_SPEECH->value => 'text-to-speech-view',
-            self::SOCIAL_MEDIA_GROUP->value => 'social-media-view',
+            self::SOCIAL_MEDIA_GROUP->value => 'social-media-view'
         ];
     }
 
