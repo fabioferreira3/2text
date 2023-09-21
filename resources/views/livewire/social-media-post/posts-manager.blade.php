@@ -6,19 +6,17 @@
     ])
 
     @if ($generating)
-        <div class="flex flex-col mt-8 border-1 border rounded-lg bg-white p-8">
-            <div class="flex justify-between items-center">
-                @include('livewire.common.label', ['title' => __('social_media.generating')])
-            </div>
+    <div class="flex flex-col mt-8 border-1 border rounded-lg bg-white p-8">
+        <div class="flex justify-between items-center">
+            @include('livewire.common.label', ['title' => __('social_media.generating')])
         </div>
+    </div>
     @endif
 
     @if (!$generating)
     <div class="flex flex-col mt-8 border-1 border rounded-lg bg-white p-8">
-        <div class="flex justify-between items-center cursor-pointer" wire:click="toggleInstructions">
-            <div>
-                @include('livewire.common.label', ['title' => __('social_media.instructions')])
-            </div>
+        <div class="flex justify-between items-center cursor-pointer h-full" wire:click="toggleInstructions">
+            @include('livewire.common.label', ['title' => __('social_media.instructions')])
             <div>
                 <x-icon :name="$showInstructions ? 'arrow-circle-up' : 'arrow-circle-down'" class="w-8 h-8 text-zinc-500" />
             </div>
@@ -51,7 +49,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="flex flex-col gap-3">
+                        <div class="flex flex-col gap-6">
                             {{-- Source --}}
                             <div>
                                 <div class="flex gap-2 items-center">
@@ -63,8 +61,53 @@
                                 </select>
                             </div>
 
+                            {{-- Context --}}
+                            <div>
+                                @if ($source === 'free_text')
+                                <div>
+                                    <div class="flex flex-col gap-1">
+                                        <label class="font-bold text-lg text-zinc-700">{{__('social_media.description')}}:</label>
+                                        <div class="text-sm">{{__('social_media.describe_subject', ['maxChars' => '30000', 'minWords' => '100'])}}</div>
+                                        <div class="text-sm">{{__('social_media.provide_guidelines')}}</div>
+                                    </div>
+                                    <textarea class="border border-zinc-200 rounded-lg w-full mt-3" rows="8" maxlength="30000" wire:model="context"></textarea>
+                                </div>
+                                @endif
+                                @if ($source === 'youtube')
+                                <label class="font-bold text-lg text-zinc-700">Youtube url:</label>
+                                <input name="url" wire:model="sourceUrl" class="p-3 border border-zinc-200 rounded-lg w-full" />
 
-                            {{-- Keyword --}}
+                                @endif
+                                @if($errors->has('source_url'))
+                                <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
+                                @endif
+
+                                @if ($source === 'website_url')
+                                <label class="font-bold text-lg text-zinc-700">URL:</label>
+                                <input name="url" wire:model="source_url" class="p-3 border border-zinc-200 rounded-lg w-full" />
+                                @endif
+                                @if($errors->has('source_url'))
+                                <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
+                                @endif
+                            </div>
+                            @if ($source === 'website_url' || $source === 'youtube')
+                            <div class="flex flex-col gap-3">
+                                <div class="flex flex-col gap-1">
+                                    <label class="font-bold text-lg text-zinc-700">{{__('social_media.further_instructions')}}:</label>
+                                    <small>{{__('social_media.provide_guidelines')}}</small>
+                                </div>
+
+                                <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="5000" wire:model="moreInstructions"></textarea>
+                                @if($errors->has('more_instructions'))
+                                <span class="text-red-500 text-sm">{{ $errors->first('more_instructions') }}</span>
+                                @endif
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    {{-- Col 2 --}}
+                    <div class="w-full flex flex-col gap-6">
+                        <div class="flex flex-col gap-3">
                             <div>
                                 <div class="flex gap-3 mb-2 items-center">
                                     <label class="font-bold text-lg text-zinc-700">{{__('social_media.keyword')}}:</label>
@@ -75,52 +118,22 @@
                                 <span class="text-red-500 text-sm">{{ $errors->first('keyword') }}</span>
                                 @endif
                             </div>
-                        </div>
-                        <div class="flex flex-col gap-3">
-                            <div class="flex gap-2 items-center">
-                                <label class="font-bold text-lg text-zinc-700">{{__('social_media.language')}}:</label>
-                                @include('livewire.common.help-item', ['header' => __('social_media.language'), 'content' => App\Helpers\InstructionsHelper::socialMediaLanguages()])
-                            </div>
-                            <select name="language" wire:model="language" class="p-3 rounded-lg border border-zinc-200">
-                                @foreach ($languages as $option)
+                            <div class="flex flex-col gap-3">
+                                <div class="flex gap-2 items-center">
+                                    <label class="font-bold text-lg text-zinc-700">{{__('social_media.language')}}:</label>
+                                    @include('livewire.common.help-item', ['header' => __('social_media.language'), 'content' => App\Helpers\InstructionsHelper::socialMediaLanguages()])
+                                </div>
+                                <select name="language" wire:model="language" class="p-3 rounded-lg border border-zinc-200">
+                                    @foreach ($languages as $option)
                                     <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('language'))
-                            <span class="text-red-500 text-sm">{{ $errors->first('language') }}</span>
-                            @endif
-                        </div>
-                    </div>
-
-                    {{-- Col 2 --}}
-                    <div class="w-full flex flex-col gap-6">
-                        <div class="flex flex-col gap-3">
-                            @if ($source === 'free_text')
-                            <div class="flex flex-col gap-1">
-                                <label class="font-bold text-lg text-zinc-700">{{__('social_media.description')}}:</label>
-                                <div class="text-sm">{{__('social_media.describe_subject', ['maxChars' => '30000', 'minWords' => '100'])}}</div>
-                                <div class="text-sm">{{__('social_media.provide_guidelines')}}</div>
+                                    @endforeach
+                                </select>
+                                @if($errors->has('language'))
+                                <span class="text-red-500 text-sm">{{ $errors->first('language') }}</span>
+                                @endif
                             </div>
-                            <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="30000" wire:model="context"></textarea>
                             @if($errors->has('context'))
-                                <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
-                            @endif
-                            @endif
-
-                            @if ($source === 'youtube')
-                                <label class="font-bold text-lg text-zinc-700">Youtube url:</label>
-                                <input name="url" wire:model="sourceUrl" class="p-3 border border-zinc-200 rounded-lg" />
-                                @if($errors->has('source_url'))
-                                    <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
-                                @endif
-                            @endif
-
-                            @if ($source === 'website_url')
-                                <label class="font-bold text-lg text-zinc-700">URL:</label>
-                                <input name="url" wire:model="source_url" class="p-3 border border-zinc-200 rounded-lg" />
-                                @if($errors->has('source_url'))
-                                    <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
-                                @endif
+                            <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
                             @endif
                         </div>
                         <div class="flex flex-col gap-3">
@@ -141,24 +154,12 @@
                                 @include('livewire.common.tones-options')
                             </select>
                         </div>
-                        @if ($source === 'website_url' || $source === 'youtube')
-                        <div class="flex flex-col gap-3">
-                            <div class="flex flex-col gap-1">
-                                <label class="font-bold text-lg text-zinc-700">{{__('social_media.further_instructions')}}:</label>
-                                <small>{{__('social_media.provide_guidelines')}}</small>
-                            </div>
-
-                            <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="5000" wire:model="moreInstructions"></textarea>
-                            @if($errors->has('more_instructions'))
-                            <span class="text-red-500 text-sm">{{ $errors->first('more_instructions') }}</span>
-                            @endif
-                        </div>
-                        @endif
                     </div>
                 </div>
                 <div class="flex justify-center mt-8">
-                    <button wire:click="process" wire:loading.remove class="bg-secondary hover:bg-main text-white font-bold px-4 py-2 rounded-lg">
-                        {{__('social_media.generate')}}
+                    <button wire:click="process" wire:loading.remove class="flex items-center gap-4 bg-secondary text-xl hover:bg-main text-white font-bold px-4 py-2 rounded-lg">
+                        <x-icon name="play" class="w-8 h-8" />
+                        <span>{{__('social_media.generate')}}</span>
                     </button>
                 </div>
             </div>
@@ -169,14 +170,16 @@
     @if(count($document->children))
     <div class="grid grid-cols-3 mt-6 gap-6">
         @foreach($document->children as $post)
-            <div class="flex flex-col">
-                <div class='flex items-center bg-white rounded-t-lg border border-zinc-200 px-4 py-2'>
-                    <img class="h-12" src="{{ Vite::asset('resources/images/instagram-logo.png') }}">
-                </div>
-                <div class="border-l border-r border-b border-zinc-200 rounded-b-lg overflow-hidden flex-grow">
-                    @livewire('social-media-post.platforms.instagram-post', [$post])
-                </div>
+        @if($post->meta['platform'] === 'instagram')
+        <div class="flex flex-col">
+            <div class='flex items-center bg-white rounded-t-lg border border-zinc-200 p-4'>
+                <img class="h-12" src="{{ Vite::asset('resources/images/instagram-logo.png') }}">
             </div>
+            <div class="border-l border-r border-b border-zinc-200 rounded-b-lg overflow-hidden flex-grow">
+                @livewire('social-media-post.platforms.instagram-post', [$post])
+            </div>
+        </div>
+        @endif
         @endforeach
     </div>
     @endif

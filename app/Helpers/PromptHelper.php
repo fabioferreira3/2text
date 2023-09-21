@@ -15,6 +15,11 @@ class PromptHelper
         $this->language = $language;
     }
 
+    public function generic($prompt, $text)
+    {
+        return Lang::get('prompt.generic_prompt', ['prompt' => $prompt, 'text' => $text], $this->language);
+    }
+
     public function summarize($text)
     {
         return Lang::get('prompt.summarize_text', ['text' => $text], $this->language);

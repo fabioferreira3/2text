@@ -28,6 +28,8 @@ return [
          - Increase the number of paragraphs during the expansion.\n
          - This is the text that must be expanded:\n\n
             :context",
+    'expand' => "Rewrite it with more details:\n\n :text",
+    'generic_prompt' => ":prompt\n\n:text\n\n",
     'given_following_text' => "Given the following text:\n\n:text\n\n",
     'given_following_context' => "And given the following context:\n\n:context\n\n\n",
     'keyword_instructions' => "- Use the keyword \":keyword\".\n",
@@ -37,6 +39,7 @@ return [
     'paraphrase_text' => 'Paraphrase the following text using a :tone tone, maintaining in its original language:\n\n\n:text',
     'post_context_instructions' => "- The post must be based on the following context:\n\n\n :context\n\n\n",
     'post_tone_instructions' => "- The post must have a :tone tone.\n",
+    'shorten' => "Rewrite it, making it shorter:\n\n :text",
     'simplify_text' => "Simplify the following text:\n\n:text",
     'summarize_text' => "Summarize the following text:\n\n :text",
     'tone_instructions' => "- Use a :tone tone.\n",

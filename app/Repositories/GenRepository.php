@@ -94,6 +94,25 @@ class GenRepository
         );
     }
 
+    public static function rewriteTextBlock(DocumentContentBlock $contentBlock, string $text, string $prompt)
+    {
+        $repo = new DocumentRepository($contentBlock->document);
+        $promptHelper = new PromptHelper($contentBlock->document->language->value);
+        $chatGpt = new ChatGPT();
+        $response = $chatGpt->request([[
+            'role' => 'user',
+            'content' => $promptHelper->generic($prompt, $text)
+        ]]);
+        $contentBlock->update(['content' => $response['content']]);
+        $repo->addHistory(
+            [
+                'field' => 'title',
+                'content' => $response['content']
+            ],
+            $response['token_usage']
+        );
+    }
+
     public static function paraphraseDocument(Document $document)
     {
         $document->refresh();

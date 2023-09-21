@@ -21,6 +21,7 @@ enum DocumentTaskEnum: string
     case PREPARE_TEXT_TRANSLATION = 'prepare_text_translation';
     case REGISTER_FINISHED_PROCESS = 'register_finished_process';
     case REGISTER_CONTENT_HISTORY = 'register_content_history';
+    case REWRITE_TEXT_BLOCK = 'rewrite_text_block';
     case TRANSLATE_TEXT = 'translate_text';
     case TEXT_TO_SPEECH = 'text_to_speech';
 
@@ -44,6 +45,7 @@ enum DocumentTaskEnum: string
             self::PREPARE_TEXT_TRANSLATION => "App\Jobs\Translation\PrepareTextTranslation",
             self::REGISTER_FINISHED_PROCESS => "App\Jobs\RegisterFinishedProcess",
             self::REGISTER_CONTENT_HISTORY => "App\Jobs\RegisterContentHistory",
+            self::REWRITE_TEXT_BLOCK => "App\Jobs\RewriteTextBlock",
             self::TEXT_TO_SPEECH => "App\Jobs\TextToSpeech\ConvertTextToAudio",
             self::TRANSLATE_TEXT => "App\Jobs\Translation\TranslateText",
         };
