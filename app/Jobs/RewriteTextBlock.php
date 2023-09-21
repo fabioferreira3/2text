@@ -40,7 +40,7 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
     {
         try {
             $contentBlock = DocumentContentBlock::findOrFail($this->meta['document_content_block_id']);
-            GenRepository::rewriteTextBlock($contentBlock, $this->meta['text'], $this->meta['prompt']);
+            GenRepository::rewriteTextBlock($contentBlock, $this->meta);
             event(new ContentBlockUpdated($contentBlock, $this->meta['process_id']));
             $this->jobSucceded();
         } catch (Exception $e) {

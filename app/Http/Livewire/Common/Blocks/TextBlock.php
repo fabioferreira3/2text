@@ -16,6 +16,7 @@ class TextBlock extends Component
     public string $contentBlockId;
     public string $content;
     public string $customPrompt;
+    public bool $faster;
     public bool $showCustomPrompt = false;
     public bool $processing;
 
@@ -76,6 +77,7 @@ class TextBlock extends Component
                     'text' => $this->content,
                     'document_content_block_id' => $contentBlock->id,
                     'prompt' => $prompt,
+                    'faster' => $this->faster
                 ]
             ]
         );

@@ -54,6 +54,7 @@ class SocialMediaPostsManager extends Component
     public function mount(Document $document)
     {
         $this->document = $document;
+        $this->generating = in_array($this->document->status, [DocumentStatus::ON_HOLD, DocumentStatus::IN_PROGRESS]);
         $this->showInstructions = $document->status == DocumentStatus::DRAFT ? true : false;
         $this->source = $document->getMeta('source') ?? 'free_text';
         $this->context = $document->getMeta('context') ?? '';
@@ -71,7 +72,6 @@ class SocialMediaPostsManager extends Component
             'Instagram' => false,
             'Twitter' => false
         ];
-        $this->generating = false;
     }
 
     public function toggleInstructions()

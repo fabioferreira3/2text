@@ -9,6 +9,7 @@ use App\Helpers\PromptHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class GenRepository
@@ -94,14 +95,15 @@ class GenRepository
         );
     }
 
-    public static function rewriteTextBlock(DocumentContentBlock $contentBlock, string $text, string $prompt)
+    public static function rewriteTextBlock(DocumentContentBlock $contentBlock, array $params)
     {
+        $model = isset($params['faster']) && $params['faster'] ? LanguageModels::GPT_3_TURBO : LanguageModels::GPT_4;
         $repo = new DocumentRepository($contentBlock->document);
         $promptHelper = new PromptHelper($contentBlock->document->language->value);
-        $chatGpt = new ChatGPT();
+        $chatGpt = new ChatGPT($model->value);
         $response = $chatGpt->request([[
             'role' => 'user',
-            'content' => $promptHelper->generic($prompt, $text)
+            'content' => $promptHelper->generic($params['prompt'], $params['text'])
         ]]);
         $contentBlock->update(['content' => $response['content']]);
         $repo->addHistory(
