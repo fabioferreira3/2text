@@ -8,6 +8,7 @@ use App\Enums\SourceProvider;
 use App\Enums\Tone;
 use App\Helpers\PromptHelper;
 use App\Models\Document;
+use App\Models\DocumentContentBlock;
 use App\Models\DocumentTask;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -151,5 +152,16 @@ class DocumentRepository
             'meta' => $params['meta'] ?? [],
             'order' => $params['order'] ?? 1,
         ]);
+    }
+
+    public static function getContentBlock(string $documentContentBlockId)
+    {
+        return DocumentContentBlock::findOrFail($documentContentBlockId);
+    }
+
+    public static function updateContentBlock(string $documentContentBlockId, array $params)
+    {
+        $contentBlock = self::getContentBlock($documentContentBlockId);
+        $contentBlock->update($params);
     }
 }

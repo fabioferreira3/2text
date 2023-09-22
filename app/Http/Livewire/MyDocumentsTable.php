@@ -32,7 +32,7 @@ class MyDocumentsTable extends DataTableComponent
     public function viewDoc($documentId)
     {
         $document = Document::findOrFail($documentId);
-        if (in_array($document->status->value, ['finished', 'draft'])) {
+        if (in_array($document->status->value, ['finished', 'draft', 'in_progress'])) {
             return redirect()->route('document-view', ['document' => $document]);
         }
     }
@@ -94,7 +94,7 @@ class MyDocumentsTable extends DataTableComponent
                         return view('livewire.tables.my-documents.view-action', [
                             'rowId' => $row->id,
                             'status' => $row->status,
-                            'canView' => in_array($row->status->value, ['finished', 'draft']),
+                            'canView' => in_array($row->status->value, ['finished', 'draft', 'in_progress']),
                             'canDelete' => in_array($row->status->value, ['finished', 'aborted', 'failed', 'draft'])
                         ]);
                     }

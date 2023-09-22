@@ -5,6 +5,7 @@ return [
     'copy' => 'Copy',
     'copied' => 'Copied',
     'close' => 'Close',
+    'delete' => 'Delete',
     'download' => 'Download',
     'document.aborted' => 'Aborted',
     'document.draft' => 'Draft',

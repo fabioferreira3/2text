@@ -38,11 +38,12 @@ class RegisterFinishedProcess implements ShouldQueue
     public function handle()
     {
         try {
-            ProcessFinished::dispatch([
+            event(new ProcessFinished([
                 'document_id' => $this->document->id,
+                'parent_document_id' => $this->document->parent_document_id,
                 'process_id' => $this->meta['process_id'],
                 'user_id' => $this->document->getMeta('user_id')
-            ]);
+            ]));
             if (!isset($this->meta['silently'])) {
                 NotifyFinished::dispatch($this->document, $this->document->getMeta('user_id'));
             }

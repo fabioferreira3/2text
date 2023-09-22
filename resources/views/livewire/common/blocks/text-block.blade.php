@@ -1,8 +1,11 @@
 <div class="relative rounded-b-xl border border-zinc-200 p-4 bg-gray-100">
-    <div class="flex mb-4 flex justify-end gap-2">
-        <button wire:click="shorten" class="p1 font-bold text-gray-600 bg-gray-200 px-3 py-1 rounded-lg">shorten</button>
-        <button wire:click="expand" class="p1 font-bold text-gray-600 bg-gray-200 px-3 py-1 rounded-lg">expand</button>
-        <button wire:click="toggleCustomPrompt" class="p1 font-bold text-gray-600 bg-gray-200 px-3 py-1 rounded-lg">ask
+    <div class="flex flex-col justify-end md:flex-row mb-4 gap-2">
+        <button wire:click="shorten"
+            class="p1 lg:text-sm xl:text-base font-bold text-gray-600 bg-gray-200 px-3 py-1 rounded-lg">shorten</button>
+        <button wire:click="expand"
+            class="p1 lg:text-sm xl:text-base font-bold text-gray-600 bg-gray-200 px-3 py-1 rounded-lg">expand</button>
+        <button wire:click="toggleCustomPrompt"
+            class="p1 lg:text-sm xl:text-base font-bold text-gray-600 bg-gray-200 px-3 py-1 rounded-lg">ask
             to...</button>
     </div>
     @if ($processing)
@@ -11,7 +14,8 @@
             <x-loader height="20" width="20" color="white" />
         </div>
     @endif
-    <textarea class="w-full text-base border-0 bg-gray-100 p-0" name="text" wire:model="content" rows="12"></textarea>
+    <textarea class="w-full text-base border-0 bg-gray-100 p-0" name="text" wire:model.debounce.500ms="content"
+        rows="12"></textarea>
     @if ($showCustomPrompt)
         <x-experior::modal>
             <div class="py-4 text-left px-6">

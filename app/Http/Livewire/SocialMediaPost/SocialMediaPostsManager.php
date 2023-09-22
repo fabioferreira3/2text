@@ -8,6 +8,7 @@ use App\Enums\Tone;
 use App\Jobs\SocialMedia\ProcessSocialMediaPosts;
 use App\Models\Document;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class SocialMediaPostsManager extends Component
@@ -51,10 +52,18 @@ class SocialMediaPostsManager extends Component
         'language.required' => 'Language is a required field.',
     ];
 
+    public function getListeners()
+    {
+        $userId = Auth::user()->id;
+        return [
+            "echo-private:User.$userId,.ProcessFinished" => 'finishedProcess',
+        ];
+    }
+
     public function mount(Document $document)
     {
         $this->document = $document;
-        $this->generating = in_array($this->document->status, [DocumentStatus::ON_HOLD, DocumentStatus::IN_PROGRESS]);
+        $this->checkDocumentStatus();
         $this->showInstructions = $document->status == DocumentStatus::DRAFT ? true : false;
         $this->source = $document->getMeta('source') ?? 'free_text';
         $this->context = $document->getMeta('context') ?? '';
@@ -72,6 +81,11 @@ class SocialMediaPostsManager extends Component
             'Instagram' => false,
             'Twitter' => false
         ];
+    }
+
+    public function checkDocumentStatus()
+    {
+        $this->generating = in_array($this->document->status, [DocumentStatus::ON_HOLD, DocumentStatus::IN_PROGRESS]);
     }
 
     public function toggleInstructions()
@@ -104,5 +118,13 @@ class SocialMediaPostsManager extends Component
         ]);
 
         ProcessSocialMediaPosts::dispatch($this->document, $this->platforms);
+    }
+
+    public function finishedProcess(array $params)
+    {
+        if (isset($params['parent_document_id']) && $params['parent_document_id'] === $this->document->id) {
+            $this->document->refresh();
+            $this->checkDocumentStatus();
+        }
     }
 }

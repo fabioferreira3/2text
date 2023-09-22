@@ -89,6 +89,15 @@ class TextBlock extends Component
         return view('livewire.common.blocks.text-block');
     }
 
+    public function updated()
+    {
+        $this->emitUp('textBlockUpdated', [
+            'document_content_block_id' => $this->contentBlockId,
+            'type' => 'text',
+            'content' => $this->content
+        ]);
+    }
+
     public function finished($params)
     {
         if ($params['document_content_block_id'] === $this->contentBlockId) {

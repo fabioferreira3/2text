@@ -11,7 +11,12 @@
     @if ($generating)
         <div class="flex flex-col mt-8 border-1 border rounded-lg bg-white p-8">
             <div class="flex justify-between items-center">
-                @include('livewire.common.label', ['title' => __('social_media.generating')])
+                <div class="flex items-center gap-2">
+                    <x-loader height="10" width="10" />
+                    <label class="font-bold text-zinc-700 text-2xl cursor-pointer">
+                        {{ __('social_media.generating') }}<span id="typewriter"></span>
+                    </label>
+                </div>
             </div>
         </div>
     @endif
@@ -225,12 +230,13 @@
             @endif
         </div>
     @endif
-    @if (!$generating && count($document->children))
-        <div class="flex flex-col w-full md:grid md:grid-cols-2 xl:grid-cols-3 mt-6 gap-12 md:gap-6">
+    @if (count($document->children))
+        <div class="flex flex-col w-full lg:grid lg:grid-cols-2 xl:grid-cols-3 mt-6 gap-12 md:gap-6">
             @foreach ($document->children as $post)
-                @include('livewire.social-media-post.platforms.platform-post', [
-                    'platform' => $post->meta['platform'],
-                ])
+                @if ($post->contentBlocks->count())
+                    @php $platform = $post->meta['platform']; @endphp
+                    @livewire("social-media-post.platforms.$platform-post", [$post], key($post->id))
+                @endif
             @endforeach
         </div>
     @endif
@@ -241,50 +247,6 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const words = ['...']; // Example words
-        const speed = 100;
-
-        let displayedText = '';
-        let currentWordIndex = 0;
-        let currentCharIndex = 0;
-        let direction = 1; // 1 for forward, -1 for backward
-        let wait = false;
-
-        const typewriterEl = document.getElementById('typewriter');
-
-        function updateText() {
-            if (wait) {
-                return;
-            }
-
-            setTimeout(() => {
-                displayedText = words[currentWordIndex].slice(0, currentCharIndex + direction);
-                typewriterEl.textContent = displayedText;
-
-                currentCharIndex += direction;
-                switchDirectionIfNeeded();
-            }, speed);
-        }
-
-        function switchDirectionIfNeeded() {
-            if (currentCharIndex === words[currentWordIndex].length && direction === 1) {
-                // reached the end of the word, switch direction to backward
-                wait = true;
-                setTimeout(() => {
-                    direction = -1;
-                    wait = false;
-                    updateText();
-                }, 500);
-            } else if (currentCharIndex === 0 && direction === -1) {
-                // reached the start of the word, switch direction to forward and proceed to next word
-                direction = 1;
-                currentWordIndex = (currentWordIndex + 1) % words.length;
-                updateText();
-            } else {
-                updateText();
-            }
-        }
-
-        updateText();
+        initTypewriter('typewriter', ['...'], 100);
     });
 </script>

@@ -36,6 +36,12 @@ enum DocumentType: string
 
     public static function getKeyValues(): array
     {
-        return collect(self::cases())->flatMap(fn ($type) => [$type->value => $type->label()])->toArray();
+        return collect([
+            self::BLOG_POST,
+            self::PARAPHRASED_TEXT,
+            self::TEXT_TRANSCRIPTION,
+            self::TEXT_TO_SPEECH,
+            self::SOCIAL_MEDIA_GROUP
+        ])->flatMap(fn ($type) => [$type->value => $type->label()])->toArray();
     }
 }
