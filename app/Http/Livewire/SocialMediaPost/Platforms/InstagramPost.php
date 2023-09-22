@@ -20,11 +20,9 @@ class InstagramPost extends Component
     public function getListeners()
     {
         return [
-            'refresh',
             'showHistoryModal',
             'closeHistoryModal',
-            'textBlockUpdated',
-            "echo-private:User.$this->userId,.ProcessFinished" => 'finishProcessing',
+            'textBlockUpdated'
         ];
     }
 

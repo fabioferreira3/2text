@@ -9,7 +9,6 @@ use App\Jobs\SocialMedia\ProcessSocialMediaPosts;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class SocialMediaPostsManager extends Component
@@ -34,24 +33,30 @@ class SocialMediaPostsManager extends Component
     public $title;
     public bool $generating;
 
-    protected $rules = [
-        'source' => 'required|in:free_text,youtube,website_url',
-        'sourceUrl' => 'required_if:source,youtube,website_url|url',
-        'platforms' => 'required|array',
-        'context' => 'required_if:source,free_text|nullable',
-        'keyword' => 'required',
-        'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
-        'tone' => 'nullable',
-        'style' => 'nullable'
-    ];
+    public function rules()
+    {
+        return [
+            'source' => 'required|in:free_text,youtube,website_url',
+            'sourceUrl' => 'required_if:source,youtube,website_url|url',
+            'platforms' => ['required', 'array', new \App\Rules\ValidPlatforms()],
+            'context' => 'required_if:source,free_text|nullable',
+            'keyword' => 'required',
+            'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
+            'tone' => 'nullable',
+            'style' => 'nullable'
+        ];
+    }
 
-    protected $messages = [
-        'context.required_if' => 'You need to provide some context for the AI to generate your social media post.',
-        'sourceUrl.required_if' => 'You need to provide a link for me to use as context for your social media post.',
-        'keyword.required' => 'You need to provide a keyword.',
-        'source.required' => 'Source is a required field.',
-        'language.required' => 'Language is a required field.',
-    ];
+    public function messages()
+    {
+        return [
+            'context.required_if' => __('validation.context_required'),
+            'sourceUrl.required_if' => __('validation.social_media_sourceurl_required'),
+            'keyword.required' => __('validation.keyword_required'),
+            'source.required' => __('validation.source_required'),
+            'language.required' => __('validation.language_required'),
+        ];
+    }
 
     public function getListeners()
     {
@@ -65,10 +70,10 @@ class SocialMediaPostsManager extends Component
     public function mount(Document $document)
     {
         $this->document = $document;
+        $this->generating = false;
         $this->checkDocumentStatus();
-        $this->showInstructions = $document->status == DocumentStatus::DRAFT ? true : false;
         $this->source = $document->getMeta('source') ?? 'free_text';
-        $this->context = $document->getMeta('context') ?? '';
+        $this->context = $document->getContext() ?? '';
         $this->sourceUrl = $document->getMeta('source_url') ?? '';
         $this->language = $document->language->value ?? 'en';
         $this->languages = Language::getLabels();
@@ -87,7 +92,19 @@ class SocialMediaPostsManager extends Component
 
     public function checkDocumentStatus()
     {
-        $this->generating = in_array($this->document->status, [DocumentStatus::ON_HOLD, DocumentStatus::IN_PROGRESS]);
+        $this->showInstructions = $this->document->status == DocumentStatus::DRAFT ? true : false;
+        if ($this->generating) {
+            $this->generating = in_array($this->document->status, [
+                DocumentStatus::ON_HOLD,
+                DocumentStatus::IN_PROGRESS
+            ]);
+            if (!$this->generating) {
+                $this->dispatchBrowserEvent('alert', [
+                    'type' => 'success',
+                    'message' => __('alerts.posts_generated')
+                ]);
+            }
+        }
     }
 
     public function toggleInstructions()
@@ -130,13 +147,18 @@ class SocialMediaPostsManager extends Component
         }
     }
 
+    public function updatedSource()
+    {
+        $this->context = '';
+    }
+
     public function deleteDocument(array $params)
     {
         (new DocumentRepository())->delete($params['document_id']);
         $this->document->refresh();
         $this->dispatchBrowserEvent('alert', [
             'type' => 'success',
-            'message' => "Post deleted!"
+            'message' => (__('alerts.post_deleted'))
         ]);
     }
 }

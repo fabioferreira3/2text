@@ -69,7 +69,7 @@ class GenRepository
         $response = $chatGpt->request([
             [
                 'role' => 'user',
-                'content' =>   $promptHelper->writeSocialMediaPost($document->context, [
+                'content' =>   $promptHelper->writeSocialMediaPost($document->getContext(), [
                     'keyword' => $document->getMeta('keyword'),
                     'platform' => $platform,
                     'tone' => $document->getMeta('tone'),

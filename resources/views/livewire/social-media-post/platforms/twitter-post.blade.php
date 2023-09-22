@@ -23,7 +23,7 @@
     <div class="border-l border-r border-b border-zinc-200 rounded-b-xl overflow-hidden flex-grow">
         <div class="flex flex-col h-full px-6 pt-6 pb-2 bg-black rounded-b-xl">
             <div class="flex-1">
-                <div class="h-[200px]">
+                <div class="h-[250px]">
                     <img class="rounded-t-xl w-full h-full object-cover"
                         src={{ $image ?? '/images/placeholder-social-media.jpg' }} />
                 </div>

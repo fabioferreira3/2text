@@ -42,15 +42,4 @@ trait SocialMediaTrait
             'document_id' => $this->document->id
         ]);
     }
-
-    public function finishProcessing(array $params)
-    {
-        if (
-            $this->document && $params['document_id'] === $this->document->id
-            && $params['process_id'] === $this->processId
-        ) {
-            $this->refresh();
-            $this->isProcessing = false;
-        }
-    }
 }

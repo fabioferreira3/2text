@@ -51,7 +51,7 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
                 [
                     'role' => 'user',
                     'content' =>   $this->promptHelper->writeOutline(
-                        $this->document->context,
+                        $this->document->getContext(),
                         [
                             'tone' => $this->document->meta['tone'],
                             'keyword' => $this->document->meta['keyword'],

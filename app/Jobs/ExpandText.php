@@ -52,7 +52,7 @@ class ExpandText implements ShouldQueue, ShouldBeUnique
             $prompt = $this->promptHelper->givenFollowingText($normalizedStructure);
 
             if (Str::wordCount($normalizedStructure) <= 1000) {
-                $prompt .= $this->promptHelper->andGivenFollowingContext($this->document->context);
+                $prompt .= $this->promptHelper->andGivenFollowingContext($this->document->getContext());
             }
             $order = $this->meta['order'];
             foreach ($rawStructure as $key => $section) {

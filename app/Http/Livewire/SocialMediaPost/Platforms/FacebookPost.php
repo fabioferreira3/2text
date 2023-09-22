@@ -23,8 +23,7 @@ class FacebookPost extends Component
             'refresh',
             'showHistoryModal',
             'closeHistoryModal',
-            'textBlockUpdated',
-            "echo-private:User.$this->userId,.ProcessFinished" => 'finishProcessing',
+            'textBlockUpdated'
         ];
     }
 

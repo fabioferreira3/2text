@@ -63,7 +63,7 @@ class TextBlock extends Component
     {
         $this->dispatchBrowserEvent('alert', [
             'type' => 'info',
-            'message' => "Rewriting text..."
+            'message' => __('alerts.rewriting_text')
         ]);
         $contentBlock = DocumentContentBlock::findOrFail($this->contentBlockId);
         $this->processing = true;
@@ -105,7 +105,7 @@ class TextBlock extends Component
             $this->content = $contentBlock->content;
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'success',
-                'message' => "Text regenerated!"
+                'message' => __('alerts.text_regenerated')
             ]);
             $this->processing = false;
         }

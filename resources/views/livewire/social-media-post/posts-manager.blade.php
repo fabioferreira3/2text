@@ -59,9 +59,11 @@
                                                 wire:model.defer="platforms.Linkedin" />
                                         </div>
                                     </div>
-                                    @if ($errors->has('platforms'))
-                                        <span class="text-red-500 text-sm">{{ $errors->first('platforms') }}</span>
-                                    @endif
+                                    <div class="mt-2">
+                                        @if ($errors->has('platforms'))
+                                            <span class="text-red-500 text-sm">{{ $errors->first('platforms') }}</span>
+                                        @endif
+                                    </div>
                                 </div>
                                 <div>
                                     <div class="flex gap-2 items-center">
@@ -110,6 +112,12 @@
                                                 </div>
                                             </div>
                                             <textarea class="border border-zinc-200 rounded-lg w-full mt-3" rows="8" maxlength="30000" wire:model="context"></textarea>
+                                            <div class="mt-2">
+                                                @if ($errors->has('context'))
+                                                    <span
+                                                        class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
+                                                @endif
+                                            </div>
                                         </div>
                                     @endif
                                     @if ($source === 'youtube')
@@ -117,17 +125,14 @@
                                         <input name="url" wire:model="sourceUrl"
                                             class="p-3 border border-zinc-200 rounded-lg w-full" />
                                     @endif
-                                    @if ($errors->has('source_url'))
-                                        <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
-                                    @endif
 
                                     @if ($source === 'website_url')
                                         <label class="font-bold text-lg text-zinc-700">URL:</label>
-                                        <input name="url" wire:model="source_url"
+                                        <input name="url" wire:model="sourceUrl"
                                             class="p-3 border border-zinc-200 rounded-lg w-full" />
                                     @endif
-                                    @if ($errors->has('source_url'))
-                                        <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
+                                    @if ($errors->has('sourceUrl'))
+                                        <span class="text-red-500 text-sm">{{ $errors->first('sourceUrl') }}</span>
                                     @endif
                                 </div>
                                 @if ($source === 'website_url' || $source === 'youtube')
@@ -184,9 +189,6 @@
                                         <span class="text-red-500 text-sm">{{ $errors->first('language') }}</span>
                                     @endif
                                 </div>
-                                @if ($errors->has('context'))
-                                    <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
-                                @endif
                             </div>
                             <div class="flex flex-col gap-3">
                                 <div class="flex gap-2 items-center">
@@ -241,9 +243,9 @@
         </div>
     @endif
 </div>
-@if ($displayHistory)
+{{-- @if ($displayHistory)
     @livewire('common.history-modal', [$document])
-@endif
+@endif --}}
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {

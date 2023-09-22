@@ -15,7 +15,7 @@
         </div>
     @endif
     <textarea class="w-full text-base border-0 bg-gray-100 p-0" name="text" wire:model.debounce.500ms="content"
-        rows="12"></textarea>
+        rows="7"></textarea>
     @if ($showCustomPrompt)
         <x-experior::modal>
             <div class="py-4 text-left px-6">

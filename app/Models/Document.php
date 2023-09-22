@@ -27,7 +27,7 @@ class Document extends Model
         'language' => Language::class,
         'meta' => 'array'
     ];
-    protected $appends = ['normalized_structure', 'content', 'context', 'status', 'source', 'tone', 'style'];
+    protected $appends = ['normalized_structure', 'content', 'status', 'source', 'tone', 'style'];
 
     public function history(): HasMany
     {
@@ -62,6 +62,11 @@ class Document extends Model
     public function getMeta($attribute)
     {
         return $this->meta[$attribute] ?? $this->parent->meta[$attribute] ?? null;
+    }
+
+    public function getContext()
+    {
+        return $this->getMeta('summary') ?? $this->getMeta('context') ?? null;
     }
 
     public function getNormalizedStructureAttribute()
@@ -166,11 +171,6 @@ class Document extends Model
 
         $style = Style::tryFrom($this->meta['style']);
         return $style->label();
-    }
-
-    public function getContextAttribute()
-    {
-        return $this->meta['summary'] ?? $this->meta['context'] ?? null;
     }
 
     protected static function booted(): void

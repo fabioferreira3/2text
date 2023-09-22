@@ -9,9 +9,10 @@ window.initTypewriter = function (elementId, wordsArray, speedValue) {
 
     const typewriterEl = document.getElementById(elementId);
 
-    if (!typewriterEl) {
-        return;
-    }
+    // if (!typewriterEl) {
+    //     console.log("eita");
+    //     return;
+    // }
 
     function updateText() {
         if (wait) {
