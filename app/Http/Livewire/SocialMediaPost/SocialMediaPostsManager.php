@@ -7,6 +7,7 @@ use App\Enums\Language;
 use App\Enums\Tone;
 use App\Jobs\SocialMedia\ProcessSocialMediaPosts;
 use App\Models\Document;
+use App\Repositories\DocumentRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -57,6 +58,7 @@ class SocialMediaPostsManager extends Component
         $userId = Auth::user()->id;
         return [
             "echo-private:User.$userId,.ProcessFinished" => 'finishedProcess',
+            'deleteSocialMediaPost' => 'deleteDocument'
         ];
     }
 
@@ -126,5 +128,15 @@ class SocialMediaPostsManager extends Component
             $this->document->refresh();
             $this->checkDocumentStatus();
         }
+    }
+
+    public function deleteDocument(array $params)
+    {
+        (new DocumentRepository())->delete($params['document_id']);
+        $this->document->refresh();
+        $this->dispatchBrowserEvent('alert', [
+            'type' => 'success',
+            'message' => "Post deleted!"
+        ]);
     }
 }

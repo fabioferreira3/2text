@@ -3,23 +3,18 @@
         <img class="h-12" src="{{ Vite::asset('resources/images/linkedin-logo.png') }}">
         <div class="flex justify-end">
             <x-dropdown persistent>
-                <x-dropdown.item icon="refresh">
-                    <x-button sm wire:loading.attr="disabled" wire:click='regenerate' label="{{ __('common.regenerate') }}"
+                <x-dropdown.item icon="book-open">
+                    <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" wire:click='showHistoryModal'
+                        label="{{ __('common.view_history') }}"
                         class='hover:bg-transparent hover:shadow-none border-0 px-0 text-zinc-700' />
-                </x-dropdown.item>
-                <x-dropdown.item icon="book-open" separator>
-                    <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save"
-                        wire:click='showHistoryModal' label="{{ __('common.view_history') }}"
-                        class='border-0 px-0 text-zinc-700' />
                 </x-dropdown.item>
                 <x-dropdown.item icon="clipboard-copy" separator>
-                    <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" :disabled='$copied ? true : false'
-                        wire:click='copy' :label='$copied ? __('common.copied') : __('common.copy')'
-                        class='hover:bg-transparent hover:shadow-none border-0 px-0 text-zinc-700' />
+                    <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" wire:click='copy'
+                        :label="$copied ? __('common.copied') : __('common.copy')" class='hover:bg-transparent hover:shadow-none border-0 px-0 text-zinc-700' />
                 </x-dropdown.item>
-                <x-dropdown.item icon="save" separator>
-                    <x-button sm spinner="save" wire:loading.attr="disabled" wire:target="regenerate,save"
-                        wire:click='save' label="{{ __('common.save') }}"
+                <x-dropdown.item icon="trash" separator>
+                    <x-button sm wire:loading.attr="disabled" wire:target="delete" wire:click='delete'
+                        label="{{ __('common.delete') }}"
                         class='hover:bg-transparent hover:shadow-none border-0 px-0 text-zinc-700' />
                 </x-dropdown.item>
             </x-dropdown>

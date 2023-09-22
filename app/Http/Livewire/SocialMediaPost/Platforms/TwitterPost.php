@@ -3,24 +3,19 @@
 namespace App\Http\Livewire\SocialMediaPost\Platforms;
 
 use App\Models\Document;
+use App\Models\Traits\SocialMediaTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
 class TwitterPost extends Component
 {
+    use SocialMediaTrait;
+
     public Document $document;
-    public string $initialContent;
-    public bool $copied = false;
     public bool $displayHistory = false;
     public string $userId;
-    public bool $isProcessing = false;
-    public string $processId;
     private string $platform;
-    public $text;
-    public $textBlockId;
-    public $image;
-    public $imageBlockId;
 
     public function getListeners()
     {
@@ -28,7 +23,8 @@ class TwitterPost extends Component
             'refresh',
             'showHistoryModal',
             'closeHistoryModal',
-            "echo-private:User.$this->userId,.ProcessFinished" => 'finish',
+            'textBlockUpdated',
+            "echo-private:User.$this->userId,.ProcessFinished" => 'finishProcessing',
         ];
     }
 
@@ -36,25 +32,18 @@ class TwitterPost extends Component
     {
         $this->userId = Auth::user()->id;
         $this->document = $document;
-        $this->processId = '';
         $imageBlock = optional($this->document->contentBlocks)->firstWhere('type', 'image');
         $textBlock = optional($this->document->contentBlocks)->firstWhere('type', 'text');
 
         $this->image = $imageBlock ? $imageBlock->content : null;
         $this->imageBlockId = $imageBlock ? $imageBlock->id : null;
-        $this->text = $textBlock ? Str::of($textBlock->content)->trim('"') : null;
+        $this->text = $textBlock ? Str::of($textBlock->content)->trim('"') : '';
         $this->textBlockId = $textBlock ? $textBlock->id : null;
     }
 
     public function render()
     {
         return view('livewire.social-media-post.platforms.twitter-post');
-    }
-
-    public function copy()
-    {
-        $this->emit('addToClipboard', $this->content);
-        $this->copied = true;
     }
 
     public function showHistoryModal()
@@ -66,16 +55,5 @@ class TwitterPost extends Component
     public function closeHistoryModal()
     {
         $this->displayHistory = false;
-    }
-
-    public function finish(array $params)
-    {
-        if (
-            $this->document && $params['document_id'] === $this->document->id
-            && $params['process_id'] === $this->processId
-        ) {
-            $this->refresh();
-            $this->isProcessing = false;
-        }
     }
 }

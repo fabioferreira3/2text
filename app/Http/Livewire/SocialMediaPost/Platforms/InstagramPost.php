@@ -24,7 +24,7 @@ class InstagramPost extends Component
             'showHistoryModal',
             'closeHistoryModal',
             'textBlockUpdated',
-            "echo-private:User.$this->userId,.ProcessFinished" => 'finish',
+            "echo-private:User.$this->userId,.ProcessFinished" => 'finishProcessing',
         ];
     }
 

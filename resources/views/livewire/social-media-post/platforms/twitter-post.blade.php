@@ -3,30 +3,25 @@
         <img class="h-12" src="{{ Vite::asset('resources/images/twitter-logo.png') }}">
         <div class="flex justify-end">
             <x-dropdown persistent>
-                <x-dropdown.item icon="refresh">
-                    <x-button sm wire:loading.attr="disabled" wire:click='regenerate' label="{{ __('common.regenerate') }}"
+                <x-dropdown.item icon="book-open">
+                    <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" wire:click='showHistoryModal'
+                        label="{{ __('common.view_history') }}"
                         class='hover:bg-transparent hover:shadow-none border-0 px-0 text-zinc-700' />
-                </x-dropdown.item>
-                <x-dropdown.item icon="book-open" separator>
-                    <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save"
-                        wire:click='showHistoryModal' label="{{ __('common.view_history') }}"
-                        class='border-0 px-0 text-zinc-700' />
                 </x-dropdown.item>
                 <x-dropdown.item icon="clipboard-copy" separator>
-                    <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" :disabled='$copied ? true : false'
-                        wire:click='copy' :label='$copied ? __('common.copied') : __('common.copy')'
-                        class='hover:bg-transparent hover:shadow-none border-0 px-0 text-zinc-700' />
+                    <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" wire:click='copy'
+                        :label="$copied ? __('common.copied') : __('common.copy')" class='hover:bg-transparent hover:shadow-none border-0 px-0 text-zinc-700' />
                 </x-dropdown.item>
-                <x-dropdown.item icon="save" separator>
-                    <x-button sm spinner="save" wire:loading.attr="disabled" wire:target="regenerate,save"
-                        wire:click='save' label="{{ __('common.save') }}"
+                <x-dropdown.item icon="trash" separator>
+                    <x-button sm wire:loading.attr="disabled" wire:target="delete" wire:click='delete'
+                        label="{{ __('common.delete') }}"
                         class='hover:bg-transparent hover:shadow-none border-0 px-0 text-zinc-700' />
                 </x-dropdown.item>
             </x-dropdown>
         </div>
     </div>
     <div class="border-l border-r border-b border-zinc-200 rounded-b-xl overflow-hidden flex-grow">
-        <div class="flex flex-col h-full p-6 bg-black rounded-b-xl">
+        <div class="flex flex-col h-full px-6 pt-6 pb-2 bg-black rounded-b-xl">
             <div class="flex-1">
                 <div class="h-[200px]">
                     <img class="rounded-t-xl w-full h-full object-cover"
@@ -34,10 +29,14 @@
                 </div>
                 @livewire('common.blocks.text-block', ['content' => $text, 'contentBlockId' => $textBlockId, 'faster' => true])
             </div>
-
-            {{-- @if ($displayHistory)
-        @livewire('common.history-modal', [$document])
-    @endif --}}
+            <div class="flex items-center gap-2 justify-end mt-2">
+                @if (!$saving)
+                    <x-icon name="badge-check" width="30" height="30" class="text-white" />
+                @endif
+                @if ($saving)
+                    <x-loader color="white" weight="6" height="6" />
+                @endif
+            </div>
         </div>
     </div>
 </div>

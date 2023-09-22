@@ -38,6 +38,19 @@ trait SocialMediaTrait
 
     public function delete()
     {
-        (new DocumentRepository())->delete($this->document->id);
+        $this->emitUp('deleteSocialMediaPost', [
+            'document_id' => $this->document->id
+        ]);
+    }
+
+    public function finishProcessing(array $params)
+    {
+        if (
+            $this->document && $params['document_id'] === $this->document->id
+            && $params['process_id'] === $this->processId
+        ) {
+            $this->refresh();
+            $this->isProcessing = false;
+        }
     }
 }
