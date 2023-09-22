@@ -19,6 +19,11 @@ class Account extends Model
         return $this->hasMany(User::class);
     }
 
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
+
     public function getLanguageAttribute()
     {
         return $this->settings['language'] ?? 'en';

@@ -121,6 +121,10 @@ class SocialMediaPostsManager extends Component
     {
         $this->validate();
         $this->generating = true;
+        $this->dispatchBrowserEvent('alert', [
+            'type' => 'info',
+            'message' => __('alerts.generating_posts')
+        ]);
         $this->document->update([
             'meta' => [
                 'context' => $this->context ?? null,

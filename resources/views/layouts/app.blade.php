@@ -36,7 +36,7 @@
     <x-jet-banner />
     @livewire('common.notifications')
 
-    <main class="flex w-full md:grid lg:grid-cols-7 xl:grid-cols-6 min-h-screen">
+    <main class="flex w-full md:grid md:grid-cols-7 xl:grid-cols-6 min-h-screen">
         <div class="hidden sm:block md:col-span-2 xl:col-span-1 h-full p-6 bg-main">
             @livewire('common.sidebar')
         </div>

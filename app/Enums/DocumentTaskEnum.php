@@ -5,23 +5,24 @@ namespace App\Enums;
 enum DocumentTaskEnum: string
 {
     case CRAWL_WEBSITE = 'crawl_website';
-    case DOWNLOAD_AUDIO = 'download_audio';
-    case PARAPHRASE_DOCUMENT = 'paraphrase_document';
-    case PARAPHRASE_TEXT = 'paraphrase_text';
-    case PROCESS_AUDIO = 'process_audio';
-    case PUBLISH_TRANSCRIPTION = 'publish_transcription';
-    case SUMMARIZE_DOC = 'summarize_doc';
     case CREATE_SOCIAL_MEDIA_POST = 'create_social_media_post';
     case CREATE_OUTLINE = 'create_outline';
     case CREATE_TITLE = 'create_title';
     case CREATE_METADESCRIPTION = 'create_meta_description';
+    case DOWNLOAD_AUDIO = 'download_audio';
     case EXPAND_OUTLINE = 'expand_outline';
     case EXPAND_TEXT = 'expand_text';
     case EXPAND_TEXT_SECTION = 'expand_text_section';
+    case GENERATE_IMAGE = 'generate_image';
+    case PARAPHRASE_DOCUMENT = 'paraphrase_document';
+    case PARAPHRASE_TEXT = 'paraphrase_text';
+    case PROCESS_AUDIO = 'process_audio';
+    case PUBLISH_TRANSCRIPTION = 'publish_transcription';
     case PREPARE_TEXT_TRANSLATION = 'prepare_text_translation';
     case REGISTER_FINISHED_PROCESS = 'register_finished_process';
     case REGISTER_CONTENT_HISTORY = 'register_content_history';
     case REWRITE_TEXT_BLOCK = 'rewrite_text_block';
+    case SUMMARIZE_DOC = 'summarize_doc';
     case TRANSLATE_TEXT = 'translate_text';
     case TEXT_TO_SPEECH = 'text_to_speech';
 
@@ -42,6 +43,7 @@ enum DocumentTaskEnum: string
             self::EXPAND_OUTLINE => "App\Jobs\ExpandOutline",
             self::EXPAND_TEXT => "App\Jobs\ExpandText",
             self::EXPAND_TEXT_SECTION => "App\Jobs\ExpandTextSection",
+            self::GENERATE_IMAGE => "App\Jobs\GenerateImage",
             self::PREPARE_TEXT_TRANSLATION => "App\Jobs\Translation\PrepareTextTranslation",
             self::REGISTER_FINISHED_PROCESS => "App\Jobs\RegisterFinishedProcess",
             self::REGISTER_CONTENT_HISTORY => "App\Jobs\RegisterContentHistory",

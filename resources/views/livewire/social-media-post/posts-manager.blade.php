@@ -8,18 +8,16 @@
         'suffix' => $document->title,
     ])
 
-    @if ($generating)
-        <div class="flex flex-col mt-8 border-1 border rounded-lg bg-white p-8">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center gap-2">
-                    <x-loader height="10" width="10" />
-                    <label class="font-bold text-zinc-700 text-2xl cursor-pointer">
-                        {{ __('social_media.generating') }}<span id="typewriter"></span>
-                    </label>
-                </div>
+    <div class="{{ $generating ? 'flex' : 'hidden' }} flex flex-col mt-8 border-1 border rounded-lg bg-white p-8">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <x-loader height="10" width="10" />
+                <label class="font-bold text-zinc-700 text-2xl cursor-pointer">
+                    {{ __('social_media.generating') }}<span id="typewriter"></span>
+                </label>
             </div>
         </div>
-    @endif
+    </div>
 
     @if (!$generating)
         <div class="flex flex-col mt-8 border-1 border rounded-xl bg-white p-8">
@@ -234,7 +232,7 @@
     @endif
     @if (count($document->children))
         <div class="flex flex-col w-full lg:grid lg:grid-cols-2 xl:grid-cols-3 mt-6 gap-12 md:gap-6">
-            @foreach ($document->children as $post)
+            @foreach ($document->children()->latest()->get() as $post)
                 @if ($post->contentBlocks->count())
                     @php $platform = $post->meta['platform']; @endphp
                     @livewire("social-media-post.platforms.$platform-post", [$post], key($post->id))
@@ -249,6 +247,6 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        initTypewriter('typewriter', ['...'], 100);
+        initTypewriter('typewriter', ['...'], 120);
     });
 </script>

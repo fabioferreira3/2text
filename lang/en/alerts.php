@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'posts_generated' => 'Posts generated!',
+    'generating_posts' => 'In Progress! Please wait...',
+    'posts_generated' => 'Post(s) generated!',
     'post_deleted' => 'Post deleted!',
     'rewriting_text' => 'Rewriting text...',
     'text_regenerated' => 'Text regenerated!'

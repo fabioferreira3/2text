@@ -2,7 +2,7 @@
     <div class="relative mb-4 h-24">
         <div class="flex w-full items-center justify-center">
             <a href="{{ route('dashboard') }}">
-                <img src="/logo.png" class="w-2/3 xl:w-3/4" />
+                <img src="/logo.png" class="w-full" />
             </a>
         </div>
     </div>

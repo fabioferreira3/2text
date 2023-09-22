@@ -9,8 +9,12 @@ use App\Helpers\PromptHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
+use App\Models\Image;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Talendor\StabilityAI\Enums\StabilityAIEngine;
+use Talendor\StabilityAI\StabilityAIClient;
 
 class GenRepository
 {
@@ -59,6 +63,25 @@ class GenRepository
             ],
             $response['token_usage']
         );
+    }
+
+    public static function generateImage(Document $document, array $params)
+    {
+        $client = app(StabilityAIClient::class);
+        $results = $client->textToImage($params);
+        if (count($results)) {
+            foreach ($results as $result) {
+                $fileName = 'ai-images/' . $result['fileName'];
+                Storage::disk('s3')->put($fileName, $result['imageData']);
+                $document->account->images()->save(new Image([
+                    'file_name' => $fileName,
+                    'model' => StabilityAIEngine::SD_XL_V_1->value,
+                    'meta' => [
+                        'document_id' => $document->id
+                    ]
+                ]));
+            }
+        }
     }
 
     public static function generateSocialMediaPost(Document $document, string $platform)
