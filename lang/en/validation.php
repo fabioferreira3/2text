@@ -55,6 +55,8 @@ return [
         'string' => 'The :attribute must be greater than or equal to :value characters.',
     ],
     'image' => 'The :attribute must be an image.',
+    'img_prompt_required' => 'Image description is a required field',
+    'img_style_required' => 'Image style is a required field',
     'in' => 'The selected :attribute is invalid.',
     'in_array' => 'The :attribute field does not exist in :other.',
     'integer' => 'The :attribute must be an integer.',

@@ -11,7 +11,6 @@ use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
-use Talendor\StabilityAI\Enums\StylePreset;
 
 class ProcessSocialMediaPosts
 {
@@ -91,7 +90,7 @@ class ProcessSocialMediaPosts
 
         $this->platforms->each(function ($value, $platform) {
             $platformName = Str::of($platform)->lower();
-            $processId = Str::uuid();
+            $textProcessId = Str::uuid();
             $post = Document::create([
                 'type' => DocumentType::SOCIAL_MEDIA_POST->value,
                 'meta' => [
@@ -104,7 +103,7 @@ class ProcessSocialMediaPosts
                 $post->id,
                 DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST,
                 [
-                    'process_id' => $processId,
+                    'process_id' => $textProcessId,
                     'meta' => [
                         'platform' => $platformName,
                         'generate_img' => $post->getMeta('generate_img')
@@ -120,15 +119,15 @@ class ProcessSocialMediaPosts
                     $post->id,
                     DocumentTaskEnum::GENERATE_IMAGE,
                     [
-                        'order' => 2,
-                        'process_id' => $processId,
+                        'order' => 1,
+                        'process_id' => Str::uuid(),
                         'meta' => [
-                            'prompt' => 'Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary, focusing on the size of the dragon and the affectionate interaction.',
+                            'prompt' => $post->getMeta('img_prompt'),
                             'height' => $imageSize['height'],
                             'width' => $imageSize['width'],
                             'add_content_block' => true,
-                            'style_preset' => StylePreset::CINEMATIC->value,
-                            'steps' => 60
+                            'style_preset' => $post->getMeta('img_style'),
+                            'steps' => 30
                         ]
                     ]
                 );
@@ -138,8 +137,8 @@ class ProcessSocialMediaPosts
                 $post->id,
                 DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
                 [
-                    'order' => 999,
-                    'process_id' => $processId,
+                    'order' => 2,
+                    'process_id' => $textProcessId,
                     'meta' => [
                         'silently' => true
                     ]

@@ -27,7 +27,7 @@ class Document extends Model
         'language' => Language::class,
         'meta' => 'array'
     ];
-    protected $appends = ['normalized_structure', 'content', 'status', 'source', 'tone', 'style'];
+    protected $appends = ['normalized_structure', 'content', 'is_finished', 'status', 'source', 'tone', 'style'];
 
     public function history(): HasMany
     {
@@ -107,6 +107,11 @@ class Document extends Model
             default:
                 return $this->attributes['content'];
         }
+    }
+
+    public function getIsFinishedAttribute()
+    {
+        return $this->status === DocumentStatus::FINISHED;
     }
 
     public function getStatusAttribute()

@@ -10,6 +10,7 @@ use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Talendor\StabilityAI\Enums\StylePreset;
 
 class SocialMediaPostsManager extends Component
 {
@@ -19,6 +20,8 @@ class SocialMediaPostsManager extends Component
     public string $context;
     public string $sourceUrl;
     public string $source;
+    public string $imgPrompt;
+    public string $imgStyle;
     public string $language;
     public array $languages;
     public string $keyword;
@@ -38,6 +41,8 @@ class SocialMediaPostsManager extends Component
         return [
             'source' => 'required|in:free_text,youtube,website_url',
             'sourceUrl' => 'required_if:source,youtube,website_url|url',
+            'imgPrompt' => 'required_if:generateImage,true',
+            'imgStyle' => 'required_if:generateImage,true',
             'platforms' => ['required', 'array', new \App\Rules\ValidPlatforms()],
             'context' => 'required_if:source,free_text|nullable',
             'keyword' => 'required',
@@ -55,6 +60,8 @@ class SocialMediaPostsManager extends Component
             'keyword.required' => __('validation.keyword_required'),
             'source.required' => __('validation.source_required'),
             'language.required' => __('validation.language_required'),
+            'imgPrompt.required_if' => __('validation.img_prompt_required'),
+            'imgStyle.required_if' => __('validation.img_style_required')
         ];
     }
 
@@ -75,9 +82,11 @@ class SocialMediaPostsManager extends Component
         $this->source = $document->getMeta('source') ?? 'free_text';
         $this->context = $document->getContext() ?? '';
         $this->sourceUrl = $document->getMeta('source_url') ?? '';
+        $this->generateImage = $document->getMeta('generate_img') ?? false;
+        $this->imgPrompt = $document->getMeta('img_prompt') ?? '';
+        $this->imgStyle = $document->getMeta('img_style') ?? StylePreset::DIGITAL_ART->value;
         $this->language = $document->language->value ?? 'en';
         $this->languages = Language::getLabels();
-        $this->generateImage = false;
         $this->keyword = $document->getMeta('keyword') ?? '';
         $this->tone = $document->getMeta('tone') ?? 'default';
         $this->style = $document->getMeta('style') ?? 'default';
@@ -92,7 +101,8 @@ class SocialMediaPostsManager extends Component
 
     public function checkDocumentStatus()
     {
-        $this->showInstructions = $this->document->status == DocumentStatus::DRAFT ? true : false;
+        $this->showInstructions = true;
+        //$this->showInstructions = $this->document->status == DocumentStatus::DRAFT ? true : false;
         if ($this->generating) {
             $this->generating = in_array($this->document->status, [
                 DocumentStatus::ON_HOLD,
@@ -135,7 +145,8 @@ class SocialMediaPostsManager extends Component
                 'keyword' => $this->keyword ?? null,
                 'more_instructions' => $this->moreInstructions ?? null,
                 'generate_img' => $this->generateImage,
-                'default_img_prompt' => '',
+                'img_prompt' => $this->imgPrompt,
+                'img_style' => $this->imgStyle,
                 'user_id' => Auth::check() ? Auth::id() : null
             ]
         ]);
@@ -154,6 +165,7 @@ class SocialMediaPostsManager extends Component
     public function updatedSource()
     {
         $this->context = '';
+        $this->moreInstructions = '';
     }
 
     public function deleteDocument(array $params)

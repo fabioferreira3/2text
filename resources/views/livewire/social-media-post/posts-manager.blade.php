@@ -63,7 +63,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div>
+                                <div class="border rounded-xl p-4">
                                     <div class="flex gap-2 items-center">
                                         <label class="font-bold text-lg text-zinc-700">Generate AI Image:</label>
                                         @include('livewire.common.help-item', [
@@ -71,10 +71,32 @@
                                             'content' => App\Helpers\InstructionsHelper::socialMediaPlatforms(),
                                         ])
                                     </div>
-                                    <div class='grid grid-cols-2 gap-8 mt-2'>
-                                        <div class='flex flex-col gap-2'>
+                                    <div class='flex items-center justify-between'>
+                                        <div>
                                             <x-checkbox md id="generate_img" name="generate_img" label="Yes"
                                                 wire:model.defer="generateImage" />
+                                        </div>
+                                        <div>
+                                            <label class="font-bold text-lg text-zinc-700">Image style:</label>
+                                            <div>Options here</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col mt-2">
+                                        <div class="flex gap-2 items-center">
+                                            <label class="font-bold text-lg text-zinc-700">Image description:</label>
+                                            @include('livewire.common.help-item', [
+                                                'header' => __('social_media.target_platforms'),
+                                                'content' => App\Helpers\InstructionsHelper::socialMediaPlatforms(),
+                                            ])
+                                        </div>
+                                        <textarea
+                                            placeholder="Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary, focusing on the size of the dragon and the affectionate interaction."
+                                            class="border border-zinc-200 rounded-lg w-full mt-3" rows="3" maxlength="1000" wire:model="imgPrompt"></textarea>
+                                        <div class="mt-2">
+                                            @if ($errors->has('imgPrompt'))
+                                                <span
+                                                    class="text-red-500 text-sm">{{ $errors->first('imgPrompt') }}</span>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -233,7 +255,7 @@
     @if (count($document->children))
         <div class="flex flex-col w-full lg:grid lg:grid-cols-2 xl:grid-cols-3 mt-6 gap-12 md:gap-6">
             @foreach ($document->children()->latest()->get() as $post)
-                @if ($post->contentBlocks->count())
+                @if ($post->isFinished && $post->contentBlocks->count())
                     @php $platform = $post->meta['platform']; @endphp
                     @livewire("social-media-post.platforms.$platform-post", [$post], key($post->id))
                 @endif

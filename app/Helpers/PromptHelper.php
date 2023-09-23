@@ -113,20 +113,20 @@ class PromptHelper
     public function writeSocialMediaPost($context, array $params)
     {
         $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
-        $prompt = Lang::get('prompt.write_social_media_post', ['platform' => $params['platform']], $this->language);
-        if ($params['platform'] === 'Twitter') {
-            $prompt .= Lang::get('prompt.max_words', ['max' => 35], $this->language);
+        $prompt = Lang::get('social_media_prompt.write_social_media_post', ['platform' => $params['platform']], $this->language);
+        if ($params['platform'] === 'twitter') {
+            $prompt .= Lang::get('social_media_prompt.max_words', ['max' => 35], $this->language);
         }
         if ($params['keyword'] ?? false) {
-            $prompt .= Lang::get('prompt.keyword_instructions', ['keyword' => $params['keyword']], $this->language);
+            $prompt .= Lang::get('social_media_prompt.keyword_instructions', ['keyword' => $params['keyword']], $this->language);
         }
         if ($params['style'] ?? false) {
-            $prompt .= Lang::get('prompt.style_instructions', ['style' => $params['style']], $this->language);
+            $prompt .= Lang::get('social_media_prompt.style_instructions', ['style' => $params['style']], $this->language);
         }
-        $prompt .= Lang::get('prompt.post_tone_instructions', ['tone' => $tone], $this->language);
-        $prompt .= Lang::get('prompt.post_context_instructions', ['context' => $context], $this->language);
+        $prompt .= Lang::get('social_media_prompt.tone_instructions', ['tone' => $tone], $this->language);
+        $prompt .= Lang::get('social_media_prompt.context_instructions', ['context' => $context], $this->language);
         if ($params['more_instructions']) {
-            $prompt .= Lang::get('prompt.more_instructions', ['instructions' => $params['more_instructions']], $this->language);
+            $prompt .= Lang::get('social_media_prompt.more_instructions', ['instructions' => $params['more_instructions']], $this->language);
         }
         return $prompt;
     }

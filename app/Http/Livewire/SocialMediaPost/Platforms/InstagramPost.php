@@ -25,19 +25,6 @@ class InstagramPost extends Component
         ];
     }
 
-    public function mount(Document $document)
-    {
-        $this->userId = Auth::user()->id;
-        $this->document = $document;
-        $imageBlock = optional($this->document->contentBlocks)->firstWhere('type', 'image');
-        $textBlock = optional($this->document->contentBlocks)->firstWhere('type', 'text');
-
-        $this->image = $imageBlock ? $imageBlock->getUrl() : null;
-        $this->imageBlockId = $imageBlock ? $imageBlock->id : null;
-        $this->text = $textBlock ? Str::of($textBlock->content)->trim('"') : '';
-        $this->textBlockId = $textBlock ? $textBlock->id : null;
-    }
-
     public function render()
     {
         return view('livewire.social-media-post.platforms.instagram-post');

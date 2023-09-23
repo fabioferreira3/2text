@@ -32,13 +32,11 @@ return [
     'generic_prompt' => ":prompt\n\n:text\n\n",
     'given_following_text' => "Given the following text:\n\n:text\n\n",
     'given_following_context' => "And given the following context:\n\n:context\n\n\n",
-    'keyword_instructions' => "- Use the keyword \":keyword\".\n",
+    'keyword_instructions' => "- The following keyword should have focus and the present throughout the post: \":keyword\".\n",
     'max_words' => "- The text must have a maximum of :max words\n",
-    'more_instructions' => "- Follow these others instructions on the post creation:\n\n\n :instructions\n\n\n",
+    'more_instructions' => "- Follow these others instructions for the creation of the post:\n\n\n :instructions\n\n\n",
     'meta_description_context_instructions' => "- The meta description must be based on the following context:\n\n\n :context\n\n\n",
     'paraphrase_text' => 'Paraphrase the following text using a :tone tone, maintaining in its original language:\n\n\n:text',
-    'post_context_instructions' => "- The post must be based on the following context:\n\n\n :context\n\n\n",
-    'post_tone_instructions' => "- The post must have a :tone tone.\n",
     'shorten' => "Rewrite it, making it shorter:\n\n :text",
     'simplify_text' => "Simplify the following text:\n\n:text",
     'summarize_text' => "Summarize the following text:\n\n :text",
@@ -58,6 +56,5 @@ return [
         --- START OF TEXT ---
         \n\n:context\n\n
         --- END OF TEXT ---",
-    'write_social_media_post' => "Write a brief social media post for :platform. Use the following instructions to guide your writing:\n\n",
     'write_title' => "Write a title, with a maximum of 7 words, for the following text: \n\n:context\n\n\nExamples of good and bad outputs:\n\nBad output:\nTitle: This is the title\n\nGood output:\nThis is the title\n\nFurther instructions:\n\n- The title must have a :tone tone.\n",
 ];
