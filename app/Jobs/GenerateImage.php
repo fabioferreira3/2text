@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Jobs\Images;
+namespace App\Jobs;
 
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
-use App\Repositories\DocumentRepository;
 use App\Repositories\GenRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -20,7 +19,6 @@ class GenerateImage implements ShouldQueue, ShouldBeUnique
 
     protected Document $document;
     protected array $meta;
-    protected DocumentRepository $repo;
 
     /**
      * Create a new job instance.
@@ -31,7 +29,6 @@ class GenerateImage implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->repo = new DocumentRepository($this->document);
     }
 
     /**
@@ -42,10 +39,10 @@ class GenerateImage implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            GenRepository::generateSocialMediaPost($this->document, $this->meta['platform']);
+            GenRepository::generateImage($this->document, $this->meta);
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to generate ' . $this->meta['platform'] . ' post: ' . $e->getMessage());
+            $this->jobFailed('Failed to generate image: ' . $e->getMessage());
         }
     }
 
@@ -54,6 +51,6 @@ class GenerateImage implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'create_social_media_post_' . $this->meta['platform'] . $this->meta['process_id'] ?? $this->document->id;
+        return 'generate_image_' . $this->document->id;
     }
 }

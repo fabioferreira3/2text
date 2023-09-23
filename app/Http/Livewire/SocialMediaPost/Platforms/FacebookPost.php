@@ -23,7 +23,6 @@ class FacebookPost extends Component
             'refresh',
             'showHistoryModal',
             'closeHistoryModal',
-            'textBlockUpdated'
         ];
     }
 
@@ -34,7 +33,7 @@ class FacebookPost extends Component
         $imageBlock = optional($this->document->contentBlocks)->firstWhere('type', 'image');
         $textBlock = optional($this->document->contentBlocks)->firstWhere('type', 'text');
 
-        $this->image = $imageBlock ? $imageBlock->content : null;
+        $this->image = $imageBlock ? $imageBlock->getUrl() : null;
         $this->imageBlockId = $imageBlock ? $imageBlock->id : null;
         $this->text = $textBlock ? Str::of($textBlock->content)->trim('"') : '';
         $this->textBlockId = $textBlock ? $textBlock->id : null;

@@ -3,6 +3,8 @@
 namespace App\Models\Traits;
 
 use App\Repositories\DocumentRepository;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 trait SocialMediaTrait
 {
@@ -12,6 +14,15 @@ trait SocialMediaTrait
     public $imageBlockId;
     public bool $saving = false;
     public bool $copied;
+
+    public function getListeners()
+    {
+        $userId = Auth::user()->id;
+        return [
+            "echo-private:User.$userId,.ProcessFinished" => 'finishedProcess',
+            'textBlockUpdated'
+        ];
+    }
 
     public function copy()
     {
@@ -41,5 +52,18 @@ trait SocialMediaTrait
         $this->emitUp('deleteSocialMediaPost', [
             'document_id' => $this->document->id
         ]);
+    }
+
+    public function finishedProcess(array $params)
+    {
+        if (isset($params['document_id']) && $params['document_id'] === $this->document->id) {
+            $imageBlock = optional($this->document->contentBlocks)->firstWhere('type', 'image');
+            $textBlock = optional($this->document->contentBlocks)->firstWhere('type', 'text');
+
+            $this->image = $imageBlock ? $imageBlock->getUrl() : null;
+            $this->imageBlockId = $imageBlock ? $imageBlock->id : null;
+            $this->text = $textBlock ? Str::of($textBlock->content)->trim('"') : '';
+            $this->textBlockId = $textBlock ? $textBlock->id : null;
+        }
     }
 }

@@ -4,12 +4,14 @@ namespace App\Jobs\SocialMedia;
 
 use App\Enums\DocumentTaskEnum;
 use App\Enums\DocumentType;
+use App\Helpers\MediaHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
+use Talendor\StabilityAI\Enums\StylePreset;
 
 class ProcessSocialMediaPosts
 {
@@ -111,11 +113,32 @@ class ProcessSocialMediaPosts
                 ]
             );
 
+            if ($post->getMeta('generate_img')) {
+                $imageSize = MediaHelper::socialMediaImageSize($platformName);
+
+                DocumentRepository::createTask(
+                    $post->id,
+                    DocumentTaskEnum::GENERATE_IMAGE,
+                    [
+                        'order' => 2,
+                        'process_id' => $processId,
+                        'meta' => [
+                            'prompt' => 'Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary, focusing on the size of the dragon and the affectionate interaction.',
+                            'height' => $imageSize['height'],
+                            'width' => $imageSize['width'],
+                            'add_content_block' => true,
+                            'style_preset' => StylePreset::CINEMATIC->value,
+                            'steps' => 60
+                        ]
+                    ]
+                );
+            }
+
             DocumentRepository::createTask(
                 $post->id,
                 DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
                 [
-                    'order' => 2,
+                    'order' => 999,
                     'process_id' => $processId,
                     'meta' => [
                         'silently' => true

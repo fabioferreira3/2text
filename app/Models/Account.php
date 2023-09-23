@@ -19,9 +19,9 @@ class Account extends Model
         return $this->hasMany(User::class);
     }
 
-    public function images()
+    public function mediaFiles()
     {
-        return $this->hasMany(Image::class);
+        return $this->hasMany(MediaFile::class);
     }
 
     public function getLanguageAttribute()

@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'audio' => 'Audio',
     'blog_post' => 'Blog Post',
     'copy' => 'Copy',
     'copied' => 'Copied',
@@ -15,6 +16,7 @@ return [
     'document.on_hold' => 'On Hold',
     'free_text' => 'Free Text',
     'generate_audio' => 'Generate AI audio',
+    'image' => 'Image',
     'listen' => 'Listen',
     'paraphrased_text' => 'Paraphrased Text',
     'regenerate' => 'Regenerate',

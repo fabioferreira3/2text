@@ -5,12 +5,12 @@ namespace App\Repositories;
 use App\Enums\DocumentTaskEnum;
 use App\Packages\ChatGPT\ChatGPT;
 use App\Enums\LanguageModels;
+use App\Enums\MediaType;
 use App\Helpers\PromptHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
-use App\Models\Image;
-use Illuminate\Support\Facades\Log;
+use App\Models\MediaFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Talendor\StabilityAI\Enums\StabilityAIEngine;
@@ -73,12 +73,22 @@ class GenRepository
             foreach ($results as $result) {
                 $fileName = 'ai-images/' . $result['fileName'];
                 Storage::disk('s3')->put($fileName, $result['imageData']);
-                $document->account->images()->save(new Image([
+                $document->account->mediaFiles()->save(new MediaFile([
                     'file_name' => $fileName,
+                    'type' => MediaType::IMAGE,
                     'model' => StabilityAIEngine::SD_XL_V_1->value,
                     'meta' => [
                         'document_id' => $document->id
                     ]
+                ]));
+            }
+
+            if ($params['add_content_block'] ?? false) {
+                $document->contentBlocks()->save(new DocumentContentBlock([
+                    'type' => 'image',
+                    'content' => 'ai-images/' . $results[0]['fileName'],
+                    'prompt' => $params['prompt'],
+                    'order' => 1
                 ]));
             }
         }
