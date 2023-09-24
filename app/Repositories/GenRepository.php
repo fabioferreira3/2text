@@ -71,17 +71,15 @@ class GenRepository
         $results = $client->textToImage($params);
         if (count($results)) {
             foreach ($results as $result) {
-                $fileName = 'ai-images/' . $result['fileName'];
-                Storage::disk('s3')->put($fileName, $result['imageData']);
-                $document->account->mediaFiles()->save(new MediaFile([
-                    'file_name' => $fileName,
-                    'type' => MediaType::IMAGE,
-                    'model' => StabilityAIEngine::SD_XL_V_1->value,
+                MediaRepository::storeImage($document->account, [
+                    'fileName' => $result['fileName'],
+                    'imageData' => $result['imageData'],
                     'meta' => [
                         'document_id' => $document->id,
-                        'process_id' => $params['process_id'] ?? null
+                        'process_id' => $params['process_id'] ?? null,
+                        'style_preset' => $params['style_preset'] ?? null
                     ]
-                ]));
+                ]);
             }
 
             if ($params['add_content_block'] ?? false) {
@@ -91,6 +89,26 @@ class GenRepository
                     'prompt' => $params['prompt'],
                     'order' => 1
                 ]));
+            }
+        }
+    }
+
+    public static function generateImageVariants(Document $document, array $params)
+    {
+        $client = app(StabilityAIClient::class);
+        $params['init_image'] = Storage::disk('s3')->get($params['file_name']);
+        $results = $client->imageToImage($params);
+        if (count($results)) {
+            foreach ($results as $result) {
+                MediaRepository::storeImage($document->account, [
+                    'fileName' => $result['fileName'],
+                    'imageData' => $result['imageData'],
+                    'meta' => [
+                        'document_id' => $document->id,
+                        'process_id' => $params['process_id'] ?? null,
+                        'style_preset' => $params['style_preset'] ?? null
+                    ]
+                ]);
             }
         }
     }

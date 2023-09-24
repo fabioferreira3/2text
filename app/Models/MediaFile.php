@@ -27,6 +27,11 @@ class MediaFile extends Model
         return Storage::temporaryUrl($this->file_name, now()->addMinutes(15));
     }
 
+    public function toBinary()
+    {
+        return Storage::disk('s3')->get($this->file_name);
+    }
+
     protected static function booted(): void
     {
         static::addGlobalScope(new SameAccountScope());

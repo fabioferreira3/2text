@@ -42,7 +42,6 @@
                         </div>
                         <div
                             class="group-hover:opacity-60 absolute flex items-center justify-center inset-0 bg-black rounded-t-xl opacity-0 transition-opacity duration-300 ease-in-out">
-
                         </div>
                     </div>
                 </div>

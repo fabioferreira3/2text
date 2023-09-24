@@ -14,6 +14,7 @@ enum DocumentTaskEnum: string
     case EXPAND_TEXT = 'expand_text';
     case EXPAND_TEXT_SECTION = 'expand_text_section';
     case GENERATE_IMAGE = 'generate_image';
+    case GENERATE_IMAGE_VARIANTS = 'generate_image_variants';
     case PARAPHRASE_DOCUMENT = 'paraphrase_document';
     case PARAPHRASE_TEXT = 'paraphrase_text';
     case PROCESS_AUDIO = 'process_audio';
@@ -39,6 +40,7 @@ enum DocumentTaskEnum: string
             self::EXPAND_TEXT => "App\Jobs\ExpandText",
             self::EXPAND_TEXT_SECTION => "App\Jobs\ExpandTextSection",
             self::GENERATE_IMAGE => "App\Jobs\GenerateImage",
+            self::GENERATE_IMAGE_VARIANTS => "App\Jobs\GenerateImageVariants",
             self::PARAPHRASE_DOCUMENT => "App\Jobs\Paraphraser\ParaphraseDocument",
             self::PARAPHRASE_TEXT => "App\Jobs\Paraphraser\ParaphraseText",
             self::PROCESS_AUDIO => "App\Jobs\ProcessAudio",

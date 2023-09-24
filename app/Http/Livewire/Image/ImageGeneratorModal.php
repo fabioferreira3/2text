@@ -9,6 +9,7 @@ use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
 use App\Repositories\DocumentRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Talendor\StabilityAI\Enums\StylePreset;
@@ -37,7 +38,8 @@ class ImageGeneratorModal extends Component
         $this->style = StylePreset::CINEMATIC->value;
         $this->saving = false;
         $this->processId = '3597a386-a7c1-4370-a6ae-593bde10daeb';
-        $this->previewImgs = collect([]);
+        //$this->previewImgs = collect([]);
+        $this->previewImgs = MediaFile::take(4)->latest()->get();
     }
 
     public function toggle()
@@ -45,7 +47,7 @@ class ImageGeneratorModal extends Component
         $this->emitUp('toggleImageGenerator');
     }
 
-    public function process()
+    public function processNew()
     {
         if (!$this->prompt) {
             return $this->dispatchBrowserEvent('alert', [
@@ -86,6 +88,44 @@ class ImageGeneratorModal extends Component
         );
 
         DispatchDocumentTasks::dispatch($this->contentBlock->document);
+    }
+
+    public function processVariants($previewImgIndex)
+    {
+        $this->saving = true;
+        $this->processId = Str::uuid();
+        DocumentRepository::createTask(
+            $this->contentBlock->document->id,
+            DocumentTaskEnum::GENERATE_IMAGE_VARIANTS,
+            [
+                'order' => 1,
+                'process_id' => $this->processId,
+                'meta' => [
+                    'file_name' => $this->previewImgs[$previewImgIndex]->file_name,
+                    'prompt' => $this->prompt,
+                    'style_preset' => $this->contentBlock->document->getMeta('img_style'),
+                ]
+            ]
+        );
+
+        DocumentRepository::createTask(
+            $this->contentBlock->document->id,
+            DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
+            [
+                'order' => 2,
+                'process_id' => $this->processId,
+                'meta' => [
+                    'silently' => true
+                ]
+            ]
+        );
+
+        DispatchDocumentTasks::dispatch($this->contentBlock->document);
+    }
+
+    public function downloadImage($previewImgIndex)
+    {
+        return Storage::download($this->previewImgs[$previewImgIndex]->file_name);
     }
 
     public function render()
