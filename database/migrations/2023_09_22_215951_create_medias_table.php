@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('media_files', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->foreignUuid('account_id')->constrained('accounts');
             $table->text('file_name');
             $table->string('type');

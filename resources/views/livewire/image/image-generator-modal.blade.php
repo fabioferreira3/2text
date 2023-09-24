@@ -11,6 +11,15 @@
                 </svg>
             </div>
         </div>
+        <div class="grid grid-cols-4 gap-4 mb-4">
+            @if ($previewImgs->count())
+                @foreach ($previewImgs as $img)
+                    <div class="border border-gray-200 rounded-lg">
+                        <img class="rounded-lg" src={{ $img->getUrl() }} />
+                    </div>
+                @endforeach
+            @endif
+        </div>
         <textarea
             placeholder="Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary."
             class="w-full text-base border-0 bg-gray-100 p-0 rounded-xl py-3 px-4" rows="3" wire:model="prompt"></textarea>

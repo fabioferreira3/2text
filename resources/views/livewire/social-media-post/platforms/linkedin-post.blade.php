@@ -59,6 +59,6 @@
         </div>
     </div>
     @if (!$showImageGenerator)
-        @livewire('image.image-generator-modal', ['prompt' => $imagePrompt, 'contentBlock' => $imageBlock])
+        @livewire('image.image-generator-modal', ['contentBlock' => $imageBlock])
     @endif
 </div>

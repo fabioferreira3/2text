@@ -6,6 +6,7 @@ use App\Enums\DocumentTaskEnum;
 use App\Helpers\MediaHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\DocumentContentBlock;
+use App\Models\MediaFile;
 use App\Repositories\DocumentRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -14,11 +15,12 @@ use Talendor\StabilityAI\Enums\StylePreset;
 
 class ImageGeneratorModal extends Component
 {
-    private string $contentBlockId;
+    public DocumentContentBlock $contentBlock;
     public $prompt;
     public $style;
     public bool $saving;
-    private string $processId;
+    public string $processId;
+    public $previewImgs;
 
     public function getListeners()
     {
@@ -28,13 +30,14 @@ class ImageGeneratorModal extends Component
         ];
     }
 
-    public function mount(DocumentContentBlock $contentBlock, string $prompt = '')
+    public function mount(DocumentContentBlock $contentBlock)
     {
-        $this->contentBlockId = $contentBlock->id;
-        $this->prompt = $prompt;
+        $this->contentBlock = $contentBlock;
+        $this->prompt = '';
         $this->style = StylePreset::CINEMATIC->value;
         $this->saving = false;
-        $this->processId = '';
+        $this->processId = '3597a386-a7c1-4370-a6ae-593bde10daeb';
+        $this->previewImgs = collect([]);
     }
 
     public function toggle()
@@ -44,7 +47,6 @@ class ImageGeneratorModal extends Component
 
     public function process()
     {
-        dd($this->contentBlockId);
         if (!$this->prompt) {
             return $this->dispatchBrowserEvent('alert', [
                 'type' => 'error',
@@ -94,7 +96,9 @@ class ImageGeneratorModal extends Component
     public function finishedProcess(array $params)
     {
         if ($params['process_id'] === $this->processId) {
-            dd('gerou');
+            $this->previewImgs = MediaFile::where('meta->document_id', $this->contentBlock->document->id)
+                ->where('meta->process_id', $this->processId)->get();
+            $this->saving = false;
         }
     }
 }

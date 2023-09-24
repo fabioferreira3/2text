@@ -114,14 +114,16 @@ class ProcessSocialMediaPosts
 
             if ($post->getMeta('generate_img')) {
                 $imageSize = MediaHelper::socialMediaImageSize($platformName);
+                $processId = Str::uuid();
 
                 DocumentRepository::createTask(
                     $post->id,
                     DocumentTaskEnum::GENERATE_IMAGE,
                     [
                         'order' => 1,
-                        'process_id' => Str::uuid(),
+                        'process_id' => $processId,
                         'meta' => [
+                            'process_id' => $processId,
                             'prompt' => $post->getMeta('img_prompt'),
                             'height' => $imageSize['height'],
                             'width' => $imageSize['width'],

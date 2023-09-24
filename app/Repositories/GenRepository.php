@@ -78,7 +78,8 @@ class GenRepository
                     'type' => MediaType::IMAGE,
                     'model' => StabilityAIEngine::SD_XL_V_1->value,
                     'meta' => [
-                        'document_id' => $document->id
+                        'document_id' => $document->id,
+                        'process_id' => $params['process_id'] ?? null
                     ]
                 ]));
             }
