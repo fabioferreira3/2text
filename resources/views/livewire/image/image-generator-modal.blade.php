@@ -55,7 +55,7 @@
             placeholder="Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary."
             class="w-full text-base border-0 bg-gray-100 p-0 rounded-xl py-3 px-4" rows="3" wire:model="prompt"></textarea>
         <div class="flex justify-start mt-8">
-            <button wire:click="processNew" wire:loading.remove :disabled='$processing'
+            <button wire:click="processNew"
                 class="flex items-center gap-4 bg-secondary text-xl hover:bg-main text-white font-bold px-4 py-2 rounded-xl">
                 @if (!$processing)
                     <x-icon name="play" class="w-8 h-8" />
