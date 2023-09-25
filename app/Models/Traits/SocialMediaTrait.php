@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
+use App\Models\MediaFile;
 use App\Repositories\DocumentRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +16,6 @@ trait SocialMediaTrait
     public $textBlockId;
     public $image;
     public $imageBlockId;
-    public $imageFileName;
     public $imagePrompt;
     public $imageBlock;
     public $saving = false;
@@ -34,12 +34,11 @@ trait SocialMediaTrait
 
     public function getListeners()
     {
-        $userId = Auth::user()->id;
         return [
-            "echo-private:User.$userId,.ProcessFinished" => 'finishedProcess',
             'textBlockUpdated',
             'toggleImageGenerator',
-            'imageSelected'
+            'imageSelected',
+            'contentBlockUpdated'
         ];
     }
 
@@ -75,12 +74,13 @@ trait SocialMediaTrait
 
     public function downloadImage()
     {
-        return Storage::download($this->imageFileName);
+        $originalFile = MediaFile::where('file_url', $this->image)->first();
+        return Storage::download($originalFile->file_path);
     }
 
     public function imageSelected($params)
     {
-        $this->imageBlock->update(['content' => $params['file_name']]);
+        $this->imageBlock->update(['content' => $params['file_url']]);
         $this->refreshImage();
         $this->toggleImageGenerator();
         $this->dispatchBrowserEvent('alert', [
@@ -89,7 +89,7 @@ trait SocialMediaTrait
         ]);
     }
 
-    public function toggleImageGenerator()
+    public function toggleImageGenerator($defaultImg = null)
     {
         if (!$this->imageBlock) {
             $this->document->contentBlocks()->save(
@@ -102,20 +102,16 @@ trait SocialMediaTrait
             $this->refreshImage();
         }
         $this->showImageGenerator = !$this->showImageGenerator;
-    }
-
-    public function finishedProcess(array $params)
-    {
-        if (isset($params['document_id']) && $params['document_id'] === $this->document->id) {
-            $this->refreshImage();
-            $this->refreshText();
+        if ($defaultImg) {
+            $this->emitTo('image.image-generator-modal', 'setOriginalPreviewImage', [
+                'file_url' => $defaultImg
+            ]);
         }
     }
 
     public function refreshImage()
     {
         $imageBlock = $this->imageBlock ?? optional($this->document->contentBlocks)->firstWhere('type', 'image');
-        $this->imageFileName = $imageBlock ? $imageBlock->content : null;
         $this->image = $imageBlock ? $imageBlock->getUrl() : null;
         $this->imageBlock = $imageBlock ?? null;
         $this->imageBlockId = $imageBlock ? $imageBlock->id : null;
@@ -127,5 +123,14 @@ trait SocialMediaTrait
         $textBlock = optional($this->document->contentBlocks)->firstWhere('type', 'text');
         $this->text = $textBlock ? Str::of($textBlock->content)->trim('"') : '';
         $this->textBlockId = $textBlock ? $textBlock->id : null;
+    }
+
+    public function contentBlockUpdated($params)
+    {
+        if ($params['document_content_block_id'] === $this->imageBlockId) {
+            $this->refreshImage();
+        } elseif ($params['document_content_block_id'] === $this->textBlockId) {
+            $this->refreshText();
+        }
     }
 }

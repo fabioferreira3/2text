@@ -9,7 +9,6 @@ use App\Jobs\SocialMedia\ProcessSocialMediaPosts;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Talendor\StabilityAI\Enums\StylePreset;
 
@@ -22,9 +21,10 @@ class SocialMediaPostsManager extends Component
     public string $sourceUrl;
     public string $source;
     public string $imgPrompt;
-    public string $imgStyle;
+    public $imgStyle;
     public string $language;
     public array $languages;
+    public array $stylePresets;
     public string $keyword;
     public mixed $tone;
     public mixed $style;
@@ -85,9 +85,10 @@ class SocialMediaPostsManager extends Component
         $this->sourceUrl = $document->getMeta('source_url') ?? '';
         $this->generateImage = $document->getMeta('generate_img') ?? false;
         $this->imgPrompt = $document->getMeta('img_prompt') ?? '';
-        $this->imgStyle = $document->getMeta('img_style') ?? StylePreset::DIGITAL_ART->value;
+        $this->imgStyle = $document->getMeta('img_style') ?? null;
         $this->language = $document->language->value ?? 'en';
         $this->languages = Language::getLabels();
+        $this->stylePresets = StylePreset::getMappedValues();
         $this->keyword = $document->getMeta('keyword') ?? '';
         $this->tone = $document->getMeta('tone') ?? 'default';
         $this->style = $document->getMeta('style') ?? 'default';
@@ -145,8 +146,8 @@ class SocialMediaPostsManager extends Component
                 'keyword' => $this->keyword ?? null,
                 'more_instructions' => $this->moreInstructions ?? null,
                 'generate_img' => $this->generateImage,
-                'img_prompt' => $this->imgPrompt,
-                'img_style' => $this->imgStyle,
+                'img_prompt' => $this->generateImage ? $this->imgPrompt ?? StylePreset::DIGITAL_ART->value : null,
+                'img_style' => $this->generateImage ? $this->imgStyle : null,
                 'user_id' => Auth::check() ? Auth::id() : null
             ]
         ]);

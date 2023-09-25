@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('media_files', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('account_id')->constrained('accounts');
-            $table->text('file_name');
+            $table->text('file_url')->nullable()->unique()->index();
+            $table->text('file_path')->unique()->index();
             $table->string('type');
             $table->json('meta')->default('{}');
-            $table->string('model')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

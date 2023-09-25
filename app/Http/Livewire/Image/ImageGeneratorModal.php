@@ -18,16 +18,25 @@ class ImageGeneratorModal extends Component
 {
     public DocumentContentBlock $contentBlock;
     public $prompt;
-    public $style;
+    public $imgStyle;
     public bool $processing = false;
     public string $processId;
-    public $previewImgs;
+    public array $previewImgs;
+    public $stylePresets;
+    public $selectedStylePreset;
+    private $documentRepo;
+
+    public function __construct()
+    {
+        $this->documentRepo = app(DocumentRepository::class);
+    }
 
     public function getListeners()
     {
         $userId = Auth::user()->id;
         return [
-            "echo-private:User.$userId,.ProcessFinished" => 'finishedProcess'
+            "echo-private:User.$userId,.ProcessFinished" => 'onProcessFinished',
+            'setOriginalPreviewImage'
         ];
     }
 
@@ -35,26 +44,40 @@ class ImageGeneratorModal extends Component
     {
         $this->contentBlock = $contentBlock;
         $this->prompt = $this->contentBlock->document->getMeta('img_prompt');
-        $this->style = StylePreset::CINEMATIC->value;
+        $this->imgStyle = $this->contentBlock->document->getMeta('img_style') ?? null;
+        $this->stylePresets = StylePreset::getMappedValues();
+        $this->selectedStylePreset = $this->imgStyle ? $this->selectStylePreset($this->imgStyle) : null;
         $this->processing = false;
         $this->processId = '';
-        $this->previewImgs = collect([]);
+        $this->previewImgs = [
+            'original' => null,
+            'variants' => []
+        ];
     }
 
-    public function toggle()
+    public function toggleModal()
     {
         $this->emitUp('toggleImageGenerator');
     }
 
-    public function selectImg($previewImgIndex)
+    public function selectImage($previewImgIndex)
     {
         $selectedImg = $this->previewImgs[$previewImgIndex];
         $this->emitUp('imageSelected', [
-            'file_name' => $selectedImg->file_name
+            'file_url' => $selectedImg->file_url
         ]);
     }
 
-    public function processNew()
+    public function selectStylePreset($style)
+    {
+        $found = array_values(array_filter($this->stylePresets, function ($item) use ($style) {
+            return $item["value"] === $style;
+        }));
+
+        return $found[0] ?? null;
+    }
+
+    public function generateNewImages()
     {
         if (!$this->prompt) {
             return $this->dispatchBrowserEvent('alert', [
@@ -62,10 +85,9 @@ class ImageGeneratorModal extends Component
                 'message' => "Please provide an image description"
             ]);
         }
-        $this->processing = true;
-        $this->processId = Str::uuid();
-        $repo = new DocumentRepository($this->contentBlock->document);
-        $repo->updateMeta('img_prompt', $this->prompt);
+        $this->setProcessingState();
+        $this->documentRepo->setDocument($this->contentBlock->document);
+        $this->documentRepo->updateMeta('img_prompt', $this->prompt);
 
         $imageSize = MediaHelper::socialMediaImageSize($this->contentBlock->document->getMeta('platform'));
 
@@ -79,7 +101,7 @@ class ImageGeneratorModal extends Component
                     'prompt' => $this->prompt,
                     'height' => $imageSize['height'],
                     'width' => $imageSize['width'],
-                    'style_preset' => $this->style,
+                    'style_preset' => $this->imgStyle,
                     'samples' => 4
                 ]
             ]
@@ -100,10 +122,9 @@ class ImageGeneratorModal extends Component
         DispatchDocumentTasks::dispatch($this->contentBlock->document);
     }
 
-    public function processVariants($previewImgIndex)
+    public function generateImageVariants($previewImgIndex)
     {
-        $this->processing = true;
-        $this->processId = Str::uuid();
+        $this->setProcessingState();
         DocumentRepository::createTask(
             $this->contentBlock->document->id,
             DocumentTaskEnum::GENERATE_IMAGE_VARIANTS,
@@ -111,9 +132,9 @@ class ImageGeneratorModal extends Component
                 'order' => 1,
                 'process_id' => $this->processId,
                 'meta' => [
-                    'file_name' => $this->previewImgs[$previewImgIndex]->file_name,
+                    'file_name' => $this->previewImgs[$previewImgIndex]->file_path,
                     'prompt' => $this->prompt ?? $this->contentBlock->document->getMeta('img_prompt'),
-                    'style_preset' => $this->contentBlock->document->getMeta('img_style'),
+                    'style_preset' => $this->imgStyle ?? $this->contentBlock->document->getMeta('img_style'),
                     'samples' => 4
                 ]
             ]
@@ -134,9 +155,15 @@ class ImageGeneratorModal extends Component
         DispatchDocumentTasks::dispatch($this->contentBlock->document);
     }
 
+    public function setOriginalPreviewImage(array $params)
+    {
+        $this->previewImgs['original'] = MediaFile::where('meta->document_id', $this->contentBlock->document->id)
+            ->where('file_url', $params['file_url'])->first();
+    }
+
     public function downloadImage($previewImgIndex)
     {
-        return Storage::download($this->previewImgs[$previewImgIndex]->file_name);
+        return Storage::download($this->previewImgs[$previewImgIndex]->file_path);
     }
 
     public function render()
@@ -144,12 +171,23 @@ class ImageGeneratorModal extends Component
         return view('livewire.image.image-generator-modal');
     }
 
-    public function finishedProcess(array $params)
+    public function onProcessFinished(array $params)
     {
         if ($params['process_id'] === $this->processId) {
-            $this->previewImgs = MediaFile::where('meta->document_id', $this->contentBlock->document->id)
+            $this->previewImgs['variants'] = MediaFile::where('meta->document_id', $this->contentBlock->document->id)
                 ->where('meta->process_id', $this->processId)->get();
             $this->processing = false;
         }
+    }
+
+    public function updatedImgStyle($newValue)
+    {
+        $this->selectedStylePreset = $this->selectStylePreset($newValue);
+    }
+
+    protected function setProcessingState()
+    {
+        $this->processing = true;
+        $this->processId = Str::uuid();
     }
 }

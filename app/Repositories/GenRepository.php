@@ -11,6 +11,7 @@ use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Talendor\StabilityAI\Enums\StabilityAIEngine;
 use Talendor\StabilityAI\StabilityAIClient;
 
 class GenRepository
@@ -75,7 +76,8 @@ class GenRepository
                         'document_id' => $document->id,
                         'process_id' => $params['process_id'] ?? null,
                         'style_preset' => $params['style_preset'] ?? null,
-                        'steps' => 20
+                        'steps' => 20,
+                        'model' => StabilityAIEngine::SD_XL_V_1->value,
                     ]
                 ]);
             }
@@ -105,6 +107,7 @@ class GenRepository
                         'document_id' => $document->id,
                         'process_id' => $params['process_id'] ?? null,
                         'style_preset' => $params['style_preset'] ?? null,
+                        'model' => StabilityAIEngine::SD_XL_V_1->value,
                         'steps' => 20
                     ]
                 ]);

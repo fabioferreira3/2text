@@ -32,7 +32,7 @@ class TextBlock extends Component
     {
         $userId = Auth::user()->id;
         return [
-            "echo-private:User.$userId,.ContentBlockUpdated" => 'finished',
+            "echo-private:User.$userId,.ContentBlockUpdated" => 'onProcessFinished',
         ];
     }
 
@@ -84,6 +84,7 @@ class TextBlock extends Component
         DispatchDocumentTasks::dispatch($contentBlock->document);
     }
 
+
     public function render()
     {
         return view('livewire.common.blocks.text-block');
@@ -98,7 +99,7 @@ class TextBlock extends Component
         ]);
     }
 
-    public function finished($params)
+    public function onProcessFinished($params)
     {
         if ($params['document_content_block_id'] === $this->contentBlockId) {
             $contentBlock = DocumentContentBlock::findOrFail($this->contentBlockId);
@@ -108,6 +109,7 @@ class TextBlock extends Component
                 'message' => __('alerts.text_regenerated')
             ]);
             $this->processing = false;
+            $this->emitUp('contentBlockUpdated', ['document_content_block_id' => $this->contentBlockId]);
         }
     }
 }

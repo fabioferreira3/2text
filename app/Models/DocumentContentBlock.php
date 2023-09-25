@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Storage;
 
 class DocumentContentBlock extends Model
 {
@@ -21,10 +20,14 @@ class DocumentContentBlock extends Model
 
     public function getUrl()
     {
+        if ($this->type === 'image' && $this->content) {
+            $file = MediaFile::where('file_path', $this->content)->first();
+            return $file ? $file->file_url : $this->content;
+        }
         if (!$this->type === 'image' || !$this->content) {
             return null;
         }
 
-        return Storage::temporaryUrl($this->content, now()->addMinutes(15));
+        return $this->content;
     }
 }
