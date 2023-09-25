@@ -19,7 +19,7 @@ class ImageGeneratorModal extends Component
     public DocumentContentBlock $contentBlock;
     public $prompt;
     public $style;
-    public bool $saving;
+    public bool $processing = false;
     public string $processId;
     public $previewImgs;
 
@@ -31,20 +31,27 @@ class ImageGeneratorModal extends Component
         ];
     }
 
-    public function mount(DocumentContentBlock $contentBlock)
+    public function mount(DocumentContentBlock $contentBlock = null)
     {
         $this->contentBlock = $contentBlock;
-        $this->prompt = '';
+        $this->prompt = $this->contentBlock->document->getMeta('img_prompt');
         $this->style = StylePreset::CINEMATIC->value;
-        $this->saving = false;
-        $this->processId = '3597a386-a7c1-4370-a6ae-593bde10daeb';
-        //$this->previewImgs = collect([]);
-        $this->previewImgs = MediaFile::take(4)->latest()->get();
+        $this->processing = false;
+        $this->processId = '';
+        $this->previewImgs = collect([]);
     }
 
     public function toggle()
     {
         $this->emitUp('toggleImageGenerator');
+    }
+
+    public function selectImg($previewImgIndex)
+    {
+        $selectedImg = $this->previewImgs[$previewImgIndex];
+        $this->emitUp('imageSelected', [
+            'file_name' => $selectedImg->file_name
+        ]);
     }
 
     public function processNew()
@@ -55,10 +62,13 @@ class ImageGeneratorModal extends Component
                 'message' => "Please provide an image description"
             ]);
         }
-
-        $this->saving = true;
-        $imageSize = MediaHelper::socialMediaImageSize($this->contentBlock->document->getMeta('platform'));
+        $this->processing = true;
         $this->processId = Str::uuid();
+        $repo = new DocumentRepository($this->contentBlock->document);
+        $repo->updateMeta('img_prompt', $this->prompt);
+
+        $imageSize = MediaHelper::socialMediaImageSize($this->contentBlock->document->getMeta('platform'));
+
         DocumentRepository::createTask(
             $this->contentBlock->document->id,
             DocumentTaskEnum::GENERATE_IMAGE,
@@ -92,7 +102,7 @@ class ImageGeneratorModal extends Component
 
     public function processVariants($previewImgIndex)
     {
-        $this->saving = true;
+        $this->processing = true;
         $this->processId = Str::uuid();
         DocumentRepository::createTask(
             $this->contentBlock->document->id,
@@ -102,8 +112,9 @@ class ImageGeneratorModal extends Component
                 'process_id' => $this->processId,
                 'meta' => [
                     'file_name' => $this->previewImgs[$previewImgIndex]->file_name,
-                    'prompt' => $this->prompt,
+                    'prompt' => $this->prompt ?? $this->contentBlock->document->getMeta('img_prompt'),
                     'style_preset' => $this->contentBlock->document->getMeta('img_style'),
+                    'samples' => 4
                 ]
             ]
         );
@@ -138,7 +149,7 @@ class ImageGeneratorModal extends Component
         if ($params['process_id'] === $this->processId) {
             $this->previewImgs = MediaFile::where('meta->document_id', $this->contentBlock->document->id)
                 ->where('meta->process_id', $this->processId)->get();
-            $this->saving = false;
+            $this->processing = false;
         }
     }
 }

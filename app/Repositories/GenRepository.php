@@ -5,15 +5,12 @@ namespace App\Repositories;
 use App\Enums\DocumentTaskEnum;
 use App\Packages\ChatGPT\ChatGPT;
 use App\Enums\LanguageModels;
-use App\Enums\MediaType;
 use App\Helpers\PromptHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
-use App\Models\MediaFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Talendor\StabilityAI\Enums\StabilityAIEngine;
 use Talendor\StabilityAI\StabilityAIClient;
 
 class GenRepository
@@ -77,7 +74,8 @@ class GenRepository
                     'meta' => [
                         'document_id' => $document->id,
                         'process_id' => $params['process_id'] ?? null,
-                        'style_preset' => $params['style_preset'] ?? null
+                        'style_preset' => $params['style_preset'] ?? null,
+                        'steps' => 20
                     ]
                 ]);
             }
@@ -106,7 +104,8 @@ class GenRepository
                     'meta' => [
                         'document_id' => $document->id,
                         'process_id' => $params['process_id'] ?? null,
-                        'style_preset' => $params['style_preset'] ?? null
+                        'style_preset' => $params['style_preset'] ?? null,
+                        'steps' => 20
                     ]
                 ]);
             }

@@ -9,5 +9,5 @@ return [
     'shorten' => "Rewrite it, making it shorter:\n\n :text",
     'style_instructions' => "The post must be written in a :style style.\n",
     'tone_instructions' => "- The post must have a :tone tone.\n",
-    'write_social_media_post' => "Write a brief social media post for :platform. Add appropriate hashtags at the end of it. And use the following instructions to guide your writing:\n\n",
+    'write_social_media_post' => "Write a brief social media post for :platform with a maximum of 90 words. Add appropriate hashtags at the end of it. And use the following instructions to guide your writing:\n\n",
 ];

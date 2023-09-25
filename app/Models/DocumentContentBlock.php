@@ -21,7 +21,7 @@ class DocumentContentBlock extends Model
 
     public function getUrl()
     {
-        if (!$this->type === 'image') {
+        if (!$this->type === 'image' || !$this->content) {
             return null;
         }
 

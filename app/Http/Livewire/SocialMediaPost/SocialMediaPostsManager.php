@@ -9,6 +9,7 @@ use App\Jobs\SocialMedia\ProcessSocialMediaPosts;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Talendor\StabilityAI\Enums\StylePreset;
 
@@ -101,8 +102,7 @@ class SocialMediaPostsManager extends Component
 
     public function checkDocumentStatus()
     {
-        $this->showInstructions = true;
-        //$this->showInstructions = $this->document->status == DocumentStatus::DRAFT ? true : false;
+        $this->showInstructions = $this->document->status == DocumentStatus::DRAFT ? true : false;
         if ($this->generating) {
             $this->generating = in_array($this->document->status, [
                 DocumentStatus::ON_HOLD,

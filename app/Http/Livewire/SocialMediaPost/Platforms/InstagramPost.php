@@ -4,8 +4,6 @@ namespace App\Http\Livewire\SocialMediaPost\Platforms;
 
 use App\Models\Document;
 use App\Models\Traits\SocialMediaTrait;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Livewire\Component;
 
 class InstagramPost extends Component
@@ -16,14 +14,6 @@ class InstagramPost extends Component
     public bool $displayHistory = false;
     public string $userId;
     private string $platform;
-
-    public function getListeners()
-    {
-        return [
-            'showHistoryModal',
-            'closeHistoryModal',
-        ];
-    }
 
     public function render()
     {

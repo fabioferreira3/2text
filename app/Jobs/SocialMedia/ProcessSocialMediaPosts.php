@@ -133,6 +133,17 @@ class ProcessSocialMediaPosts
                         ]
                     ]
                 );
+                DocumentRepository::createTask(
+                    $post->id,
+                    DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
+                    [
+                        'order' => 2,
+                        'process_id' => $processId,
+                        'meta' => [
+                            'silently' => true
+                        ]
+                    ]
+                );
             }
 
             DocumentRepository::createTask(

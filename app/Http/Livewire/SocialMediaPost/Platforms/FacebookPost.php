@@ -17,15 +17,6 @@ class FacebookPost extends Component
     public string $userId;
     private string $platform;
 
-    public function getListeners()
-    {
-        return [
-            'refresh',
-            'showHistoryModal',
-            'closeHistoryModal',
-        ];
-    }
-
     public function render()
     {
         return view('livewire.social-media-post.platforms.facebook-post');
