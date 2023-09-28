@@ -50,8 +50,11 @@ class ImageGeneratorModal extends Component
         $this->processing = false;
         $this->processId = '';
         $this->previewImgs = [
-            'original' => null,
-            'variants' => []
+            // 'original' => null,
+            'original' => MediaFile::where('meta->document_id', $this->contentBlock->document->id)
+                ->first(),
+            'variants' => MediaFile::take(4)->latest()->get()
+            //'variants' => []
         ];
     }
 
@@ -60,11 +63,10 @@ class ImageGeneratorModal extends Component
         $this->emitUp('toggleImageGenerator');
     }
 
-    public function selectImage($previewImgIndex)
+    public function selectImage($fileUrl)
     {
-        $selectedImg = $this->previewImgs[$previewImgIndex];
         $this->emitUp('imageSelected', [
-            'file_url' => $selectedImg->file_url
+            'file_url' => $fileUrl
         ]);
     }
 
@@ -122,8 +124,14 @@ class ImageGeneratorModal extends Component
         DispatchDocumentTasks::dispatch($this->contentBlock->document);
     }
 
-    public function generateImageVariants($previewImgIndex)
+    public function generateImageVariants($mediaFileId)
     {
+        $this->documentRepo->setDocument($this->contentBlock->document);
+        $this->documentRepo->updateMeta('img_prompt', $this->prompt);
+        $this->documentRepo->updateMeta('img_style', $this->imgStyle);
+        $this->contentBlock->document->refresh();
+
+        $mediaFile = MediaFile::findOrFail($mediaFileId);
         $this->setProcessingState();
         DocumentRepository::createTask(
             $this->contentBlock->document->id,
@@ -132,9 +140,9 @@ class ImageGeneratorModal extends Component
                 'order' => 1,
                 'process_id' => $this->processId,
                 'meta' => [
-                    'file_name' => $this->previewImgs[$previewImgIndex]->file_path,
-                    'prompt' => $this->prompt ?? $this->contentBlock->document->getMeta('img_prompt'),
-                    'style_preset' => $this->imgStyle ?? $this->contentBlock->document->getMeta('img_style'),
+                    'file_name' => $mediaFile->file_path,
+                    'prompt' => $this->prompt,
+                    'style_preset' => $this->imgStyle,
                     'samples' => 4
                 ]
             ]
@@ -161,23 +169,15 @@ class ImageGeneratorModal extends Component
             ->where('file_url', $params['file_url'])->first();
     }
 
-    public function downloadImage($previewImgIndex)
+    public function downloadImage($mediaFileId)
     {
-        return Storage::download($this->previewImgs[$previewImgIndex]->file_path);
+        $mediaFile = MediaFile::findOrFail($mediaFileId);
+        return Storage::download($mediaFile->file_path);
     }
 
     public function render()
     {
         return view('livewire.image.image-generator-modal');
-    }
-
-    public function onProcessFinished(array $params)
-    {
-        if ($params['process_id'] === $this->processId) {
-            $this->previewImgs['variants'] = MediaFile::where('meta->document_id', $this->contentBlock->document->id)
-                ->where('meta->process_id', $this->processId)->get();
-            $this->processing = false;
-        }
     }
 
     public function updatedImgStyle($newValue)
@@ -189,5 +189,18 @@ class ImageGeneratorModal extends Component
     {
         $this->processing = true;
         $this->processId = Str::uuid();
+    }
+
+    public function onProcessFinished(array $params)
+    {
+        if ($params['process_id'] === $this->processId) {
+            $this->previewImgs['variants'] = MediaFile::where('meta->document_id', $this->contentBlock->document->id)
+                ->where('meta->process_id', $this->processId)->get();
+            $this->processing = false;
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'success',
+                'message' => "Images generated successfully!"
+            ]);
+        }
     }
 }

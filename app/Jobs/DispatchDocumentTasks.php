@@ -11,11 +11,10 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
-class DispatchDocumentTasks implements ShouldQueue, ShouldBeUnique
+class DispatchDocumentTasks
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, SerializesModels;
 
     public Document $document;
 
@@ -54,13 +53,5 @@ class DispatchDocumentTasks implements ShouldQueue, ShouldBeUnique
                 Bus::chain($jobsChain)->dispatch();
             }
         }
-    }
-
-    /**
-     * The unique ID of the job.
-     */
-    public function uniqueId(): string
-    {
-        return 'dispatching_tasks_' . $this->document->id;
     }
 }

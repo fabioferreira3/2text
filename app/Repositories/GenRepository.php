@@ -76,7 +76,7 @@ class GenRepository
                         'document_id' => $document->id,
                         'process_id' => $params['process_id'] ?? null,
                         'style_preset' => $params['style_preset'] ?? null,
-                        'steps' => 20,
+                        'steps' => 25,
                         'model' => StabilityAIEngine::SD_XL_V_1->value,
                     ]
                 ]);
@@ -108,7 +108,7 @@ class GenRepository
                         'process_id' => $params['process_id'] ?? null,
                         'style_preset' => $params['style_preset'] ?? null,
                         'model' => StabilityAIEngine::SD_XL_V_1->value,
-                        'steps' => 20
+                        'steps' => 25
                     ]
                 ]);
             }
