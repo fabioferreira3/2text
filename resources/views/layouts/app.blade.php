@@ -130,7 +130,9 @@
             });
         });
 
-        // window.Echo.connector.pusher.connection.bind('connected', function() {});
+        window.livewire.on('openLinkInNewTab', link => {
+            window.open(link, '_blank');
+        });
     </script>
 </body>
 

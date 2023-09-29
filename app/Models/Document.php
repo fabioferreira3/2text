@@ -69,6 +69,11 @@ class Document extends Model
         return $this->getMeta('summary') ?? $this->getMeta('context') ?? null;
     }
 
+    public function getLatestImages($amount)
+    {
+        return MediaFile::where('meta->document_id', $this->id)->take($amount)->latest()->get();
+    }
+
     public function getNormalizedStructureAttribute()
     {
         $text = '';

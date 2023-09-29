@@ -27,20 +27,38 @@
                         <div class="z-20 flex items-center justify-center gap-2">
                             <button @if ($processing) disabled @endif
                                 wire:click="selectImage('{{ $previewImgs['original']['file_url'] }}')"
-                                class="transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
+                                class="relative group/button transition duration-200 text-white hover:bg-secondary border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
                                 <x-icon solid name="thumb-up" class="w-6 h-6" />
-                                {{-- <span>Use this one</span> --}}
+                                <div
+                                    class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                    Use as main
+                                </div>
                             </button>
+
                             <button @if ($processing) disabled @endif
                                 wire:click="generateImageVariants('{{ $previewImgs['original']['id'] }}')"
-                                class="transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
+                                class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
                                 <x-icon name="switch-horizontal" class="w-6 h-6" />
-                                {{-- <span>Generate Variants</span> --}}
+                                <div
+                                    class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                    Generate variants
+                                </div>
                             </button>
                             <button wire:click="downloadImage('{{ $previewImgs['original']['id'] }}')"
-                                class="transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
+                                class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
                                 <x-icon name="download" class="w-6 h-6" />
-                                {{-- <span>Download</span> --}}
+                                <div
+                                    class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                    Download
+                                </div>
+                            </button>
+                            <button wire:click="previewImage('{{ $previewImgs['original']['id'] }}')"
+                                class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
+                                <x-icon name="eye" class="w-6 h-6" />
+                                <div
+                                    class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                    Preview
+                                </div>
                             </button>
                         </div>
                     </div>
@@ -57,26 +75,43 @@
                 <div class="grid grid-cols-2 gap-4 mb-4 overflow-auto">
                     @foreach ($previewImgs['variants'] as $img)
                     <div class="relative group border border-gray-200 rounded-lg max-h-64">
-                        <img class="rounded-lg object-cover h-[180px] w-full" src={{ $img['file_url'] }} />
+                        <img class="rounded-lg object-cover h-[160px] w-full" src={{ $img['file_url'] }} />
                         <div
                             class="hidden group-hover:flex absolute top-0 left-0 h-full w-full items-center justify-center">
                             <div class="z-20 flex items-center gap-2">
                                 <button @if ($processing) disabled @endif
                                     wire:click="selectImage('{{ $img['file_url'] }}')"
-                                    class="transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
+                                    class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                     <x-icon solid name="thumb-up" class="w-5 h-5" />
-                                    {{-- <span>Use this one</span> --}}
+                                    <div
+                                        class="absolute top-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                        Use as main
+                                    </div>
                                 </button>
                                 <button @if ($processing) disabled @endif
                                     wire:click="generateImageVariants('{{ $img['id'] }}')"
-                                    class="transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
+                                    class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                     <x-icon name="switch-horizontal" class="w-5 h-5" />
-                                    {{-- <span>Generate Variants</span> --}}
+                                    <div
+                                        class="absolute top-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                        Generate variants
+                                    </div>
                                 </button>
                                 <button wire:click="downloadImage('{{ $img['id'] }}')"
-                                    class="transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
+                                    class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                     <x-icon name="download" class="w-5 h-5" />
-                                    {{-- <span>Download</span> --}}
+                                    <div
+                                        class="absolute top-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                        Download
+                                    </div>
+                                </button>
+                                <button wire:click="previewImage('{{ $img['id'] }}')"
+                                    class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
+                                    <x-icon name="eye" class="w-5 h-5" />
+                                    <div
+                                        class="absolute top-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                        Preview
+                                    </div>
                                 </button>
                             </div>
                         </div>
@@ -102,7 +137,10 @@
             </div>
             <div class="flex flex-col gap-2 w-full">
                 <div class="text-xl font-bold">Select a style:</div>
-                <x-dropdown class="w-full">
+                <div>
+
+                </div>
+                <x-custom.dropdown class="w-full" direction="up">
                     <x-slot name="trigger">
                         <button class="bg-gray-100 w-full p-4 text-gray-700 rounded-lg">
                             <div class="flex items-center gap-4">
@@ -114,14 +152,15 @@
                         </button>
                     </x-slot>
                     @foreach ($this->stylePresets as $key => $stylePreset)
-                    <x-dropdown.item wire:click="$set('imgStyle', '{{ $stylePreset['value'] }}')" :separator="$key > 0">
+                    <x-dropdown.item class="hover:bg-gray-100"
+                        wire:click="$set('imgStyle', '{{ $stylePreset['value'] }}')" :separator="$key > 0">
                         <div class="flex items-center gap-4 w-full">
                             <img class="w-20 h-20 rounded-lg" src={{ $stylePreset['image_path'] }} />
-                            {{ $stylePreset['label'] }}
+                            <div class="text-lg">{{ $stylePreset['label'] }}</div>
                         </div>
                     </x-dropdown.item>
                     @endforeach
-                </x-dropdown>
+                </x-custom.dropdown>
             </div>
         </div>
 
@@ -139,12 +178,7 @@
                 @endif
                 @if (!$processing)
                 <span>
-                    @if (!count($previewImgs['variants']))
                     {{ __('social_media.generate_new_image') }}
-                    @endif
-                    @if (count($previewImgs['variants']))
-                    {{ __('social_media.regenerate') }}
-                    @endif
                 </span>
                 @endif
             </button>

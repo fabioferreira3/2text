@@ -50,11 +50,8 @@ class ImageGeneratorModal extends Component
         $this->processing = false;
         $this->processId = '';
         $this->previewImgs = [
-            // 'original' => null,
-            'original' => MediaFile::where('meta->document_id', $this->contentBlock->document->id)
-                ->first(),
-            'variants' => MediaFile::take(4)->latest()->get()
-            //'variants' => []
+            'original' => null,
+            'variants' => $this->contentBlock->document->getLatestImages(4)
         ];
     }
 
@@ -173,6 +170,12 @@ class ImageGeneratorModal extends Component
     {
         $mediaFile = MediaFile::findOrFail($mediaFileId);
         return Storage::download($mediaFile->file_path);
+    }
+
+    public function previewImage($mediaFileId)
+    {
+        $mediaFile = MediaFile::findOrFail($mediaFileId);
+        $this->emit('openLinkInNewTab', $mediaFile->file_url);
     }
 
     public function render()
