@@ -25,21 +25,37 @@ class RegisterCreationTasks
 
     public function handle()
     {
-        $this->repo->createTask(DocumentTaskEnum::SUMMARIZE_DOC, [
-            'order' => $this->params['next_order'],
-            'process_id' => $this->params['process_id']
-        ]);
-        $this->repo->createTask(DocumentTaskEnum::CREATE_OUTLINE, [
-            'process_id' => $this->params['process_id'],
-            'meta' => [],
-            'order' => $this->params['next_order'] + 1
-        ]);
-        $this->repo->createTask(DocumentTaskEnum::EXPAND_OUTLINE, [
-            'process_id' => $this->params['process_id'],
-            'meta' => [],
-            'order' => $this->params['next_order'] + 2
-        ]);
-        $this->repo->createTask(
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::SUMMARIZE_DOC,
+            [
+                'order' => $this->params['next_order'],
+                'process_id' => $this->params['process_id']
+            ]
+        );
+
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::CREATE_OUTLINE,
+            [
+                'process_id' => $this->params['process_id'],
+                'meta' => [],
+                'order' => $this->params['next_order'] + 1
+            ]
+        );
+
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::EXPAND_OUTLINE,
+            [
+                'process_id' => $this->params['process_id'],
+                'meta' => [],
+                'order' => $this->params['next_order'] + 2
+            ]
+        );
+
+        DocumentRepository::createTask(
+            $this->document->id,
             DocumentTaskEnum::EXPAND_TEXT,
             [
                 'process_id' => $this->params['process_id'],
@@ -47,7 +63,9 @@ class RegisterCreationTasks
                 'order' => $this->params['next_order'] + 3
             ]
         );
-        $this->repo->createTask(
+
+        DocumentRepository::createTask(
+            $this->document->id,
             DocumentTaskEnum::CREATE_TITLE,
             [
                 'process_id' => $this->params['process_id'],
@@ -55,7 +73,9 @@ class RegisterCreationTasks
                 'order' => $this->params['next_order'] + 4
             ]
         );
-        $this->repo->createTask(
+
+        DocumentRepository::createTask(
+            $this->document->id,
             DocumentTaskEnum::CREATE_METADESCRIPTION,
             [
                 'process_id' => $this->params['process_id'],
