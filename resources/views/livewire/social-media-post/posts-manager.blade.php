@@ -147,14 +147,41 @@
                                 'content' => App\Helpers\InstructionsHelper::socialMediaPlatforms(),
                                 ])
                             </div>
-                            <div class='flex flex-col gap-4 md:gap-0 md:flex-row md:items-center md:justify-between'>
-                                <div>
+                            <div class='flex flex-col gap-4 md:gap-0 md:grid md:grid-cols-3'>
+                                <div class="md:col-span-1">
                                     <x-checkbox md id="generate_img" name="generate_img" label="Yes"
                                         wire:model="generateImage" />
                                 </div>
                                 @if ($generateImage)
-                                <div>
-                                    <label class="font-bold text-lg text-zinc-700">Image style:</label>
+                                <div class="md:col-span-2 w-full">
+                                    <div class="font-bold text-lg text-zinc-700">{{ __('social_media.select_style') }}:
+                                    </div>
+                                    <x-custom.dropdown class="w-full" direction="down">
+                                        <x-slot name="trigger">
+                                            <button class="bg-gray-100 w-full p-4 text-gray-700 rounded-lg">
+                                                <div class="flex items-center gap-4">
+                                                    {{-- @if ($selectedStylePreset)
+                                                    <img class="w-20 h-20 rounded-lg" src={{
+                                                        $selectedStylePreset['image_path'] }} />
+                                                    @endif --}}
+                                                    <div>{{ $imgStyle ??
+                                                        'Select' }}</div>
+                                                </div>
+                                            </button>
+                                        </x-slot>
+                                        @foreach ($this->stylePresets as $key => $stylePreset)
+                                        <x-dropdown.item class="hover:bg-gray-100"
+                                            wire:click="$set('imgStyle', '{{ $stylePreset['value'] }}')"
+                                            :separator="$key > 0">
+                                            <div class="flex items-center gap-4 w-full">
+                                                <img class="w-20 h-20 rounded-lg" src={{ $stylePreset['image_path']
+                                                    }} />
+                                                <div class="text-lg">{{ $stylePreset['label'] }}</div>
+                                            </div>
+                                        </x-dropdown.item>
+                                        @endforeach
+                                    </x-custom.dropdown>
+                                    {{-- <label class="font-bold text-lg text-zinc-700">Image style:</label>
                                     <x-dropdown class="w-[300px]">
                                         <x-slot name="trigger">
                                             <button class="bg-secondary px-4 text-white py-1 rounded-lg">{{ $imgStyle ??
@@ -170,7 +197,7 @@
                                             </div>
                                         </x-dropdown.item>
                                         @endforeach
-                                    </x-dropdown>
+                                    </x-dropdown> --}}
                                 </div>
                                 @endif
                             </div>

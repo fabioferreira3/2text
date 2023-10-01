@@ -32,6 +32,7 @@ class SocialMediaPostsManager extends Component
     public array $platforms;
     public mixed $moreInstructions;
     public bool $showInstructions;
+    public $selectedStylePreset;
     public bool $generateImage;
     public bool $modal;
     public $title;
@@ -116,6 +117,20 @@ class SocialMediaPostsManager extends Component
                 ]);
             }
         }
+    }
+
+    public function updatedImgStyle($newValue)
+    {
+        $this->selectedStylePreset = $this->selectStylePreset($newValue);
+    }
+
+    public function selectStylePreset($style)
+    {
+        $found = array_values(array_filter($this->stylePresets, function ($item) use ($style) {
+            return $item["value"] === $style;
+        }));
+
+        return $found[0] ?? null;
     }
 
     public function toggleInstructions()

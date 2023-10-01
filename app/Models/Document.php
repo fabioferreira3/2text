@@ -56,7 +56,7 @@ class Document extends Model
 
     public function contentBlocks(): HasMany
     {
-        return $this->hasMany(DocumentContentBlock::class);
+        return $this->hasMany(DocumentContentBlock::class)->orderBy('order', 'ASC');
     }
 
     public function getMeta($attribute)

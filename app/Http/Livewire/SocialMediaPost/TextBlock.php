@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Common\Blocks;
+namespace App\Http\Livewire\SocialMediaPost;
 
 use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
@@ -13,9 +13,8 @@ use Illuminate\Support\Str;
 
 class TextBlock extends Component
 {
-    public $contentBlock;
+    public string $contentBlockId;
     public string $content;
-    public string $type;
     public string $customPrompt;
     public bool $faster;
     public bool $showCustomPrompt = false;
@@ -35,13 +34,6 @@ class TextBlock extends Component
         return [
             "echo-private:User.$userId,.ContentBlockUpdated" => 'onProcessFinished',
         ];
-    }
-
-    public function mount(DocumentContentBlock $contentBlock)
-    {
-        $this->contentBlock = $contentBlock;
-        $this->content = $contentBlock->content;
-        $this->type = $contentBlock->type;
     }
 
     public function expand()
@@ -95,23 +87,16 @@ class TextBlock extends Component
 
     public function render()
     {
-        return view('livewire.common.blocks.text-block');
+        return view('livewire.social-media-post.text-block');
     }
 
     public function updated()
     {
-        // $this->emitUp('textBlockUpdated', [
-        //     'document_content_block_id' => $this->contentBlockId,
-        //     'type' => 'text',
-        //     'content' => $this->content
-        // ]);
-    }
-
-    public function updatedContent()
-    {
-        // Trigger an event to adjust the textarea after Livewire updates the DOM.
-        $this->dispatchBrowserEvent('adjustTextarea');
-        $this->contentBlock->update(['content' => $this->content]);
+        $this->emitUp('textBlockUpdated', [
+            'document_content_block_id' => $this->contentBlockId,
+            'type' => 'text',
+            'content' => $this->content
+        ]);
     }
 
     public function onProcessFinished($params)

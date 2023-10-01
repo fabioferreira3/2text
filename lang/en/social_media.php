@@ -32,10 +32,12 @@ return [
     'regenerate' => 'Regenerate',
     'regenerate_image' => 'Regenerate image',
     'selected_language_info' => 'Take into account that the selected language must be the same language of the context you\'re using',
+    'select_style' => 'Select style',
     'social_media_post' => 'Social media post',
     'source' => 'Source',
     'source_definition' => 'Define what would be the base context of your text. Choose between a youtube link, a website url, or just from free text.',
     'tone' => 'Tone',
     'target_platforms' => 'Target Platforms',
     'writing_style' => 'Writing style',
+    'write_image_description' => 'Write the image description'
 ];

@@ -1,11 +1,14 @@
-<div class="flex flex-col gap-12">
-    @livewire('blog.title', [$document])
-    @livewire('blog.content-editor', [$document])
-    @livewire('blog.meta-description', [$document])
+<div class="flex flex-col">
+    {{-- @livewire('blog.title', [$document]) --}}
+    {{-- @livewire('blog.meta-description', [$document]) --}}
 
-    @if($displayHistory)
+    {{-- @if($displayHistory)
     @livewire('common.history-modal', [$document])
-    @endif
+    @endif --}}
+
+    @foreach ($document->contentBlocks as $contentBlock)
+    @livewire('common.blocks.text-block', [$contentBlock])
+    @endforeach
 </div>
 
 

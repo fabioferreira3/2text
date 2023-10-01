@@ -131,7 +131,7 @@
 
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mt-4">
             <div class="flex flex-col gap-2 w-full">
-                <div class="text-xl font-bold">Write the image description:</div>
+                <div class="text-xl font-bold">{{ __('social_media.write_image_description') }}:</div>
                 <textarea
                     placeholder="Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary."
                     class="w-full text-base border-1 border-gray-200 bg-gray-100 p-0 rounded-xl p-4" rows="3"
@@ -139,10 +139,7 @@
 
             </div>
             <div class="flex flex-col gap-2 w-full">
-                <div class="text-xl font-bold">Select a style:</div>
-                <div>
-
-                </div>
+                <div class="text-xl font-bold">{{ __('social_media.select_style') }}:</div>
                 <x-custom.dropdown class="w-full" direction="up">
                     <x-slot name="trigger">
                         <button class="bg-gray-100 w-full p-4 text-gray-700 rounded-lg">

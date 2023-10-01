@@ -7,7 +7,8 @@
         <div class="flex flex-col h-full px-6 pt-6 pb-2 bg-black rounded-b-xl">
             <div class="flex-1">
                 @include('livewire.social-media-post.social-media-image', ['image' => $image])
-                @livewire('common.blocks.text-block', ['content' => $text, 'contentBlockId' => $textBlockId, 'faster' =>
+                @livewire('social-media-post.text-block', ['content' => $text, 'contentBlockId' => $textBlockId,
+                'faster' =>
                 true])
             </div>
             <div class="flex items-center gap-2 justify-end mt-2">
