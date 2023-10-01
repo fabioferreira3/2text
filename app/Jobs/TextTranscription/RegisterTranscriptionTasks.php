@@ -12,18 +12,19 @@ class RegisterTranscriptionTasks
 {
     use Dispatchable, SerializesModels;
 
-    protected $repo;
+    protected Document $document;
     protected array $params;
 
     public function __construct(Document $document, array $params)
     {
+        $this->document = $document;
         $this->params = $params;
-        $this->repo = new DocumentRepository($document);
     }
 
     public function handle()
     {
-        $this->repo->createTask(
+        DocumentRepository::createTask(
+            $this->document->id,
             DocumentTaskEnum::DOWNLOAD_AUDIO,
             [
                 'process_id' => $this->params['process_id'],
@@ -33,9 +34,14 @@ class RegisterTranscriptionTasks
                 'order' => 1
             ]
         );
-        $this->repo->createTask(DocumentTaskEnum::PROCESS_AUDIO, [
-            'process_id' => $this->params['process_id'],
-            'order' => 2
-        ]);
+
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::PROCESS_AUDIO,
+            [
+                'process_id' => $this->params['process_id'],
+                'order' => 2
+            ]
+        );
     }
 }

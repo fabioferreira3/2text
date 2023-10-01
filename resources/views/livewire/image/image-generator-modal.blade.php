@@ -16,12 +16,13 @@
                 </svg>
             </div>
         </div>
-        <div class="grid items-start grid-cols-2 gap-8 mt-4">
+        <div class="flex flex-col lg:grid lg:grid-cols-2 items-start gap-8 mt-4">
             @if ($previewImgs['original'])
-            <div class="flex flex-col gap-2 h-full">
-                <div class="text-2xl font-bold">Original:</div>
-                <div class="relative group rounded-lg h-full flex items-center">
-                    <img class="rounded-lg border border-gray-200" src={{ $previewImgs['original']['file_url'] }} />
+            <div class="flex flex-col gap-2 h-full w-full">
+                <div class="text-2xl font-bold mb-8 md:mb-0">Original:</div>
+                <div class="relative group rounded-lg h-full flex justify-center items-center">
+                    <img class="rounded-lg object-cover border border-gray-200 h-96" src={{
+                        $previewImgs['original']['file_url'] }} />
                     <div
                         class="hidden group-hover:flex absolute top-0 left-0 h-full w-full items-center justify-center">
                         <div class="z-20 flex items-center justify-center gap-2">
@@ -70,12 +71,15 @@
             @endif
 
             @if (count($previewImgs['variants']))
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-2 w-full mt-8 md:mt-0">
                 <div class="text-2xl font-bold">Variants:</div>
-                <div class="grid grid-cols-2 gap-4 mb-4 overflow-auto">
-                    @foreach ($previewImgs['variants'] as $img)
+                <div class="flex flex-col md:grid md:grid-cols-2 gap-4">
+                    @foreach ($previewImgs['variants'] as $key => $img)
                     <div class="relative group border border-gray-200 rounded-lg max-h-64">
-                        <img class="rounded-lg object-cover h-[160px] w-full" src={{ $img['file_url'] }} />
+                        <img class="rounded-lg object-cover w-full lg:h-44 xl:h-64" src={{ $img['file_url'] }} />
+                        <div
+                            class="absolute top-4 left-4 text-2xl font-bold text-black bg-white opacity-50 rounded-lg px-2">
+                            #{{$key+1}}</div>
                         <div
                             class="hidden group-hover:flex absolute top-0 left-0 h-full w-full items-center justify-center">
                             <div class="z-20 flex items-center gap-2">
@@ -124,7 +128,6 @@
             </div>
             @endif
         </div>
-
 
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mt-4">
             <div class="flex flex-col gap-2 w-full">

@@ -40,9 +40,8 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         RegisterTranscriptionTasks::dispatchSync($this->document, $this->params);
-
-        $repo = new DocumentRepository($this->document);
-        $repo->createTask(
+        DocumentRepository::createTask(
+            $this->document->id,
             DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST,
             [
                 'process_id' => $this->params['process_id'],

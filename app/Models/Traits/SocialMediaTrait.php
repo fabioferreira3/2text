@@ -27,7 +27,7 @@ trait SocialMediaTrait
         $this->saving = false;
         $this->userId = Auth::user()->id;
         $this->document = $document;
-        $this->showImageGenerator = $document->id === '9a3707e7-ff26-4ae3-a17f-b1b55a9bf3ae' ?? false;
+        $this->showImageGenerator = false;
         $this->refreshImage();
         $this->refreshText();
     }
