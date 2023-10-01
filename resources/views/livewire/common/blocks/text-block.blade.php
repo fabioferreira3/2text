@@ -28,15 +28,15 @@
         <textarea class="autoExpandTextarea w-full border-0 text-base bg-white p-0" name="text"
             wire:model.debounce.500ms="content" wire:ignore></textarea>
         <div
-            class="hidden group-hover:flex items-center gap-2 p-2 absolute right-0 top-0 bg-white rounded-lg border border-gray-200">
+            class="hidden text-sm group-hover:flex items-center gap-2 absolute right-0 -top-8 bg-white rounded-lg border border-gray-200">
             <button class="bg-gray-200 px-3 py-1 rounded-lg">shorten</button>
             <button class="bg-gray-200 px-3 py-1 rounded-lg">expand</button>
             <button class="bg-gray-200 px-3 py-1 rounded-lg">Ask to...</button>
         </div>
     </div>
     @endif
-    <div class="group/add flex items-center justify-center">
-        <button class="invisible group-hover/add:visible text-3xl text-gray-400">+</button>
+    <div class="group/add flex items-center justify-end w-1/2">
+        <button class="invisible text-xxs group-hover/add:visible group-hover/add:text-3xl text-gray-400">+</button>
     </div>
     @if ($showCustomPrompt)
     <x-experior::modal>

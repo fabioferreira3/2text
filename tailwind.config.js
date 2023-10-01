@@ -34,6 +34,9 @@ module.exports = {
                 main: "#080B53",
                 secondary: "#EA1F88",
             },
+            fontSize: {
+                xxs: ".40rem",
+            }
         },
         fontFamily: {
             sans: ["Avenir Regular", ...defaultTheme.fontFamily.sans],
