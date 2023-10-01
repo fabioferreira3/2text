@@ -1,15 +1,5 @@
-<div class="flex flex-col">
-    {{-- @livewire('blog.title', [$document]) --}}
-    {{-- @livewire('blog.meta-description', [$document]) --}}
-
-    {{-- @if($displayHistory)
-    @livewire('common.history-modal', [$document])
-    @endif --}}
-
+<div class="flex flex-col gap-2">
     @foreach ($document->contentBlocks as $contentBlock)
-    @livewire('common.blocks.text-block', [$contentBlock])
+    @if($contentBlock->type === 'image') @else @livewire('common.blocks.text-block', [$contentBlock]) @endif
     @endforeach
 </div>
-
-
-@stack('scripts')

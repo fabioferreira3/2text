@@ -17,8 +17,9 @@ class TextBlock extends Component
     public string $content;
     public string $type;
     public string $customPrompt;
-    public bool $faster;
+    public bool $faster = true;
     public bool $showCustomPrompt = false;
+    public bool $showBlockOptions = false;
     public bool $processing;
 
     protected $rules = [
@@ -34,6 +35,7 @@ class TextBlock extends Component
         $userId = Auth::user()->id;
         return [
             "echo-private:User.$userId,.ContentBlockUpdated" => 'onProcessFinished',
+            'trackSelectedBlock',
         ];
     }
 
@@ -67,29 +69,34 @@ class TextBlock extends Component
         $this->showCustomPrompt = !$this->showCustomPrompt;
     }
 
+    public function displayBlockOptions()
+    {
+        $this->showBlockOptions = true;
+        $this->emit('trackSelectedBlock', $this->contentBlock->id);
+    }
+
     private function rewrite(string $prompt)
     {
         $this->dispatchBrowserEvent('alert', [
             'type' => 'info',
             'message' => __('alerts.rewriting_text')
         ]);
-        $contentBlock = DocumentContentBlock::findOrFail($this->contentBlockId);
         $this->processing = true;
         DocumentRepository::createTask(
-            $contentBlock->document->id,
+            $this->contentBlock->document->id,
             DocumentTaskEnum::REWRITE_TEXT_BLOCK,
             [
                 'order' => 1,
                 'process_id' => Str::uuid(),
                 'meta' => [
                     'text' => $this->content,
-                    'document_content_block_id' => $contentBlock->id,
+                    'document_content_block_id' => $this->contentBlock->id,
                     'prompt' => $prompt,
                     'faster' => $this->faster
                 ]
             ]
         );
-        DispatchDocumentTasks::dispatch($contentBlock->document);
+        DispatchDocumentTasks::dispatch($this->contentBlock->document);
     }
 
 
@@ -98,33 +105,29 @@ class TextBlock extends Component
         return view('livewire.common.blocks.text-block');
     }
 
-    public function updated()
-    {
-        // $this->emitUp('textBlockUpdated', [
-        //     'document_content_block_id' => $this->contentBlockId,
-        //     'type' => 'text',
-        //     'content' => $this->content
-        // ]);
-    }
-
     public function updatedContent()
     {
-        // Trigger an event to adjust the textarea after Livewire updates the DOM.
-        $this->dispatchBrowserEvent('adjustTextarea');
         $this->contentBlock->update(['content' => $this->content]);
     }
 
     public function onProcessFinished($params)
     {
-        if ($params['document_content_block_id'] === $this->contentBlockId) {
-            $contentBlock = DocumentContentBlock::findOrFail($this->contentBlockId);
-            $this->content = $contentBlock->content;
+        if ($params['document_content_block_id'] === $this->contentBlock->id) {
+            $this->contentBlock->refresh();
+            $this->content = $this->contentBlock->content;
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'success',
                 'message' => __('alerts.text_regenerated')
             ]);
             $this->processing = false;
-            $this->emitUp('contentBlockUpdated', ['document_content_block_id' => $this->contentBlockId]);
+            $this->showBlockOptions = false;
+        }
+    }
+
+    public function trackSelectedBlock($selectedBlockId)
+    {
+        if ($selectedBlockId !== $this->contentBlock->id) {
+            $this->showBlockOptions = false;
         }
     }
 }

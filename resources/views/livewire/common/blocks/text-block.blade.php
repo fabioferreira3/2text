@@ -1,42 +1,47 @@
 <div class="relative bg-white">
-    {{-- <div class="flex flex-col justify-end md:flex-row mb-4 gap-2">
-        <button wire:click="shorten"
-            class="p1 lg:text-sm xl:text-base font-bold text-gray-600 bg-gray-200 px-3 py-1 rounded-lg">shorten</button>
-        <button wire:click="expand"
-            class="p1 lg:text-sm xl:text-base font-bold text-gray-600 bg-gray-200 px-3 py-1 rounded-lg">expand</button>
-        <button wire:click="toggleCustomPrompt"
-            class="p1 lg:text-sm xl:text-base font-bold text-gray-600 bg-gray-200 px-3 py-1 rounded-lg">ask
-            to...</button>
-    </div> --}}
-    @if ($processing)
-    <div class="z-20 absolute top-0 left-0 bg-black opacity-20 h-full w-full"></div>
-    <div class="z-30 absolute w-full h-full top-0 left-0 flex items-center justify-center">
-        <x-loader height="20" width="20" color="white" />
-    </div>
-    @endif
-    @if (in_array($type, ['h2', 'h3', 'h4', 'h5', 'h6']))
-    <input class="border-0 bg-white w-full font-bold p-0
+    <div class="relative">
+        @if (in_array($type, ['h2', 'h3', 'h4', 'h5', 'h6']))
+        <input class="border-0 bg-white w-full font-bold p-0
         {{ $type === 'h2' ? 'text-2xl' : ''}}
         {{ $type === 'h3' ? 'text-xl' : ''}}
         {{ $type === 'h4' ? 'text-lg' : ''}}
         {{ $type === 'h5' ? 'text-base' : ''}}
         {{ $type === 'h6' ? 'text-base' : ''}}
         " name="text" wire:model.debounce.500ms="content" />
-    @endif
-    @if (in_array($type, ['paragraph']))
-    <div class="relative group">
-        <textarea class="autoExpandTextarea w-full border-0 text-base bg-white p-0" name="text"
-            wire:model.debounce.500ms="content" wire:ignore></textarea>
-        <div
-            class="hidden text-sm group-hover:flex items-center gap-2 absolute right-0 -top-8 bg-white rounded-lg border border-gray-200">
-            <button class="bg-gray-200 px-3 py-1 rounded-lg">shorten</button>
-            <button class="bg-gray-200 px-3 py-1 rounded-lg">expand</button>
-            <button class="bg-gray-200 px-3 py-1 rounded-lg">Ask to...</button>
+        @endif
+        @if (in_array($type, ['paragraph']))
+        <div class="relative group">
+            <textarea wire:click="displayBlockOptions" class="p-0 autoExpandTextarea w-full border-0 text-base"
+                name="text" wire:model.debounce.500ms="content" wire:ignore></textarea>
+            <div class="border border-b border-gray-50"></div>
+            @if($showBlockOptions)
+            <div class="flex items-center text-sm gap-2 absolute right-0 -top-8 bg-white">
+                <button wire:click="shorten"
+                    class="flex items-center gap-2 text-gray-600 hover:bg-secondary hover:text-white hover:border-white bg-gray-100 border border-gray-400 px-3 py-1 rounded-lg transition ease-in-out duration-200 hover:delay-150">
+                    <x-icon name="menu-alt-4" width="18" height="18" />
+                    <div>shorten</div>
+                </button>
+                <button wire:click="expand"
+                    class="flex items-center gap-2 text-gray-600 hover:bg-secondary hover:text-white hover:border-white bg-gray-100 border border-gray-400 px-3 py-1 rounded-lg transition ease-in-out duration-200 hover:delay-150">
+                    <x-icon name="menu" width="18" height="18" />
+                    <div>expand</div>
+                </button>
+                <button
+                    class="flex items-center gap-2 text-gray-600 hover:bg-secondary hover:text-white hover:border-white bg-gray-100 border border-gray-400 px-3 py-1 rounded-lg transition ease-in-out duration-200 hover:delay-150"
+                    wire:click="toggleCustomPrompt">
+                    <x-icon name="speakerphone" width="18" height="18" />
+                    <div>Ask
+                        to...</div>
+                </button>
+            </div>
+            @endif
         </div>
-    </div>
-    @endif
-    <div class="group/add flex items-center justify-end w-1/2">
-        <button class="invisible text-xxs group-hover/add:visible group-hover/add:text-3xl text-gray-400">+</button>
+        @endif
+        @if($processing)
+        <div class="bg-black opacity-20 flex items-center justify-center absolute top-0 left-0 w-full h-full">
+            <x-loader height="8" width="8" color="white" />
+        </div>
+        @endif
     </div>
     @if ($showCustomPrompt)
     <x-experior::modal>
