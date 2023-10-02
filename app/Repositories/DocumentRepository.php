@@ -6,6 +6,7 @@ use App\Enums\DocumentTaskEnum;
 use App\Enums\DocumentType;
 use App\Enums\SourceProvider;
 use App\Enums\Tone;
+use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelper;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
@@ -132,13 +133,24 @@ class DocumentRepository
         return $document->restore();
     }
 
-    public function publishText()
+    public function publishContentBlocks()
     {
         $content = str_replace(["\r", "\n"], '', $this->document->normalized_structure);
-        $this->document->update([
-            'content' => $content,
-            'word_count' => Str::wordCount($content)
-        ]);
+        $blocks = DocumentHelper::parseHtmlToArray($content);
+        if (count($blocks)) {
+            foreach ($blocks as $key => $block) {
+                $this->document->contentBlocks()->create([
+                    'type' => $block['tag'],
+                    'content' => $block['content'],
+                    'order' => $key + 1,
+                    'meta' => []
+                ]);
+            }
+        }
+        // $this->document->update([
+        //     'content' => $content,
+        //     'word_count' => Str::wordCount($content)
+        // ]);
     }
 
     public static function createTask(string $documentId, DocumentTaskEnum $task, array $params)

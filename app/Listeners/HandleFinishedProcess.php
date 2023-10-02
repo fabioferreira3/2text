@@ -35,8 +35,10 @@ class HandleFinishedProcess
         $finishedCount = $tasksByProcess->whereIn('status', ['finished', 'skipped'])->count();
 
         if ($tasksByProcess->count() === $finishedCount) {
-            $repo = new DocumentRepository($event->task->document);
-            $repo->publishText();
+            if ($event->task->document->contentBlocks->count() === 0) {
+                $repo = new DocumentRepository($event->task->document);
+                $repo->publishContentBlocks();
+            }
         }
     }
 }

@@ -106,4 +106,20 @@ class DocumentHelper
             return implode(' ', $chunk);
         }, $sentenceChunks);
     }
+
+    public static function parseHtmlToArray($html)
+    {
+        $pattern = '/<(\w+)>([^<]+)<\/\1>/';
+        preg_match_all($pattern, $html, $matches, PREG_SET_ORDER);
+
+        $result = [];
+        foreach ($matches as $match) {
+            $result[] = [
+                'tag' => $match[1],
+                'content' => $match[2]
+            ];
+        }
+
+        return $result;
+    }
 }

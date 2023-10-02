@@ -48,12 +48,31 @@ class TextBlock extends Component
 
     public function expand()
     {
-        $this->rewrite(__('prompt.expand'));
+        if (in_array($this->type, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])) {
+            $this->rewrite(__('prompt.expand_title'));
+        } else {
+            $this->rewrite(__('prompt.expand'));
+        }
     }
 
     public function shorten()
     {
-        $this->rewrite(__('prompt.shorten'));
+        if (in_array($this->type, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])) {
+            $this->rewrite(__('prompt.shorten_title'));
+        } else {
+            $this->rewrite(__('prompt.shorten'));
+        }
+    }
+
+    public function copy()
+    {
+        $this->emit('addToClipboard', $this->content);
+    }
+
+    public function delete()
+    {
+        $this->contentBlock->delete();
+        $this->dispatchBrowserEvent('refresh-page');
     }
 
     public function runCustomPrompt()
@@ -121,6 +140,7 @@ class TextBlock extends Component
             ]);
             $this->processing = false;
             $this->showBlockOptions = false;
+            $this->dispatchBrowserEvent('adjustTextArea');
         }
     }
 

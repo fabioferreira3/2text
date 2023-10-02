@@ -1,39 +1,25 @@
 <div class="relative bg-white">
     <div class="relative">
         @if (in_array($type, ['h2', 'h3', 'h4', 'h5', 'h6']))
-        <input class="border-0 bg-white w-full font-bold p-0
+        <input wire:click="displayBlockOptions" class="focus:bg-red-100 border-0 bg-white w-full font-bold p-0
         {{ $type === 'h2' ? 'text-2xl' : ''}}
         {{ $type === 'h3' ? 'text-xl' : ''}}
         {{ $type === 'h4' ? 'text-lg' : ''}}
         {{ $type === 'h5' ? 'text-base' : ''}}
         {{ $type === 'h6' ? 'text-base' : ''}}
-        " name="text" wire:model.debounce.500ms="content" />
+        " name="text" wire:model.debounce.500ms="content" wire:ignore />
+        @if($showBlockOptions)
+        @include('livewire.common.blocks.text-block-actions')
         @endif
-        @if (in_array($type, ['paragraph']))
+        @endif
+        @if (in_array($type, ['p']))
         <div class="relative group">
-            <textarea wire:click="displayBlockOptions" class="p-0 autoExpandTextarea w-full border-0 text-base"
-                name="text" wire:model.debounce.500ms="content" wire:ignore></textarea>
+            <textarea wire:click="displayBlockOptions"
+                class="focus:bg-red-100 p-0 autoExpandTextarea w-full border-0 text-base" name="text"
+                wire:model.debounce.500ms="content" wire:ignore></textarea>
             <div class="border border-b border-gray-50"></div>
             @if($showBlockOptions)
-            <div class="flex items-center text-sm gap-2 absolute right-0 -top-8 bg-white">
-                <button wire:click="shorten"
-                    class="flex items-center gap-2 text-gray-600 hover:bg-secondary hover:text-white hover:border-white bg-gray-100 border border-gray-400 px-3 py-1 rounded-lg transition ease-in-out duration-200 hover:delay-150">
-                    <x-icon name="menu-alt-4" width="18" height="18" />
-                    <div>shorten</div>
-                </button>
-                <button wire:click="expand"
-                    class="flex items-center gap-2 text-gray-600 hover:bg-secondary hover:text-white hover:border-white bg-gray-100 border border-gray-400 px-3 py-1 rounded-lg transition ease-in-out duration-200 hover:delay-150">
-                    <x-icon name="menu" width="18" height="18" />
-                    <div>expand</div>
-                </button>
-                <button
-                    class="flex items-center gap-2 text-gray-600 hover:bg-secondary hover:text-white hover:border-white bg-gray-100 border border-gray-400 px-3 py-1 rounded-lg transition ease-in-out duration-200 hover:delay-150"
-                    wire:click="toggleCustomPrompt">
-                    <x-icon name="speakerphone" width="18" height="18" />
-                    <div>Ask
-                        to...</div>
-                </button>
-            </div>
+            @include('livewire.common.blocks.text-block-actions')
             @endif
         </div>
         @endif
@@ -76,21 +62,28 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    let textareas = document.querySelectorAll('.autoExpandTextarea');
+    function adjustTextArea() {
+        let textareas = document.querySelectorAll('.autoExpandTextarea');
 
-    function adjustHeight(el) {
-    el.style.height = 'auto';
-    el.style.height = el.scrollHeight + 'px';
+        function adjustHeight(el) {
+        el.style.height = 'auto';
+        el.style.height = el.scrollHeight + 'px';
+        }
+
+        textareas.forEach(textarea => {
+            textarea.addEventListener('input', function () {
+            adjustHeight(this);
+            });
+
+            // Initial adjustment
+            adjustHeight(textarea);
+        });
     }
-
-    textareas.forEach(textarea => {
-    textarea.addEventListener('input', function () {
-    adjustHeight(this);
+    document.addEventListener('DOMContentLoaded', function () {
+        adjustTextArea();
     });
 
-    // Initial adjustment
-    adjustHeight(textarea);
-    });
+    document.addEventListener('adjustTextArea', function () {
+        adjustTextArea();
     });
 </script>

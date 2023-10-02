@@ -14,7 +14,7 @@ class ProcessFinished implements ShouldBroadcast
 
     public string $userId;
     public string $documentId;
-    public string $parentDocumentId;
+    public mixed $parentDocumentId;
     public string $processId;
 
     /**
@@ -26,7 +26,7 @@ class ProcessFinished implements ShouldBroadcast
     {
         $this->userId = $params['user_id'];
         $this->documentId = $params['document_id'];
-        $this->parentDocumentId = $params['parent_document_id'];
+        $this->parentDocumentId = $params['parent_document_id'] ?? null;
         $this->processId = $params['process_id'];
     }
 
