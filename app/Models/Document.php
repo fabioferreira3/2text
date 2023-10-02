@@ -74,6 +74,13 @@ class Document extends Model
         return MediaFile::where('meta->document_id', $this->id)->take($amount)->latest()->get();
     }
 
+    public function getHtmlContentBlocksAsText()
+    {
+        return $this->contentBlocks->reduce(function ($carry, $block) {
+            return $carry . "<" . $block->type . ">" . $block->content . "</" . $block->type . ">";
+        }, '');
+    }
+
     public function getNormalizedStructureAttribute()
     {
         $text = '';

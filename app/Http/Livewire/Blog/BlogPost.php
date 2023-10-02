@@ -13,7 +13,13 @@ class BlogPost extends Component
     public function mount(Document $document)
     {
         $this->document = $document;
-        $this->title = 'Blog post';
+        $this->title = $document->title ?? 'Blog post';
+    }
+
+    public function copyPost()
+    {
+        $content = $this->document->getHtmlContentBlocksAsText();
+        $this->emit('addToClipboard', $content);
     }
 
     public function render()

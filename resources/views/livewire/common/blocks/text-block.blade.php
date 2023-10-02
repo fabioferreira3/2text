@@ -1,7 +1,7 @@
 <div class="relative bg-white">
     <div class="relative">
         @if (in_array($type, ['h2', 'h3', 'h4', 'h5', 'h6']))
-        <input wire:click="displayBlockOptions" class="focus:bg-red-100 border-0 bg-white w-full font-bold p-0
+        <input wire:click="displayBlockOptions" class="focus:bg-red-100 border-0 bg-white w-full font-bold p-0 text-zinc-700
         {{ $type === 'h2' ? 'text-2xl' : ''}}
         {{ $type === 'h3' ? 'text-xl' : ''}}
         {{ $type === 'h4' ? 'text-lg' : ''}}
@@ -15,7 +15,7 @@
         @if (in_array($type, ['p']))
         <div class="relative group">
             <textarea wire:click="displayBlockOptions"
-                class="focus:bg-red-100 p-0 autoExpandTextarea w-full border-0 text-base" name="text"
+                class="focus:bg-red-100 p-0 text-zinc-700 autoExpandTextarea w-full border-0 text-base" name="text"
                 wire:model.debounce.500ms="content" wire:ignore></textarea>
             <div class="border border-b border-gray-50"></div>
             @if($showBlockOptions)
