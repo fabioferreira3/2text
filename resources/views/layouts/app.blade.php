@@ -134,6 +134,7 @@
             window.open(link, '_blank');
         });
     </script>
+    @stack('scripts')
 </body>
 
 </html>

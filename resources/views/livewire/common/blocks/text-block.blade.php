@@ -1,4 +1,4 @@
-<div class="relative bg-white">
+<div class="relative bg-white" :wire:key="$document->id">
     <div class="relative">
         @if (in_array($type, ['h2', 'h3', 'h4', 'h5', 'h6']))
         <input wire:click="displayBlockOptions" class="focus:bg-red-100 border-0 bg-white w-full font-bold p-0 text-zinc-700
@@ -33,7 +33,7 @@
     <x-experior::modal>
         <div class="py-4 text-left px-6">
             <div role='button' class="flex justify-between items-center pb-3">
-                <p class="text-2xl font-bold">Ask to...</p>
+                <p class="text-2xl font-bold">{{ __('common.ask_to') }}</p>
                 <div role="button" class="cursor-pointer z-50" id="close" wire:click="toggleCustomPrompt">
                     <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 18 18">
@@ -53,7 +53,7 @@
                 <button wire:click="runCustomPrompt" wire:loading.remove
                     class="flex items-center gap-4 bg-secondary text-xl hover:bg-main text-white font-bold px-4 py-2 rounded-xl">
                     <x-icon name="play" class="w-8 h-8" />
-                    <span>{{ __('social_media.go') }}</span>
+                    <span>{{ __('common.go') }}</span>
                 </button>
             </div>
         </div>
@@ -61,29 +61,31 @@
     @endif
 </div>
 
+@push('scripts')
 <script>
     function adjustTextArea() {
-        let textareas = document.querySelectorAll('.autoExpandTextarea');
+            let textareas = document.querySelectorAll('.autoExpandTextarea');
 
-        function adjustHeight(el) {
-        el.style.height = 'auto';
-        el.style.height = el.scrollHeight + 'px';
-        }
+            function adjustHeight(el) {
+            el.style.height = 'auto';
+            el.style.height = el.scrollHeight + 'px';
+            }
 
-        textareas.forEach(textarea => {
-            textarea.addEventListener('input', function () {
-            adjustHeight(this);
+            textareas.forEach(textarea => {
+                textarea.addEventListener('input', function () {
+                adjustHeight(this);
+                });
+
+                // Initial adjustment
+                adjustHeight(textarea);
             });
-
-            // Initial adjustment
-            adjustHeight(textarea);
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            adjustTextArea();
         });
-    }
-    document.addEventListener('DOMContentLoaded', function () {
-        adjustTextArea();
-    });
 
-    document.addEventListener('adjustTextArea', function () {
-        adjustTextArea();
-    });
+        document.addEventListener('adjustTextArea', function () {
+            adjustTextArea();
+        });
 </script>
+@endpush

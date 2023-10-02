@@ -298,7 +298,7 @@
     @endif
     @if (count($document->children))
     <div class="flex flex-col w-full lg:grid lg:grid-cols-2 xl:grid-cols-3 mt-6 gap-12 md:gap-6">
-        @foreach ($document->children()->latest()->get() as $post)
+        @foreach ($document->children()->ofMediaPosts()->latest()->get() as $post)
         @if ($post->isFinished && $post->contentBlocks->count())
         @php $platform = $post->meta['platform']; @endphp
         @livewire("social-media-post.platforms.$platform-post", [$post], key($post->id))

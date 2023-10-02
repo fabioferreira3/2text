@@ -18,6 +18,15 @@ class DocumentContentBlock extends Model
         return $this->belongsTo(Document::class);
     }
 
+    public function getMediaFile()
+    {
+        if ($this->type === 'image_media_file') {
+            return MediaFile::where('id', $this->content)->first();
+        }
+
+        return null;
+    }
+
     public function getUrl()
     {
         if ($this->type === 'image' && $this->content) {

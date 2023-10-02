@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'ask_to' => 'Ask to...',
     'audio' => 'Audio',
     'blog_post' => 'Blog Post',
     'copy' => 'Copy',
@@ -8,6 +9,7 @@ return [
     'close' => 'Close',
     'delete' => 'Delete',
     'download' => 'Download',
+    'download_image' => 'Download image',
     'document.aborted' => 'Aborted',
     'document.draft' => 'Draft',
     'document.failed' => 'Failed',
@@ -16,10 +18,12 @@ return [
     'document.on_hold' => 'On Hold',
     'free_text' => 'Free Text',
     'generate_audio' => 'Generate AI audio',
+    'go' => 'Go',
     'image' => 'Image',
     'listen' => 'Listen',
     'paraphrased_text' => 'Paraphrased Text',
     'regenerate' => 'Regenerate',
+    'regenerate_image' => 'Regenerate image',
     'save' => 'Save',
     'social_media_post' => 'Media Post',
     'social_media' => 'Social Media',

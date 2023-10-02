@@ -24,6 +24,7 @@ class ImageGeneratorModal extends Component
     public array $previewImgs;
     public $stylePresets;
     public $selectedStylePreset;
+    public mixed $action = null;
     private $documentRepo;
 
     public function __construct()
@@ -50,7 +51,7 @@ class ImageGeneratorModal extends Component
         $this->processing = false;
         $this->processId = '';
         $this->previewImgs = [
-            'original' => null,
+            'original' => $this->contentBlock->getMediaFile() ?? null,
             'variants' => $this->contentBlock->document->getLatestImages(4)
         ];
     }
@@ -60,10 +61,12 @@ class ImageGeneratorModal extends Component
         $this->emitUp('toggleImageGenerator');
     }
 
-    public function selectImage($fileUrl)
+    public function selectImage($mediaFileId)
     {
+        $mediaFile = MediaFile::findOrFail($mediaFileId);
         $this->emitUp('imageSelected', [
-            'file_url' => $fileUrl
+            'media_file_id' => $mediaFileId,
+            'file_url' => $mediaFile->file_url
         ]);
     }
 
@@ -78,17 +81,15 @@ class ImageGeneratorModal extends Component
 
     public function generateNewImages()
     {
-        if (!$this->prompt) {
-            return $this->dispatchBrowserEvent('alert', [
-                'type' => 'error',
-                'message' => "Please provide an image description"
-            ]);
+        if (!$this->validateParams()) {
+            return;
         }
+        $this->action = 'New images';
         $this->setProcessingState();
         $this->documentRepo->setDocument($this->contentBlock->document);
         $this->documentRepo->updateMeta('img_prompt', $this->prompt);
 
-        $imageSize = MediaHelper::socialMediaImageSize($this->contentBlock->document->getMeta('platform'));
+        $imageSize = MediaHelper::getPossibleImageSize($this->contentBlock);
 
         DocumentRepository::createTask(
             $this->contentBlock->document->id,
@@ -123,6 +124,10 @@ class ImageGeneratorModal extends Component
 
     public function generateImageVariants($mediaFileId)
     {
+        if (!$this->validateParams()) {
+            return;
+        }
+        $this->action = 'Variants';
         $this->documentRepo->setDocument($this->contentBlock->document);
         $this->documentRepo->updateMeta('img_prompt', $this->prompt);
         $this->documentRepo->updateMeta('img_style', $this->imgStyle);
@@ -205,5 +210,26 @@ class ImageGeneratorModal extends Component
                 'message' => "Images generated successfully!"
             ]);
         }
+    }
+
+    public function validateParams()
+    {
+        if (!$this->prompt) {
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'error',
+                'message' => "Please provide an image description"
+            ]);
+            return false;
+        }
+
+        if (!$this->imgStyle) {
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'error',
+                'message' => "Please provide an image style"
+            ]);
+            return false;
+        }
+
+        return true;
     }
 }

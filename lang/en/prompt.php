@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'append_inst' => "\n\n - Additional instruction: Provide a response with increased burstiness and perplexity and at a slightly higher temperature than your default writing style.",
     'blog_first_pass' => "Write a simple blog article, following these instructions:\n\n
         - It must have a :tone tone\n
         - Use <p> tags to surround paragraphs\n

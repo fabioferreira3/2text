@@ -9,6 +9,7 @@ class BlogPost extends Component
 {
     public Document $document;
     public $title;
+    public $showInfo = false;
 
     public function mount(Document $document)
     {

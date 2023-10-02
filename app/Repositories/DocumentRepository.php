@@ -147,10 +147,9 @@ class DocumentRepository
                 ]);
             }
         }
-        // $this->document->update([
-        //     'content' => $content,
-        //     'word_count' => Str::wordCount($content)
-        // ]);
+        $this->document->update([
+            'word_count' => Str::wordCount($content)
+        ]);
     }
 
     public static function createTask(string $documentId, DocumentTaskEnum $task, array $params)

@@ -72,11 +72,11 @@
 
             @if (count($previewImgs['variants']))
             <div class="flex flex-col gap-2 w-full mt-8 md:mt-0">
-                <div class="text-2xl font-bold">Variants:</div>
+                <div class="text-2xl font-bold">@if($action) {{$action . ":"}} @endif</div>
                 <div class="flex flex-col md:grid md:grid-cols-2 gap-4">
-                    @foreach ($previewImgs['variants'] as $key => $img)
+                    @foreach ($previewImgs['variants'] as $key => $mediaFile)
                     <div class="relative group border border-gray-200 rounded-lg max-h-64">
-                        <img class="rounded-lg object-cover w-full lg:h-44 xl:h-64" src={{ $img['file_url'] }} />
+                        <img class="rounded-lg object-cover w-full lg:h-44 xl:h-64" src={{ $mediaFile['file_url'] }} />
                         <div
                             class="absolute top-4 left-4 text-2xl font-bold text-black bg-white opacity-50 rounded-lg px-2">
                             #{{$key+1}}</div>
@@ -84,7 +84,7 @@
                             class="hidden group-hover:flex absolute top-0 left-0 h-full w-full items-center justify-center">
                             <div class="z-20 flex items-center gap-2">
                                 <button @if ($processing) disabled @endif
-                                    wire:click="selectImage('{{ $img['file_url'] }}')"
+                                    wire:click="selectImage('{{ $mediaFile['id'] }}')"
                                     class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                     <x-icon solid name="thumb-up" class="w-5 h-5" />
                                     <div
@@ -93,7 +93,7 @@
                                     </div>
                                 </button>
                                 <button @if ($processing) disabled @endif
-                                    wire:click="generateImageVariants('{{ $img['id'] }}')"
+                                    wire:click="generateImageVariants('{{ $mediaFile['id'] }}')"
                                     class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                     <x-icon name="switch-horizontal" class="w-5 h-5" />
                                     <div
@@ -101,7 +101,7 @@
                                         Generate variants
                                     </div>
                                 </button>
-                                <button wire:click="downloadImage('{{ $img['id'] }}')"
+                                <button wire:click="downloadImage('{{ $mediaFile['id'] }}')"
                                     class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                     <x-icon name="download" class="w-5 h-5" />
                                     <div
@@ -109,7 +109,7 @@
                                         Download
                                     </div>
                                 </button>
-                                <button wire:click="previewImage('{{ $img['id'] }}')"
+                                <button wire:click="previewImage('{{ $mediaFile['id'] }}')"
                                     class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                     <x-icon name="eye" class="w-5 h-5" />
                                     <div

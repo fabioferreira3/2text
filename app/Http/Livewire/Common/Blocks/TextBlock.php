@@ -67,6 +67,10 @@ class TextBlock extends Component
     public function copy()
     {
         $this->emit('addToClipboard', $this->content);
+        $this->dispatchBrowserEvent('alert', [
+            'type' => 'info',
+            'message' => __('social_media.text_copied')
+        ]);
     }
 
     public function delete()

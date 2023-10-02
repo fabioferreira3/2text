@@ -5,10 +5,11 @@ namespace App\Repositories;
 use App\Enums\DocumentTaskEnum;
 use App\Packages\ChatGPT\ChatGPT;
 use App\Enums\LanguageModels;
-use App\Helpers\PromptHelper;
+use App\Helpers\PromptHelperFactory;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Talendor\StabilityAI\Enums\StabilityAIEngine;
@@ -19,7 +20,7 @@ class GenRepository
     public static function generateTitle(Document $document, $context)
     {
         $repo = new DocumentRepository($document);
-        $promptHelper = new PromptHelper($document->language->value);
+        $promptHelper = PromptHelperFactory::create($document->language->value);
         $chatGpt = new ChatGPT(LanguageModels::GPT_3_TURBO->value);
         $response = $chatGpt->request([[
             'role' => 'user',
@@ -41,7 +42,7 @@ class GenRepository
     public static function generateMetaDescription(Document $document)
     {
         $repo = new DocumentRepository($document);
-        $promptHelper = new PromptHelper($document->language->value);
+        $promptHelper = PromptHelperFactory::create($document->language->value);
         $chatGpt = new ChatGPT(LanguageModels::GPT_3_TURBO->value);
         $response = $chatGpt->request([[
             'role' => 'user',
@@ -66,6 +67,7 @@ class GenRepository
     public static function generateImage(Document $document, array $params)
     {
         $client = app(StabilityAIClient::class);
+        Log::debug($params);
         $results = $client->textToImage($params);
         if (count($results)) {
             foreach ($results as $result) {
@@ -118,7 +120,7 @@ class GenRepository
     public static function generateSocialMediaPost(Document $document, string $platform)
     {
         $repo = new DocumentRepository($document);
-        $promptHelper = new PromptHelper($document->language->value);
+        $promptHelper = PromptHelperFactory::create($document->language->value);
         $chatGpt = new ChatGPT();
         $response = $chatGpt->request([
             [
@@ -153,7 +155,7 @@ class GenRepository
     {
         $model = isset($params['faster']) && $params['faster'] ? LanguageModels::GPT_3_TURBO : LanguageModels::GPT_4;
         $repo = new DocumentRepository($contentBlock->document);
-        $promptHelper = new PromptHelper($contentBlock->document->language->value);
+        $promptHelper = PromptHelperFactory::create($contentBlock->document->language->value);
         $chatGpt = new ChatGPT($model->value);
         $response = $chatGpt->request([[
             'role' => 'user',

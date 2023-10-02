@@ -4,7 +4,6 @@ namespace App\Helpers;
 
 use App\Enums\Tone;
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\Log;
 
 class PromptHelper
 {

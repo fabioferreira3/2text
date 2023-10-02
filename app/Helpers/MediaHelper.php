@@ -2,9 +2,12 @@
 
 namespace App\Helpers;
 
+use App\Enums\DocumentType;
+use App\Models\DocumentContentBlock;
+
 class MediaHelper
 {
-    public static function socialMediaImageSize(string $platform)
+    public static function getSocialMediaImageSize(string $platform)
     {
         $size = null;
         switch ($platform) {
@@ -25,5 +28,16 @@ class MediaHelper
         }
 
         return $size;
+    }
+
+    public static function getPossibleImageSize(DocumentContentBlock $contentBlock)
+    {
+        if ($contentBlock->document->type === DocumentType::SOCIAL_MEDIA_POST) {
+            return self::getSocialMediaImageSize($contentBlock->document->getMeta('platform'));
+        }
+
+        if ($contentBlock->document->type === DocumentType::BLOG_POST) {
+            return ['height' => 640, 'width' => 1536];
+        }
     }
 }

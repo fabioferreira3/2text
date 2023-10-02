@@ -190,6 +190,11 @@ class Document extends Model
         return $style->label();
     }
 
+    public function scopeOfMediaPosts($query)
+    {
+        return $query->where('type', DocumentType::SOCIAL_MEDIA_POST);
+    }
+
     protected static function booted(): void
     {
         static::addGlobalScope(new SameAccountScope());
