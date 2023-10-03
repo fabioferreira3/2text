@@ -160,10 +160,6 @@
                                         <x-slot name="trigger">
                                             <button class="bg-gray-100 w-full p-4 text-gray-700 rounded-lg">
                                                 <div class="flex items-center gap-4">
-                                                    {{-- @if ($selectedStylePreset)
-                                                    <img class="w-20 h-20 rounded-lg" src={{
-                                                        $selectedStylePreset['image_path'] }} />
-                                                    @endif --}}
                                                     <div>{{ $imgStyle ??
                                                         'Select' }}</div>
                                                 </div>
@@ -181,23 +177,6 @@
                                         </x-dropdown.item>
                                         @endforeach
                                     </x-custom.dropdown>
-                                    {{-- <label class="font-bold text-lg text-zinc-700">Image style:</label>
-                                    <x-dropdown class="w-[300px]">
-                                        <x-slot name="trigger">
-                                            <button class="bg-secondary px-4 text-white py-1 rounded-lg">{{ $imgStyle ??
-                                                'Select' }}</button>
-                                        </x-slot>
-                                        @foreach ($this->stylePresets as $key => $stylePreset)
-                                        <x-dropdown.item wire:click="$set('imgStyle', '{{ $stylePreset['value'] }}')"
-                                            :separator="$key > 0">
-                                            <div class="flex items-center gap-4 w-full">
-                                                <img class="w-20 h-20 rounded-lg" src={{ $stylePreset['image_path']
-                                                    }} />
-                                                {{ $stylePreset['label'] }}
-                                            </div>
-                                        </x-dropdown.item>
-                                        @endforeach
-                                    </x-dropdown> --}}
                                 </div>
                                 @endif
                             </div>

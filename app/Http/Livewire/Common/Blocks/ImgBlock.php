@@ -53,6 +53,11 @@ class ImgBlock extends Component
         $this->showImageGenerator = !$this->showImageGenerator;
     }
 
+    public function previewImage()
+    {
+        $this->emit('openLinkInNewTab', $this->mediaFile->file_url);
+    }
+
     public function render()
     {
         return view('livewire.common.blocks.img-block');

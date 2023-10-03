@@ -7,8 +7,8 @@
                     <div class="flex gap-2 items-center">
                         <label>{{__('blog.source')}}:</label>
                         @include('livewire.common.help-item', [
-                            'header' => __('blog.source'),
-                            'content' => App\Helpers\InstructionsHelper::sources()
+                        'header' => __('blog.source'),
+                        'content' => App\Helpers\InstructionsHelper::sources()
                         ])
                     </div>
                     <select name="provider" wire:model="source" class="p-3 rounded-lg border border-zinc-200">
@@ -19,8 +19,8 @@
                     <div class="flex gap-2 items-center">
                         <label>{{__('blog.keyword')}}:</label>
                         @include('livewire.common.help-item', [
-                            'header' => __('blog.keyword'),
-                            'content' => App\Helpers\InstructionsHelper::blogKeyword()
+                        'header' => __('blog.keyword'),
+                        'content' => App\Helpers\InstructionsHelper::blogKeyword()
                         ])
                     </div>
                     <input name="keyword" wire:model="keyword" class="p-3 rounded-lg border border-zinc-200" />
@@ -36,7 +36,8 @@
                     <small>{{__('blog.briefly_describe', ['maxWords' => '100'])}}</small>
                     <small>{{__('blog.paste_content', ['maxChars' => '30000'])}}</small>
                 </div>
-                <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="30000" wire:model="context"></textarea>
+                <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="30000"
+                    wire:model="context"></textarea>
                 @if($errors->has('context'))
                 <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
                 @endif
@@ -67,8 +68,8 @@
                     <div class="flex gap-2 items-center">
                         <label>{{__('blog.topics_number')}}:</label>
                         @include('livewire.common.help-item', [
-                            'header' => __('blog.topics_number'),
-                            'content' => App\Helpers\InstructionsHelper::maxSubtopics()
+                        'header' => __('blog.topics_number'),
+                        'content' => App\Helpers\InstructionsHelper::maxSubtopics()
                         ])
                     </div>
                     <input type="number" max="10" name="target_headers_count" wire:model="targetHeadersCount"
@@ -81,8 +82,8 @@
                     <div class="flex gap-2 items-center">
                         <label>{{__('blog.language')}}:</label>
                         @include('livewire.common.help-item', [
-                            'header' => __('blog.language'),
-                            'content' => App\Helpers\InstructionsHelper::blogLanguages()
+                        'header' => __('blog.language'),
+                        'content' => App\Helpers\InstructionsHelper::blogLanguages()
                         ])
                     </div>
                     <select name="language" wire:model="language" class="p-3 rounded-lg border border-zinc-200">
@@ -98,8 +99,8 @@
                     <div class="flex gap-2 items-center">
                         <label>{{__('blog.writing_style')}}:</label>
                         @include('livewire.common.help-item', [
-                            'header' => __('blog.writing_style'),
-                            'content' => App\Helpers\InstructionsHelper::writingStyles()
+                        'header' => __('blog.writing_style'),
+                        'content' => App\Helpers\InstructionsHelper::writingStyles()
                         ])
                     </div>
                     <select name="style" wire:model="style" class="p-3 rounded-lg border border-zinc-200">
@@ -110,13 +111,42 @@
                     <div class="flex gap-2 items-center">
                         <label>{{__('blog.tone')}}:</label>
                         @include('livewire.common.help-item', [
-                            'header' => __('blog.tone'),
-                            'content' => App\Helpers\InstructionsHelper::writingTones()
+                        'header' => __('blog.tone'),
+                        'content' => App\Helpers\InstructionsHelper::writingTones()
                         ])
                     </div>
                     <select name="tone" wire:model="tone" class="p-3 rounded-lg border border-zinc-200">
                         @include('livewire.common.tones-options')
                     </select>
+                </div>
+            </div>
+            <div class="w-full flex flex-col md:grid md:grid-cols-2 gap-6">
+                <div class="flex flex-col gap-3">
+                    <div class="flex gap-2 items-center">
+                        <label>Generate Hero Image:</label>
+                        @include('livewire.common.help-item', [
+                        'header' => __('blog.writing_style'),
+                        'content' => App\Helpers\InstructionsHelper::writingStyles()
+                        ])
+                    </div>
+                    <div class="md:col-span-1">
+                        <x-checkbox md id="generate_img" name="generate_img" label="Yes" wire:model="generateImage" />
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <div class="flex gap-2 items-center">
+                        <label>Hero image description:</label>
+                        @include('livewire.common.help-item', [
+                        'header' => __('blog.writing_style'),
+                        'content' => App\Helpers\InstructionsHelper::writingStyles()
+                        ])
+                    </div>
+                    <div class="w-full">
+                        <textarea
+                            placeholder="Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary."
+                            class="border border-zinc-200 rounded-lg w-full" rows="3" maxlength="2000"
+                            wire:model="imgPrompt"></textarea>
+                    </div>
                 </div>
             </div>
             <div class="flex justify-center mt-4">

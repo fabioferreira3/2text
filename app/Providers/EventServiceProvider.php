@@ -9,7 +9,6 @@ use App\Events\UserCreated;
 use App\Listeners\HandleAbortedDocumentTask;
 use App\Listeners\HandleFailedDocumentTask;
 use App\Listeners\HandleFinishedDocumentTask;
-use App\Listeners\HandleFinishedProcess;
 use App\Listeners\HandleNewUserNotification;
 use App\Models\DocumentHistory;
 use App\Observers\DocumentHistoryObserver;
@@ -30,8 +29,7 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         DocumentTaskFinished::class => [
-            HandleFinishedDocumentTask::class,
-            HandleFinishedProcess::class
+            HandleFinishedDocumentTask::class
         ],
         DocumentTaskFailed::class => [
             HandleFailedDocumentTask::class

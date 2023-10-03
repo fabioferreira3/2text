@@ -59,9 +59,15 @@ class ExpandText implements ShouldQueue, ShouldBeUnique
                 $order++;
             }
 
-            DocumentRepository::createTask($this->document->id, DocumentTaskEnum::REGISTER_CONTENT_HISTORY, [
+            DocumentRepository::createTask($this->document->id, DocumentTaskEnum::PUBLISH_TEXT_BLOCKS, [
                 'process_id' => $this->meta['process_id'],
                 'order' => $order,
+                'meta' => []
+            ]);
+
+            DocumentRepository::createTask($this->document->id, DocumentTaskEnum::REGISTER_CONTENT_HISTORY, [
+                'process_id' => $this->meta['process_id'],
+                'order' => $order + 1,
                 'meta' => []
             ]);
 

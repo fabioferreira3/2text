@@ -1,34 +1,32 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Blog;
 
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
-use App\Repositories\GenRepository;
+use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Contracts\Broadcasting\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class GenerateImage implements ShouldQueue, ShouldBeUnique
+class PublishTextBlocks implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
     protected Document $document;
-    protected array $params;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Document $document, array $params = [])
+    public function __construct(Document $document)
     {
-        $this->document = $document->fresh();
-        $this->params = $params;
+        $this->document = $document;
     }
 
     /**
@@ -39,10 +37,11 @@ class GenerateImage implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            GenRepository::generateImage($this->document, $this->params);
+            $repo = new DocumentRepository($this->document);
+            $repo->publishContentBlocks();
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to generate image: ' . $e->getMessage());
+            $this->jobFailed('Failed to publish text blocks: ' . $e->getMessage());
         }
     }
 
@@ -51,6 +50,6 @@ class GenerateImage implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'generate_image_' . $this->document->id;
+        return 'publish_text_blocks_' . $this->document->id;
     }
 }

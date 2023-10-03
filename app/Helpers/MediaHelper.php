@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Enums\DocumentType;
+use App\Models\Document;
 use App\Models\DocumentContentBlock;
 
 class MediaHelper
@@ -30,13 +31,13 @@ class MediaHelper
         return $size;
     }
 
-    public static function getPossibleImageSize(DocumentContentBlock $contentBlock)
+    public static function getPossibleImageSize(Document $document)
     {
-        if ($contentBlock->document->type === DocumentType::SOCIAL_MEDIA_POST) {
-            return self::getSocialMediaImageSize($contentBlock->document->getMeta('platform'));
+        if ($document->type === DocumentType::SOCIAL_MEDIA_POST) {
+            return self::getSocialMediaImageSize($document->getMeta('platform'));
         }
 
-        if ($contentBlock->document->type === DocumentType::BLOG_POST) {
+        if ($document->type === DocumentType::BLOG_POST) {
             return ['height' => 640, 'width' => 1536];
         }
     }

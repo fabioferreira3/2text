@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Enums\LanguageModels;
+use Talendor\StabilityAI\Enums\StabilityAIEngine;
 
 class DocumentHelper
 {
@@ -63,6 +64,8 @@ class DocumentHelper
             return $tokenUsage['audio_length'] * 0.006;
         } else if (in_array($model, [LanguageModels::POLLY->value])) {
             return $tokenUsage['char_count'] * 0.000016;
+        } else if (in_array($model, [StabilityAIEngine::SD_XL_V_1->value])) {
+            return 0.08;
         } else {
             return 0;
         }

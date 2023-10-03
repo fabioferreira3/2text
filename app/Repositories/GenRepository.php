@@ -9,6 +9,7 @@ use App\Helpers\PromptHelperFactory;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
+use App\Models\MediaFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -67,26 +68,15 @@ class GenRepository
     public static function generateImage(Document $document, array $params)
     {
         $client = app(StabilityAIClient::class);
-        Log::debug($params);
         $results = $client->textToImage($params);
         if (count($results)) {
             foreach ($results as $result) {
-                MediaRepository::storeImage($document->account, [
-                    'fileName' => $result['fileName'],
-                    'imageData' => $result['imageData'],
-                    'meta' => [
-                        'document_id' => $document->id,
-                        'process_id' => $params['process_id'] ?? null,
-                        'style_preset' => $params['style_preset'] ?? null,
-                        'steps' => 25,
-                        'model' => StabilityAIEngine::SD_XL_V_1->value,
-                    ]
-                ]);
+                self::processImageResult($document, $result, $params);
             }
 
             if ($params['add_content_block'] ?? false) {
                 $document->contentBlocks()->save(new DocumentContentBlock([
-                    'type' => 'image',
+                    'type' => 'media_file_image',
                     'content' => 'ai-images/' . $results[0]['fileName'],
                     'prompt' => $params['prompt'],
                     'order' => 1
@@ -102,17 +92,7 @@ class GenRepository
         $results = $client->imageToImage($params);
         if (count($results)) {
             foreach ($results as $result) {
-                MediaRepository::storeImage($document->account, [
-                    'fileName' => $result['fileName'],
-                    'imageData' => $result['imageData'],
-                    'meta' => [
-                        'document_id' => $document->id,
-                        'process_id' => $params['process_id'] ?? null,
-                        'style_preset' => $params['style_preset'] ?? null,
-                        'model' => StabilityAIEngine::SD_XL_V_1->value,
-                        'steps' => 25
-                    ]
-                ]);
+                self::processImageResult($document, $result, $params);
             }
         }
     }
@@ -242,5 +222,34 @@ class GenRepository
         ]);
 
         DispatchDocumentTasks::dispatch($document);
+    }
+
+    private static function processImageResult($document, $result, $params): MediaFile
+    {
+        $repo = new DocumentRepository($document);
+        $mediaFile = MediaRepository::storeImage($document->account, [
+            'fileName' => $result['fileName'],
+            'imageData' => $result['imageData'],
+            'meta' => [
+                'document_id' => $document->id,
+                'process_id' => $params['process_id'] ?? null,
+                'style_preset' => $params['style_preset'] ?? null,
+                'model' => StabilityAIEngine::SD_XL_V_1->value,
+                'steps' => $params['steps'] ?? 0
+            ]
+        ]);
+        $repo->addHistory(
+            [
+                'field' => 'image_generation',
+                'content' => $mediaFile->id,
+                'word_count' => 0,
+                'char_count' => 0
+            ],
+            [
+                'model' => StabilityAIEngine::SD_XL_V_1->value,
+            ]
+        );
+
+        return $mediaFile;
     }
 }

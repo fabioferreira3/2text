@@ -27,12 +27,12 @@
                         class="hidden group-hover:flex absolute top-0 left-0 h-full w-full items-center justify-center">
                         <div class="z-20 flex items-center justify-center gap-2">
                             <button @if ($processing) disabled @endif
-                                wire:click="selectImage('{{ $previewImgs['original']['file_url'] }}')"
+                                wire:click="selectImage('{{ $previewImgs['original']['id'] }}')"
                                 class="relative group/button transition duration-200 text-white hover:bg-secondary border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
                                 <x-icon solid name="thumb-up" class="w-6 h-6" />
                                 <div
                                     class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                                    Use as main
+                                    Use as primary
                                 </div>
                             </button>
 
@@ -82,38 +82,38 @@
                             #{{$key+1}}</div>
                         <div
                             class="hidden group-hover:flex absolute top-0 left-0 h-full w-full items-center justify-center">
-                            <div class="z-20 flex items-center gap-2">
+                            <div class="relative z-20 grid grid-cols-2 xl:flex xl:flex-row text-lg items-center gap-2">
                                 <button @if ($processing) disabled @endif
                                     wire:click="selectImage('{{ $mediaFile['id'] }}')"
-                                    class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
+                                    class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                     <x-icon solid name="thumb-up" class="w-5 h-5" />
                                     <div
-                                        class="absolute top-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                                        Use as main
+                                        class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                        Use as primary
                                     </div>
                                 </button>
                                 <button @if ($processing) disabled @endif
                                     wire:click="generateImageVariants('{{ $mediaFile['id'] }}')"
-                                    class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
+                                    class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                     <x-icon name="switch-horizontal" class="w-5 h-5" />
                                     <div
-                                        class="absolute top-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                        class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
                                         Generate variants
                                     </div>
                                 </button>
                                 <button wire:click="downloadImage('{{ $mediaFile['id'] }}')"
-                                    class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
+                                    class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                     <x-icon name="download" class="w-5 h-5" />
                                     <div
-                                        class="absolute top-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                        class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
                                         Download
                                     </div>
                                 </button>
                                 <button wire:click="previewImage('{{ $mediaFile['id'] }}')"
-                                    class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
+                                    class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                     <x-icon name="eye" class="w-5 h-5" />
                                     <div
-                                        class="absolute top-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                        class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
                                         Preview
                                     </div>
                                 </button>

@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Storage;
 
 class MediaRepository
 {
-    public static function newImage(Account $account, array $fileParams)
+    public static function newImage(Account $account, array $fileParams): MediaFile
     {
-        $account->mediaFiles()->save(new MediaFile([
+        $mediaFile = new MediaFile([
             'file_url' => $fileParams['file_url'],
             'file_path' => $fileParams['file_path'],
             'type' => MediaType::IMAGE,
@@ -23,22 +23,26 @@ class MediaRepository
                 'publicId' => $fileParams['file_public_id'],
                 ...$fileParams['meta'] ?? []
             ]
-        ]));
+        ]);
+        $account->mediaFiles()->save($mediaFile);
+
+        return $mediaFile;
     }
 
-    public static function storeImage(Account $account, $fileParams)
+    public static function storeImage(Account $account, $fileParams): MediaFile
     {
         $fileParams['fileName'] = 'ai-images/' . $fileParams['fileName'];
         Storage::disk('s3')->put($fileParams['fileName'], $fileParams['imageData']);
 
-        self::optimizeAndStore($account, $fileParams);
+        return self::optimizeAndStore($account, $fileParams);
     }
 
-    public static function optimizeAndStore(Account $account, $fileParams)
+    public static function optimizeAndStore(Account $account, $fileParams): MediaFile
     {
         $originalFileUrl = Storage::temporaryUrl($fileParams['fileName'], now()->addMinutes(5));
         $uploadedFile = cloudinary()->upload($originalFileUrl);
-        self::newImage($account, [
+
+        return self::newImage($account, [
             'file_url' => $uploadedFile->getSecurePath(),
             'file_path' => $fileParams['fileName'],
             'file_size' => $uploadedFile->getSize(),

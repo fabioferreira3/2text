@@ -24,7 +24,7 @@ class ImageGeneratorModal extends Component
     public array $previewImgs;
     public $stylePresets;
     public $selectedStylePreset;
-    public mixed $action = null;
+    public mixed $action = 'New images';
     private $documentRepo;
 
     public function __construct()
@@ -89,7 +89,7 @@ class ImageGeneratorModal extends Component
         $this->documentRepo->setDocument($this->contentBlock->document);
         $this->documentRepo->updateMeta('img_prompt', $this->prompt);
 
-        $imageSize = MediaHelper::getPossibleImageSize($this->contentBlock);
+        $imageSize = MediaHelper::getPossibleImageSize($this->contentBlock->document);
 
         DocumentRepository::createTask(
             $this->contentBlock->document->id,
@@ -102,6 +102,7 @@ class ImageGeneratorModal extends Component
                     'height' => $imageSize['height'],
                     'width' => $imageSize['width'],
                     'style_preset' => $this->imgStyle,
+                    'steps' => 21,
                     'samples' => 4
                 ]
             ]
@@ -145,6 +146,7 @@ class ImageGeneratorModal extends Component
                     'file_name' => $mediaFile->file_path,
                     'prompt' => $this->prompt,
                     'style_preset' => $this->imgStyle,
+                    'steps' => 21,
                     'samples' => 4
                 ]
             ]

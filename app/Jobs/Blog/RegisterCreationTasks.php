@@ -3,10 +3,13 @@
 namespace App\Jobs\Blog;
 
 use App\Enums\DocumentTaskEnum;
+use App\Helpers\MediaHelper;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
+use Talendor\StabilityAI\Enums\StylePreset;
 
 class RegisterCreationTasks
 {
@@ -25,6 +28,48 @@ class RegisterCreationTasks
 
     public function handle()
     {
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::SUMMARIZE_DOC,
+            [
+                'order' => $this->params['next_order'],
+                'process_id' => $this->params['process_id']
+            ]
+        );
+
+        if ($this->params['meta']['generate_image'] ?? false) {
+            $processId = Str::uuid();
+            $imageSize = MediaHelper::getPossibleImageSize($this->document);
+            DocumentRepository::createTask(
+                $this->document->id,
+                DocumentTaskEnum::GENERATE_IMAGE,
+                [
+                    'order' => 1,
+                    'process_id' => $processId,
+                    'meta' => [
+                        'prompt' => $this->params['meta']['img_prompt'],
+                        'height' => $imageSize['height'],
+                        'width' => $imageSize['width'],
+                        'style_preset' => StylePreset::DIGITAL_ART->value,
+                        'steps' => 21,
+                        'samples' => 1,
+                        'add_content_block' => true
+                    ]
+                ]
+            );
+            DocumentRepository::createTask(
+                $this->document->id,
+                DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
+                [
+                    'order' => 2,
+                    'process_id' => $processId,
+                    'meta' => [
+                        'silently' => true
+                    ]
+                ]
+            );
+        }
+
         DocumentRepository::createTask(
             $this->document->id,
             DocumentTaskEnum::SUMMARIZE_DOC,

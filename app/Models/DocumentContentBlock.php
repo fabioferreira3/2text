@@ -20,7 +20,7 @@ class DocumentContentBlock extends Model
 
     public function getMediaFile()
     {
-        if ($this->type === 'image_media_file') {
+        if ($this->type === 'media_file_image') {
             return MediaFile::where('id', $this->content)->first();
         }
 
@@ -38,5 +38,10 @@ class DocumentContentBlock extends Model
         }
 
         return $this->content;
+    }
+
+    public function scopeNotOfImageType($query)
+    {
+        return $query->whereNotIn('type', ['image', 'media_file_image']);
     }
 }

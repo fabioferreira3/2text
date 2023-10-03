@@ -21,6 +21,10 @@ class BlogPost extends Component
     {
         $content = $this->document->getHtmlContentBlocksAsText();
         $this->emit('addToClipboard', $content);
+        $this->dispatchBrowserEvent('alert', [
+            'type' => 'info',
+            'message' => __('common.copied_to_clipboard')
+        ]);
     }
 
     public function render()

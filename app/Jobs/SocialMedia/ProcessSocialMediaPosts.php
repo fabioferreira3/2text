@@ -128,7 +128,7 @@ class ProcessSocialMediaPosts
                             'width' => $imageSize['width'],
                             'add_content_block' => true,
                             'style_preset' => $post->getMeta('img_style'),
-                            'steps' => 30
+                            'steps' => 21
                         ]
                     ]
                 );

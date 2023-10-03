@@ -13,7 +13,7 @@ class NewPost extends Component
     use Actions;
 
     public string $context;
-    public string $source_url;
+    public string $sourceUrl;
     public string $source;
     public string $language;
     public array $languages;
@@ -21,7 +21,9 @@ class NewPost extends Component
     public string $tone;
     public string $style;
     public string $targetHeadersCount;
+    public $imgPrompt;
     public bool $modal;
+    public bool $generateImage;
     public string $title;
 
 
@@ -31,10 +33,12 @@ class NewPost extends Component
         $this->title = 'New Blog Post';
         $this->source = 'free_text';
         $this->context = '';
-        $this->source_url = '';
+        $this->sourceUrl = '';
         $this->language = 'en';
         $this->languages = Language::getLabels();
         $this->keyword = '';
+        $this->generateImage = false;
+        $this->imgPrompt = null;
         $this->targetHeadersCount = '3';
         $this->tone = 'default';
         $this->style = 'default';
@@ -56,14 +60,12 @@ class NewPost extends Component
             'style' => 'nullable'
         ];
 
-        // Dynamic rule for source_url based on source value
         if ($this->source === 'youtube') {
-            $rules['source_url'] = ['required', 'url', new \App\Rules\YouTubeUrl()];
+            $rules['sourceUrl'] = ['required', 'url', new \App\Rules\YouTubeUrl()];
         } elseif ($this->source === 'website_url') {
-            $rules['source_url'] = ['required', 'url'];
+            $rules['sourceUrl'] = ['required', 'url'];
         }
 
-        // Dynamic rule for context based on source value
         if ($this->source === 'free_text') {
             $rules['context'] = 'required';
         } else {
@@ -75,7 +77,7 @@ class NewPost extends Component
 
     protected $messages = [
         'context.required_if' => 'You need to provide some context for the AI to generate your blog post.',
-        'source_url.required_if' => 'You need to provide a link for me to use as context for your blog post.',
+        'sourceUrl.required_if' => 'You need to provide a link for me to use as context for your blog post.',
         'keyword.required' => 'You need to provide a keyword.',
         'source.required' => 'Source is a required field.',
         'language.required' => 'Language is a required field.',
@@ -92,11 +94,13 @@ class NewPost extends Component
             'context' => $this->context,
             'language' => $this->language,
             'meta' => [
-                'source_url' => $this->source_url,
+                'source_url' => $this->sourceUrl,
                 'target_headers_count' => $this->targetHeadersCount,
                 'tone' => $this->tone,
                 'style' => $this->style,
                 'keyword' => $this->keyword,
+                'img_prompt' => $this->imgPrompt ?? null,
+                'generate_image' => $this->generateImage
             ]
         ];
         $repo = new DocumentRepository();

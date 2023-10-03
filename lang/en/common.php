@@ -6,6 +6,7 @@ return [
     'blog_post' => 'Blog Post',
     'copy' => 'Copy',
     'copied' => 'Copied',
+    'copied_to_clipboard' => 'Copied to Clipboard',
     'close' => 'Close',
     'delete' => 'Delete',
     'download' => 'Download',
