@@ -199,6 +199,10 @@ class ImageGeneratorModal extends Component
     {
         $this->processing = true;
         $this->processId = Str::uuid();
+        $this->dispatchBrowserEvent('alert', [
+            'type' => 'info',
+            'message' => "Generating images. Please wait..."
+        ]);
     }
 
     public function onProcessFinished(array $params)

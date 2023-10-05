@@ -29,7 +29,7 @@ return [
          - Increase the number of paragraphs during the expansion.\n
          - This is the text that must be expanded:\n\n
             :context",
-    'expand' => "Rewrite the following paragraph, making it slightly longer:\n\n :text",
+    'expand' => "Rewrite the following paragraph, doubling the number of words:\n\n :text",
     'expand_title' => "Rewrite the following title, making it slightly longer:\n\n :text",
     'generic_prompt' => ":prompt\n\n:text\n\n",
     'given_following_text' => "Given the following text:\n\n:text\n\n",

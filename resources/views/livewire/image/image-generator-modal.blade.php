@@ -4,7 +4,7 @@
             <div class="flex items-center gap-4 border-gray-200 border-b pb-2">
                 <div class="w-2 h-12 md:h-6 bg-secondary"></div>
                 <h1 class="text-2xl font-bold">
-                    Generate new images or create variants of existing ones
+                    Generate new images or variants of existing ones
                 </h1>
             </div>
             <div role="button" class="cursor-pointer z-50" id="close" wire:click="toggleModal">
@@ -119,6 +119,11 @@
                                 </button>
                             </div>
                         </div>
+                        @if ($processing)
+                        <div class="opacity-60 rounded-lg absolute flex items-center justify-center inset-0 bg-black">
+                            <x-loader height="12" width="12" color="white" />
+                        </div>
+                        @endif
                         <div
                             class="group-hover:opacity-60 rounded-lg absolute flex items-center justify-center inset-0 bg-black opacity-0 transition-opacity duration-300 ease-in-out">
                         </div>
