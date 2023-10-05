@@ -28,6 +28,11 @@ class MediaFile extends Model
         return Storage::temporaryUrl($this->file_path, now()->addMinutes(15));
     }
 
+    public function scopeImages($query)
+    {
+        return $query->where('type', MediaType::IMAGE);
+    }
+
     public function toBinary()
     {
         return Storage::disk('s3')->get($this->file_path);
