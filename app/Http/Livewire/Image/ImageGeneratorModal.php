@@ -20,6 +20,7 @@ class ImageGeneratorModal extends Component
     public $prompt;
     public $imgStyle;
     public bool $processing = false;
+    public $useAsPrimaryOption;
     public string $processId;
     public array $previewImgs;
     public $stylePresets;
@@ -41,7 +42,7 @@ class ImageGeneratorModal extends Component
         ];
     }
 
-    public function mount(DocumentContentBlock $contentBlock = null)
+    public function mount(DocumentContentBlock $contentBlock = null, $useAsPrimaryOption = true)
     {
         $this->contentBlock = $contentBlock;
         $this->prompt = $this->contentBlock->document->getMeta('img_prompt');
@@ -49,6 +50,7 @@ class ImageGeneratorModal extends Component
         $this->stylePresets = StylePreset::getMappedValues();
         $this->selectedStylePreset = $this->imgStyle ? $this->selectStylePreset($this->imgStyle) : null;
         $this->processing = false;
+        $this->useAsPrimaryOption = $useAsPrimaryOption;
         $this->processId = '';
         $this->previewImgs = [
             'original' => $this->contentBlock->getMediaFile() ?? null,

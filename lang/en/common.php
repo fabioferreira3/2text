@@ -19,6 +19,7 @@ return [
     'document.on_hold' => 'On Hold',
     'free_text' => 'Free Text',
     'generate_audio' => 'Generate AI audio',
+    'generate_variants' => 'Generate Variants',
     'go' => 'Go',
     'image' => 'Image',
     'listen' => 'Listen',
