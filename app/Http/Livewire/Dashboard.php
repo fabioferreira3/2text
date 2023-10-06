@@ -9,8 +9,9 @@ use Livewire\Component;
 class Dashboard extends Component
 {
     public $title;
-    public $selectedTab = 'images';
+    public $selectedTab = 'dashboard';
     public $selectedImage;
+    public $showImageGenerator;
     public $images;
 
     public function mount()
@@ -18,6 +19,7 @@ class Dashboard extends Component
         $this->title = 'Dashboard';
         $this->images = collect([]);
         $this->selectedImage = null;
+        $this->showImageGenerator = false;
     }
 
     public function render()

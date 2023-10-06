@@ -65,7 +65,6 @@
                 @endforeach
             </div>
             @endif
-
             @endif
         </div>
         @if ($selectedImage)
@@ -80,7 +79,7 @@
                     </svg>
                 </div>
             </div>
-            <img src="{{$selectedImage->file_url}}" />
+            <img src="{{$selectedImage->file_url}}" class="h-full w-full" />
         </x-experior::modal>
         @endif
     </div>

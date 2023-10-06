@@ -22,6 +22,6 @@
         </div>
     </div>
     @if ($showImageGenerator)
-    @livewire('image.image-generator-modal', ['contentBlock' => $imageBlock])
+    @livewire('image.image-block-generator-modal', ['contentBlock' => $imageBlock])
     @endif
 </div>

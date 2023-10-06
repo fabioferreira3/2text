@@ -36,6 +36,9 @@ module.exports = {
             },
             fontSize: {
                 xxs: ".40rem",
+            },
+            maxHeight: {
+                '128': '32rem',
             }
         },
         fontFamily: {

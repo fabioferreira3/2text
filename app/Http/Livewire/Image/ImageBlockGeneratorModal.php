@@ -14,13 +14,12 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Talendor\StabilityAI\Enums\StylePreset;
 
-class ImageGeneratorModal extends Component
+class ImageBlockGeneratorModal extends Component
 {
     public DocumentContentBlock $contentBlock;
     public $prompt;
     public $imgStyle;
     public bool $processing = false;
-    public $useAsPrimaryOption;
     public string $processId;
     public array $previewImgs;
     public $stylePresets;
@@ -50,7 +49,6 @@ class ImageGeneratorModal extends Component
         $this->stylePresets = StylePreset::getMappedValues();
         $this->selectedStylePreset = $this->imgStyle ? $this->selectStylePreset($this->imgStyle) : null;
         $this->processing = false;
-        $this->useAsPrimaryOption = $useAsPrimaryOption;
         $this->processId = '';
         $this->previewImgs = [
             'original' => $this->contentBlock->getMediaFile() ?? null,
@@ -189,7 +187,7 @@ class ImageGeneratorModal extends Component
 
     public function render()
     {
-        return view('livewire.image.image-generator-modal');
+        return view('livewire.image.image-block-generator-modal');
     }
 
     public function updatedImgStyle($newValue)
