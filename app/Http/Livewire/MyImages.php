@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\MediaFile;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 
 
@@ -19,7 +20,7 @@ class MyImages extends Component
     {
         $this->images = MediaFile::images()->latest()->get();
         $this->selectedImage = null;
-        $this->showVariantsGenerator = true;
+        $this->showVariantsGenerator = false;
         $this->showNewGenerator = false;
         $this->shouldPreviewImage = false;
     }
@@ -27,13 +28,37 @@ class MyImages extends Component
     public function getListeners()
     {
         return [
-            'toggleImageGenerator'
+            'toggleVariantsGenerator',
+            'toggleNewGenerator',
+            'refreshImages'
         ];
     }
 
-    public function toggleImageGenerator()
+    public function toggleVariantsGenerator()
     {
         $this->showVariantsGenerator = !$this->showVariantsGenerator;
+    }
+
+    public function toggleNewGenerator()
+    {
+        $this->showNewGenerator = !$this->showNewGenerator;
+    }
+
+    public function downloadImage($mediaFileId)
+    {
+        $mediaFile = MediaFile::findOrFail($mediaFileId);
+        return Storage::download($mediaFile->file_path);
+    }
+
+    public function deleteImage($mediaFileId)
+    {
+        $mediaFile = MediaFile::findOrFail($mediaFileId);
+        $mediaFile->delete();
+        $this->refreshImages();
+        $this->dispatchBrowserEvent('alert', [
+            'type' => 'success',
+            'message' => 'Image deleted successfully'
+        ]);
     }
 
     public function selectImage($mediaFileId)
@@ -51,6 +76,11 @@ class MyImages extends Component
     {
         $this->selectImage($mediaFileId);
         $this->showVariantsGenerator = true;
+    }
+
+    public function refreshImages()
+    {
+        $this->images = MediaFile::images()->latest()->get();
     }
 
     public function render()

@@ -13,14 +13,14 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Talendor\StabilityAI\Enums\StylePreset;
 
-class VariantsGenerator extends Component
+class Generator extends Component
 {
     public $prompt;
     public $imgStyle;
     public bool $processing = false;
     public bool $shouldPreviewImage = false;
     public string $processId;
-    public array $previewImgs;
+    public $previewImgs;
     public $stylePresets;
     public $selectedStylePreset;
     public $selectedImage;
@@ -35,7 +35,7 @@ class VariantsGenerator extends Component
         ];
     }
 
-    public function mount($main)
+    public function mount()
     {
         $this->prompt = '';
         $this->imgStyle = null;
@@ -43,11 +43,13 @@ class VariantsGenerator extends Component
         $this->selectedStylePreset = $this->imgStyle ? $this->selectStylePreset($this->imgStyle) : null;
         $this->processing = false;
         $this->processId = '';
-        $this->previewImgs = [
-            'original' => $main,
-            'variants' => []
-        ];
+        $this->previewImgs = MediaFile::latest()->take(4)->get();
         $this->samples = 4;
+    }
+
+    public function render()
+    {
+        return view('livewire.image.generator');
     }
 
     public function selectStylePreset($style)
@@ -73,12 +75,11 @@ class VariantsGenerator extends Component
         ]);
         DocumentRepository::createTask(
             $document->id,
-            DocumentTaskEnum::GENERATE_IMAGE_VARIANTS,
+            DocumentTaskEnum::GENERATE_IMAGE,
             [
                 'order' => 1,
                 'process_id' => $this->processId,
                 'meta' => [
-                    'file_name' => $this->previewImgs['original']['file_path'],
                     'prompt' => $this->prompt,
                     'style_preset' => $this->imgStyle,
                     'steps' => 21,
@@ -114,11 +115,6 @@ class VariantsGenerator extends Component
         $this->shouldPreviewImage = true;
     }
 
-    public function render()
-    {
-        return view('livewire.image.variants-generator');
-    }
-
     public function updatedImgStyle($newValue)
     {
         $this->selectedStylePreset = $this->selectStylePreset($newValue);
@@ -126,7 +122,7 @@ class VariantsGenerator extends Component
 
     public function toggleModal()
     {
-        $this->emitUp('toggleVariantsGenerator');
+        $this->emitUp('toggleNewGenerator');
     }
 
     protected function setProcessingState()
@@ -144,7 +140,7 @@ class VariantsGenerator extends Component
         if ($params['process_id'] === $this->processId) {
             $this->emitUp('refreshImages');
             $mediaFiles = MediaFile::where('meta->process_id', $this->processId)->latest()->take($this->samples)->get();
-            $this->previewImgs['variants'] = $mediaFiles->toArray();
+            $this->previewImgs = $mediaFiles->toArray();
             $this->processing = false;
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'success',

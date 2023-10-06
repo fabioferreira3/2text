@@ -39,6 +39,9 @@ module.exports = {
             },
             maxHeight: {
                 '128': '32rem',
+            },
+            zIndex: {
+                '100': '100',
             }
         },
         fontFamily: {

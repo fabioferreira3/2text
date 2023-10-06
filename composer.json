@@ -25,7 +25,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^2.11",
         "norkunas/youtube-dl-php": "dev-master",
-        "openai-php/laravel": "^0.6.1",
+        "openai-php/laravel": "^0.7",
         "pusher/pusher-php-server": "^7.2",
         "rappasoft/laravel-livewire-tables": "^2.12",
         "sentry/sentry-laravel": "^3.3",

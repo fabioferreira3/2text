@@ -1,9 +1,9 @@
-<div class="p-4">
+<div class="p-4 h-1/2">
     <div role='button' class="flex justify-between items-center pb-3">
         <div class="flex items-center gap-4 border-gray-200 border-b pb-2">
             <div class="w-2 h-12 md:h-6 bg-secondary"></div>
             <h1 class="text-2xl font-bold">
-                {{__('images.generate_image_variants')}}
+                {{__('images.generate_image')}}
             </h1>
         </div>
         <div role="button" class="cursor-pointer z-50" id="close" wire:click="toggleModal">
@@ -15,42 +15,11 @@
             </svg>
         </div>
     </div>
-    <div class="flex flex-col lg:grid lg:grid-cols-2 items-start gap-8 mt-4">
-        <div class="flex flex-col gap-2 h-full w-full">
-            <div class="text-2xl font-bold mb-8 md:mb-0">{{ __('images.original') }}:</div>
-            <div class="relative group rounded-lg h-full flex justify-center items-center">
-                <img class="rounded-lg object-cover border border-gray-200 h-96" src={{
-                    $previewImgs['original']['file_url'] }} />
-                <div class="hidden group-hover:flex absolute top-0 left-0 h-full w-full items-center justify-center">
-                    <div class="z-20 flex items-center justify-center gap-2">
-                        <button wire:click="downloadImage('{{ $previewImgs['original']['id'] }}')"
-                            class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
-                            <x-icon name="download" class="w-6 h-6" />
-                            <div
-                                class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                                {{ __('images.download') }}
-                            </div>
-                        </button>
-                        <button wire:click="previewImage('{{ $previewImgs['original']['id'] }}')"
-                            class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
-                            <x-icon name="eye" class="w-6 h-6" />
-                            <div
-                                class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                                {{ __('images.preview') }}
-                            </div>
-                        </button>
-                    </div>
-                </div>
-                <div
-                    class="group-hover:opacity-60 rounded-lg absolute flex items-center justify-center inset-0 bg-black opacity-0 transition-opacity duration-300 ease-in-out">
-                </div>
-            </div>
-        </div>
-
+    <div class="flex flex-col lg:grid-cols-2 items-start gap-8 mt-4">
         @if($processing)
         <div>
-            <div class="text-2xl font-bold mb-8">{{__('images.variants')}}</div>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="text-2xl font-bold mb-8">{{__('images.images')}}</div>
+            <div class="grid grid-cols-4 gap-4">
                 <div class="bg-black opacity-60 rounded-lg h-48 w-full flex items-center justify-center">
                     <x-loader width="16" height="16" color="white" />
                 </div>
@@ -64,17 +33,16 @@
                     <x-loader width="16" height="16" color="white" />
                 </div>
             </div>
-
         </div>
         @endif
 
-        @if (count($previewImgs['variants']) && !$processing)
+        @if (count($previewImgs) && !$processing)
         <div class="flex flex-col gap-2 w-full mt-8 md:mt-0">
-            <div class="text-2xl font-bold">{{__('images.variants')}}</div>
+            <div class="text-2xl font-bold">{{__('images.images')}}</div>
             <div class="flex flex-col md:grid md:grid-cols-2 gap-4">
-                @foreach ($previewImgs['variants'] as $key => $mediaFile)
-                <div class="relative group border border-gray-200 rounded-lg max-h-64">
-                    <img class="rounded-lg object-cover w-full lg:h-44 xl:h-64" src={{ $mediaFile['file_url'] }} />
+                @foreach ($previewImgs as $key => $mediaFile)
+                <div class="relative group border border-gray-200 rounded-lg max-h-96">
+                    <img class="rounded-lg object-cover w-full lg:h-44 xl:h-96" src={{ $mediaFile['file_url'] }} />
                     <div
                         class="absolute top-4 left-4 text-2xl font-bold text-black bg-white opacity-50 rounded-lg px-2">
                         #{{$key+1}}</div>
@@ -116,14 +84,14 @@
 
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mt-4">
         <div class="flex flex-col gap-2 w-full">
-            <div class="text-xl font-bold">{{ __('images.describe_changes') }}:</div>
+            <div class="text-xl font-bold">{{ __('images.describe_new_image') }}:</div>
             <textarea placeholder="{{__('images.example')}}"
                 class="w-full text-base border-1 border-gray-200 bg-gray-100 p-0 rounded-xl p-4" rows="3"
                 wire:model="prompt"></textarea>
         </div>
         <div class="flex flex-col gap-2 w-full">
             <div class="text-xl font-bold">{{ __('social_media.select_style') }}:</div>
-            <x-custom.dropdown class="w-full" direction="up">
+            <x-custom.dropdown class="w-full z-100" direction="down">
                 <x-slot name="trigger">
                     <button class="bg-gray-100 w-full p-4 text-gray-700 rounded-lg">
                         <div class="flex items-center gap-4">
@@ -161,7 +129,7 @@
             @endif
             @if (!$processing)
             <span>
-                {{ __('images.generate_variants') }}
+                {{ __('images.generate') }}
             </span>
             @endif
         </button>
