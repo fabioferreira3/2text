@@ -85,14 +85,14 @@ class DocumentRepository
         ]);
     }
 
-    public function createGeneric(array $params): Document
+    public static function createGeneric(array $params): Document
     {
         return Document::create([
             ...$params,
             'meta' => [
                 ...$params['meta'] ?? [],
                 'context' => $params['context'] ?? null,
-                'source' => $params['source'],
+                'source' => $params['source'] ?? null,
                 'user_id' => Auth::check() ? Auth::id() : null,
             ]
         ]);

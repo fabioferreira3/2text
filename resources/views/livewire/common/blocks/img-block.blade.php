@@ -10,7 +10,7 @@
                     <x-icon solid name="refresh" class="w-5 h-5" />
                     <div
                         class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                        {{ __('common.regenerate_image') }}
+                        {{ __('images.regenerate_image') }}
                     </div>
                 </button>
                 <button wire:click="downloadImage"
@@ -18,7 +18,7 @@
                     <x-icon solid name="arrow-circle-down" class="w-5 h-5" />
                     <div
                         class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                        {{ __('common.download_image') }}
+                        {{ __('images.download') }}
                     </div>
                 </button>
                 <button wire:click="previewImage"
@@ -26,7 +26,7 @@
                     <x-icon name="eye" class="w-5 h-5" />
                     <div
                         class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                        Preview
+                        {{ __('images.preview') }}
                     </div>
                 </button>
             </div>

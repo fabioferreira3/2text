@@ -50,8 +50,7 @@ class NewParaphraser extends Component
 
     public function start()
     {
-        $repo = new DocumentRepository();
-        $document = $repo->createGeneric([
+        $document = DocumentRepository::createGeneric([
             'type' => DocumentType::PARAPHRASED_TEXT->value,
             'source' => $this->source,
             'language' => $this->language,

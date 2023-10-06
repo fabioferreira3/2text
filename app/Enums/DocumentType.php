@@ -10,6 +10,7 @@ enum DocumentType: string
     case SOCIAL_MEDIA_POST = 'social_media_post';
     case TEXT_TO_SPEECH = 'text_to_speech';
     case TEXT_TRANSCRIPTION = 'text_transcription';
+    case GENERIC = 'generic';
 
     public function label()
     {
@@ -19,7 +20,8 @@ enum DocumentType: string
             self::TEXT_TRANSCRIPTION => __('common.text_transcription'),
             self::TEXT_TO_SPEECH => __('common.text_to_speech'),
             self::SOCIAL_MEDIA_GROUP => __('common.social_media'),
-            self::SOCIAL_MEDIA_POST => __('common.social_media_post')
+            self::SOCIAL_MEDIA_POST => __('common.social_media_post'),
+            self::GENERIC => 'generic'
         };
     }
 
