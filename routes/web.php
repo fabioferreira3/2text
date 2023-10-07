@@ -14,6 +14,8 @@ use App\Http\Livewire\TextToSpeech\TextToAudio;
 use App\Http\Livewire\TextTranscription\NewTranscription;
 use App\Http\Livewire\TextTranscription\TextTranscription;
 use App\Http\Livewire\Trash;
+use App\Models\Voice;
+use Georgehadjisavva\ElevenLabsClient\ElevenLabsClient;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -63,6 +65,12 @@ Route::middleware([
     Route::get('/documents/text-to-speech/{document}', TextToAudio::class)->name('text-to-speech-view');
 
     Route::get('/documents/{document}', [DocumentViewController::class, 'index'])->name('document-view');
+
+
+    Route::get('/elevenlabs', function () {
+        $elevenLabsClient = app()->make(ElevenLabsClient::class);
+        return collect($elevenLabsClient->voices()->getAll());
+    });
 });
 
 /* Google Auth */
