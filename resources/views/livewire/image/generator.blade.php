@@ -49,7 +49,7 @@
                     <div
                         class="hidden group-hover:flex absolute top-0 left-0 h-full w-full items-center justify-center">
                         <div class="relative z-20 grid grid-cols-2 xl:flex xl:flex-row text-lg items-center gap-2">
-                            <button wire:click="downloadImage('{{ $mediaFile['id'] }}')"
+                            <button wire:click="generateVariants('{{ $mediaFile['id'] }}')"
                                 class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                 <x-icon name="switch-horizontal" class="w-5 h-5" />
                                 <div

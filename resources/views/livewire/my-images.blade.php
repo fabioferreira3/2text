@@ -1,5 +1,4 @@
-<div>
-
+<div class="p-4">
     <div class="flex items-center justify-between mb-6">
         <button wire:click="$toggle('showNewGenerator')"
             class="flex items-center gap-2 bg-secondary px-4 py-2 rounded-lg text-white font-bold text-lg">
@@ -10,7 +9,7 @@
     </div>
 
     @if(count($images))
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         @foreach($images as $image)
         <div class="h-[300px] relative group">
             <img wire:click="selectImage('{{$image->id}}')" src={{$image->file_url}} class="rounded-lg w-full

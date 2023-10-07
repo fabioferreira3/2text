@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Image;
 
 use App\Enums\DocumentTaskEnum;
 use App\Enums\DocumentType;
+use App\Helpers\MediaHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\MediaFile;
 use App\Repositories\DocumentRepository;
@@ -43,7 +44,7 @@ class Generator extends Component
         $this->selectedStylePreset = $this->imgStyle ? $this->selectStylePreset($this->imgStyle) : null;
         $this->processing = false;
         $this->processId = '';
-        $this->previewImgs = MediaFile::latest()->take(4)->get();
+        $this->previewImgs = [];
         $this->samples = 4;
     }
 
@@ -73,6 +74,9 @@ class Generator extends Component
             'type' => DocumentType::GENERIC,
             'language' => 'en'
         ]);
+
+        $imageSize = MediaHelper::getPossibleImageSize($document);
+
         DocumentRepository::createTask(
             $document->id,
             DocumentTaskEnum::GENERATE_IMAGE,
@@ -83,7 +87,9 @@ class Generator extends Component
                     'prompt' => $this->prompt,
                     'style_preset' => $this->imgStyle,
                     'steps' => 21,
-                    'samples' => $this->samples
+                    'samples' => $this->samples,
+                    'height' => $imageSize['height'],
+                    'width' => $imageSize['width']
                 ]
             ]
         );
@@ -107,6 +113,12 @@ class Generator extends Component
     {
         $mediaFile = MediaFile::findOrFail($mediaFileId);
         return Storage::download($mediaFile->file_path);
+    }
+
+    public function generateVariants($mediaFileId)
+    {
+        $this->emitUp('selectImage', $mediaFileId);
+        $this->emitUp('toggleVariantsGenerator');
     }
 
     public function previewImage($mediaFileId)

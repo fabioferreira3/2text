@@ -40,5 +40,7 @@ class MediaHelper
         if ($document->type === DocumentType::BLOG_POST) {
             return ['height' => 640, 'width' => 1536];
         }
+
+        return ['height' => 1024, 'width' => 1024];
     }
 }

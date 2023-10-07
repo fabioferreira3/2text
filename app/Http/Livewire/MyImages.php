@@ -30,6 +30,7 @@ class MyImages extends Component
         return [
             'toggleVariantsGenerator',
             'toggleNewGenerator',
+            'selectImage',
             'refreshImages'
         ];
     }
@@ -37,11 +38,13 @@ class MyImages extends Component
     public function toggleVariantsGenerator()
     {
         $this->showVariantsGenerator = !$this->showVariantsGenerator;
+        $this->showNewGenerator = false;
     }
 
     public function toggleNewGenerator()
     {
         $this->showNewGenerator = !$this->showNewGenerator;
+        $this->showVariantsGenerator = false;
     }
 
     public function downloadImage($mediaFileId)
