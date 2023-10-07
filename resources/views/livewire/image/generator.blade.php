@@ -51,6 +51,14 @@
                         <div class="relative z-20 grid grid-cols-2 xl:flex xl:flex-row text-lg items-center gap-2">
                             <button wire:click="downloadImage('{{ $mediaFile['id'] }}')"
                                 class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
+                                <x-icon name="switch-horizontal" class="w-5 h-5" />
+                                <div
+                                    class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                    {{ __('images.generate_variants') }}
+                                </div>
+                            </button>
+                            <button wire:click="downloadImage('{{ $mediaFile['id'] }}')"
+                                class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                 <x-icon name="download" class="w-5 h-5" />
                                 <div
                                     class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">

@@ -32,7 +32,7 @@
                                 <x-icon solid name="thumb-up" class="w-6 h-6" />
                                 <div
                                     class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                                    Use as primary
+                                    {{__('images.use_primary')}}
                                 </div>
                             </button>
 
@@ -42,7 +42,7 @@
                                 <x-icon name="switch-horizontal" class="w-6 h-6" />
                                 <div
                                     class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                                    Generate variants
+                                    {{__('images.generate_variants')}}
                                 </div>
                             </button>
                             <button wire:click="downloadImage('{{ $previewImgs['original']['id'] }}')"
@@ -50,7 +50,7 @@
                                 <x-icon name="download" class="w-6 h-6" />
                                 <div
                                     class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                                    Download
+                                    {{__('images.download')}}
                                 </div>
                             </button>
                             <button wire:click="previewImage('{{ $previewImgs['original']['id'] }}')"
@@ -58,7 +58,7 @@
                                 <x-icon name="eye" class="w-6 h-6" />
                                 <div
                                     class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                                    Preview
+                                    {{__('images.preview')}}
                                 </div>
                             </button>
                         </div>
@@ -89,7 +89,7 @@
                                     <x-icon solid name="thumb-up" class="w-5 h-5" />
                                     <div
                                         class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                                        Use as primary
+                                        {{__('images.use_primary')}}
                                     </div>
                                 </button>
                                 <button @if ($processing) disabled @endif
@@ -98,7 +98,7 @@
                                     <x-icon name="switch-horizontal" class="w-5 h-5" />
                                     <div
                                         class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                                        Generate variants
+                                        {{__('images.generate_variants')}}
                                     </div>
                                 </button>
                                 <button wire:click="downloadImage('{{ $mediaFile['id'] }}')"
@@ -106,7 +106,7 @@
                                     <x-icon name="download" class="w-5 h-5" />
                                     <div
                                         class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                                        Download
+                                        {{__('images.download')}}
                                     </div>
                                 </button>
                                 <button wire:click="previewImage('{{ $mediaFile['id'] }}')"
@@ -114,7 +114,7 @@
                                     <x-icon name="eye" class="w-5 h-5" />
                                     <div
                                         class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                                        Preview
+                                        {{__('images.preview')}}
                                     </div>
                                 </button>
                             </div>
