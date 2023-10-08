@@ -34,9 +34,16 @@
             <div class="h-48 md:h-full overflow-auto">
                 @foreach($voices as $key => $voice)
                 <div class="flex items-center justify-between px-4 py-2 border border-t-0 border-x-0 border-b">
-                    <div class="flex items-center gap-2">
-                        <input value={{$voice['value']}} wire:model="selectedVoice" type="radio" name="voice" class="cursor-pointer border-zinc-500 checked:bg-secondary checked:hover:bg-secondary checked:active:bg-secondary checked:focus:bg-secondary focus:bg-secondary focus:outline-none focus:ring-1 focus:ring-secondary" />
-                        <label class="text-zinc-500">{{$voice['label']}}</label>
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-2">
+                            <input value={{$voice['value']}} wire:model="selectedVoice" type="radio" name="voice" class="cursor-pointer border-zinc-500 checked:bg-secondary checked:hover:bg-secondary checked:active:bg-secondary checked:focus:bg-secondary focus:bg-secondary focus:outline-none focus:ring-1 focus:ring-secondary" />
+                            <label class="text-zinc-500">{{$voice['label']}}</label>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="rounded-full @if($voice['meta']['gender'] === 'male') bg-blue-400 @endif @if($voice['meta']['gender'] === 'female') bg-secondary @endif px-3 text-white text-xs">{{$voice['meta']['gender']}}</div>
+                            <div class="rounded-full px-3 bg-gray-500 text-white text-xs">{{$voice['meta']['age']}}</div>
+                            <div class="rounded-full px-3 bg-gray-500 text-white text-xs">{{$voice['meta']['description']}}</div>
+                        </div>
                     </div>
                     <div wire:click="playAudio('{{$voice['id']}}')">
                         <x-icon solid name="play" class="cursor-pointer w-5 h-5 text-zinc-500" />

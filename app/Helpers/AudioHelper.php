@@ -17,7 +17,12 @@ class AudioHelper
                 'id' => $voice->id,
                 'value' => $voice->name,
                 'label' => $voice->name,
-                'url' => $voice->preview_url
+                'url' => $voice->preview_url,
+                'meta' => [
+                    'age' => $voice->meta['age'] ?? null,
+                    'gender' => $voice->meta['gender'] ?? null,
+                    'description' => $voice->meta['description'] ?? null,
+                ]
             ];
         });
     }
