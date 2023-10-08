@@ -57,7 +57,7 @@ class TextToAudio extends Component
         $this->inputText = $this->document ? $this->document->content : "";
         $this->currentAudioFile = $this->document ? ($this->document->meta['audio_file'] ?? null) : null;
         $this->currentAudioUrl = $this->currentAudioFile ? AudioHelper::getAudioUrl($this->currentAudioFile) : null;
-        $this->voices = AudioHelper::getVoicesByLanguage($this->document ? $this->document->language : $this->language);
+        $this->voices = AudioHelper::getVoices();
     }
 
     public function finish(array $params)

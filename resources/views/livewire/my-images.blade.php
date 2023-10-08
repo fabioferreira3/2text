@@ -14,41 +14,49 @@
         <div class="h-[300px] relative group">
             <img wire:click="selectImage('{{$image->id}}')" src={{$image->file_url}} class="rounded-lg w-full
             h-full object-cover" loading="lazy"/>
-            <div class="hidden group-hover:flex absolute top-0 left-0 h-full w-full items-center justify-center">
-                <div class="z-20 flex gap-2">
-                    <button wire:click="generateVariants('{{$image->id}}')"
-                        class="relative group/button transition duration-200 text-white hover:bg-secondary border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
-                        <x-icon solid name="refresh" class="w-5 h-5" />
-                        <div
-                            class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                            {{ __('images.generate_variants') }}
-                        </div>
-                    </button>
-                    <button wire:click="downloadImage('{{$image->id}}')"
-                        class="relative group/button transition duration-200 text-white hover:bg-secondary border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
-                        <x-icon solid name="arrow-circle-down" class="w-5 h-5" />
-                        <div
-                            class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                            {{ __('images.download') }}
-                        </div>
-                    </button>
-                    <button wire:click="previewImage('{{$image->id}}')"
-                        class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
-                        <x-icon name="eye" class="w-5 h-5" />
-                        <div
-                            class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                            {{ __('images.preview') }}
-                        </div>
-                    </button>
-                    <button wire:click="deleteImage('{{$image->id}}')"
-                        class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
-                        <x-icon name="trash" class="w-5 h-5" />
-                        <div
-                            class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
-                            {{ __('images.delete') }}
-                        </div>
-                    </button>
+            <div
+                class="hidden group-hover:flex absolute top-0 left-0 h-full w-full flex-col items-center justify-center gap-12">
+                <div class="flex items-center justify-center">
+                    <div class="z-20 flex gap-2">
+                        <button wire:click="generateVariants('{{$image->id}}')"
+                            class="relative group/button transition duration-200 text-white hover:bg-secondary border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
+                            <x-icon solid name="refresh" class="w-5 h-5" />
+                            <div
+                                class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                {{ __('images.generate_variants') }}
+                            </div>
+                        </button>
+                        <button wire:click="downloadImage('{{$image->id}}')"
+                            class="relative group/button transition duration-200 text-white hover:bg-secondary border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
+                            <x-icon solid name="arrow-circle-down" class="w-5 h-5" />
+                            <div
+                                class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                {{ __('images.download') }}
+                            </div>
+                        </button>
+                        <button wire:click="previewImage('{{$image->id}}')"
+                            class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
+                            <x-icon name="eye" class="w-5 h-5" />
+                            <div
+                                class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                {{ __('images.preview') }}
+                            </div>
+                        </button>
+                        <button wire:click="deleteImage('{{$image->id}}')"
+                            class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
+                            <x-icon name="trash" class="w-5 h-5" />
+                            <div
+                                class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                                {{ __('images.delete') }}
+                            </div>
+                        </button>
+                    </div>
                 </div>
+                @if (isset($image->meta['prompt']))
+                <div class="z-50 max-h-28 overflow-auto px-6">
+                    <div class="text-white">"{{$image->meta['prompt']}}"</div>
+                </div>
+                @endif
             </div>
             <div
                 class="group-hover:opacity-60 absolute flex items-center justify-center inset-0 bg-black rounded-t-xl opacity-0 transition-opacity duration-300 ease-in-out">

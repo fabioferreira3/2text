@@ -235,7 +235,8 @@ class GenRepository
                 'process_id' => $params['process_id'] ?? null,
                 'style_preset' => $params['style_preset'] ?? null,
                 'model' => StabilityAIEngine::SD_XL_V_1->value,
-                'steps' => $params['steps'] ?? 0
+                'steps' => $params['steps'] ?? 0,
+                'prompt' => $params['prompt'] ?? null
             ]
         ]);
         $repo->addHistory(

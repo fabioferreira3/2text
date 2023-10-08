@@ -17,7 +17,7 @@
     </div>
     <div class="flex flex-col lg:grid-cols-2 items-start gap-8 mt-4">
         @if($processing)
-        <div>
+        <div class="w-full">
             <div class="text-2xl font-bold mb-8">{{__('images.images')}}</div>
             <div class="grid grid-cols-4 gap-4">
                 <div class="bg-black opacity-60 rounded-lg h-48 w-full flex items-center justify-center">

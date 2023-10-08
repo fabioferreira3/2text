@@ -68,8 +68,24 @@ Route::middleware([
 
 
     Route::get('/elevenlabs', function () {
+        Voice::truncate();
         $elevenLabsClient = app()->make(ElevenLabsClient::class);
-        return collect($elevenLabsClient->voices()->getAll());
+        $voices = collect($elevenLabsClient->voices()->getAll());
+        $voices->each(function ($voice) {
+            $model = null;
+            if (count($voice['high_quality_base_model_ids'])) {
+                $model = $voice['high_quality_base_model_ids'][0];
+            }
+            Voice::create([
+                'external_id' => $voice['voice_id'],
+                'name' => $voice['name'],
+                'preview_url' => $voice['preview_url'],
+                'model' => $model,
+                'provider' => 'elevenlabs',
+                'meta' => $voice['labels']
+            ]);
+        });
+        return $voices;
     });
 });
 
