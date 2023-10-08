@@ -2,14 +2,15 @@
 
 namespace App\Http\Livewire\TextToSpeech;
 
-use App\Enums\Language;
-use App\Enums\SourceProvider;
+
 use App\Helpers\AudioHelper;
 use App\Models\Document;
+use App\Models\MediaFile;
 use App\Repositories\DocumentRepository;
 use App\Repositories\GenRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class TextToAudio extends Component
@@ -20,8 +21,7 @@ class TextToAudio extends Component
     public $voices;
     public $selectedVoice;
     public $selectedVoiceObj;
-    public $language = null;
-    public $isProcessing;
+    public bool $isProcessing;
     public $isPlaying;
     public $currentAudioFile;
     public $currentAudioUrl;
@@ -29,19 +29,19 @@ class TextToAudio extends Component
 
     protected $rules = [
         'inputText' => 'required|string',
-        'language' => 'required',
-        'selectedVoice' => 'required|string'
+        'selectedVoice' => 'required|uuid'
     ];
 
     protected $messages = [
-        'selectedVoice.required' => 'You need to select a voice'
+        'selectedVoice.required' => 'You need to select a voice',
+        'inputText' => 'You need to provide the text you want to convert into audio'
     ];
 
     public function getListeners()
     {
         $userId = Auth::user()->id;
         return [
-            "echo-private:User.$userId,.AudioGenerated" => 'finish',
+            "echo-private:User.$userId,.AudioGenerated" => 'onProcessFinished',
             'stop-audio' => 'stopAudio',
         ];
     }
@@ -53,29 +53,19 @@ class TextToAudio extends Component
         $this->selectedVoice = null;
         $this->processId = '';
         $this->document = $document ? Document::findOrFail($document) : null;
-        $this->language = $this->document ? $this->document->language : Language::ENGLISH;
         $this->inputText = $this->document ? $this->document->content : "";
-        $this->currentAudioFile = $this->document ? ($this->document->meta['audio_file'] ?? null) : null;
-        $this->currentAudioUrl = $this->currentAudioFile ? AudioHelper::getAudioUrl($this->currentAudioFile) : null;
+        $this->currentAudioFile = null;
+        $this->currentAudioUrl = null;
         $this->voices = AudioHelper::getVoices();
-    }
-
-    public function finish(array $params)
-    {
-        if ($this->document && $params['document_id'] === $this->document->id) {
-            $this->isProcessing = false;
-            $this->currentAudioFile = $params['audio_file'];
-            $this->currentAudioUrl = AudioHelper::getAudioUrl($this->currentAudioFile);
-        }
     }
 
     public function processAudio($id)
     {
         if ($this->isPlaying) {
-            return $this->stopAudio();
+            $this->stopAudio();
+        } else {
+            $this->playAudio($id);
         }
-
-        $this->playAudio($id);
     }
 
     public function playAudio($id)
@@ -94,36 +84,39 @@ class TextToAudio extends Component
 
     public function downloadAudio()
     {
-        return Storage::download($this->currentAudioFile);
-    }
-
-    public function changeLanguage()
-    {
-        $this->voices = AudioHelper::getVoicesByLanguage(Language::from($this->language));
+        return Storage::download($this->currentAudioFile->file_path);
     }
 
     public function generate()
     {
         $this->validate();
         $this->isProcessing = true;
-        $voice = $this->voices->where('value', $this->selectedVoice)->first();
-        if (!$this->document) {
-            $repo = new DocumentRepository();
-            $this->document = $repo->createTextToSpeech([
-                'text' => $this->inputText,
-                'voice' => $voice['value'],
-                'language' => $this->language
-            ]);
-        } else {
-            $this->document->update(['content' => $this->inputText]);
-        }
-        $this->document->update(['language' => $this->language]);
-
-        GenRepository::textToSpeech($this->document, [
-            'voice' => $voice['value'],
-            'iso_language' => $voice['iso'],
-            'text' => $this->inputText
+        $this->processId = Str::uuid();
+        $document = DocumentRepository::createTextToSpeech([
+            'input_text' => $this->inputText,
+            'voice_id' => $this->selectedVoice,
         ]);
+
+        GenRepository::textToSpeech($document, [
+            'voice_id' => $this->selectedVoice,
+            'process_id' => $this->processId,
+            'input_text' => $this->inputText
+        ]);
+    }
+
+    public function onProcessFinished(array $params)
+    {
+        if ($params['process_id'] === $this->processId) {
+            $mediaFile = MediaFile::findOrFail($params['media_file_id']);
+            $this->isProcessing = false;
+            $this->currentAudioFile = $mediaFile;
+            $this->currentAudioUrl = $mediaFile->getSignedUrl();
+        }
+    }
+
+    public function showHistory()
+    {
+        return redirect()->route('text-to-speech-history');
     }
 
     public function render()

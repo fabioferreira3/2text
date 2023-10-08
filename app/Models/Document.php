@@ -74,6 +74,11 @@ class Document extends Model
         return MediaFile::where('meta->document_id', $this->id)->take($amount)->latest()->get();
     }
 
+    public function getLatestAudios()
+    {
+        return MediaFile::where('meta->document_id', $this->id)->where('type', 'audio')->latest()->get();
+    }
+
     public function getHtmlContentBlocksAsText()
     {
         return $this->contentBlocks->reduce(function ($carry, $block) {
@@ -193,6 +198,11 @@ class Document extends Model
     public function scopeOfMediaPosts($query)
     {
         return $query->where('type', DocumentType::SOCIAL_MEDIA_POST);
+    }
+
+    public function scopeOfTextToSpeech($query)
+    {
+        return $query->where('type', DocumentType::TEXT_TO_SPEECH);
     }
 
     protected static function booted(): void

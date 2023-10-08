@@ -3,11 +3,14 @@
 namespace App\Jobs\TextToSpeech;
 
 use App\Enums\LanguageModels;
+use App\Enums\MediaType;
 use App\Events\AudioGenerated;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
+use App\Models\MediaFile;
+use App\Models\User;
+use App\Models\Voice;
 use App\Repositories\DocumentRepository;
-use Cion\TextToSpeech\Facades\TextToSpeech;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -15,15 +18,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Talendor\ElevenLabsClient\TextToSpeech\TextToSpeech;
 
 class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
     protected Document $document;
-    protected array $meta;
     protected DocumentRepository $repo;
+    protected array $meta;
 
     /**
      * Create a new job instance.
@@ -45,26 +51,40 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $fileName = Str::uuid() . '.mp3';
-            $path = TextToSpeech::disk('s3')
-                ->language($this->meta['iso_language'])
-                ->saveTo($fileName)
-                ->convert($this->meta['text'], [
-                    'voice' => $this->meta['voice'],
-                    'engine' => 'neural'
-                ]);
-            $this->repo->updateMeta('audio_file', $path);
+            $user = User::findOrFail($this->document->meta['user_id']);
+            $voice = Voice::findOrFail($this->meta['voice_id']);
+            $client = app(TextToSpeech::class);
+            $response = $client->generate($this->meta['input_text'], $voice->external_id);
+            $audioContent = $response['response_body'];
+
+            $filePath = 'ai-audio/' . Str::uuid() . '.mp3';
+            Storage::disk('s3')->put($filePath, $audioContent);
+
+            $mediaFile = MediaFile::create([
+                'account_id' => $user->account_id,
+                'file_path' => $filePath,
+                'type' => MediaType::AUDIO,
+                'meta' => [
+                    'document_id' => $this->document->id
+                ]
+            ]);
+
             $this->repo->addHistory([
                 'field' => 'audio_generation',
-                'content' => $fileName,
-                'word_count' => Str::wordCount($this->meta['text']),
-                'char_count' => iconv_strlen($this->meta['text'])
+                'content' => $filePath,
+                'word_count' => Str::wordCount($this->meta['input_text']),
+                'char_count' => iconv_strlen($this->meta['input_text'])
             ], [
-                'model' => LanguageModels::POLLY->value
+                'model' => LanguageModels::ELEVEN_LABS->value
             ]);
+
             AudioGenerated::dispatchIf(
-                $this->document->meta['user_id'] ?? false,
-                $this->document
+                $this->document->meta['user_id'],
+                [
+                    'user_id' => $this->document->meta['user_id'],
+                    'media_file_id' => $mediaFile->id,
+                    'process_id' => $this->meta['process_id']
+                ]
             );
 
             $this->jobSucceded();

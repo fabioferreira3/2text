@@ -10,7 +10,6 @@ use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Talendor\StabilityAI\Enums\StabilityAIEngine;
@@ -210,16 +209,17 @@ class GenRepository
 
     public static function textToSpeech($document, array $params = [])
     {
-        $repo = new DocumentRepository($document);
-        $repo->createTask(DocumentTaskEnum::TEXT_TO_SPEECH, [
-            'order' => 1,
-            'process_id' => $params['process_id'] ?? Str::uuid(),
-            'meta' => [
-                'text' => $params['text'],
-                'voice' => $params['voice'],
-                'iso_language' => $params['iso_language']
+        DocumentRepository::createTask(
+            $document->id,
+            DocumentTaskEnum::TEXT_TO_SPEECH,
+            [
+                'meta' => [
+                    'input_text' => $params['input_text'],
+                    'voice_id' => $params['voice_id'],
+                ],
+                'process_id' => $params['process_id']
             ]
-        ]);
+        );
 
         DispatchDocumentTasks::dispatch($document);
     }

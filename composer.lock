@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dcfd3eccb86b2a42f8b7619ca277da5f",
+    "content-hash": "34d97045b463e25c6e1533cb3258311e",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1425,57 +1425,6 @@
                 }
             ],
             "time": "2022-02-20T15:07:15+00:00"
-        },
-        {
-            "name": "georgehadjisavva/elevenlabs-api-client",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sCuz12/laravel-elevenlabs-client.git",
-                "reference": "f873a33df9224546c511db418f1d68f9523d9dbd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sCuz12/laravel-elevenlabs-client/zipball/f873a33df9224546c511db418f1d68f9523d9dbd",
-                "reference": "f873a33df9224546c511db418f1d68f9523d9dbd",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^7.7",
-                "illuminate/support": "^10.13",
-                "php": "^8.0"
-            },
-            "require-dev": {
-                "pestphp/pest": "^2.6",
-                "vimeo/psalm": "^5.12"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/Providers/ElevenLabsClientServiceProvider.php"
-                ],
-                "psr-4": {
-                    "Georgehadjisavva\\ElevenLabsClient\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "George Hadjisavva",
-                    "email": "georgex8@gmail.com",
-                    "homepage": "https://georgehadjisavva.dev/",
-                    "role": "Author"
-                }
-            ],
-            "description": "Wrapper client for elevenlabs api",
-            "support": {
-                "issues": "https://github.com/sCuz12/laravel-elevenlabs-client/issues",
-                "source": "https://github.com/sCuz12/laravel-elevenlabs-client/tree/1.0.0"
-            },
-            "time": "2023-06-14T10:59:21+00:00"
         },
         {
             "name": "google/apiclient",
@@ -10239,6 +10188,64 @@
                 }
             ],
             "time": "2023-09-12T10:11:35+00:00"
+        },
+        {
+            "name": "talendor/elevenlabs-api",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fabioferreira3/elevenlabs-api.git",
+                "reference": "2428bf40434557f61a53863da7fcdcd607bb0c1a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fabioferreira3/elevenlabs-api/zipball/2428bf40434557f61a53863da7fcdcd607bb0c1a",
+                "reference": "2428bf40434557f61a53863da7fcdcd607bb0c1a",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.7",
+                "illuminate/support": "^10.13",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "pestphp/pest": "^2.6",
+                "vimeo/psalm": "^5.12"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Talendor\\ElevenLabsClient\\Providers\\ElevenLabsClientServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/Providers/ElevenLabsClientServiceProvider.php"
+                ],
+                "psr-4": {
+                    "Talendor\\ElevenLabsClient\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabio Ferreira",
+                    "email": "fabio86ferreira@gmail.com",
+                    "homepage": "https://talendor.io/",
+                    "role": "Author"
+                }
+            ],
+            "description": "Laravel wrapper client for Elevenlabs api",
+            "support": {
+                "issues": "https://github.com/fabioferreira3/elevenlabs-api/issues",
+                "source": "https://github.com/fabioferreira3/elevenlabs-api/tree/v1.0.0"
+            },
+            "time": "2023-10-08T19:11:59+00:00"
         },
         {
             "name": "talendor/laravel-stability-ai",

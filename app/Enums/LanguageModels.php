@@ -15,6 +15,7 @@ enum LanguageModels: string
     case GPT_4_32 = 'gpt-4-32k';
     case GPT_4_32_0314 = 'gpt-4-32k-0314';
     case GPT_4_32_0613 = 'gpt-4-32k-0613';
+    case ELEVEN_LABS = 'elevenlabs';
     case POLLY = 'aws_polly';
     case WHISPER = 'whisper';
 }

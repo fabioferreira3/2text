@@ -69,17 +69,17 @@ class DocumentRepository
         ]);
     }
 
-    public function createTextToSpeech(array $params): Document
+    public static function createTextToSpeech(array $params = []): Document
     {
         return Document::create([
             ...$params,
             'title' => '',
+            'language' => 'en',
             'type' => DocumentType::TEXT_TO_SPEECH->value,
-            'content' => $params['text'],
-            'language' => $params['language'],
+            'content' => $params['input_text'] ?? '',
             'meta' => [
                 'source' => SourceProvider::FREE_TEXT->value,
-                'voice' => $params['voice'],
+                'voice_id' => $params['voice_id'],
                 'user_id' => Auth::check() ? Auth::id() : null,
             ]
         ]);

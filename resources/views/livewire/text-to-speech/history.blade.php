@@ -1,0 +1,22 @@
+<div>
+    @if(count($history))
+    <table>
+        <thead>
+            <th>Date</th>
+            <th>Content</th>
+            <th>Voice</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            @foreach($history as $document)
+            <tr>
+                <td>{{$document['created_at']}}</td>
+                <td>{{$document['content']}}</td>
+                <td>{{$document['voice']->name}}</td>
+                <td><button>Play</button><button>Download</button><button>Delete</button></td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    @endif
+</div>

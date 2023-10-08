@@ -4,7 +4,6 @@ namespace App\Helpers;
 
 use App\Enums\DocumentType;
 use App\Models\Document;
-use App\Models\DocumentContentBlock;
 
 class MediaHelper
 {
