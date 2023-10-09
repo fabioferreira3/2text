@@ -111,6 +111,10 @@ class TextToAudio extends Component
             $this->isProcessing = false;
             $this->currentAudioFile = $mediaFile;
             $this->currentAudioUrl = $mediaFile->getSignedUrl();
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'success',
+                'message' => 'Audio file generated successfully.'
+            ]);
         }
     }
 

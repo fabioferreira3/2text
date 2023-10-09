@@ -12,7 +12,6 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\MultiSelectFilter;
 use WireUi\Traits\Actions;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MyDocumentsTable extends DataTableComponent

@@ -6,14 +6,14 @@ use App\Models\Document;
 use App\Models\MediaFile;
 use App\Models\Voice;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class History extends Component
 {
     public $history;
     public $isPlaying;
-    public $currentAudioFile;
-    public $currentAudioUrl;
+    public $selectedMediaFile;
 
     public function getListeners()
     {
@@ -24,23 +24,35 @@ class History extends Component
 
     public function mount()
     {
-        $this->history = Document::ofTextToSpeech()->get()->map(function ($document) {
+        $this->refresh();
+        $this->isPlaying = false;
+        $this->selectedMediaFile = null;
+    }
+
+    public function refresh()
+    {
+        $this->history = Document::ofTextToSpeech()->latest()->get()->map(function ($document) {
             if (!$document->getLatestAudios()) {
                 return null;
             }
             $mediaFiles = $document->getLatestAudios();
+            $voice = Voice::findOrFail($document->getMeta('voice_id'));
+            $mediaFile = $mediaFiles ? $mediaFiles->first() : null;
             return collect([
-                'created_at' => $document->created_at,
-                'content' => $document->content,
-                'media_file' => $mediaFiles ? $mediaFiles->first() : null,
-                'voice' => $mediaFiles ? Voice::findOrFail($document->getMeta('voice_id')) : null,
+                'created_at' => $document->created_at->format('m/d/Y h:ia'),
+                'content' => Str::limit($document->content, 60, '...'),
+                'media_file' => $mediaFile ? [
+                    'id' => $mediaFile->id,
+                    'url' => $mediaFile->getSignedUrl()
+                ] : null,
+                'voice' => [
+                    'id' => $voice->id,
+                    'name' => $voice->name
+                ],
             ]);
         })->reject(function ($audios) {
             return !$audios['media_file'];
         }) ?? [];
-        $this->isPlaying = false;
-        $this->currentAudioFile = null;
-        $this->currentAudioUrl = null;
     }
 
     public function processAudio($id)
@@ -66,9 +78,31 @@ class History extends Component
         $this->isPlaying = false;
     }
 
-    public function downloadAudio()
+    public function download($mediaFileId)
     {
-        return Storage::download($this->currentAudioFile->file_path);
+        $mediaFile = MediaFile::findOrFail($mediaFileId);
+        return Storage::download($mediaFile->file_path);
+    }
+
+    public function displayDeleteModal($mediaFileId)
+    {
+        $this->selectedMediaFile = MediaFile::findOrFail($mediaFileId);
+    }
+
+    public function delete()
+    {
+        $this->selectedMediaFile->delete();
+        $this->selectedMediaFile = null;
+        $this->refresh();
+        $this->dispatchBrowserEvent('alert', [
+            'type' => 'success',
+            'message' => 'Audio file deleted successfully.'
+        ]);
+    }
+
+    public function abortDeletion()
+    {
+        $this->selectedMediaFile = null;
     }
 
     public function render()

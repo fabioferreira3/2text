@@ -1,7 +1,10 @@
 <?php
 
 return [
+    'audio_history' => 'Text to Audio History',
     'convert_to_audio' => 'Convert to audio',
+    'delete_confirmation_header' => 'Are you sure?',
+    'delete_confirmation' => 'This action is irreversible. Please confirm you want to delete this audio.',
     'download' => 'Download',
     'history' => 'History',
     'input_text' => 'Input text',

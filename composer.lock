@@ -10191,16 +10191,16 @@
         },
         {
             "name": "talendor/elevenlabs-api",
-            "version": "1.0.0",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabioferreira3/elevenlabs-api.git",
-                "reference": "2428bf40434557f61a53863da7fcdcd607bb0c1a"
+                "reference": "950373184e118a4d939b584b5be66282672d4e8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabioferreira3/elevenlabs-api/zipball/2428bf40434557f61a53863da7fcdcd607bb0c1a",
-                "reference": "2428bf40434557f61a53863da7fcdcd607bb0c1a",
+                "url": "https://api.github.com/repos/fabioferreira3/elevenlabs-api/zipball/950373184e118a4d939b584b5be66282672d4e8a",
+                "reference": "950373184e118a4d939b584b5be66282672d4e8a",
                 "shasum": ""
             },
             "require": {
@@ -10243,9 +10243,9 @@
             "description": "Laravel wrapper client for Elevenlabs api",
             "support": {
                 "issues": "https://github.com/fabioferreira3/elevenlabs-api/issues",
-                "source": "https://github.com/fabioferreira3/elevenlabs-api/tree/v1.0.0"
+                "source": "https://github.com/fabioferreira3/elevenlabs-api/tree/v1.0.2"
             },
-            "time": "2023-10-08T19:11:59+00:00"
+            "time": "2023-10-09T00:28:04+00:00"
         },
         {
             "name": "talendor/laravel-stability-ai",

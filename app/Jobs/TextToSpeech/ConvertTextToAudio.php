@@ -18,7 +18,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Talendor\ElevenLabsClient\TextToSpeech\TextToSpeech;
@@ -41,6 +40,7 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
         $this->document = $document->fresh();
         $this->meta = $meta;
         $this->repo = new DocumentRepository($this->document);
+        $this->onQueue('voice_generation');
     }
 
     /**
@@ -54,7 +54,7 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
             $user = User::findOrFail($this->document->meta['user_id']);
             $voice = Voice::findOrFail($this->meta['voice_id']);
             $client = app(TextToSpeech::class);
-            $response = $client->generate($this->meta['input_text'], $voice->external_id);
+            $response = $client->generate($this->meta['input_text'], $voice->external_id, 0, 'eleven_multilingual_v2');
             $audioContent = $response['response_body'];
 
             $filePath = 'ai-audio/' . Str::uuid() . '.mp3';

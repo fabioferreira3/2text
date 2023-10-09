@@ -192,6 +192,15 @@ return [
             'timeout' => 900,
             'nice' => 0,
         ],
+        'supervisor-2' => [
+            'connection' => 'redis',
+            'queue' => ['voice_generation'],
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 128,
+            'timeout' => 900,
+            'nice' => 0,
+        ]
     ],
 
     'environments' => [
@@ -200,6 +209,14 @@ return [
                 'balance' => 'auto',
                 'autoScalingStrategy' => 'time',
                 'maxProcesses' => 10,
+                'balanceMaxShift' => 1,
+                'balanceCooldown' => 3,
+                'tries' => 3,
+            ],
+            'supervisor-2' => [
+                'balance' => 'auto',
+                'autoScalingStrategy' => 'time',
+                'maxProcesses' => 5,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
                 'tries' => 3,
