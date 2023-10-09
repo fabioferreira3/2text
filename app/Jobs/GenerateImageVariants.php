@@ -29,6 +29,7 @@ class GenerateImageVariants implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
+        $this->onQueue('image_generation');
     }
 
     /**

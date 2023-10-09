@@ -29,6 +29,7 @@ class GenerateImage implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->params = $params;
+        $this->onQueue('image_generation');
     }
 
     /**

@@ -180,7 +180,7 @@ return [
     */
 
     'defaults' => [
-        'supervisor-1' => [
+        'default' => [
             'connection' => 'redis',
             'queue' => ['default'],
             'balance' => 'auto',
@@ -192,28 +192,41 @@ return [
             'timeout' => 900,
             'nice' => 0,
         ],
-        'supervisor-2' => [
-            'connection' => 'redis',
-            'queue' => ['voice_generation'],
-            'maxTime' => 0,
-            'maxJobs' => 0,
-            'memory' => 128,
-            'timeout' => 900,
-            'nice' => 0,
-        ]
     ],
 
     'environments' => [
         'production' => [
-            'supervisor-1' => [
+            'default' => [
                 'balance' => 'auto',
                 'autoScalingStrategy' => 'time',
-                'maxProcesses' => 10,
+                'maxProcesses' => 8,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
                 'tries' => 3,
             ],
-            'supervisor-2' => [
+            'image-generation' => [
+                'connection' => 'redis',
+                'queue' => ['image_generation'],
+                'maxTime' => 0,
+                'maxJobs' => 0,
+                'memory' => 128,
+                'timeout' => 900,
+                'nice' => 0,
+                'balance' => 'auto',
+                'autoScalingStrategy' => 'time',
+                'maxProcesses' => 5,
+                'balanceMaxShift' => 1,
+                'balanceCooldown' => 3,
+                'tries' => 3,
+            ],
+            'voice-generation' => [
+                'connection' => 'redis',
+                'queue' => ['voice_generation'],
+                'maxTime' => 0,
+                'maxJobs' => 0,
+                'memory' => 128,
+                'timeout' => 900,
+                'nice' => 0,
                 'balance' => 'auto',
                 'autoScalingStrategy' => 'time',
                 'maxProcesses' => 5,
@@ -224,7 +237,7 @@ return [
         ],
 
         'local' => [
-            'supervisor-1' => [
+            'default' => [
                 'maxProcesses' => 3,
                 'timeout' => 900,
                 'memory' => 512,
