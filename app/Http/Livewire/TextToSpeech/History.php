@@ -40,7 +40,8 @@ class History extends Component
             $mediaFile = $mediaFiles ? $mediaFiles->first() : null;
             return collect([
                 'created_at' => $document->created_at->format('m/d/Y h:ia'),
-                'content' => Str::limit($document->content, 60, '...'),
+                'short_content' => Str::limit($document->content, 60, '...'),
+                'content' => $document->content,
                 'media_file' => $mediaFile ? [
                     'id' => $mediaFile->id,
                     'url' => $mediaFile->getSignedUrl()
