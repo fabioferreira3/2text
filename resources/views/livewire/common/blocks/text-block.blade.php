@@ -8,9 +8,7 @@
         {{ $type === 'h5' ? 'text-base' : ''}}
         {{ $type === 'h6' ? 'text-base' : ''}}
         " name="text" wire:model.debounce.500ms="content" wire:ignore />
-        @if($showBlockOptions)
         @include('livewire.common.blocks.text-block-actions')
-        @endif
         @endif
         @if (in_array($type, ['p', 'text']))
         <div class="relative group/block">
