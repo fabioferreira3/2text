@@ -12,15 +12,13 @@
         @include('livewire.common.blocks.text-block-actions')
         @endif
         @endif
-        @if (in_array($type, ['p']))
-        <div class="relative group">
-            <textarea wire:click="displayBlockOptions"
-                class="focus:bg-blue-100 focus:cursor-text cursor-pointer p-0 text-zinc-700 autoExpandTextarea w-full border-0 text-base"
+        @if (in_array($type, ['p', 'text']))
+        <div class="relative group/block">
+            <textarea
+                class="focus:bg-blue-100 focus:cursor-text cursor-pointer p-0 text-zinc-700 autoExpandTextarea w-full border-0 text-base group-hover/block:bg-red-100 rounded"
                 name="text" wire:model.debounce.500ms="content" wire:ignore></textarea>
             <div class="border border-b border-gray-50"></div>
-            @if($showBlockOptions)
             @include('livewire.common.blocks.text-block-actions')
-            @endif
         </div>
         @endif
         @if($processing)

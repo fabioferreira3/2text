@@ -15,7 +15,7 @@ class Paraphraser extends Component
     public $document;
     protected $repo;
     public $inputText = '';
-    public $outputText = [];
+    public $outputBlocks = [];
     public $selectedSentence;
     public $selectedSentenceIndex;
     public $tone = null;
@@ -37,7 +37,7 @@ class Paraphraser extends Component
         $userId = Auth::user()->id;
         return [
             "echo-private:User.$userId,.TextParaphrased" => 'ready',
-            "echo-private:User.$userId,.ProcessFinished" => 'processFinished',
+            //    "echo-private:User.$userId,.ProcessFinished" => 'processFinished',
             'select',
         ];
     }
@@ -55,41 +55,37 @@ class Paraphraser extends Component
             $this->document->status,
             [
                 DocumentStatus::FINISHED,
-                DocumentStatus::ON_HOLD
+                DocumentStatus::ON_HOLD,
+                DocumentStatus::DRAFT
             ]
         ) && $this->isSaving === false) {
             $this->isSaving = true;
         };
         $this->tone = $document->meta['tone'] ?? null;
-        $this->inputText = $document->meta['original_text'] ?? '';
-        $this->outputText = [];
-        $originalSentences = collect($this->document['meta']['original_sentences'] ?? []);
-        $paraphrasedSentences = collect($this->document['meta']['paraphrased_sentences'] ?? []);
-        $paraphrasedTextArray = $paraphrasedSentences->sortBy('sentence_order')->map(function ($sentence) {
-            return $sentence['text'];
-        });
+        $this->inputText = $document->content ?? '';
+        $this->outputBlocks = $document->contentBlocks()->ofTextType()->get();
+        ///$originalSentences = collect($this->document['meta']['original_sentences'] ?? []);
+        //$paraphrasedSentences = collect($this->document['meta']['paraphrased_sentences'] ?? []);
+        // $paraphrasedTextArray = $paraphrasedSentences->sortBy('sentence_order')->map(function ($sentence) {
+        //     return $sentence['text'];
+        // });
 
-        if ($originalSentences->count() && $paraphrasedTextArray->count()) {
-            foreach ($paraphrasedTextArray as $key => $sentence) {
-                $this->outputText[] = [
-                    'original' => $originalSentences[$key]['text'],
-                    'paraphrased' => $sentence
-                ];
-            }
+        // if ($originalSentences->count() && $paraphrasedTextArray->count()) {
+        //     foreach ($paraphrasedTextArray as $key => $sentence) {
+        //         $this->outputBlocks[] = [
+        //             'original' => $originalSentences[$key]['text'],
+        //             'paraphrased' => $sentence
+        //         ];
+        //     }
+        // }
+    }
+
+    public function ready($params)
+    {
+        if ($params['document_id'] === $this->document->id) {
+            $this->document->refresh();
+            $this->setup($this->document);
         }
-    }
-
-    public function ready()
-    {
-        $this->document->refresh();
-        $this->setup($this->document);
-    }
-
-    public function processFinished(array $params)
-    {
-        $this->isSaving = !($params['process_id'] === $this->processId);
-        $this->processId = '';
-        $this->ready();
     }
 
     public function copy()
@@ -109,32 +105,31 @@ class Paraphraser extends Component
         $this->copiedAll = true;
     }
 
-    public function paraphraseSentence()
-    {
-        $this->isSaving = true;
-        $this->copied = false;
-        $this->processId = GenRepository::paraphraseText($this->document, [
-            'text' => $this->selectedSentence['original'],
-            'sentence_order' => $this->selectedSentenceIndex + 1,
-            'tone' => $this->tone
-        ]);
-    }
+    // public function paraphraseSentence()
+    // {
+    //     $this->isSaving = true;
+    //     $this->copied = false;
+    //     $this->processId = GenRepository::paraphraseText($this->document, [
+    //         'text' => $this->selectedSentence['original'],
+    //         'sentence_order' => $this->selectedSentenceIndex + 1,
+    //         'tone' => $this->tone
+    //     ]);
+    // }
 
-    public function paraphraseAll()
+    public function paraphrase()
     {
         $this->validate();
         $this->isSaving = true;
         $repo = new DocumentRepository($this->document);
-        $this->unselect();
         $repo->updateMeta('tone', $this->tone);
-        $repo->updateMeta('original_text', $this->inputText);
+        $repo->updateMeta('add_content_block', true);
+        $this->document->update(['content' => $this->inputText]);
 
         // Break down inputText into sentences
         $originalSentencesArray = DocumentHelper::breakTextIntoSentences($this->inputText);
-        $repo->updateMeta('original_sentences', $originalSentencesArray);
-        $repo->updateMeta('paraphrased_sentences', $originalSentencesArray);
+        $repo->updateMeta('sentences', $originalSentencesArray);
 
-        $this->processId = GenRepository::paraphraseDocument($this->document->fresh());
+        GenRepository::paraphraseDocument($this->document->fresh());
     }
 
     public function saveDoc()
@@ -146,11 +141,11 @@ class Paraphraser extends Component
 
     public function resetSentence()
     {
-        $this->outputText[$this->selectedSentenceIndex]['paraphrased'] = $this->selectedSentence['original'];
-        $repo = new DocumentRepository($this->document);
-        $repo->updateMeta('paraphrased_sentences', collect($this->outputText)->map(function ($sentence, $idx) {
-            return ['sentence_order' => $idx + 1, 'text' => $sentence['paraphrased']];
-        })->toArray());
+        // $this->outputText[$this->selectedSentenceIndex]['paraphrased'] = $this->selectedSentence['original'];
+        // $repo = new DocumentRepository($this->document);
+        // $repo->updateMeta('paraphrased_sentences', collect($this->outputText)->map(function ($sentence, $idx) {
+        //     return ['sentence_order' => $idx + 1, 'text' => $sentence['paraphrased']];
+        // })->toArray());
     }
 
     public function select($index)

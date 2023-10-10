@@ -153,58 +153,25 @@ class GenRepository
     public static function paraphraseDocument(Document $document)
     {
         $document->refresh();
-        $repo = new DocumentRepository($document);
-        $processId = Str::uuid();
 
-        foreach ($document->meta['original_sentences'] as $sentence) {
-            $repo->createTask(DocumentTaskEnum::PARAPHRASE_TEXT, [
-                'order' => 1,
-                'process_id' => $processId,
-                'meta' => [
-                    'text' => $sentence['text'],
-                    'sentence_order' => $sentence['sentence_order']
+        foreach ($document->meta['sentences'] as $sentence) {
+            DocumentRepository::createTask(
+                $document->id,
+                DocumentTaskEnum::PARAPHRASE_TEXT,
+                [
+                    'order' => 1,
+                    'process_id' => Str::uuid(),
+                    'meta' => [
+                        'text' => $sentence['text'],
+                        'tone' => $document->getMeta('tone'),
+                        'sentence_order' => $sentence['sentence_order'],
+                        'add_content_block' => $document->getMeta('add_content_block')
+                    ]
                 ]
-            ]);
+            );
         }
 
-        $repo->createTask(DocumentTaskEnum::REGISTER_FINISHED_PROCESS, [
-            'order' => 99,
-            'process_id' => $processId,
-            'meta' => [
-                'silently' => true
-            ]
-        ]);
-
         DispatchDocumentTasks::dispatch($document);
-
-        return $processId;
-    }
-
-    public static function paraphraseText(Document $document, array $params)
-    {
-        $processId = $params['process_id'] ?? Str::uuid();
-        $repo = new DocumentRepository($document);
-        $order = $params['order'] ?? 1;
-        $repo->createTask(DocumentTaskEnum::PARAPHRASE_TEXT, [
-            'order' => $params['order'] ?? 1,
-            'process_id' => $processId,
-            'meta' => [
-                'text' => $params['text'],
-                'sentence_order' => $params['sentence_order'],
-                'tone' => $params['tone'] ?? null
-            ]
-        ]);
-        $repo->createTask(DocumentTaskEnum::REGISTER_FINISHED_PROCESS, [
-            'order' => $order + 1,
-            'process_id' => $processId,
-            'meta' => [
-                'silently' => true
-            ]
-        ]);
-
-        DispatchDocumentTasks::dispatch($document);
-
-        return $processId;
     }
 
     public static function textToSpeech($document, array $params = [])

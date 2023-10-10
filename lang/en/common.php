@@ -3,6 +3,7 @@
 return [
     'ask_to' => 'Ask to...',
     'audio' => 'Audio',
+    'back' => 'Back',
     'blog_post' => 'Blog Post',
     'copy' => 'Copy',
     'copied' => 'Copied',

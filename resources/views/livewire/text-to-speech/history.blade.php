@@ -5,16 +5,20 @@
             <thead>
                 <tr>
                     <th>
-                        <div class="bg-gray-100 text-left px-4 py-2 border rounded-lg">Date</div>
+                        <div class="bg-gray-100 text-left px-4 py-2 border rounded-lg">{{__('text-to-speech.date')}}
+                        </div>
                     </th>
                     <th>
-                        <div class="bg-gray-100 text-left px-4 py-2 border rounded-lg">Content</div>
+                        <div class="bg-gray-100 text-left px-4 py-2 border rounded-lg">{{__('text-to-speech.content')}}
+                        </div>
                     </th>
                     <th>
-                        <div class="bg-gray-100 text-left px-4 py-2 border rounded-lg">Voice</div>
+                        <div class="bg-gray-100 text-left px-4 py-2 border rounded-lg">{{__('text-to-speech.voice')}}
+                        </div>
                     </th>
                     <th>
-                        <div class="bg-gray-100 text-left px-4 py-2 border rounded-lg">Actions</div>
+                        <div class="bg-gray-100 text-left px-4 py-2 border rounded-lg">{{__('text-to-speech.actions')}}
+                        </div>
                     </th>
                 </tr>
             </thead>
@@ -66,9 +70,9 @@
         <div class="mt-4 text-lg">{{__('text-to-speech.delete_confirmation')}}</div>
         <div class="flex items-center gap-2 mt-6">
             <button wire:click="delete"
-                class="bg-secondary text-lg px-4 py-2 font-bold rounded-lg text-white">Confirm</button>
+                class="bg-secondary text-lg px-4 py-2 font-bold rounded-lg text-white">{{__('text-to-speech.confirm')}}</button>
             <button wire:click="abortDeletion"
-                class="bg-gray-100 text-lg px-4 py-2 font-bold rounded-lg text-gray-600">Cancel</button>
+                class="bg-gray-100 text-lg px-4 py-2 font-bold rounded-lg text-gray-600">{{__('text-to-speech.cancel')}}</button>
         </div>
     </x-experior::modal>
     @endif

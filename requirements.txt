@@ -1,3 +1,5 @@
 tiktoken
 requests
 beautifulsoup4
+embedchain
+python-dotenv

@@ -7,6 +7,7 @@ return [
     'dashboard' => 'Dashboard',
     'language' => 'Language',
     'my_documents' => 'My Documents',
+    'my_images' => 'My Images',
     'new' => 'New',
     'status' => 'Status',
     'trash' => 'Trash',

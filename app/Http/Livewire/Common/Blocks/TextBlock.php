@@ -19,7 +19,6 @@ class TextBlock extends Component
     public string $customPrompt;
     public bool $faster = true;
     public bool $showCustomPrompt = false;
-    public bool $showBlockOptions = false;
     public bool $processing;
 
     protected $rules = [
@@ -35,7 +34,6 @@ class TextBlock extends Component
         $userId = Auth::user()->id;
         return [
             "echo-private:User.$userId,.ContentBlockUpdated" => 'onProcessFinished',
-            'trackSelectedBlock',
         ];
     }
 
@@ -92,12 +90,6 @@ class TextBlock extends Component
         $this->showCustomPrompt = !$this->showCustomPrompt;
     }
 
-    public function displayBlockOptions()
-    {
-        $this->showBlockOptions = true;
-        $this->emit('trackSelectedBlock', $this->contentBlock->id);
-    }
-
     private function rewrite(string $prompt)
     {
         $this->dispatchBrowserEvent('alert', [
@@ -143,15 +135,7 @@ class TextBlock extends Component
                 'message' => __('alerts.text_regenerated')
             ]);
             $this->processing = false;
-            $this->showBlockOptions = false;
             $this->dispatchBrowserEvent('adjustTextArea');
-        }
-    }
-
-    public function trackSelectedBlock($selectedBlockId)
-    {
-        if ($selectedBlockId !== $this->contentBlock->id) {
-            $this->showBlockOptions = false;
         }
     }
 }

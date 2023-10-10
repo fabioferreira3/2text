@@ -27,7 +27,7 @@ class Document extends Model
         'language' => Language::class,
         'meta' => 'array'
     ];
-    protected $appends = ['normalized_structure', 'content', 'is_finished', 'status', 'source', 'tone', 'style'];
+    protected $appends = ['normalized_structure', 'is_finished', 'status', 'source', 'tone', 'style'];
 
     public function history(): HasMany
     {
@@ -56,7 +56,7 @@ class Document extends Model
 
     public function contentBlocks(): HasMany
     {
-        return $this->hasMany(DocumentContentBlock::class)->orderBy('order', 'ASC');
+        return $this->hasMany(DocumentContentBlock::class);
     }
 
     public function getMeta($attribute)
@@ -112,18 +112,6 @@ class Document extends Model
         }
 
         return null;
-    }
-
-    public function getContentAttribute()
-    {
-        switch ($this->type) {
-            case DocumentType::PARAPHRASED_TEXT:
-                return ($this->meta['paraphrased_sentences'] ?? false) ? collect($this->meta['paraphrased_sentences'])->sortBy('sentence_order')->map(function ($sentence) {
-                    return $sentence['text'];
-                })->implode(' ') : null;
-            default:
-                return $this->attributes['content'];
-        }
     }
 
     public function getIsFinishedAttribute()
