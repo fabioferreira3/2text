@@ -79,6 +79,13 @@ class Document extends Model
         return MediaFile::where('meta->document_id', $this->id)->where('type', 'audio')->latest()->get();
     }
 
+    public function getTextContentBlocksAsText()
+    {
+        return $this->contentBlocks()->ofTextType()->get()->reduce(function ($carry, $block) {
+            return $carry . $block->content;
+        }, '');
+    }
+
     public function getHtmlContentBlocksAsText()
     {
         return $this->contentBlocks->reduce(function ($carry, $block) {

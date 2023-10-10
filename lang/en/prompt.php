@@ -29,8 +29,8 @@ return [
          - Increase the number of paragraphs during the expansion.\n
          - This is the text that must be expanded:\n\n
             :context",
-    'expand' => "Rewrite the following paragraph, doubling the number of words:\n\n :text",
-    'expand_title' => "Rewrite the following title, making it slightly longer:\n\n :text",
+    'expand' => "Rewrite the following paragraph, using a :tone tone, doubling the number of words:\n\n :text",
+    'expand_title' => "Rewrite the following title, with a :tone tone, making it slightly longer:\n\n :text",
     'generic_prompt' => ":prompt\n\n:text\n\n",
     'given_following_text' => "Given the following text:\n\n:text\n\n",
     'given_following_context' => "And given the following context:\n\n:context\n\n\n",
@@ -38,9 +38,9 @@ return [
     'max_words' => "- The text must have a maximum of :max words\n",
     'more_instructions' => "- Follow these others instructions for the creation of the post:\n\n\n :instructions\n\n\n",
     'meta_description_context_instructions' => "- The meta description must be based on the following context:\n\n\n :context\n\n\n",
-    'paraphrase_text' => 'Paraphrase the following text using a :tone tone, maintaining in its original language:\n\n\n:text',
-    'shorten' => "Rewrite it, making it shorter:\n\n :text",
-    'shorten_title' => "Rewrite the following title, making it slighly shorter:\n\n :text",
+    'paraphrase_text' => 'Paraphrase the following text, while using a :tone tone, keeping the same number of words and keeping its original language. Just provide the result, without making any additional comments. This is the text:\n\n\n:text',
+    'shorten' => "Make the following text shorter, while using a :tone tone:\n\n :text",
+    'shorten_title' => "Make the following title shorter, while using a :tone tone:\n\n :text",
     'simplify_text' => "Simplify the following text:\n\n:text",
     'summarize_text' => "Summarize the following text:\n\n :text",
     'tone_instructions' => "- Use a :tone tone.\n",

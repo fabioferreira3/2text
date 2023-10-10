@@ -17,6 +17,7 @@ class TextBlock extends Component
     public string $content;
     public string $type;
     public string $customPrompt;
+    public string $tone = 'default';
     public bool $faster = true;
     public bool $showCustomPrompt = false;
     public bool $processing;
@@ -34,12 +35,14 @@ class TextBlock extends Component
         $userId = Auth::user()->id;
         return [
             "echo-private:User.$userId,.ContentBlockUpdated" => 'onProcessFinished',
+            "setTone"
         ];
     }
 
     public function mount(DocumentContentBlock $contentBlock)
     {
         $this->contentBlock = $contentBlock;
+        $this->tone = $this->contentBlock->document->getMeta('tone') ?? 'default';
         $this->content = $contentBlock->content;
         $this->type = $contentBlock->type;
     }
@@ -47,18 +50,23 @@ class TextBlock extends Component
     public function expand()
     {
         if (in_array($this->type, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])) {
-            $this->rewrite(__('prompt.expand_title'));
+            $this->rewrite(__('prompt.expand_title', ['tone' => $this->tone]));
         } else {
-            $this->rewrite(__('prompt.expand'));
+            $this->rewrite(__('prompt.expand', ['tone' => $this->tone]));
         }
+    }
+
+    public function paraphrase()
+    {
+        $this->rewrite(__('prompt.paraphrase_text', ['tone' => $this->tone]));
     }
 
     public function shorten()
     {
         if (in_array($this->type, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])) {
-            $this->rewrite(__('prompt.shorten_title'));
+            $this->rewrite(__('prompt.shorten_title', ['tone' => $this->tone]));
         } else {
-            $this->rewrite(__('prompt.shorten'));
+            $this->rewrite(__('prompt.shorten', ['tone' => $this->tone]));
         }
     }
 
@@ -114,15 +122,14 @@ class TextBlock extends Component
         DispatchDocumentTasks::dispatch($this->contentBlock->document);
     }
 
-
-    public function render()
-    {
-        return view('livewire.common.blocks.text-block');
-    }
-
     public function updatedContent()
     {
         $this->contentBlock->update(['content' => $this->content]);
+    }
+
+    public function setTone($newTone)
+    {
+        $this->tone = $newTone;
     }
 
     public function onProcessFinished($params)
@@ -137,5 +144,10 @@ class TextBlock extends Component
             $this->processing = false;
             $this->dispatchBrowserEvent('adjustTextArea');
         }
+    }
+
+    public function render()
+    {
+        return view('livewire.common.blocks.text-block');
     }
 }

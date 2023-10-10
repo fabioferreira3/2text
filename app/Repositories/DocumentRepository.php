@@ -177,4 +177,9 @@ class DocumentRepository
         $contentBlock = self::getContentBlock($documentContentBlockId);
         $contentBlock->update($params);
     }
+
+    public static function clearContentBlocks(Document $document)
+    {
+        return $document->contentBlocks()->delete();
+    }
 }
