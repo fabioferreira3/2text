@@ -30,18 +30,19 @@ class Paraphraser extends Component
         $userId = Auth::user()->id;
         return [
             "echo-private:User.$userId,.TextParaphrased" => 'ready',
+            'blockDeleted'
         ];
     }
 
     public function mount(Document $document)
     {
         $this->processId;
-        $this->setup($document);
+        $this->document = $document;
+        $this->setup();
     }
 
-    public function setup($document)
+    public function setup()
     {
-        $this->document = $document;
         if ($this->document->status === DocumentStatus::FINISHED) {
             if ($this->isSaving === true) {
                 $this->dispatchBrowserEvent('alert', [
@@ -54,9 +55,9 @@ class Paraphraser extends Component
         } else {
             $this->isSaving = true;
         };
-        $this->tone = $document->getMeta('tone') ?? 'default';
-        $this->inputText = $document->content ?? '';
-        $this->outputBlocks = $document->contentBlocks()->ofTextType()->get();
+        $this->tone = $this->document->getMeta('tone') ?? 'default';
+        $this->inputText = $this->document->content ?? '';
+        $this->outputBlocks = $this->document->contentBlocks()->ofTextType()->get();
     }
 
     public function ready($params)
@@ -65,6 +66,11 @@ class Paraphraser extends Component
             $this->document->refresh();
             $this->setup($this->document);
         }
+    }
+
+    public function blockDeleted()
+    {
+        $this->setup();
     }
 
     public function copy()

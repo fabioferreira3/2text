@@ -47,6 +47,48 @@ class DocumentContentBlock extends Model
         return $this->content;
     }
 
+    public function hasPastVersions()
+    {
+        return $this->versions()->count() ? $this->versions()->where('version', '<', $this->versions()
+            ->active()->first()->version)->count() > 0 : false;
+    }
+
+    public function hasFutureVersions()
+    {
+        return $this->versions()->count() ? $this->versions()->where('version', '>', $this->versions()
+            ->active()->first()->version)->count() > 0 : false;
+    }
+
+    public function rollbackVersion()
+    {
+        if (!$this->hasPastVersions()) {
+            return false;
+        }
+
+        $currentVersion = $this->versions()->active()->first();
+        $previousVersion = $this->versions()->where('version', '<', $currentVersion->version)
+            ->orderBy('version', 'DESC')->first();
+        $this->content = $previousVersion->content;
+        $this->saveQuietly();
+        $previousVersion->update(['active' => true]);
+        $currentVersion->update(['active' => false]);
+    }
+
+    public function fastForwardVersion()
+    {
+        if (!$this->hasFutureVersions()) {
+            return false;
+        }
+
+        $currentVersion = $this->versions()->active()->first();
+        $nextVersion = $this->versions()->where('version', '>', $currentVersion->version)
+            ->orderBy('version', 'ASC')->first();
+        $this->content = $nextVersion->content;
+        $this->saveQuietly();
+        $nextVersion->update(['active' => true]);
+        $currentVersion->update(['active' => false]);
+    }
+
     public function scopeNotOfImageType($query)
     {
         return $query->whereNotIn('type', ['image', 'media_file_image']);
@@ -73,10 +115,12 @@ class DocumentContentBlock extends Model
         });
         static::updated(function ($contentBlock) {
             if ($contentBlock->wasChanged('content')) {
-                $latest = $contentBlock->versions->first()->version;
+                $latest = $contentBlock->versions()->active()->first();
+                $latest->update(['active' => false]);
                 $contentBlock->versions()->create([
                     'content' => $contentBlock->content,
-                    'version' => $latest + 1
+                    'version' => $latest->version + 1,
+                    'active' => true
                 ]);
             }
         });

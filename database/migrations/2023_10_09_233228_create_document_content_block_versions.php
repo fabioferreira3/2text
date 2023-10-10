@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignUuid('document_content_block_id')->constrained('document_content_blocks')->cascadeOnDelete();
             $table->text('content')->nullable();
             $table->integer('version')->default(1);
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

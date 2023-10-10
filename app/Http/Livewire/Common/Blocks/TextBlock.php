@@ -21,6 +21,8 @@ class TextBlock extends Component
     public bool $faster = true;
     public bool $showCustomPrompt = false;
     public bool $processing;
+    public $hasPastVersions;
+    public $hasFutureVersions;
 
     protected $rules = [
         'customPrompt' => 'required|string'
@@ -42,9 +44,16 @@ class TextBlock extends Component
     public function mount(DocumentContentBlock $contentBlock)
     {
         $this->contentBlock = $contentBlock;
+        $this->setup();
+    }
+
+    public function setup()
+    {
+        $this->hasPastVersions = $this->contentBlock->hasPastVersions();
+        $this->hasFutureVersions = $this->contentBlock->hasFutureVersions();
         $this->tone = $this->contentBlock->document->getMeta('tone') ?? 'default';
-        $this->content = $contentBlock->content;
-        $this->type = $contentBlock->type;
+        $this->content = $this->contentBlock->content;
+        $this->type = $this->contentBlock->type;
     }
 
     public function expand()
@@ -70,6 +79,20 @@ class TextBlock extends Component
         }
     }
 
+    public function undo()
+    {
+        $this->contentBlock->rollbackVersion();
+        $this->contentBlock->refresh();
+        $this->setup();
+    }
+
+    public function redo()
+    {
+        $this->contentBlock->fastForwardVersion();
+        $this->contentBlock->refresh();
+        $this->setup();
+    }
+
     public function copy()
     {
         $this->emit('addToClipboard', $this->content);
@@ -82,7 +105,11 @@ class TextBlock extends Component
     public function delete()
     {
         $this->contentBlock->delete();
-        $this->dispatchBrowserEvent('refresh-page');
+        $this->emitUp('blockDeleted');
+        $this->dispatchBrowserEvent('alert', [
+            'type' => 'success',
+            'message' => __('alerts.text_block_removed')
+        ]);
     }
 
     public function runCustomPrompt()

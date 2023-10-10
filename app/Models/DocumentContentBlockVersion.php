@@ -19,13 +19,8 @@ class DocumentContentBlockVersion extends Model
         return $this->belongsTo(DocumentContentBlock::class);
     }
 
-    /**
-     * The "booted" method of the model.
-     */
-    protected static function booted(): void
+    public function scopeActive($query)
     {
-        static::addGlobalScope('versioned', function (Builder $builder) {
-            $builder->orderBy('version', 'DESC');
-        });
+        return $query->where('active', true);
     }
 }

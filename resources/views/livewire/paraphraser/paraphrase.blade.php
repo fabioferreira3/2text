@@ -16,13 +16,14 @@
                 @include('livewire.common.label', ['title' => __('paraphraser.paraphrased_text')])
 
                 <!-- Paraphrase options -->
-                @if($outputBlocks && !$isSaving)
+                @if(count($outputBlocks) && !$isSaving)
                 <div class="hidden lg:flex lg:flex-col xl:flex-row xl:items-center gap-2">
-                    <button class="flex items-center gap-2 bg-zinc-200 hover:text-zinc-200 hover:bg-zinc-500 px-4 py-2 rounded-lg text-sm text-zinc-600" wire:click='copy'>
+                    <button
+                        class="flex items-center gap-2 bg-zinc-200 hover:text-zinc-200 hover:bg-zinc-500 px-4 py-2 rounded-lg text-sm text-zinc-600"
+                        wire:click='copy'>
                         <x-icon class="w-5 h-5" :name="$copied ? 'check' : 'clipboard-copy'" />
                         <div class="font-bold">{{$copied ? __('common.copied') : __('common.copy')}}</div>
                     </button>
-                    @livewire('common.generate-audio', ['document' => $document])
                 </div>
                 @endif
             </div>
@@ -35,13 +36,16 @@
                     @include('livewire.common.label', ['title' => __('paraphraser.original_text')])
                 </div>
                 <div>
-                    <textarea rows="10" class="w-full p-4 border border-zinc-200 rounded-lg" wire:model="inputText"></textarea>
+                    <textarea rows="10" class="w-full p-4 border border-zinc-200 rounded-lg"
+                        wire:model="inputText"></textarea>
                     @if($errors->has('inputText'))
                     <span class="text-red-500 text-sm">{{ $errors->first('inputText') }}</span>
                     @endif
                 </div>
                 <div class="hidden w-full md:flex md:justify-center">
-                    <button wire:target="paraphrase" :disabled="$isSaving" class="mt-4 text-base bg-secondary duration-700 hover:bg-main text-white font-bold py-2 px-4 rounded-lg" wire:click="paraphrase">
+                    <button wire:target="paraphrase" :disabled="$isSaving"
+                        class="mt-4 text-base bg-secondary duration-700 hover:bg-main text-white font-bold py-2 px-4 rounded-lg"
+                        wire:click="paraphrase">
                         @if(!$isSaving)<span wire:target="paraphrase">{{
                             __('paraphraser.paraphrase') }}</span>@endif
                         @if($isSaving)<span wire:target="paraphrase">{{
@@ -54,8 +58,6 @@
                     @include('livewire.common.label', ['title' => __('paraphraser.paraphrased_text')])
                 </div>
                 @if ($isSaving)
-                <div class="absolute top-0 left-0 h-96 overflow-auto w-full bg-zinc-300 rounded-lg opacity-70 z-30">
-                </div>
                 <div class="z-40 absolute flex items-center justify-center h-full w-full">
                     <x-loader color="zinc-700" height="14" width="14" />
                 </div>
