@@ -192,6 +192,18 @@ return [
             'timeout' => 900,
             'nice' => 0,
         ],
+        'image-generation' => [
+            'connection' => 'redis',
+            'queue' => ['image_generation'],
+            'balance' => 'auto',
+            'autoScalingStrategy' => 'time',
+        ],
+        'voice-generation' => [
+            'connection' => 'redis',
+            'queue' => ['voice_generation'],
+            'balance' => 'auto',
+            'autoScalingStrategy' => 'time',
+        ],
     ],
 
     'environments' => [
@@ -239,6 +251,18 @@ return [
         'local' => [
             'default' => [
                 'maxProcesses' => 3,
+                'timeout' => 900,
+                'memory' => 512,
+                'tries' => 3,
+            ],
+            'image-generation' => [
+                'maxProcesses' => 1,
+                'timeout' => 900,
+                'memory' => 512,
+                'tries' => 3,
+            ],
+            'voice-generation' => [
+                'maxProcesses' => 1,
                 'timeout' => 900,
                 'memory' => 512,
                 'tries' => 3,
