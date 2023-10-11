@@ -42,11 +42,11 @@ Route::middleware([
     'maintenance'
 ])->group(function () {
     Route::get('/', function () {
-        return redirect('/templates');
+        return redirect('/tools');
     });
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/dashboard/trash', Trash::class)->name('trash');
-    Route::get('/templates', Templates::class)->name('templates');
+    Route::get('/tools', Templates::class)->name('tools');
 
     /* Blog routes */
     Route::get('/blog/new', NewPost::class)->name('new-post');

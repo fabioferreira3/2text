@@ -9,7 +9,7 @@ return [
     'paraphraser' => 'Paraphraser',
     'profile' => 'Profile',
     'social_media_post' => 'Social media',
-    'templates' => 'Templates',
+    'tools' => 'Tools',
     'text_transcription' => 'Transcription',
     'text_to_audio' => 'Text to Audio',
 ];
