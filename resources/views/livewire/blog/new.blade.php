@@ -36,8 +36,7 @@
                     <small>{{__('blog.briefly_describe', ['maxWords' => '100'])}}</small>
                     <small>{{__('blog.paste_content', ['maxChars' => '30000'])}}</small>
                 </div>
-                <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="30000"
-                    wire:model="context"></textarea>
+                <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="30000" wire:model="context"></textarea>
                 @if($errors->has('context'))
                 <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
                 @endif
@@ -72,8 +71,7 @@
                         'content' => App\Helpers\InstructionsHelper::maxSubtopics()
                         ])
                     </div>
-                    <input type="number" max="10" name="target_headers_count" wire:model="targetHeadersCount"
-                        class="p-3 rounded-lg border border-zinc-200" />
+                    <input type="number" max="10" name="target_headers_count" wire:model="targetHeadersCount" class="p-3 rounded-lg border border-zinc-200" />
                     @if($errors->has('targetHeadersCount'))
                     <span class="text-red-500 text-sm">{{ $errors->first('targetHeadersCount') }}</span>
                     @endif
@@ -133,25 +131,23 @@
                         <x-checkbox md id="generate_img" name="generate_img" label="Yes" wire:model="generateImage" />
                     </div>
                 </div>
+                @if($generateImage)
                 <div class="flex flex-col gap-3">
                     <div class="flex gap-2 items-center">
-                        <label>Hero image description:</label>
+                        <label>{{__('blog.hero_image_description')}}:</label>
                         @include('livewire.common.help-item', [
                         'header' => __('blog.writing_style'),
                         'content' => App\Helpers\InstructionsHelper::writingStyles()
                         ])
                     </div>
                     <div class="w-full">
-                        <textarea
-                            placeholder="Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary."
-                            class="border border-zinc-200 rounded-lg w-full" rows="3" maxlength="2000"
-                            wire:model="imgPrompt"></textarea>
+                        <textarea placeholder="{{__('blog.placeholder_example')}}" class="border border-zinc-200 rounded-lg w-full" rows="3" maxlength="2000" wire:model="imgPrompt"></textarea>
                     </div>
                 </div>
+                @endif
             </div>
             <div class="flex justify-center mt-4">
-                <button wire:click="process" wire:loading.remove
-                    class="bg-secondary text-white font-bold px-4 py-2 rounded-lg">
+                <button wire:click="process" wire:loading.remove class="bg-secondary text-white font-bold px-4 py-2 rounded-lg">
                     {{__('blog.generate')}}!
                 </button>
             </div>

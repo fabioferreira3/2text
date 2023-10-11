@@ -14,6 +14,7 @@ return [
     'generate_variants' => 'Generate Variants',
     'generate_image' => 'Generate a new image',
     'generate_image_variants' => 'Generate image variants',
+    'placeholder_example' => 'Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary.',
     'preview' => 'Preview',
     'regenerate_image' => 'Regenerate image',
     'use_primary' => 'Use as primary',

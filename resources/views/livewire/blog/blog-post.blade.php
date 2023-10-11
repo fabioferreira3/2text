@@ -3,13 +3,11 @@
         @include('livewire.common.label', ['title' => $title])
     </div>
     <div class="flex items-center gap-2 justify-start mb-4">
-        <button wire:click="$toggle('showInfo')"
-            class="flex items-center gap-2 bg-gray-500 px-3 py-1 rounded-lg text-gray-100">
+        <button wire:click="$toggle('showInfo')" class="flex items-center gap-2 bg-gray-500 px-3 py-1 rounded-lg text-gray-100">
             <x-icon name="information-circle" width="18" height="18" />
             <div>{{__('blog.info')}}</div>
         </button>
-        <button type="button" wire:click="copyPost"
-            class="flex items-center gap-2 bg-secondary px-3 py-1 rounded-lg text-white">
+        <button type="button" wire:click="copyPost" class="flex items-center gap-2 bg-secondary px-3 py-1 rounded-lg text-white">
             <x-icon name="clipboard-copy" width="18" height="18" />
             <div>{{__('blog.copy_all')}}</div>
         </button>
@@ -32,10 +30,8 @@
             <div class="flex items-center justify-between">
                 @include('livewire.common.label', ['title' => $title])
                 <div role="button" class="cursor-pointer z-50" id="close" wire:click="$toggle('showInfo')">
-                    <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        viewBox="0 0 18 18">
-                        <path
-                            d="M14.1 4.93l-1.4-1.4L9 6.59 5.3 3.53 3.9 4.93 7.59 8.5 3.9 12.07l1.4 1.43L9 10.41l3.7 3.07 1.4-1.43L10.41 8.5l3.7-3.57z">
+                    <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 18 18">
+                        <path d="M14.1 4.93l-1.4-1.4L9 6.59 5.3 3.53 3.9 4.93 7.59 8.5 3.9 12.07l1.4 1.43L9 10.41l3.7 3.07 1.4-1.43L10.41 8.5l3.7-3.57z">
                         </path>
                     </svg>
                 </div>
