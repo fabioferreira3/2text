@@ -52,7 +52,7 @@ class Paraphraser extends Component
             }
 
             $this->isSaving = false;
-        } else {
+        } elseif (in_array($this->document->status, [DocumentStatus::IN_PROGRESS, DocumentStatus::ON_HOLD])) {
             $this->isSaving = true;
         };
         $this->tone = $this->document->getMeta('tone') ?? 'default';
