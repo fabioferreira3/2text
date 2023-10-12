@@ -5,21 +5,25 @@ return [
     'blog_first_pass' => "Write a simple blog article, following these instructions:\n\n
         - It must have a :tone tone\n
         - Use <p> tags to surround paragraphs\n
-        - Use <h2> tags to surround topics\n
+        - Use <h2> tags to surround main topics\n
         - Do not use <h3> tags\n
         - Write only one paragraph <p> per topic <h2>\n
         - Do not surround h2 tags with p tags, for example: \n\n
             Bad output:\n
                 <p><h2>Topic</h2></p>\n\n
-        - Every roman number from the outline must be a <h2> tag. For example:\n\n
-           - Outline structure:\n
-           I. Topic 1\n
-           II. Topic 2\n
-           III. Topic 3\n\n
-           - Resulting blog post html structure:\n
-           <h2>Topic1</h2>\n
-           <h2>Topic2</h2>\n
-           <h2>Topic3</h2>\n\n
+        - Main topics in the outline are referenced in the outline as \"Topic\", and the context of each topic are reference under \"Context\". All topics must be converted to a <h2> tag. For example:\n\n
+           - Outline structure input:\n
+           Topic: Introduction\n
+           Context: The nature of apples. Why apples are red.\n\n
+           Topic: Nutrition of Apples\n
+           Context: Vitamins and minerals. Why apples are good for you.\n\n
+           Topic: Production of Apples\n
+           Context: How apples are grown. Where apples are grown.\n\n\n
+
+           - Blog post output:\n
+           <h2>Introduction</h2><p>Content about nature of apples.</p><p>Content about why apples are red</p>\n
+           <h2>Nutrition of Apples</h2><p>Content about vitamins of apples</p><p>Content about benefits of apples</p>\n
+           <h2>Production of Apples</h2><p>Content about how apples are grown</p><p>Content about where apples are grown</p>\n\n
         - This is the outline that the blog post must be based: \n\n
             :outline",
     'expand_text' => "Expand the text following these instructions:\n\n
@@ -50,13 +54,13 @@ return [
     'write_meta_description' => "Write a meta description using a maximum of 20 words.\n Follow these instructions to guide your writing:\n\n",
     'write_outline' => "Create a comprehensive :style outline for a blog post.\n\n
         - It must have a maximum of two levels.\n
-        - Use roman numerals to indicate main topics and alphabet letters to indicate subtopics.\n
+        - Use numbers to indicate main topics and alphabet letters to indicate subtopics.\n
         - It must have only :maxsubtopics main topic(s), using the keyword \":keyword\".\n
         - Each main topic must contain a maximum of 2 subtopics.\n
         - The outline must have a \":tone\" tone.\n
-        - The outline must not have more than :maxsubtopics main topics, which are represented by the roman numerals.\n
+        - The outline must not have more than :maxsubtopics main topics, which are represented by numbers.\n
         - Do not nest a third level of topics.\n
-        - Do not add inner topics inside the subtopics indicated by alphabet letters, for example: \n\nGood output:\nI. Main Topic \n A. Subtopic 1 \n B. Subtopic 2 \n C. Subtopic 3 \n\nBad output:\nI. Main Topic \nA. Subtopic 1 \nB. Subtopic 2\n   1. Inner topic 1\n   2. Inner topic 2\nC. Subtopic 3\n\n\n
+        - Do not add inner topics inside the subtopics indicated by alphabet letters, for example: \n\nGood output:\n1. Main Topic \n A. Subtopic 1 \n B. Subtopic 2 \n C. Subtopic 3 \n\nBad output:\n1. Main Topic \nA. Subtopic 1 \nB. Subtopic 2\n   B1. Inner topic 1\n   B2. Inner topic 2\nC. Subtopic 3\n\n\n
         - The outline should be based on the following text: \n
         --- START OF TEXT ---
         \n\n:context\n\n

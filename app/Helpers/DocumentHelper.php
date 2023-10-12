@@ -16,18 +16,52 @@ class DocumentHelper
         foreach ($lines as $line) {
             $trimmed = trim($line);
 
-            if (preg_match('/^[IVX]+\..+/', $trimmed)) {
-                $currentSubheader = preg_replace('/^[IVX]+\.\s/', '', $trimmed);
+            // Match lines that start with a number followed by a period
+            if (preg_match('/^\d+\..+/', $trimmed)) {
+                $currentSubheader = preg_replace('/^\d+\.\s/', '', $trimmed);
                 $result[] = [
                     'subheader' => $currentSubheader,
                     'content' => ''
                 ];
                 $currentSubheaderIndex++;
-            } elseif (preg_match('/^[A-Z]\..+/', $trimmed)) {
-                $subtopic = preg_replace('/^[A-Z]\.\s/', '', $trimmed);
-                $result[$currentSubheaderIndex]['content'] .= '<h3>' . $subtopic . '</h3>';
             }
+            // Match lines that start with an uppercase letter followed by a period
+            elseif (preg_match('/^[A-Z]\..+/', $trimmed)) {
+                $subtopic = preg_replace('/^[A-Z]\.\s/', '', $trimmed);
+
+                if ($currentSubheaderIndex >= 0) {
+                    // If there's already content, add a space before the next subtopic
+                    if (!empty($result[$currentSubheaderIndex]['content'])) {
+                        $result[$currentSubheaderIndex]['content'] .= ' ';
+                    }
+                    $result[$currentSubheaderIndex]['content'] .= $subtopic . '.';
+                }
+            }
+
+            // if (preg_match('/^\d+\..+/', $trimmed)) {
+            //     $currentSubheader = preg_replace('/^\d+\.\s/', '', $trimmed);
+            //     $result[] = [
+            //         'subheader' => $currentSubheader,
+            //         'content' => ''
+            //     ];
+            //     $currentSubheaderIndex++;
+            // }
+            // } elseif (preg_match('/^[A-Z]\..+/', $trimmed)) {
+            //     $subtopic = preg_replace('/^[A-Z]\.\s/', '', $trimmed);
+            //     $result[$currentSubheaderIndex]['content'] .= '<h3>' . $subtopic . '</h3>';
+            // }
         }
+
+        // $result = [
+        //     [
+        //         'subheader' => 'Topic 1',
+        //         'content' => 'Subtopic 1. Subtopic 2'
+        //     ],
+        //     [
+        //         'subheader' => 'Topic 2',
+        //         'content' => 'Subtopic 1'
+        //     ],
+        // ]
 
         return $result;
     }

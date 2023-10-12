@@ -59,6 +59,22 @@ class Document extends Model
         return $this->hasMany(DocumentContentBlock::class);
     }
 
+    public function getRawStructureDescription()
+    {
+        $details = "";
+
+        if (!isset($this->meta['raw_structure'])) {
+            return $details;
+        }
+
+        foreach ($this->meta['raw_structure'] as $topic) {
+            $details .= "Topic: " . $topic['subheader'] . "\n" .
+                "Context: " . $topic['content'] . "\n\n";
+        }
+
+        return $details;
+    }
+
     public function getMeta($attribute)
     {
         return $this->meta[$attribute] ?? $this->parent->meta[$attribute] ?? null;
