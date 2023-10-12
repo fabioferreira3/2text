@@ -14,6 +14,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class ExpandTextSection implements ShouldQueue, ShouldBeUnique
 {
@@ -54,8 +55,9 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
                 [
                     'role' => 'user',
                     'content' =>  $prompt . $this->promptHelper->expandOn($this->meta['text_section'], [
-                        'tone' => $this->document['meta']['tone'],
-                        'style' => $this->document['meta']['style'] ?? null
+                        'tone' => $this->document->getMeta('tone'),
+                        'style' => $this->document->getMeta('style') ?? null,
+                        'keyword' => $this->meta['keyword']
                     ])
                 ]
             ]);

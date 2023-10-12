@@ -23,6 +23,7 @@ class TextBlock extends Component
     public bool $processing;
     public $hasPastVersions;
     public $hasFutureVersions;
+    public array $info;
 
     protected $rules = [
         'customPrompt' => 'required|string'
@@ -54,6 +55,10 @@ class TextBlock extends Component
         $this->tone = $this->contentBlock->document->getMeta('tone') ?? 'default';
         $this->content = $this->contentBlock->content;
         $this->type = $this->contentBlock->type;
+        $this->info = [
+            'char_count' => mb_strlen($this->content),
+            'word_count' => Str::wordCount($this->content)
+        ];
     }
 
     public function expand()
@@ -68,6 +73,16 @@ class TextBlock extends Component
     public function paraphrase()
     {
         $this->rewrite(__('prompt.paraphrase_text', ['tone' => $this->tone]));
+    }
+
+    public function moreComplex()
+    {
+        $this->rewrite(__('prompt.increase_complexity'));
+    }
+
+    public function lessComplex()
+    {
+        $this->rewrite(__('prompt.reduce_complexity'));
     }
 
     public function shorten()
@@ -163,7 +178,7 @@ class TextBlock extends Component
     {
         if ($params['document_content_block_id'] === $this->contentBlock->id) {
             $this->contentBlock->refresh();
-            $this->content = $this->contentBlock->content;
+            $this->setup();
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'success',
                 'message' => __('alerts.text_regenerated')

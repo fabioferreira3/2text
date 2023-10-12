@@ -31,7 +31,7 @@ class GoogleAuthController extends Controller
 
             Auth::login($user);
 
-            return redirect()->route('templates');
+            return redirect()->route('tools');
         } catch (\Exception $e) {
             // Handle the error properly here. Maybe log it and redirect with an error message.
             return redirect()->route('login')->with('error', 'Unable to login with Google. Please try again.');

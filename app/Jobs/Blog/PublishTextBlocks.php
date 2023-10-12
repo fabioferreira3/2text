@@ -18,15 +18,17 @@ class PublishTextBlocks implements ShouldQueue, ShouldBeUnique
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
     protected Document $document;
+    protected array $meta;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Document $document)
+    public function __construct(Document $document, array $meta = [])
     {
         $this->document = $document;
+        $this->meta = $meta;
     }
 
     /**

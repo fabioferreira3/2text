@@ -1,13 +1,13 @@
 <?php
 
 return [
-    'append_inst' => "\n\n - Additional instruction: Provide a response with increased burstiness and perplexity and at a slightly higher temperature than your default writing style.",
+    'append_inst' => "\n\n - Additional instructions: Provide a response with increased burstiness and perplexity and at a slightly higher temperature than your default writing style.",
     'blog_first_pass' => "Write a simple blog article, following these instructions:\n\n
         - It must have a :tone tone\n
         - Use <p> tags to surround paragraphs\n
         - Use <h2> tags to surround topics\n
         - Do not use <h3> tags\n
-        - Write only 1 paragraph <p> per topic <h2>\n
+        - Write only one paragraph <p> per topic <h2>\n
         - Do not surround h2 tags with p tags, for example: \n\n
             Bad output:\n
                 <p><h2>Topic</h2></p>\n\n
@@ -20,25 +20,27 @@ return [
            <h2>Topic1</h2>\n
            <h2>Topic2</h2>\n
            <h2>Topic3</h2>\n\n
-        - The blog post must be based on the following outline: \n\n
+        - This is the outline that the blog post must be based: \n\n
             :outline",
-    'expand_text' => "Expand a text following these instructions:\n\n
+    'expand_text' => "Expand the text following these instructions:\n\n
          - Use a :tone tone\n
-         - Use <h3> tags for subtopics and <p> tags for paragraphs\n
+         - The keyword :keyword must be present throughout the text\n
+         - Write three new paragraphs\n
          - Do not create new <h2> topics.\n
-         - Increase the number of paragraphs during the expansion.\n
          - This is the text that must be expanded:\n\n
             :context",
-    'expand' => "Rewrite the following paragraph, using a :tone tone, doubling the number of words:\n\n :text",
+    'expand' => "Rewrite the following paragraph, using a :tone tone, using twice as many words:\n\n :text",
     'expand_title' => "Rewrite the following title, with a :tone tone, making it slightly longer:\n\n :text",
     'generic_prompt' => ":prompt\n\n:text\n\n",
     'given_following_text' => "Given the following text:\n\n:text\n\n",
     'given_following_context' => "And given the following context:\n\n:context\n\n\n",
-    'keyword_instructions' => "- The following keyword should have focus and the present throughout the post: \":keyword\".\n",
+    'increase_complexity' => "Rewrite the following text increasing its reading complexity so a college professor would understand:\n\n :text",
+    'keyword_instructions' => "- The following keyword should have focus and be present throughout the post: \":keyword\".\n",
     'max_words' => "- The text must have a maximum of :max words\n",
     'more_instructions' => "- Follow these others instructions for the creation of the post:\n\n\n :instructions\n\n\n",
     'meta_description_context_instructions' => "- The meta description must be based on the following context:\n\n\n :context\n\n\n",
     'paraphrase_text' => 'Paraphrase the following text, while using a :tone tone, keeping the same number of words and keeping its original language. Just provide the result, without making any additional comments. This is the text:\n\n\n:text',
+    'reduce_complexity' => "Rewrite the following text reducing its reading complexity so a 13 year old kid would understand:\n\n :text",
     'shorten' => "Make the following text shorter, while using a :tone tone:\n\n :text",
     'shorten_title' => "Make the following title shorter, while using a :tone tone:\n\n :text",
     'simplify_text' => "Simplify the following text:\n\n:text",

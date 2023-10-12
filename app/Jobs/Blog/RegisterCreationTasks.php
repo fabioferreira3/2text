@@ -28,24 +28,14 @@ class RegisterCreationTasks
 
     public function handle()
     {
-        DocumentRepository::createTask(
-            $this->document->id,
-            DocumentTaskEnum::SUMMARIZE_DOC,
-            [
-                'order' => $this->params['next_order'],
-                'process_id' => $this->params['process_id']
-            ]
-        );
-
         if ($this->params['meta']['generate_image'] ?? false) {
-            $processId = Str::uuid();
             $imageSize = MediaHelper::getPossibleImageSize($this->document);
             DocumentRepository::createTask(
                 $this->document->id,
                 DocumentTaskEnum::GENERATE_IMAGE,
                 [
                     'order' => 1,
-                    'process_id' => $processId,
+                    'process_id' => Str::uuid(),
                     'meta' => [
                         'prompt' => $this->params['meta']['img_prompt'],
                         'height' => $imageSize['height'],
@@ -54,17 +44,6 @@ class RegisterCreationTasks
                         'steps' => 21,
                         'samples' => 1,
                         'add_content_block' => true
-                    ]
-                ]
-            );
-            DocumentRepository::createTask(
-                $this->document->id,
-                DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
-                [
-                    'order' => 2,
-                    'process_id' => $processId,
-                    'meta' => [
-                        'silently' => true
                     ]
                 ]
             );
@@ -104,7 +83,9 @@ class RegisterCreationTasks
             DocumentTaskEnum::EXPAND_TEXT,
             [
                 'process_id' => $this->params['process_id'],
-                'meta' => [],
+                'meta' => [
+                    'keyword' => $this->document->getMeta('keyword')
+                ],
                 'order' => $this->params['next_order'] + 3
             ]
         );
@@ -114,7 +95,9 @@ class RegisterCreationTasks
             DocumentTaskEnum::CREATE_TITLE,
             [
                 'process_id' => $this->params['process_id'],
-                'meta' => [],
+                'meta' => [
+                    'keyword' => $this->document->getMeta('keyword')
+                ],
                 'order' => $this->params['next_order'] + 4
             ]
         );

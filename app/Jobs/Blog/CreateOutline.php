@@ -53,10 +53,10 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
                     'content' =>   $this->promptHelper->writeOutline(
                         $this->document->getContext(),
                         [
-                            'tone' => $this->document->meta['tone'],
-                            'keyword' => $this->document->meta['keyword'],
-                            'style' => $this->document->meta['style'] ?? null,
-                            'maxsubtopics' => $this->document->meta['target_headers_count'] ?? 2
+                            'tone' => $this->document->getMeta('tone'),
+                            'keyword' => $this->document->getMeta('keyword'),
+                            'style' => $this->document->getMeta('style') ?? null,
+                            'maxsubtopics' => $this->document->getMeta('target_headers_count') ?? 2
                         ]
                     )
                 ]

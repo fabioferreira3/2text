@@ -45,7 +45,7 @@ class ExpandText implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $rawStructure = $this->document->meta['raw_structure'];
+            $rawStructure = $this->document->getMeta('raw_structure');
             $order = $this->meta['order'];
             foreach ($rawStructure as $key => $section) {
                 DocumentRepository::createTask($this->document->id, DocumentTaskEnum::EXPAND_TEXT_SECTION, [
@@ -54,6 +54,7 @@ class ExpandText implements ShouldQueue, ShouldBeUnique
                     'meta' => [
                         'text_section' => $section['content'],
                         'section_key' => $key,
+                        'keyword' => $this->meta['keyword']
                     ]
                 ]);
                 $order++;

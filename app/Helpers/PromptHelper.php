@@ -89,7 +89,7 @@ class PromptHelper
     public function expandOn($text, array $params)
     {
         $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
-        $prompt = Lang::get('prompt.expand_text', ['tone' => $tone, 'context' => $text], $this->language);
+        $prompt = Lang::get('prompt.expand_text', ['tone' => $tone, 'context' => $text, 'keyword' => $params['keyword']], $this->language);
         if ($params['style'] ?? false) {
             $prompt .= Lang::get('prompt.style_instructions', ['style' => $params['style']], $this->language);
         }

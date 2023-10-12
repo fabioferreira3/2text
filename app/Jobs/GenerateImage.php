@@ -18,17 +18,17 @@ class GenerateImage implements ShouldQueue, ShouldBeUnique
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
     protected Document $document;
-    protected array $params;
+    protected array $meta;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Document $document, array $params = [])
+    public function __construct(Document $document, array $meta = [])
     {
         $this->document = $document->fresh();
-        $this->params = $params;
+        $this->meta = $meta;
         $this->onQueue('image_generation');
     }
 
@@ -40,7 +40,7 @@ class GenerateImage implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            GenRepository::generateImage($this->document, $this->params);
+            GenRepository::generateImage($this->document, $this->meta);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to generate image: ' . $e->getMessage());

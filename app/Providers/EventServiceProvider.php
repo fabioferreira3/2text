@@ -2,13 +2,7 @@
 
 namespace App\Providers;
 
-use App\Events\DocumentTaskAborted;
-use App\Events\DocumentTaskFailed;
-use App\Events\DocumentTaskFinished;
 use App\Events\UserCreated;
-use App\Listeners\HandleAbortedDocumentTask;
-use App\Listeners\HandleFailedDocumentTask;
-use App\Listeners\HandleFinishedDocumentTask;
 use App\Listeners\HandleNewUserNotification;
 use App\Models\DocumentHistory;
 use App\Observers\DocumentHistoryObserver;
@@ -27,15 +21,6 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
-        ],
-        DocumentTaskFinished::class => [
-            HandleFinishedDocumentTask::class
-        ],
-        DocumentTaskFailed::class => [
-            HandleFailedDocumentTask::class
-        ],
-        DocumentTaskAborted::class => [
-            HandleAbortedDocumentTask::class
         ],
         UserCreated::class => [
             HandleNewUserNotification::class

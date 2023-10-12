@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Enums\DocumentTaskEnum;
 use App\Packages\ChatGPT\ChatGPT;
 use App\Enums\LanguageModels;
+use App\Events\ProcessFinished;
 use App\Helpers\PromptHelperFactory;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
@@ -70,18 +71,24 @@ class GenRepository
         $results = $client->textToImage($params);
         if (count($results)) {
             foreach ($results as $result) {
-                self::processImageResult($document, $result, $params);
-            }
-
-            if ($params['add_content_block'] ?? false) {
-                $document->contentBlocks()->save(new DocumentContentBlock([
-                    'type' => 'media_file_image',
-                    'content' => 'ai-images/' . $results[0]['fileName'],
-                    'prompt' => $params['prompt'],
-                    'order' => 1
-                ]));
+                $mediaFile = self::processImageResult($document, $result, $params);
+                if ($params['add_content_block'] ?? false) {
+                    $document->contentBlocks()->save(new DocumentContentBlock([
+                        'type' => 'media_file_image',
+                        'content' => $mediaFile->id,
+                        'prompt' => $params['prompt'],
+                        'order' => 1
+                    ]));
+                }
             }
         }
+
+        event(new ProcessFinished([
+            'document_id' => $document->id,
+            'parent_document_id' => $document->parent_document_id,
+            'process_id' => $params['process_id'],
+            'user_id' => $document->getMeta('user_id')
+        ]));
     }
 
     public static function generateImageVariants(Document $document, array $params)

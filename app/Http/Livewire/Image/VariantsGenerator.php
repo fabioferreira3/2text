@@ -38,7 +38,7 @@ class VariantsGenerator extends Component
     public function mount($main)
     {
         $this->prompt = '';
-        $this->imgStyle = null;
+        $this->imgStyle = StylePreset::ANIME->value;
         $this->stylePresets = StylePreset::getMappedValues();
         $this->selectedStylePreset = $this->imgStyle ? $this->selectStylePreset($this->imgStyle) : null;
         $this->processing = false;
