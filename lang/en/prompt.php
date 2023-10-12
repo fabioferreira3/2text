@@ -1,9 +1,11 @@
 <?php
 
 return [
+    'academic_tone' => 'The complexity of the text must be similar to a scientific article',
+    'adventurous_tone' => 'Use a writing tone that makes the reader feel excited, similar to the tone used in travel blogs',
     'append_inst' => "\n\n - Additional instructions: Provide a response with increased burstiness and perplexity and at a slightly higher temperature than your default writing style.",
     'blog_first_pass' => "Write a simple blog article, following these instructions:\n\n
-        - It must have a :tone tone\n
+        - :tone_instructions
         - Use <p> tags to surround paragraphs\n
         - Use <h2> tags to surround main topics\n
         - Do not use <h3> tags\n
@@ -26,6 +28,9 @@ return [
            <h2>Production of Apples</h2><p>Content about how apples are grown</p><p>Content about where apples are grown</p>\n\n
         - This is the outline that the blog post must be based: \n\n
             :outline",
+    'casual_tone' => 'Use a writing tone that makes the reader feel like they are talking to a friend',
+    'dramatic_tone' => 'Use a writing tone that makes the reader feel like they are watching a dramatic movie',
+    'default_tone' => 'Use a tone that suits the context',
     'expand_text' => "Expand the text following these instructions:\n\n
          - Use a :tone tone\n
          - The keyword :keyword must be present throughout the text\n
@@ -35,6 +40,8 @@ return [
             :context",
     'expand' => "Rewrite the following paragraph, using a :tone tone, using twice as many words:\n\n :text",
     'expand_title' => "Rewrite the following title, with a :tone tone, making it slightly longer:\n\n :text",
+    'formal_tone' => 'Use a writing tone that makes the reader feel like they are reading from a serious source like a newspaper',
+    'funny_tone' => 'Use a writing tone that makes the reader laught sometimes but not always. A slightly funny tone, while not joking all the time',
     'generic_prompt' => ":prompt\n\n:text\n\n",
     'given_following_text' => "Given the following text:\n\n:text\n\n",
     'given_following_context' => "And given the following context:\n\n:context\n\n\n",
@@ -43,11 +50,16 @@ return [
     'max_words' => "- The text must have a maximum of :max words\n",
     'more_instructions' => "- Follow these others instructions for the creation of the post:\n\n\n :instructions\n\n\n",
     'meta_description_context_instructions' => "- The meta description must be based on the following context:\n\n\n :context\n\n\n",
+    'mysterious_tone' => 'Use a writing tone that makes the reader feel like they are reading a mystery novel or watching a mystery movie. A tone that makes the reader feel intrigued',
+    'optimistic_tone' => 'Use a writing tone that makes the reader feel like they are reading a motivational book, highlighting the positive aspects of the topic',
     'paraphrase_text' => 'Paraphrase the following text, while using a :tone tone, keeping the same number of words and keeping its original language. Just provide the result, without making any additional comments. This is the text:\n\n\n:text',
+    'pessimistic_tone' => 'Use a writing tone that makes the reader feel like they are reading a book that highlights the negative aspects of the topic',
     'reduce_complexity' => "Rewrite the following text reducing its reading complexity so a 13 year old kid would understand:\n\n :text",
+    'sarcastic_tone' => 'Use a writing tone that makes the reader feel like they are reading a sarcastic book or watching a sarcastic movie. A tone that makes the reader feel like they are being mocked',
     'shorten' => "Make the following text shorter, while using a :tone tone:\n\n :text",
     'shorten_title' => "Make the following title shorter, while using a :tone tone:\n\n :text",
     'simplify_text' => "Simplify the following text:\n\n:text",
+    'simplistic_tone' => 'The reading complexity of the text must be low, as if a teenager would be able to read and understand it',
     'summarize_text' => "Summarize the following text:\n\n :text",
     'tone_instructions' => "- Use a :tone tone.\n",
     'translate_text' => "Translate the following text to :target_language :\n\n:text",

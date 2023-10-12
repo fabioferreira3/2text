@@ -44,8 +44,8 @@ class PromptHelper
 
     public function writeFirstPass($outline, array $params)
     {
-        $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
-        $prompt = Lang::get('prompt.blog_first_pass', ['tone' => $tone, 'outline' => $outline], $this->language);
+        $toneInstructions = ($params['tone'] ?? false) ? $this->getToneInstructions($params['tone']) : '';
+        $prompt = Lang::get('prompt.blog_first_pass', ['tone_instructions' => $toneInstructions, 'outline' => $outline], $this->language);
         if ($params['style'] ?? false) {
             $prompt .= Lang::get('prompt.style_instructions', ['style' => $params['style']], $this->language);
         }
@@ -133,5 +133,12 @@ class PromptHelper
     public function setLanguage(string $language)
     {
         $this->language = $language;
+    }
+
+    public function getToneInstructions($value)
+    {
+        $tone = Tone::tryFrom($value);
+        $prompt = 'prompt.' . $tone->value . '_tone';
+        return Lang::get($prompt, [], $this->language);
     }
 }
