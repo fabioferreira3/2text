@@ -43,6 +43,10 @@ class Chat extends Component
 
     public function createThread()
     {
+        $this->processing = false;
+        if ($this->activeThread->iterations->count() < 2) {
+            return;
+        }
         $this->activeThread = ChatThread::create();
     }
 
