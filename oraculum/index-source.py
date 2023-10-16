@@ -1,4 +1,5 @@
 import sys
+import os
 from dotenv import load_dotenv
 from embedchain import App
 
@@ -11,9 +12,13 @@ ALLOWED_DATA_TYPES = [
     'csv', 'docs_site', 'text'
 ]
 
+ABS_PATH = os.getcwd() + "/oraculum"
+
+
 def index_source(origin: str, collection_name: str, data_type: str):
     try:
-        custom_bot = App()
+        custom_bot = App.from_config(
+            yaml_path=ABS_PATH + "/default.yaml")
         custom_bot.db.set_collection_name(collection_name)
 
         if data_type not in ALLOWED_DATA_TYPES:
@@ -24,6 +29,7 @@ def index_source(origin: str, collection_name: str, data_type: str):
     except Exception as e:
         print(f"Error: {e}")
         return False
+
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
