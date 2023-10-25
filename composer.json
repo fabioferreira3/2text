@@ -36,7 +36,7 @@
         "spatie/laravel-permission": "^5.10",
         "talendor/elevenlabs-api": "^1.0",
         "talendor/laravel-stability-ai": "^0.3.0",
-        "tinymce/tinymce": "^6.4",
+        "tymon/jwt-auth": "^2",
         "wireui/wireui": "^1.17"
     },
     "require-dev": {
