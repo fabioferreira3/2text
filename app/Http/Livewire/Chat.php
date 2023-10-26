@@ -4,7 +4,6 @@ namespace App\Http\Livewire;
 
 use App\Jobs\Oraculum\Ask;
 use App\Models\ChatThread;
-use App\Packages\Oraculum\Oraculum;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 

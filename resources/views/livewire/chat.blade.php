@@ -1,9 +1,11 @@
 <div>
-    <div class="w-full md:w-1/3 fixed @if($isOpen) visible opacity-100 @else invisible opacity-0 @endif transition-all duration-500 ease-in-out bg-white top-0 right-0 z-50 h-screen shadow-lg flex flex-col">
+    <div
+        class="w-full md:w-1/3 fixed @if($isOpen) visible opacity-100 @else invisible opacity-0 @endif transition-all duration-500 ease-in-out bg-white top-0 right-0 z-50 h-screen shadow-lg flex flex-col">
         <div class="flex items-center justify-between p-6 bg-main">
             <div class="text-gray-800 text-2xl font-bold text-white">Chat</div>
             <div>
-                <button wire:click="createThread" class="flex items-center gap-1 w-full bg-gray-200 text-gray-700 rounded-lg px-2 py-1">
+                <button wire:click="createThread"
+                    class="flex items-center gap-1 w-full bg-gray-200 text-gray-700 rounded-lg px-2 py-1">
                     <x-icon name="plus" widht="28" height="28" />
                     <span class="font-bold">{{__('chat.new_chat')}}</span>
                 </button>
@@ -30,18 +32,29 @@
             </div>
         </div>
 
-        <div class="w-full flex flex-col justify-end p-6 bg-gray-100">
+        <div class="w-full flex flex-col justify-end p-6 bg-gray-100" x-data="{
+            submitOnEnter: $wire.submitMsg,
+            handleEnter(event) {
+                if (!event.shiftKey) {
+                    event.preventDefault();
+                    this.submitOnEnter();
+                }
+            }
+        }">
             @if($errors->has('inputMsg'))
             <span class="text-red-500 text-sm mb-2">{{ $errors->first('inputMsg') }}</span>
             @endif
-            <textarea wire:model="inputMsg" placeholder="Type your message here..." rows="4" class="w-full rounded-t-lg border-gray-200"></textarea>
-            <button :disabled="$processing" wire:click='submitMsg' class="bg-secondary text-white py-2 rounded-b-lg font-bold text-lg">Send</button>
+            <textarea wire:model="inputMsg" x-on:keydown.enter="handleEnter($event)"
+                placeholder="Type your message here..." rows="4" class="w-full rounded-t-lg border-gray-200"></textarea>
+            <button :disabled="$processing" wire:click='submitMsg'
+                class="bg-secondary text-white py-2 rounded-b-lg font-bold text-lg">Send</button>
         </div>
     </div>
 
     @if(!$isOpen)
     <div class="fixed top-1/3 right-0 z-40 w-[30px]">
-        <button wire:click="$set('isOpen', true)" class="flex flex-col items-center justify-center w-full bg-secondary m-0 px-4 py-2 rounded-l-xl text-white flex items-center justify-center text-xl font-bold">
+        <button wire:click="$set('isOpen', true)"
+            class="flex flex-col items-center justify-center w-full bg-secondary m-0 px-4 py-2 rounded-l-xl text-white flex items-center justify-center text-xl font-bold">
             <div>H</div>
             <div>E</div>
             <div>L</div>

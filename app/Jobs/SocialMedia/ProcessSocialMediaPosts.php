@@ -2,6 +2,7 @@
 
 namespace App\Jobs\SocialMedia;
 
+use App\Enums\DataType;
 use App\Enums\DocumentTaskEnum;
 use App\Enums\DocumentType;
 use App\Helpers\MediaHelper;
@@ -32,24 +33,27 @@ class ProcessSocialMediaPosts
 
     public function handle()
     {
-        DocumentRepository::createTask(
-            $this->document->id,
-            DocumentTaskEnum::SUMMARIZE_DOC,
-            [
-                'order' => 1,
-                'process_id' => $this->processId
-            ]
-        );
+        // DocumentRepository::createTask(
+        //     $this->document->id,
+        //     DocumentTaskEnum::SUMMARIZE_DOC,
+        //     [
+        //         'order' => 1,
+        //         'process_id' => $this->processId
+        //     ]
+        // );
 
         $this->document->refresh();
 
         if ($this->document->meta['source'] === 'website_url') {
             DocumentRepository::createTask(
                 $this->document->id,
-                DocumentTaskEnum::CRAWL_WEBSITE,
+                DocumentTaskEnum::EMBED_SOURCE,
                 [
                     'process_id' => $this->processId,
-                    'meta' => [],
+                    'meta' => [
+                        'data_type' => DataType::WEB_PAGE,
+                        'source' => $this->document->getMeta('source_url')
+                    ],
                     'order' => 2
                 ]
             );
