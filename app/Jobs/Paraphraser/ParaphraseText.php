@@ -4,6 +4,7 @@ namespace App\Jobs\Paraphraser;
 
 use App\Events\Paraphraser\TextParaphrased;
 use App\Helpers\PromptHelper;
+use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
@@ -60,9 +61,10 @@ class ParaphraseText implements ShouldQueue
                 [
                     'field' => 'paraphrased_text',
                     'content' => $response['content']
-                ],
-                $response['token_usage']
+                ]
             );
+
+            RegisterProductUsage::dispatch($this->document->account, $response['token_usage']);
 
             TextParaphrased::dispatch($this->document, [
                 'user_id' => $this->document->meta['user_id'],

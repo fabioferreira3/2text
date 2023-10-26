@@ -5,6 +5,7 @@ namespace App\Jobs\TextToSpeech;
 use App\Enums\LanguageModels;
 use App\Enums\MediaType;
 use App\Events\AudioGenerated;
+use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\MediaFile;
@@ -74,7 +75,9 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
                 'content' => $filePath,
                 'word_count' => Str::wordCount($this->meta['input_text']),
                 'char_count' => iconv_strlen($this->meta['input_text'])
-            ], [
+            ]);
+
+            RegisterProductUsage::dispatch($this->document->account, [
                 'model' => LanguageModels::ELEVEN_LABS->value
             ]);
 

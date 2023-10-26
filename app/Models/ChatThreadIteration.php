@@ -15,6 +15,6 @@ class ChatThreadIteration extends Model
 
     public function thread(): BelongsTo
     {
-        return $this->belongsTo(ChatThread::class);
+        return $this->belongsTo(ChatThread::class, 'chat_thread_id');
     }
 }

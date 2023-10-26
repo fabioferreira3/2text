@@ -5,7 +5,6 @@ namespace App\Packages\Oraculum;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Tymon\JWTAuth\Facades\JWTAuth;
 

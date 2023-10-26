@@ -103,9 +103,9 @@ class SummarizeDocument implements ShouldQueue, ShouldBeUnique
                     [
                         'field' => 'partial_summary',
                         'content' => $response['content']
-                    ],
-                    $response['token_usage']
+                    ]
                 );
+                RegisterProductUsage::dispatch($this->document->account, $response['token_usage']);
             });
             $allRewrittenParagraphs = $rewrittenParagraphs->join(' ');
             $this->document->update(['meta' => [...$this->document['meta'], 'summary' => $allRewrittenParagraphs !== "" ? $allRewrittenParagraphs : null]]);

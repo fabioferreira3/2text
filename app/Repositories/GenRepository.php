@@ -8,6 +8,7 @@ use App\Enums\LanguageModels;
 use App\Events\ProcessFinished;
 use App\Helpers\PromptHelperFactory;
 use App\Jobs\DispatchDocumentTasks;
+use App\Jobs\RegisterProductUsage;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
@@ -35,9 +36,9 @@ class GenRepository
             [
                 'field' => 'title',
                 'content' => $response['content']
-            ],
-            $response['token_usage']
+            ]
         );
+        RegisterProductUsage::dispatch($document->account, $response['token_usage']);
     }
 
     public static function generateMetaDescription(Document $document)
@@ -60,9 +61,9 @@ class GenRepository
             [
                 'field' => 'meta_description',
                 'content' => $response['content']
-            ],
-            $response['token_usage']
+            ]
         );
+        RegisterProductUsage::dispatch($document->account, $response['token_usage']);
     }
 
     public static function generateImage(Document $document, array $params)
@@ -132,9 +133,9 @@ class GenRepository
             [
                 'field' => $platform,
                 'content' => $response['content']
-            ],
-            $response['token_usage']
+            ]
         );
+        RegisterProductUsage::dispatch($document->account, $response['token_usage']);
     }
 
     public static function rewriteTextBlock(DocumentContentBlock $contentBlock, array $params)
@@ -152,9 +153,9 @@ class GenRepository
             [
                 'field' => 'title',
                 'content' => $response['content']
-            ],
-            $response['token_usage']
+            ]
         );
+        RegisterProductUsage::dispatch($contentBlock->document->account, $response['token_usage']);
     }
 
     public static function paraphraseDocument(Document $document)
@@ -219,11 +220,11 @@ class GenRepository
                 'content' => $mediaFile->id,
                 'word_count' => 0,
                 'char_count' => 0
-            ],
-            [
-                'model' => StabilityAIEngine::SD_XL_V_1->value,
             ]
         );
+        RegisterProductUsage::dispatch($document->account, [
+            'model' => StabilityAIEngine::SD_XL_V_1->value,
+        ]);
 
         return $mediaFile;
     }

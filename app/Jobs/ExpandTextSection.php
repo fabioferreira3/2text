@@ -67,9 +67,9 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
                 [
                     'field' => 'expand_text_section',
                     'content' => $response['content']
-                ],
-                $response['token_usage']
+                ]
             );
+            RegisterProductUsage::dispatch($this->document->account, $response['token_usage']);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to expand text section: ' . $e->getMessage());

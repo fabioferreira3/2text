@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire;
 
+use App\Jobs\Oraculum\Ask;
 use App\Models\ChatThread;
+use App\Packages\Oraculum\Oraculum;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -60,6 +62,21 @@ class Chat extends Component
         ]);
         $this->inputMsg = '';
         $this->activeThread->refresh();
+        $this->dispatchBrowserEvent('scrollToBottom');
+        Ask::dispatch($iteration, 'oraculum');
+    }
+
+    public function receiveMsg(array $params)
+    {
+        if ($params['chat_thread_id'] === $this->activeThread->id) {
+            $this->processing = false;
+            $this->activeThread->refresh();
+            $this->dispatchBrowserEvent('scrollToBottom');
+        }
+    }
+
+    public function updatedIsOpen()
+    {
         $this->dispatchBrowserEvent('scrollToBottom');
     }
 

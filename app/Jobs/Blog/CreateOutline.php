@@ -4,6 +4,7 @@ namespace App\Jobs\Blog;
 
 use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelper;
+use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Packages\ChatGPT\ChatGPT;
@@ -67,9 +68,9 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
                 [
                     'field' => 'outline',
                     'content' => $response['content']
-                ],
-                $response['token_usage']
+                ]
             );
+            RegisterProductUsage::dispatch($this->document->account, $response['token_usage']);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to generate outline: ' . $e->getMessage());

@@ -1,6 +1,6 @@
 <div class="flex justify-end items-end gap-4">
-    <div class="bg-gray-300 rounded-full p-2">
-        <x-icon name="user" width="28" height="28" class="text-gray-600" />
+    <div class="w-1/6 bg-gray-300 rounded-full p-6">
+        <x-icon name="user" class="w-full h-full text-gray-600" />
     </div>
-    <div class="border borde-gray-100 rounded-t-xl rounded-br-xl p-4">{{$response}}</div>
+    <div class="w-5/6 border border-gray-300 rounded-t-xl rounded-br-xl p-4">{{$response}}</div>
 </div>

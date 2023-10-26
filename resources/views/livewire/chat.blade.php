@@ -1,5 +1,5 @@
 <div>
-    <div class="fixed @if($isOpen) visible opacity-100 @else invisible opacity-0 @endif transition-all duration-500 ease-in-out bg-white top-0 right-0 w-1/4 z-50 h-screen shadow-lg flex flex-col">
+    <div class="w-full md:w-1/3 fixed @if($isOpen) visible opacity-100 @else invisible opacity-0 @endif transition-all duration-500 ease-in-out bg-white top-0 right-0 z-50 h-screen shadow-lg flex flex-col">
         <div class="flex items-center justify-between p-6 bg-main">
             <div class="text-gray-800 text-2xl font-bold text-white">Chat</div>
             <div>

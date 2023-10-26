@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'is_typing' => 'system is typing',
+    'is_typing' => 'Oraculum is typing',
     'new_chat' => 'New chat'
 ];
