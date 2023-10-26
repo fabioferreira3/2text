@@ -14,7 +14,7 @@ enum DataType: string
     case SITEMAP = 'sitemap';
     case TEXT = 'text';
     case WEB_PAGE = 'web_page';
-    case YOUTUBE = 'youtube';
+    case YOUTUBE = 'youtube_video';
 
     public function label()
     {

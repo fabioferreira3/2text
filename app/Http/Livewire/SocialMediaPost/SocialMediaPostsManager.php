@@ -134,11 +134,6 @@ class SocialMediaPostsManager extends Component
         }
     }
 
-    public function updatedImgStyle($newValue)
-    {
-        $this->selectedStylePreset = $this->selectStylePreset($newValue);
-    }
-
     public function selectStylePreset($style)
     {
         $found = array_values(array_filter($this->stylePresets, function ($item) use ($style) {
@@ -207,6 +202,11 @@ class SocialMediaPostsManager extends Component
         $this->context = '';
         $this->moreInstructions = '';
         $this->resetErrorBag('fileInput');
+    }
+
+    public function updatedImgStyle($newValue)
+    {
+        $this->selectedStylePreset = $this->selectStylePreset($newValue);
     }
 
     public function deleteDocument(array $params)

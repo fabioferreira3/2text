@@ -2,10 +2,16 @@
 
 namespace App\Packages\Oraculum;
 
+use App\Enums\DataType;
 use App\Models\User;
+use App\Packages\Oraculum\Exceptions\AddSourceException;
+use App\Packages\Oraculum\Exceptions\ChatRequestException;
+use App\Packages\Oraculum\Exceptions\CreateBotException;
+use App\Packages\Oraculum\Exceptions\QueryRequestException;
 use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class Oraculum
@@ -42,40 +48,42 @@ class Oraculum
                 ->post('/new_user_bot', $this->defaultBody);
 
             if ($response->failed()) {
-                return $response->throw();
+                $response->throw();
             }
 
             if ($response->successful()) {
                 $this->user->update(['bot_enabled' => true]);
             }
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+            throw new CreateBotException($e->getMessage());
         }
     }
 
-    public function add(string $dataType, string $source)
+    public function add(DataType $dataType, string $source)
     {
         try {
             if (!$this->user->bot_enabled) {
                 $this->createBot();
             }
+            Log::debug($dataType->value);
+            Log::debug($source);
 
             $response = $this->client
                 ->post('/add', array_merge($this->defaultBody, [
                     'collection_name' => $this->taskId,
-                    'data_type' => $dataType,
+                    'data_type' => $dataType->value,
                     'url_or_text' => $source
                 ]));
 
             if ($response->failed()) {
-                return $response->throw();
+                $response->throw();
             }
 
             if ($response->successful()) {
                 return $response->json('data');
             }
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+            throw new AddSourceException($e->getMessage());
         }
     }
 
@@ -100,7 +108,7 @@ class Oraculum
                 return $response->json('data');
             }
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+            throw new QueryRequestException($e->getMessage());
         }
     }
 
@@ -131,7 +139,7 @@ class Oraculum
                 ];
             }
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+            throw new ChatRequestException($e->getMessage());
         }
     }
 

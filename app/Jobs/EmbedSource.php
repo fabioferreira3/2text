@@ -33,7 +33,7 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->dataType = $meta['data_type'];
+        $this->dataType = DataType::tryFrom($meta['data_type']);
         $this->source = $meta['source'];
     }
 
@@ -46,10 +46,11 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
     {
         try {
             $user = User::findOrFail($this->document->getMeta('user_id'));
-            $oraculum = new Oraculum();
+            $oraculum = new Oraculum($user, $this->document->id);
+            $oraculum->add($this->dataType, $this->source);
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to expand outline: ' . $e->getMessage());
+            $this->jobFailed('Failed to embed source: ' . $e->getMessage());
         }
     }
 
@@ -58,6 +59,6 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'embed_document_' . $this->meta['process_id'] ?? $this->document->id;
+        return 'embed_document_' . $this->dataType->value . '_' . $this->meta['process_id'] ?? $this->document->id;
     }
 }
