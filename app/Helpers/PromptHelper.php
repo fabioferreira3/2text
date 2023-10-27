@@ -63,6 +63,17 @@ class PromptHelper
         return $prompt;
     }
 
+    public function writeEmbeddedTitle(array $params)
+    {
+        $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
+        $prompt = Lang::get('prompt.write_embedded_title', ['tone' => $tone], $this->language);
+        if ($params['keyword'] ?? false) {
+            $prompt .= Lang::get('prompt.keyword_instructions', ['keyword' => $params['keyword']], $this->language);
+        }
+
+        return $prompt;
+    }
+
     public function writeOutline($context, array $params)
     {
         $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);

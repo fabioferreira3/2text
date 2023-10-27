@@ -40,7 +40,12 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            GenRepository::generateTitle($this->document, $this->meta['text'] ?? $this->document->normalized_structure);
+            if ($this->meta['query_embedding'] ?? false) {
+                GenRepository::generateEmbeddedTitle($this->document);
+            } else {
+                GenRepository::generateTitle($this->document, $this->meta['text'] ?? $this->document->normalized_structure);
+            }
+
             event(new TitleGenerated($this->document, $this->meta['process_id']));
             $this->jobSucceded();
         } catch (Exception $e) {

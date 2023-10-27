@@ -167,6 +167,7 @@ class SocialMediaPostsManager extends Component
                 $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
             }
             $this->document->update([
+                'language' => $this->language ?? $this->document->language->value,
                 'meta' => [
                     'context' => $this->context ?? null,
                     'tone' => $this->tone ?? Tone::CASUAL->value,

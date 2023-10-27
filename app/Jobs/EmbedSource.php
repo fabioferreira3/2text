@@ -59,6 +59,6 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'embed_document_' . $this->dataType->value . '_' . $this->meta['process_id'] ?? $this->document->id;
+        return 'embed_document_' . $this->dataType->value . '_' . $this->document->id;
     }
 }

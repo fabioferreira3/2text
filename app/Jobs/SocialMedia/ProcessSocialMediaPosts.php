@@ -60,47 +60,39 @@ class ProcessSocialMediaPosts
         } elseif ($this->document->meta['source'] === 'youtube') {
             DocumentRepository::createTask(
                 $this->document->id,
-                DocumentTaskEnum::EMBED_SOURCE,
+                DocumentTaskEnum::DOWNLOAD_AUDIO,
                 [
                     'process_id' => $this->processId,
                     'meta' => [
-                        'data_type' => DataType::YOUTUBE,
-                        'source' => $this->document->getMeta('source_url')
+                        'source_url' => $this->document->meta['source_url']
                     ],
                     'order' => 2
                 ]
             );
-            // DocumentRepository::createTask(
-            //     $this->document->id,
-            //     DocumentTaskEnum::DOWNLOAD_AUDIO,
-            //     [
-            //         'process_id' => $this->processId,
-            //         'meta' => [
-            //             'source_url' => $this->document->meta['source_url']
-            //         ],
-            //         'order' => 2
-            //     ]
-            // );
-            // DocumentRepository::createTask(
-            //     $this->document->id,
-            //     DocumentTaskEnum::PROCESS_AUDIO,
-            //     [
-            //         'process_id' => $this->processId,
-            //         'meta' => [],
-            //         'order' => 3
-            //     ]
-            // );
+            DocumentRepository::createTask(
+                $this->document->id,
+                DocumentTaskEnum::PROCESS_AUDIO,
+                [
+                    'process_id' => $this->processId,
+                    'meta' => [
+                        'embed_source' => true
+                    ],
+                    'order' => 3
+                ]
+            );
         }
 
-        // DocumentRepository::createTask(
-        //     $this->document->id,
-        //     DocumentTaskEnum::CREATE_TITLE,
-        //     [
-        //         'process_id' => $this->processId,
-        //         'meta' => [],
-        //         'order' => 99
-        //     ]
-        // );
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::CREATE_TITLE,
+            [
+                'process_id' => $this->processId,
+                'meta' => [
+                    'query_embedding' => true
+                ],
+                'order' => 99
+            ]
+        );
 
         DispatchDocumentTasks::dispatch($this->document);
 

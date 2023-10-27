@@ -11,7 +11,6 @@ use App\Packages\Oraculum\Exceptions\QueryRequestException;
 use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class Oraculum
@@ -65,8 +64,6 @@ class Oraculum
             if (!$this->user->bot_enabled) {
                 $this->createBot();
             }
-            Log::debug($dataType->value);
-            Log::debug($source);
 
             $response = $this->client
                 ->post('/add', array_merge($this->defaultBody, [
@@ -94,6 +91,8 @@ class Oraculum
                 $this->createBot();
             }
 
+            $requestTokens = $this->countTokens($message);
+
             $response = $this->client
                 ->post('/query', array_merge($this->defaultBody, [
                     'collection_name' => $this->taskId,
@@ -105,7 +104,15 @@ class Oraculum
             }
 
             if ($response->successful()) {
-                return $response->json('data');
+                $responseTokens = $this->countTokens($response->json('data'));
+                return [
+                    'data' => $response->json('data'),
+                    'token_usage' => [
+                        'prompt' => $requestTokens,
+                        'completion' => $responseTokens,
+                        'total' => $requestTokens + $responseTokens
+                    ]
+                ];
             }
         } catch (Exception $e) {
             throw new QueryRequestException($e->getMessage());
@@ -135,7 +142,11 @@ class Oraculum
                 $responseTokens = $this->countTokens($response->json('data'));
                 return [
                     'data' => $response->json('data'),
-                    'tokens_count' => $requestTokens + $responseTokens
+                    'token_usage' => [
+                        'prompt' => $requestTokens,
+                        'completion' => $responseTokens,
+                        'total' => $requestTokens + $responseTokens
+                    ]
                 ];
             }
         } catch (Exception $e) {

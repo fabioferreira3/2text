@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\DataType;
 use App\Enums\LanguageModels;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
@@ -68,6 +69,13 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
 
                     $transcription->push($response['text']);
                 }
+            }
+
+            if ($this->meta['embed_source'] ?? false) {
+                EmbedSource::dispatchSync($this->document, [
+                    'data_type' => DataType::TEXT->value,
+                    'source' => $transcription->implode(' ')
+                ]);
             }
 
             $this->document->update([
