@@ -36,11 +36,11 @@ class DocumentContentBlock extends Model
 
     public function getUrl()
     {
-        if ($this->type === 'image' && $this->content) {
-            $file = MediaFile::where('file_path', $this->content)->first();
+        if ($this->type === 'media_file_image' && $this->content) {
+            $file = MediaFile::find($this->content)->first();
             return $file ? $file->file_url : $this->content;
         }
-        if (!$this->type === 'image' || !$this->content) {
+        if (!$this->type === 'media_file_image' || !$this->content) {
             return null;
         }
 

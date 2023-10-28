@@ -7,7 +7,7 @@
             <div class="z-20 flex gap-2">
                 <button wire:click="$toggle('showImageGenerator')"
                     class="relative group/button transition duration-200 text-white hover:bg-secondary border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
-                    <x-icon solid name="refresh" class="w-5 h-5" />
+                    <x-icon solid name="photograph" class="w-5 h-5" />
                     <div
                         class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
                         {{ __('images.regenerate_image') }}

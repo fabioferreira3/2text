@@ -2,7 +2,7 @@
 
 namespace App\Jobs\TextToSpeech;
 
-use App\Enums\LanguageModels;
+use App\Enums\AIModel;
 use App\Enums\MediaType;
 use App\Events\AudioGenerated;
 use App\Jobs\RegisterProductUsage;
@@ -78,7 +78,7 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
             ]);
 
             RegisterProductUsage::dispatch($this->document->account, [
-                'model' => LanguageModels::ELEVEN_LABS->value
+                'model' => AIModel::ELEVEN_LABS->value
             ]);
 
             AudioGenerated::dispatchIf(

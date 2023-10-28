@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Enums\DataType;
-use App\Enums\LanguageModels;
+use App\Enums\AIModel;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Packages\Whisper\Whisper;
@@ -75,7 +75,7 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
                             'content' => json_decode('"' . $response['text'] . '"')
                         ],
                         [
-                            'model' => LanguageModels::WHISPER->value,
+                            'model' => AIModel::WHISPER->value,
                             'length' => $this->document->meta['duration']
                         ]
                     );

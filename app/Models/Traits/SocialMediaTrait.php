@@ -92,14 +92,16 @@ trait SocialMediaTrait
     public function toggleImageGenerator($defaultImg = null)
     {
         if (!$this->imageBlock) {
-            $this->document->contentBlocks()->save(
+            $imageBlock = $this->document->contentBlocks()->save(
                 new DocumentContentBlock([
                     'type' => 'image',
                     'content' => ''
                 ])
             );
+            $this->imageBlock = $imageBlock;
+            $this->imageBlockId = $imageBlock ? $imageBlock->id : null;
+            $this->imagePrompt = '';
             $this->document->refresh();
-            $this->refreshImage();
         }
         $this->showImageGenerator = !$this->showImageGenerator;
         if ($defaultImg) {
@@ -111,7 +113,7 @@ trait SocialMediaTrait
 
     public function refreshImage()
     {
-        $imageBlock = $this->imageBlock ?? optional($this->document->contentBlocks)->firstWhere('type', 'image');
+        $imageBlock = $this->imageBlock ?? optional($this->document->contentBlocks)->firstWhere('type', 'media_file_image');
         $this->image = $imageBlock ? $imageBlock->getUrl() : null;
         $this->imageBlock = $imageBlock ?? null;
         $this->imageBlockId = $imageBlock ? $imageBlock->id : null;

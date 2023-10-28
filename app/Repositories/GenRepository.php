@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Enums\DocumentTaskEnum;
 use App\Packages\ChatGPT\ChatGPT;
-use App\Enums\LanguageModels;
+use App\Enums\AIModel;
 use App\Events\ProcessFinished;
 use App\Helpers\PromptHelperFactory;
 use App\Jobs\DispatchDocumentTasks;
@@ -25,7 +25,7 @@ class GenRepository
     {
         $repo = new DocumentRepository($document);
         $promptHelper = PromptHelperFactory::create($document->language->value);
-        $chatGpt = new ChatGPT(LanguageModels::GPT_3_TURBO->value);
+        $chatGpt = new ChatGPT(AIModel::GPT_3_TURBO->value);
         $response = $chatGpt->request([[
             'role' => 'user',
             'content' => $promptHelper->writeTitle($context, [
@@ -68,7 +68,7 @@ class GenRepository
     {
         $repo = new DocumentRepository($document);
         $promptHelper = PromptHelperFactory::create($document->language->value);
-        $chatGpt = new ChatGPT(LanguageModels::GPT_3_TURBO->value);
+        $chatGpt = new ChatGPT(AIModel::GPT_3_TURBO->value);
         $response = $chatGpt->request([[
             'role' => 'user',
             'content' => $promptHelper->writeMetaDescription(
@@ -194,7 +194,7 @@ class GenRepository
 
     public static function rewriteTextBlock(DocumentContentBlock $contentBlock, array $params)
     {
-        $model = isset($params['faster']) && $params['faster'] ? LanguageModels::GPT_3_TURBO : LanguageModels::GPT_4;
+        $model = isset($params['faster']) && $params['faster'] ? AIModel::GPT_3_TURBO : AIModel::GPT_4;
         $repo = new DocumentRepository($contentBlock->document);
         $promptHelper = PromptHelperFactory::create($contentBlock->document->language->value);
         $chatGpt = new ChatGPT($model->value);

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\LanguageModels;
+use App\Enums\AIModel;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +13,7 @@ class ProductUsage extends Model
     use HasFactory, HasUuids;
 
     protected $guarded = ['id'];
-    protected $casts = ['meta' => 'array', 'model' => LanguageModels::class];
+    protected $casts = ['meta' => 'array', 'model' => AIModel::class];
     protected $table = 'product_usage';
 
     public function account(): BelongsTo

@@ -20,6 +20,7 @@ return [
     'enter_website' => 'Enter an external website url to be used as context, like another blog post or page. I\'ll do my best to extract as much information as possible from that page and use it as context for the creation of your text.',
     'free_text' => 'Just enter any text that you want as context and I\'ll write a text based on the information you provide.',
     'further_instructions' => 'Further instructions (optional)',
+    'generate_ai_image' => 'Generate AI image',
     'generate_new_image' => 'Generate new image',
     'generate' => 'Generate',
     'generating' => 'Generating with AI',
