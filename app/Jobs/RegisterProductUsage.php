@@ -41,19 +41,19 @@ class RegisterProductUsage implements ShouldQueue
             $cost = 0;
             if ($this->params['model'] ?? false) {
                 $cost = SupportHelper::calculateModelCosts($this->params['model'], [
-                    'prompt' => $this->params['prompt'] ?? null,
-                    'completion' => $this->params['completion'] ?? null,
-                    'audio_length' => $this->params['length'] ?? null,
-                    'total' => $this->params['total'] ?? null,
+                    'prompt' => $this->params['prompt'] ?? 0,
+                    'completion' => $this->params['completion'] ?? 0,
+                    'audio_length' => $this->params['length'] ?? 0,
+                    'total' => $this->params['total'] ?? 0,
                 ]);
             }
 
             $this->account->productUsage()->save(
                 new ProductUsage([
                     'model' => $this->params['model'] ?? null,
-                    'prompt_token_usage' => $this->params['prompt'] ?? null,
-                    'completion_token_usage' => $this->params['completion'] ?? null,
-                    'total_token_usage' => $this->params['total'] ?? null,
+                    'prompt_token_usage' => $this->params['prompt'] ?? 0,
+                    'completion_token_usage' => $this->params['completion'] ?? 0,
+                    'total_token_usage' => $this->params['total'] ?? 0,
                     'cost' => $cost
                 ])
             );

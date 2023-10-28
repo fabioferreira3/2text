@@ -300,9 +300,6 @@
     </div>
     @endif
 </div>
-{{-- @if ($displayHistory)
-@livewire('common.history-modal', [$document])
-@endif --}}
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {

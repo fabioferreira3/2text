@@ -24,7 +24,7 @@ class ImageBlockGeneratorModal extends Component
     public array $previewImgs;
     public $stylePresets;
     public $selectedStylePreset;
-    public mixed $action = 'New images';
+    public mixed $action = '';
     private $documentRepo;
 
     public function __construct()
@@ -43,6 +43,7 @@ class ImageBlockGeneratorModal extends Component
 
     public function mount(DocumentContentBlock $contentBlock = null)
     {
+        $this->action = __('modals.new_images');
         $this->contentBlock = $contentBlock;
         $this->prompt = $this->contentBlock->document->getMeta('img_prompt');
         $this->imgStyle = $this->contentBlock->document->getMeta('img_style') ?? null;
@@ -84,7 +85,7 @@ class ImageBlockGeneratorModal extends Component
         if (!$this->validateParams()) {
             return;
         }
-        $this->action = 'New images';
+        $this->action = __('modals.new_images');
         $this->setProcessingState();
         $this->documentRepo->setDocument($this->contentBlock->document);
         $this->documentRepo->updateMeta('img_prompt', $this->prompt);
@@ -201,7 +202,7 @@ class ImageBlockGeneratorModal extends Component
         $this->processId = Str::uuid();
         $this->dispatchBrowserEvent('alert', [
             'type' => 'info',
-            'message' => "Generating images. Please wait..."
+            'message' => __('modals.generating_images')
         ]);
     }
 
@@ -213,7 +214,7 @@ class ImageBlockGeneratorModal extends Component
             $this->processing = false;
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'success',
-                'message' => "Images generated successfully!"
+                'message' => __('modals.images_generated')
             ]);
         }
     }
@@ -223,7 +224,7 @@ class ImageBlockGeneratorModal extends Component
         if (!$this->prompt) {
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'error',
-                'message' => "Please provide an image description"
+                'message' => __('validation.image_description')
             ]);
             return false;
         }
@@ -231,7 +232,7 @@ class ImageBlockGeneratorModal extends Component
         if (!$this->imgStyle) {
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'error',
-                'message' => "Please provide an image style"
+                'message' => __('validation.image_style')
             ]);
             return false;
         }

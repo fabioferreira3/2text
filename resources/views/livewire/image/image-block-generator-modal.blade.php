@@ -4,7 +4,7 @@
             <div class="flex items-center gap-4 border-gray-200 border-b pb-2">
                 <div class="w-2 h-12 md:h-6 bg-secondary"></div>
                 <h1 class="text-2xl font-bold">
-                    Generate new images or variants of existing ones
+                    {{__('modals.generate_new_images')}}
                 </h1>
             </div>
             <div role="button" class="cursor-pointer z-50 bg-main p-1 rounded" id="close" wire:click="toggleModal">
@@ -19,7 +19,7 @@
         <div class="flex flex-col lg:grid lg:grid-cols-2 items-start gap-8 mt-4">
             @if ($previewImgs['original'])
             <div class="flex flex-col gap-2 h-full w-full">
-                <div class="text-2xl font-bold mb-8 md:mb-0">Original:</div>
+                <div class="text-2xl font-bold mb-8 md:mb-0">{{__('modals.original')}}:</div>
                 <div class="relative group rounded-lg h-full flex justify-center items-center">
                     <img class="rounded-lg object-cover border border-gray-200 h-96" src={{
                         $previewImgs['original']['file_url'] }} />

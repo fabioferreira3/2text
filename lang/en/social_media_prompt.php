@@ -3,7 +3,7 @@
 return [
     'context_instructions' => "- The post must be based on the following context:\n\n\n :context\n\n\n",
     'expand' => "Rewrite it with more details:\n\n :text",
-    'keyword_instructions' => "- The keyword :keyword should have focus and the present throughout the post.\n",
+    'keyword_instructions' => "- The keyword \":keyword\" should have focus and the present throughout the post.\n",
     'max_words' => "- The text must have a maximum of :max words\n",
     'more_instructions' => "- Follow these others instructions for the creation of the post:\n\n\n :instructions\n\n\n",
     'shorten' => "Rewrite it, making it shorter:\n\n :text",

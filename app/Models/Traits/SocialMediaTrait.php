@@ -80,7 +80,8 @@ trait SocialMediaTrait
 
     public function imageSelected($params)
     {
-        $this->imageBlock->update(['content' => $params['file_url']]);
+        $mediaFile = MediaFile::findOrFail($params['media_file_id']);
+        $this->imageBlock->update(['content' => $mediaFile->id]);
         $this->refreshImage();
         $this->toggleImageGenerator();
         $this->dispatchBrowserEvent('alert', [
