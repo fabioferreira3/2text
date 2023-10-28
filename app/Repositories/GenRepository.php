@@ -14,7 +14,6 @@ use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
 use App\Models\User;
 use App\Packages\Oraculum\Oraculum;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Talendor\StabilityAI\Enums\StabilityAIEngine;
@@ -50,10 +49,6 @@ class GenRepository
         $user = User::findOrFail($document->getMeta('user_id'));
         $oraculum = new Oraculum($user, $document->id);
         $promptHelper = PromptHelperFactory::create($document->language->value);
-        Log::debug($promptHelper->writeEmbeddedTitle([
-            'tone' => $document->getMeta('tone'),
-            'keyword' => $document->getMeta('keyword')
-        ]));
         $response = $oraculum->query($promptHelper->writeEmbeddedTitle([
             'tone' => $document->getMeta('tone'),
             'keyword' => $document->getMeta('keyword')
@@ -161,6 +156,37 @@ class GenRepository
             [
                 'field' => $platform,
                 'content' => $response['content']
+            ]
+        );
+        RegisterProductUsage::dispatch($document->account, $response['token_usage']);
+    }
+
+    public static function generateEmbeddedSocialMediaPost(Document $document, string $platform)
+    {
+        $repo = new DocumentRepository($document);
+        $user = User::findOrFail($document->getMeta('user_id'));
+        $oraculum = new Oraculum($user, $document->parent_document_id);
+        $promptHelper = PromptHelperFactory::create($document->language->value);
+        $response = $oraculum->query($promptHelper->writeEmbeddedSocialMediaPost([
+            'query_embedded' => true,
+            'keyword' => $document->getMeta('keyword'),
+            'platform' => $platform,
+            'tone' => $document->getMeta('tone'),
+            'style' => $document->getMeta('style'),
+            'more_instructions' => $document->getMeta('more_instructions')
+        ]), 'advanced');
+
+        $document->contentBlocks()->save(
+            new DocumentContentBlock([
+                'type' => 'text',
+                'content' => $response['data']
+            ])
+        );
+
+        $repo->addHistory(
+            [
+                'field' => $platform,
+                'content' => $response['data']
             ]
         );
         RegisterProductUsage::dispatch($document->account, $response['token_usage']);

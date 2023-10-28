@@ -19,11 +19,12 @@ enum DocumentTaskEnum: string
     case PARAPHRASE_DOCUMENT = 'paraphrase_document';
     case PARAPHRASE_TEXT = 'paraphrase_text';
     case PROCESS_AUDIO = 'process_audio';
+    case PROCESS_SOCIAL_MEDIA_POSTS_CREATION = 'process_social_media_posts_creation';
     case PUBLISH_TRANSCRIPTION = 'publish_transcription';
     case PUBLISH_TEXT_BLOCKS = 'publish_text_blocks';
     case PREPARE_TEXT_TRANSLATION = 'prepare_text_translation';
     case REGISTER_FINISHED_PROCESS = 'register_finished_process';
-    case REGISTER_CONTENT_HISTORY = 'register_content_history';
+    case REGISTER_CONTENT_HISTORY = 'register_content_histo ry';
     case REWRITE_TEXT_BLOCK = 'rewrite_text_block';
     case SUMMARIZE_DOC = 'summarize_doc';
     case TRANSLATE_TEXT = 'translate_text';
@@ -47,6 +48,7 @@ enum DocumentTaskEnum: string
             self::PARAPHRASE_DOCUMENT => "App\Jobs\Paraphraser\ParaphraseDocument",
             self::PARAPHRASE_TEXT => "App\Jobs\Paraphraser\ParaphraseText",
             self::PROCESS_AUDIO => "App\Jobs\ProcessAudio",
+            self::PROCESS_SOCIAL_MEDIA_POSTS_CREATION => "App\Jobs\SocialMedia\ProcessSocialMediaPostsCreation",
             self::PREPARE_TEXT_TRANSLATION => "App\Jobs\Translation\PrepareTextTranslation",
             self::PUBLISH_TRANSCRIPTION => "App\Jobs\TextTranscription\PublishTranscription",
             self::PUBLISH_TEXT_BLOCKS => "App\Jobs\Blog\PublishTextBlocks",

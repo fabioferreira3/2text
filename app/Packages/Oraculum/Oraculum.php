@@ -84,7 +84,7 @@ class Oraculum
         }
     }
 
-    public function query($message)
+    public function query($message, $type = null)
     {
         try {
             if (!$this->user->chat_enabled) {
@@ -96,7 +96,8 @@ class Oraculum
             $response = $this->client
                 ->post('/query', array_merge($this->defaultBody, [
                     'collection_name' => $this->taskId,
-                    'message' => $message
+                    'message' => $message,
+                    'type' => $type ?? null
                 ]));
 
             if ($response->failed()) {

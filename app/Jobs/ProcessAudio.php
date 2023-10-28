@@ -45,6 +45,7 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
+            $repo = new DocumentRepository($this->document);
             $transcription = collect([]);
             if (count($this->document->meta['audio_file_path'])) {
                 foreach ($this->document->meta['audio_file_path'] as $audioFilePath) {
@@ -68,35 +69,36 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
                     }
 
                     $transcription->push($response['text']);
+                    $repo->addHistory(
+                        [
+                            'field' => 'content',
+                            'content' => json_decode('"' . $response['text'] . '"')
+                        ],
+                        [
+                            'model' => LanguageModels::WHISPER->value,
+                            'length' => $this->document->meta['duration']
+                        ]
+                    );
                 }
             }
+
+            $decodedText = json_decode('"' . $transcription->implode(' ') . '"');
 
             if ($this->meta['embed_source'] ?? false) {
                 EmbedSource::dispatchSync($this->document, [
                     'data_type' => DataType::TEXT->value,
-                    'source' => $transcription->implode(' ')
+                    'source' => $decodedText
                 ]);
             }
 
             $this->document->update([
                 'meta' => [
                     ...$this->document->meta,
-                    'context' => $transcription->implode(' '),
-                    'original_text' => $transcription->implode(' ')
+                    'context' => $decodedText,
+                    'original_text' => $decodedText
                 ]
             ]);
 
-            $repo = new DocumentRepository($this->document);
-            $repo->addHistory(
-                [
-                    'field' => 'content',
-                    'content' => $response['text']
-                ],
-                [
-                    'model' => LanguageModels::WHISPER->value,
-                    'length' => $this->document->meta['duration']
-                ]
-            );
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Audio processing error: ' . $e->getMessage());

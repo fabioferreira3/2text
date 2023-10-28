@@ -17,7 +17,6 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Talendor\StabilityAI\Enums\StylePreset;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 
 class SocialMediaPostsManager extends Component
 {
