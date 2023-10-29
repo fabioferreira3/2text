@@ -41,7 +41,7 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
     {
         try {
             if ($this->meta['query_embedding'] ?? false) {
-                GenRepository::generateEmbeddedTitle($this->document);
+                GenRepository::generateEmbeddedTitle($this->document, $this->meta['collection_name']);
             } else {
                 GenRepository::generateTitle($this->document, $this->meta['text'] ?? $this->document->normalized_structure);
             }

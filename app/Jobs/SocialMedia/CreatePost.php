@@ -46,7 +46,11 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
     {
         try {
             if ($this->meta['query_embedding'] ?? false) {
-                GenRepository::generateEmbeddedSocialMediaPost($this->document, $this->meta['platform']);
+                GenRepository::generateEmbeddedSocialMediaPost(
+                    $this->document,
+                    $this->meta['platform'],
+                    $this->meta['collection_name']
+                );
             } else {
                 GenRepository::generateSocialMediaPost($this->document, $this->meta['platform']);
             }

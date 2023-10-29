@@ -43,11 +43,11 @@ class GenRepository
         RegisterProductUsage::dispatch($document->account, $response['token_usage']);
     }
 
-    public static function generateEmbeddedTitle(Document $document)
+    public static function generateEmbeddedTitle(Document $document, string $collectionName)
     {
         $repo = new DocumentRepository($document);
         $user = User::findOrFail($document->getMeta('user_id'));
-        $oraculum = new Oraculum($user, $document->id);
+        $oraculum = new Oraculum($user, $collectionName);
         $promptHelper = PromptHelperFactory::create($document->language->value);
         $response = $oraculum->query($promptHelper->writeEmbeddedTitle([
             'tone' => $document->getMeta('tone'),
@@ -161,11 +161,11 @@ class GenRepository
         RegisterProductUsage::dispatch($document->account, $response['token_usage']);
     }
 
-    public static function generateEmbeddedSocialMediaPost(Document $document, string $platform)
+    public static function generateEmbeddedSocialMediaPost(Document $document, string $platform, string $collectionName)
     {
         $repo = new DocumentRepository($document);
         $user = User::findOrFail($document->getMeta('user_id'));
-        $oraculum = new Oraculum($user, $document->parent_document_id);
+        $oraculum = new Oraculum($user, $collectionName);
         $promptHelper = PromptHelperFactory::create($document->language->value);
         $response = $oraculum->query($promptHelper->writeEmbeddedSocialMediaPost([
             'query_embedded' => true,

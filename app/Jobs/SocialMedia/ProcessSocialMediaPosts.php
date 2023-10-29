@@ -4,10 +4,7 @@ namespace App\Jobs\SocialMedia;
 
 use App\Enums\DataType;
 use App\Enums\DocumentTaskEnum;
-use App\Enums\DocumentType;
-use App\Helpers\MediaHelper;
 use App\Jobs\DispatchDocumentTasks;
-use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -33,14 +30,23 @@ class ProcessSocialMediaPosts
 
     public function handle()
     {
-        // DocumentRepository::createTask(
-        //     $this->document->id,
-        //     DocumentTaskEnum::SUMMARIZE_DOC,
-        //     [
-        //         'order' => 1,
-        //         'process_id' => $this->processId
-        //     ]
-        // );
+        $queryEmbedding = false;
+        if (isset($this->document->meta['context']) && Str::wordCount($this->document->getMeta('context')) > 1000) {
+            $queryEmbedding = true;
+            DocumentRepository::createTask(
+                $this->document->id,
+                DocumentTaskEnum::EMBED_SOURCE,
+                [
+                    'process_id' => $this->processId,
+                    'meta' => [
+                        'data_type' => DataType::TEXT,
+                        'source' => $this->document->getMeta('context'),
+                        'collection_name' => $this->document->id
+                    ],
+                    'order' => 1
+                ]
+            );
+        }
 
         $this->document->refresh();
 
@@ -52,7 +58,8 @@ class ProcessSocialMediaPosts
                     'process_id' => $this->processId,
                     'meta' => [
                         'data_type' => DataType::WEB_PAGE,
-                        'source' => $this->document->getMeta('source_url')
+                        'source' => $this->document->getMeta('source_url'),
+                        'collection_name' => $this->document->id
                     ],
                     'order' => 2
                 ]
@@ -100,7 +107,8 @@ class ProcessSocialMediaPosts
             [
                 'process_id' => $this->processId,
                 'meta' => [
-                    'query_embedding' => true
+                    'query_embedding' => $queryEmbedding,
+                    'collection_name' => $this->document->id
                 ],
                 'order' => 99
             ]

@@ -22,6 +22,7 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
     protected Document $document;
     protected DataType $dataType;
     protected string $source;
+    protected string $collectionName;
     protected array $meta;
 
     /**
@@ -32,9 +33,10 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
     public function __construct(Document $document, array $meta)
     {
         $this->document = $document->fresh();
-        $this->meta = $meta;
         $this->dataType = DataType::tryFrom($meta['data_type']);
         $this->source = $meta['source'];
+        $this->collectionName = $meta['collection_name'];
+        $this->meta = $meta;
     }
 
     /**
@@ -46,7 +48,7 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
     {
         try {
             $user = User::findOrFail($this->document->getMeta('user_id'));
-            $oraculum = new Oraculum($user, $this->document->id);
+            $oraculum = new Oraculum($user, $this->collectionName);
             $oraculum->add($this->dataType, $this->source);
             $this->jobSucceded();
         } catch (Exception $e) {
