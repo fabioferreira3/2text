@@ -4,6 +4,7 @@ namespace App\Http\Livewire\SocialMediaPost;
 
 use App\Enums\DocumentStatus;
 use App\Enums\Language;
+use App\Enums\SourceProvider;
 use App\Enums\Tone;
 use App\Exceptions\CreatingSocialMediaPostException;
 use App\Jobs\SocialMedia\ProcessSocialMediaPosts;
@@ -13,6 +14,7 @@ use App\Rules\DocxFile;
 use App\Rules\PdfFile;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Talendor\StabilityAI\Enums\StylePreset;
@@ -27,7 +29,8 @@ class SocialMediaPostsManager extends Component
     public bool $displayHistory = false;
     public string $context;
     public $fileInput = null;
-    public string $sourceUrl;
+    public array $sourceUrls;
+    public string $tempSourceUrl;
     public string $source;
     public string $imgPrompt;
     public $imgStyle;
@@ -50,7 +53,8 @@ class SocialMediaPostsManager extends Component
     {
         return [
             'source' => 'required|in:free_text,youtube,website_url',
-            'sourceUrl' => 'required_if:source,youtube,website_url|url',
+            'sourceUrls' => 'required_if:source,youtube,website_url|array',
+            'sourceUrls.*' => 'url',
             'imgPrompt' => 'required_if:generateImage,true',
             'imgStyle' => 'required_if:generateImage,true',
             'platforms' => ['required', 'array', new \App\Rules\ValidPlatforms()],
@@ -72,7 +76,8 @@ class SocialMediaPostsManager extends Component
     {
         return [
             'context.required_if' => __('validation.context_required'),
-            'sourceUrl.required_if' => __('validation.social_media_sourceurl_required'),
+            'sourceUrls.required_if' => __('validation.social_media_sourceurl_required'),
+            'sourceUrls.*.url' => __('validation.social_media_sourceurl_required'),
             'keyword.required' => __('validation.keyword_required'),
             'source.required' => __('validation.source_required'),
             'language.required' => __('validation.language_required'),
@@ -97,7 +102,8 @@ class SocialMediaPostsManager extends Component
         $this->checkDocumentStatus();
         $this->source = $document->getMeta('source') ?? 'free_text';
         $this->context = $document->getContext() ?? '';
-        $this->sourceUrl = $document->getMeta('source_url') ?? '';
+        $this->sourceUrls = $document->getMeta('sourceUrls') ?? [];
+        $this->tempSourceUrl = '';
         $this->generateImage = $document->getMeta('generate_img') ?? false;
         $this->imgPrompt = $document->getMeta('img_prompt') ?? '';
         $this->imgStyle = $document->getMeta('img_style') ?? null;
@@ -115,6 +121,54 @@ class SocialMediaPostsManager extends Component
             'Twitter' => false
         ];
     }
+
+    public function addSourceUrl()
+    {
+        if ($this->source === SourceProvider::YOUTUBE->value) {
+            $validator = Validator::make(
+                ['url' => $this->tempSourceUrl],
+                [
+                    'url' => [
+                        'required',
+                        'url',
+                        function ($attribute, $value, $fail) {
+                            // Check if it's a valid YouTube URL
+                            if (!preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/', $value)) {
+                                return $fail('The ' . $attribute . ' must be a valid YouTube URL.');
+                            }
+                        },
+                    ],
+                ]
+            );
+            $validationMsg = 'This is not a valid Youtube URL.';
+        } else {
+            $validator = Validator::make(['url' => $this->tempSourceUrl], [
+                'url' => 'required|url',
+            ]);
+            $validationMsg = 'The URL is not valid.';
+        }
+
+        if ($validator->fails()) {
+            $this->addError('tempSourceUrl', $validationMsg);
+            return;
+        }
+
+        if (!in_array($this->tempSourceUrl, $this->sourceUrls, true)) {
+            $this->sourceUrls[] = $this->tempSourceUrl;
+        }
+
+        $this->tempSourceUrl = '';
+    }
+
+    public function removeSourceUrl(string $sourceUrl)
+    {
+        $this->sourceUrls = array_filter($this->sourceUrls, function ($url) use ($sourceUrl) {
+            return $url !== $sourceUrl;
+        });
+
+        $this->sourceUrls = array_values($this->sourceUrls);
+    }
+
 
     public function checkDocumentStatus()
     {
@@ -173,7 +227,7 @@ class SocialMediaPostsManager extends Component
                     'style' => $this->style ?? null,
                     'source_file_path' => $filePath ?? null,
                     'source' => $this->source,
-                    'source_url' => $this->sourceUrl ?? null,
+                    'source_urls' => $this->sourceUrls ?? [],
                     'keyword' => $this->keyword ?? null,
                     'more_instructions' => $this->moreInstructions ?? null,
                     'generate_img' => $this->generateImage,
@@ -201,7 +255,10 @@ class SocialMediaPostsManager extends Component
     {
         $this->context = '';
         $this->moreInstructions = '';
+        $this->sourceUrls = [];
         $this->resetErrorBag('fileInput');
+        $this->resetErrorBag('tempSourceUrl');
+        $this->resetErrorBag('sourceUrls');
     }
 
     public function updatedImgStyle($newValue)

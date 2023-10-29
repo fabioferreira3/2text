@@ -19,6 +19,7 @@ return [
     'enter_youtube' => 'Enter a youtube link and I\'ll write text based on the content of the video.',
     'enter_website' => 'Enter an external website url to be used as context, like another blog post or page. I\'ll do my best to extract as much information as possible from that page and use it as context for the creation of your text.',
     'free_text' => 'Just enter any text that you want as context and I\'ll write a text based on the information you provide.',
+    'file_option' => 'File:',
     'further_instructions' => 'Further instructions (optional)',
     'generate_ai_image' => 'Generate AI image',
     'generate_new_image' => 'Generate new image',
@@ -26,6 +27,7 @@ return [
     'generating' => 'Generating with AI',
     'go' => 'Go!',
     'instructions' => 'Instructions',
+    'image_description' => 'Image Description',
     'keyword' => 'Keyword',
     'language' => 'Language',
     'new_social_media_post' => 'New Social Media Post',
@@ -41,6 +43,9 @@ return [
     'text_copied' => 'Text copied to the clipboard!',
     'tone' => 'Tone',
     'target_platforms' => 'Target Platforms',
+    'yes' => 'Yes',
+    'youtube_option' => 'Youtube url(s):',
+    'url_option' => 'URL(s):',
     'writing_style' => 'Writing style',
     'write_image_description' => 'Write the image description'
 ];

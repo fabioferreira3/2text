@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Packages\Oraculum\Exceptions\AddSourceException;
 use App\Packages\Oraculum\Exceptions\ChatRequestException;
 use App\Packages\Oraculum\Exceptions\CreateBotException;
+use App\Packages\Oraculum\Exceptions\DeleteCollectionException;
 use App\Packages\Oraculum\Exceptions\QueryRequestException;
 use Exception;
 use Illuminate\Support\Facades\Artisan;
@@ -18,13 +19,13 @@ class Oraculum
     protected $client;
     protected $defaultBody;
     protected $user;
-    protected $taskId;
+    protected $collectionName;
 
-    public function __construct(User $user, string $taskId)
+    public function __construct(User $user, string $collectionName)
     {
         $this->user = $user;
         $token = JWTAuth::fromUser($this->user);
-        $this->taskId = $taskId;
+        $this->collectionName = $collectionName;
         $this->defaultBody = [
             'app_id' => $this->user->id,
             'token' => $token
@@ -67,7 +68,7 @@ class Oraculum
 
             $response = $this->client
                 ->post('/add', array_merge($this->defaultBody, [
-                    'collection_name' => $this->taskId,
+                    'collection_name' => $this->collectionName,
                     'data_type' => $dataType->value,
                     'url_or_text' => $source
                 ]));
@@ -87,7 +88,7 @@ class Oraculum
     public function query($message, $type = null)
     {
         try {
-            if (!$this->user->chat_enabled) {
+            if (!$this->user->bot_enabled) {
                 $this->createBot();
             }
 
@@ -95,7 +96,7 @@ class Oraculum
 
             $response = $this->client
                 ->post('/query', array_merge($this->defaultBody, [
-                    'collection_name' => $this->taskId,
+                    'collection_name' => $this->collectionName,
                     'message' => $message,
                     'type' => $type ?? null
                 ]));
@@ -123,7 +124,7 @@ class Oraculum
     public function chat($message)
     {
         try {
-            if (!$this->user->chat_enabled) {
+            if (!$this->user->bot_enabled) {
                 $this->createBot();
             }
 
@@ -131,7 +132,7 @@ class Oraculum
 
             $response = $this->client
                 ->post('/chat', array_merge($this->defaultBody, [
-                    'collection_name' => $this->taskId,
+                    'collection_name' => $this->collectionName,
                     'message' => $message
                 ]));
 
@@ -152,6 +153,32 @@ class Oraculum
             }
         } catch (Exception $e) {
             throw new ChatRequestException($e->getMessage());
+        }
+    }
+
+    public function deleteCollection()
+    {
+        try {
+            if (!$this->user->bot_enabled) {
+                $this->createBot();
+            }
+
+            $response = $this->client
+                ->post('/delete-collection', array_merge($this->defaultBody, [
+                    'collection_name' => $this->collectionName,
+                ]));
+
+            if ($response->failed()) {
+                return $response->throw();
+            }
+
+            if ($response->successful()) {
+                return [
+                    'data' => $response->json('data')
+                ];
+            }
+        } catch (Exception $e) {
+            throw new DeleteCollectionException($e->getMessage());
         }
     }
 

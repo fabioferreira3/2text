@@ -35,6 +35,17 @@ class ProcessSocialMediaPosts
             $queryEmbedding = true;
             DocumentRepository::createTask(
                 $this->document->id,
+                DocumentTaskEnum::REMOVE_EMBEDDINGS,
+                [
+                    'process_id' => $this->processId,
+                    'meta' => [
+                        'collection_name' => $this->document->id
+                    ],
+                    'order' => 1
+                ]
+            );
+            DocumentRepository::createTask(
+                $this->document->id,
                 DocumentTaskEnum::EMBED_SOURCE,
                 [
                     'process_id' => $this->processId,
@@ -43,7 +54,7 @@ class ProcessSocialMediaPosts
                         'source' => $this->document->getMeta('context'),
                         'collection_name' => $this->document->id
                     ],
-                    'order' => 1
+                    'order' => 2
                 ]
             );
         }
@@ -61,7 +72,7 @@ class ProcessSocialMediaPosts
                         'source' => $this->document->getMeta('source_url'),
                         'collection_name' => $this->document->id
                     ],
-                    'order' => 2
+                    'order' => 3
                 ]
             );
         } elseif ($this->document->meta['source'] === 'youtube') {
@@ -73,7 +84,7 @@ class ProcessSocialMediaPosts
                     'meta' => [
                         'source_url' => $this->document->meta['source_url']
                     ],
-                    'order' => 2
+                    'order' => 3
                 ]
             );
             DocumentRepository::createTask(
@@ -84,7 +95,7 @@ class ProcessSocialMediaPosts
                     'meta' => [
                         'embed_source' => true
                     ],
-                    'order' => 3
+                    'order' => 4
                 ]
             );
         }
@@ -97,7 +108,7 @@ class ProcessSocialMediaPosts
                 'meta' => [
                     'platforms' => $this->platforms
                 ],
-                'order' => 4
+                'order' => 5
             ]
         );
 
