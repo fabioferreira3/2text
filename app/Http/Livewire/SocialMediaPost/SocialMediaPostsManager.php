@@ -10,7 +10,9 @@ use App\Exceptions\CreatingSocialMediaPostException;
 use App\Jobs\SocialMedia\ProcessSocialMediaPosts;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
+use App\Rules\CsvFile;
 use App\Rules\DocxFile;
+use App\Rules\JsonFile;
 use App\Rules\PdfFile;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -82,10 +84,12 @@ class SocialMediaPostsManager extends Component
             'style' => 'nullable',
             'wordCountTarget' => 'numeric|min:20|max:400',
             'fileInput' => [
-                'required_if:source,docx,pdf',
+                'required_if:source,docx,pdf,csv',
                 'max:51200', // in kilobytes, 50mb = 50 * 1024 = 51200kb
                 new DocxFile($this->source),
-                new PdfFile($this->source)
+                new PdfFile($this->source),
+                new CsvFile($this->source),
+                //    new JsonFile($this->source)
             ]
         ];
     }

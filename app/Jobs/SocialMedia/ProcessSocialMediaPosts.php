@@ -62,6 +62,7 @@ class ProcessSocialMediaPosts
                 );
             }
         } elseif ($this->document->getMeta('source') === SourceProvider::WEBSITE_URL->value) {
+            $queryEmbedding = true;
             foreach ($this->document->getMeta('source_urls') as $key => $sourceUrl) {
                 DocumentRepository::createTask(
                     $this->document->id,
@@ -78,6 +79,7 @@ class ProcessSocialMediaPosts
                 );
             }
         } elseif ($this->document->getMeta('source') === SourceProvider::YOUTUBE->value) {
+            $queryEmbedding = true;
             foreach ($this->document->getMeta('source_urls') as $key => $sourceUrl) {
                 DocumentRepository::createTask(
                     $this->document->id,
@@ -96,8 +98,9 @@ class ProcessSocialMediaPosts
             SourceProvider::PDF->value,
             SourceProvider::DOCX->value,
             SourceProvider::CSV->value,
-            SourceProvider::JSON->value
+            //    SourceProvider::JSON->value
         ])) {
+            $queryEmbedding = true;
             $dataType = DataType::tryFrom($this->document->meta['source']);
             DocumentRepository::createTask(
                 $this->document->id,

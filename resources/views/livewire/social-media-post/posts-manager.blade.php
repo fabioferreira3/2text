@@ -126,7 +126,7 @@
                                     </div>
                                 </div>
                                 <textarea class="border border-zinc-200 rounded-lg w-full mt-3" rows="8"
-                                    maxlength="30000" wire:model="context"></textarea>
+                                    maxlength="30000" wire:model.defer="context"></textarea>
                                 <div class="mt-2">
                                     @if ($errors->has('context'))
                                     <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
@@ -145,9 +145,13 @@
                             @endif
 
                             @if ($source === 'website_url' || $source === 'youtube')
-                            <label class="font-bold text-lg text-zinc-700">
-                                @if($source === 'youtube') {{ __('social_media.youtube_option') }}
-                                @else {{ __('social_media.url_option') }}
+                            <label class="font-bold text-lg text-zinc-700 flex items-center justify-between">
+                                @if($source === 'youtube') {{ __('social_media.youtube_option') }} <span
+                                    class="text-sm">{{__('social_media.max_permitted_youtube_links', ['max'
+                                    => 3])}}</span>
+                                @else {{ __('social_media.url_option') }} <span
+                                    class="text-sm">{{__('social_media.max_permitted_urls', ['max'
+                                    => 5])}}</span>
                                 @endif
                             </label>
                             <div class="flex flex-col gap-1 my-2">
@@ -197,7 +201,7 @@
                             </div>
 
                             <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="5000"
-                                wire:model="moreInstructions"></textarea>
+                                wire:model.defer="moreInstructions"></textarea>
                             @if ($errors->has('more_instructions'))
                             <span class="text-red-500 text-sm">{{ $errors->first('more_instructions') }}</span>
                             @endif
@@ -273,7 +277,7 @@
                                 </div>
                                 <textarea placeholder="{{__('social_media.placeholder_example')}}"
                                     class="border border-zinc-200 rounded-lg w-full mt-3" rows="3" maxlength="1000"
-                                    wire:model="imgPrompt"></textarea>
+                                    wire:model.defer="imgPrompt"></textarea>
                                 <div class="mt-2">
                                     @if ($errors->has('imgPrompt'))
                                     <span class="text-red-500 text-sm">{{ $errors->first('imgPrompt') }}</span>
@@ -290,7 +294,7 @@
                                 'content' => App\Helpers\InstructionsHelper::socialMediaKeyword(),
                                 ])
                             </div>
-                            <input name="keyword" wire:model="keyword"
+                            <input name="keyword" wire:model.defer="keyword"
                                 class="p-3 w-full rounded-lg border border-zinc-200" />
                             @if ($errors->has('keyword'))
                             <span class="text-red-500 text-sm">{{ $errors->first('keyword') }}</span>
@@ -345,11 +349,15 @@
                 </div>
             </div>
             <div class="flex justify-center mt-8">
-                <button wire:click="process" :disabled="$generating"
+                <button wire:click="process"
                     class="flex items-center gap-4 bg-secondary text-xl hover:bg-main text-white font-bold px-4 py-2 rounded-lg">
-                    <x-icon name="play" class="w-8 h-8" />
-                    <span>@if(!$generating) {{__('social_media.generate')}} @else {{
-                        __('social_media.please_wait')}}@endif</span>
+                    <div wire:loading.remove>
+                        <x-icon name="play" class="w-8 h-8" />
+                    </div>
+                    <div wire:loading>
+                        <x-loader color="white" height="10" width="10" />
+                    </div>
+                    <span>{{__('social_media.generate')}}</span>
                 </button>
             </div>
 

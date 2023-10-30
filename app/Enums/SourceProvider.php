@@ -7,7 +7,7 @@ enum SourceProvider: string
     case CSV = 'csv';
     case DOCX = 'docx';
     case FREE_TEXT = 'free_text';
-    case JSON = 'json';
+        //  case JSON = 'json';
     case PDF = 'pdf_file';
     case YOUTUBE = 'youtube';
     case WEBSITE_URL = 'website_url';
@@ -16,7 +16,7 @@ enum SourceProvider: string
     {
         return match ($this) {
             self::CSV     => __("common.csv_file"),
-            self::JSON     => __("common.json_file"),
+            //  self::JSON     => __("common.json_file"),
             self::FREE_TEXT       => __("common.free_text"),
             self::WEBSITE_URL     => __("common.website_url"),
             self::YOUTUBE         => __("common.youtube"),

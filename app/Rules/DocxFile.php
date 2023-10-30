@@ -27,10 +27,10 @@ class DocxFile implements ValidationRule
 
         if ($value instanceof \Illuminate\Http\UploadedFile) {
             if ($value->getMimeType() !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-                $fail("The {$attribute} must be a valid .docx file.");
+                $fail("The file provided must be a valid .docx file.");
             }
         } else {
-            $fail("The {$attribute} is required.");
+            $fail("It is required to provide a .docx file.");
         }
     }
 

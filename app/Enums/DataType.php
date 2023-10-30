@@ -7,7 +7,7 @@ enum DataType: string
     case CSV = 'csv';
     case DOCX = 'docx';
     case DOCS_SITE = 'docs_site';
-    case JSON = 'json';
+        //  case JSON = 'json';
     case MDX = 'mdx';
     case NOTION = 'notion';
     case PDF = 'pdf_file';
@@ -22,7 +22,7 @@ enum DataType: string
             self::CSV => 'csv',
             self::DOCX => 'docx',
             self::DOCS_SITE => 'Doc site',
-            self::JSON => 'json',
+            //     self::JSON => 'json',
             self::MDX => 'mdx',
             self::NOTION => 'Notion site',
             self::PDF => 'PDF',

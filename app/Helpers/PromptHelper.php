@@ -148,7 +148,6 @@ class PromptHelper
 
     public function writeSocialMediaPost($context, array $params)
     {
-        Log::debug($params);
         $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
         $prompt = Lang::get('social_media_prompt.write_social_media_post', [
             'platform' => $params['platform']

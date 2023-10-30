@@ -52,7 +52,7 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
                 DataType::PDF,
                 DataType::DOCX,
                 DataType::CSV,
-                DataType::JSON
+                //    DataType::JSON
             ], true)) {
                 $expirationDate = now()->addMinutes(15);
                 $tempUrl = Storage::temporaryUrl($this->source, $expirationDate);

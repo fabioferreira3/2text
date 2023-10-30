@@ -27,20 +27,10 @@ class PdfFile implements ValidationRule
 
         if ($value instanceof \Illuminate\Http\UploadedFile) {
             if ($value->getMimeType() !== 'application/pdf') {
-                $fail("The {$attribute} must be a valid .pdf file.");
+                $fail("The file provided must be a valid PDF file.");
             }
         } else {
-            $fail("The {$attribute} is required.");
+            $fail("It is required to provide a PDF file.");
         }
-    }
-
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message(): string
-    {
-        return 'The file provided must be a valid .pdf file.';
     }
 }
