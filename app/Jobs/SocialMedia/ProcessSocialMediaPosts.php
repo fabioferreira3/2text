@@ -31,7 +31,7 @@ class ProcessSocialMediaPosts
 
     public function handle()
     {
-        $queryEmbedding = false;
+        $queryEmbedding = true;
         DocumentRepository::createTask(
             $this->document->id,
             DocumentTaskEnum::REMOVE_EMBEDDINGS,
@@ -46,7 +46,6 @@ class ProcessSocialMediaPosts
 
         if ($this->document->getMeta('source') === SourceProvider::FREE_TEXT->value) {
             if ($this->document->getMeta('context') && Str::wordCount($this->document->getMeta('context')) > 1000) {
-                $queryEmbedding = true;
                 DocumentRepository::createTask(
                     $this->document->id,
                     DocumentTaskEnum::EMBED_SOURCE,
@@ -60,9 +59,10 @@ class ProcessSocialMediaPosts
                         'order' => 2
                     ]
                 );
+            } else {
+                $queryEmbedding = false;
             }
         } elseif ($this->document->getMeta('source') === SourceProvider::WEBSITE_URL->value) {
-            $queryEmbedding = true;
             foreach ($this->document->getMeta('source_urls') as $key => $sourceUrl) {
                 DocumentRepository::createTask(
                     $this->document->id,
@@ -79,7 +79,6 @@ class ProcessSocialMediaPosts
                 );
             }
         } elseif ($this->document->getMeta('source') === SourceProvider::YOUTUBE->value) {
-            $queryEmbedding = true;
             foreach ($this->document->getMeta('source_urls') as $key => $sourceUrl) {
                 DocumentRepository::createTask(
                     $this->document->id,
@@ -100,7 +99,6 @@ class ProcessSocialMediaPosts
             SourceProvider::CSV->value,
             //    SourceProvider::JSON->value
         ])) {
-            $queryEmbedding = true;
             $dataType = DataType::tryFrom($this->document->meta['source']);
             DocumentRepository::createTask(
                 $this->document->id,

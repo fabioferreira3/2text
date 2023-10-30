@@ -23,6 +23,16 @@ trait JobEndings
         }
     }
 
+    protected function jobFailedButSkipped($errorMsg = '')
+    {
+        if (isset($this->meta['task_id'])) {
+            $task = DocumentTask::findOrFail($this->meta['task_id']);
+            $task->update(['status' => 'skipped']);
+        }
+
+        throw new Exception($errorMsg);
+    }
+
     protected function jobFailed($errorMsg = '')
     {
         if (isset($this->meta['task_id'])) {

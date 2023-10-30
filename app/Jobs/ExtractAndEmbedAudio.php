@@ -57,6 +57,20 @@ class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
     }
 
     /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public $tries = 7;
+
+    /**
+     * The maximum number of unhandled exceptions to allow before failing.
+     *
+     * @var int
+     */
+    public $maxExceptions = 7;
+
+    /**
      * Get the middleware the job should pass through.
      *
      * @return array
@@ -73,7 +87,7 @@ class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
      */
     public function retryUntil()
     {
-        return now()->addMinutes(5);
+        return now()->addMinutes(10);
     }
 
     /**
