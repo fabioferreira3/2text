@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Enums\DataType;
+use App\Enums\SourceProvider;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
@@ -14,6 +15,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class EmbedSource implements ShouldQueue, ShouldBeUnique
 {
@@ -47,6 +50,14 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
+            Log::debug($this->source);
+            Log::debug($this->dataType->value);
+            if ($this->dataType->value === "pdf_file") {
+                Log::debug('tentando');
+                $newSource = Storage::temporaryUrl($this->source, now()->addMinutes(15));
+                $this->source = $newSource;
+            }
+            Log::debug($this->source);
             $user = User::findOrFail($this->document->getMeta('user_id'));
             $oraculum = new Oraculum($user, $this->collectionName);
             $oraculum->add($this->dataType, $this->source);

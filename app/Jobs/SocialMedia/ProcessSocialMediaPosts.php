@@ -44,8 +44,8 @@ class ProcessSocialMediaPosts
             ]
         );
 
-        if ($this->document->meta['source'] === SourceProvider::FREE_TEXT->value) {
-            if (isset($this->document->meta['context']) && Str::wordCount($this->document->getMeta('context')) > 1000) {
+        if ($this->document->getMeta('source') === SourceProvider::FREE_TEXT->value) {
+            if ($this->document->getMeta('context') && Str::wordCount($this->document->getMeta('context')) > 1000) {
                 $queryEmbedding = true;
                 DocumentRepository::createTask(
                     $this->document->id,
@@ -61,7 +61,7 @@ class ProcessSocialMediaPosts
                     ]
                 );
             }
-        } elseif ($this->document->meta['source'] === SourceProvider::WEBSITE_URL->value) {
+        } elseif ($this->document->getMeta('source') === SourceProvider::WEBSITE_URL->value) {
             foreach ($this->document->getMeta('source_urls') as $key => $sourceUrl) {
                 DocumentRepository::createTask(
                     $this->document->id,
@@ -77,7 +77,7 @@ class ProcessSocialMediaPosts
                     ]
                 );
             }
-        } elseif ($this->document->meta['source'] === SourceProvider::YOUTUBE->value) {
+        } elseif ($this->document->getMeta('source') === SourceProvider::YOUTUBE->value) {
             foreach ($this->document->getMeta('source_urls') as $key => $sourceUrl) {
                 DocumentRepository::createTask(
                     $this->document->id,
@@ -92,6 +92,20 @@ class ProcessSocialMediaPosts
                     ]
                 );
             }
+        } elseif ($this->document->meta['source'] === SourceProvider::PDF->value) {
+            DocumentRepository::createTask(
+                $this->document->id,
+                DocumentTaskEnum::EMBED_SOURCE,
+                [
+                    'process_id' => $this->processId,
+                    'meta' => [
+                        'data_type' => DataType::PDF,
+                        'source' => $this->document->getMeta('source_file_path'),
+                        'collection_name' => $this->document->id
+                    ],
+                    'order' => 2
+                ]
+            );
         }
 
         DocumentRepository::createTask(

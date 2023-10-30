@@ -36,5 +36,5 @@ return [
     'unselect' => 'Unselect',
     'view_history' => 'View History',
     'youtube' => 'Youtube',
-    'website_url' => 'Website URL'
+    'website_url' => 'Website pages'
 ];

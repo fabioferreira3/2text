@@ -40,12 +40,13 @@ return [
     'social_media_post' => 'Social media post',
     'source' => 'Source',
     'source_definition' => 'Define what would be the base context of your text. Choose between a youtube link, a website url, or just from free text.',
+    'target_word_count' => 'Target word count',
     'text_copied' => 'Text copied to the clipboard!',
     'tone' => 'Tone',
     'target_platforms' => 'Target Platforms',
     'yes' => 'Yes',
     'youtube_option' => 'Youtube url(s):',
-    'url_option' => 'URL(s):',
+    'url_option' => 'Page(s) URL:',
     'writing_style' => 'Writing style',
     'write_image_description' => 'Write the image description'
 ];

@@ -126,9 +126,11 @@ class PromptHelper
         $prompt = Lang::get('social_media_prompt.write_social_media_post_embedded', [
             'platform' => $params['platform']
         ], $this->language);
-        if ($params['platform'] === 'twitter') {
-            $prompt .= Lang::get('social_media_prompt.max_words', ['max' => 35], $this->language);
+
+        if ($params['target_word_count'] ?? false) {
+            $prompt .= Lang::get('social_media_prompt.target_word_count', ['target' => $params['platform'] === 'twitter' ? 35 : $params['target_word_count']], $this->language);
         }
+
         if ($params['keyword'] ?? false) {
             $prompt .= Lang::get('social_media_prompt.keyword_instructions', ['keyword' => $params['keyword']], $this->language);
         }
@@ -139,6 +141,7 @@ class PromptHelper
         if ($params['more_instructions']) {
             $prompt .= Lang::get('social_media_prompt.more_instructions', ['instructions' => $params['more_instructions']], $this->language);
         }
+
         return $prompt;
     }
 

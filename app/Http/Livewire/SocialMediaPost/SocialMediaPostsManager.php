@@ -19,6 +19,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Talendor\StabilityAI\Enums\StylePreset;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class SocialMediaPostsManager extends Component
 {
@@ -31,9 +32,11 @@ class SocialMediaPostsManager extends Component
     public $fileInput = null;
     public array $sourceUrls;
     public string $tempSourceUrl;
+    public bool $maxSourceUrlsReached;
     public string $source;
     public string $imgPrompt;
     public $imgStyle;
+    public $wordCountTarget;
     public string $language;
     public array $languages;
     public array $stylePresets;
@@ -52,8 +55,19 @@ class SocialMediaPostsManager extends Component
     public function rules()
     {
         return [
-            'source' => 'required|in:free_text,youtube,website_url',
-            'sourceUrls' => 'required_if:source,youtube,website_url|array',
+            'source' => 'required|in:free_text,youtube,website_url,pdf,docx',
+            'sourceUrls' => [
+                'required_if:source,youtube,website_url',
+                'array',
+                function ($attribute, $value, $fail) {
+                    if (request()->input('source') === 'youtube' && count($value) > 3) {
+                        return $fail('The maximum number of Youtube sources is 3.');
+                    }
+                    if (request()->input('source') === 'website_url' && count($value) > 5) {
+                        return $fail('The maximum number of source URLs is 5.');
+                    }
+                },
+            ],
             'sourceUrls.*' => 'url',
             'imgPrompt' => 'required_if:generateImage,true',
             'imgStyle' => 'required_if:generateImage,true',
@@ -63,6 +77,7 @@ class SocialMediaPostsManager extends Component
             'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
             'tone' => 'nullable',
             'style' => 'nullable',
+            'wordCountTarget' => 'numeric|min:20|max:400',
             'fileInput' => [
                 'required_if:source,docx,pdf',
                 'max:51200', // in kilobytes, 50mb = 50 * 1024 = 51200kb
@@ -109,6 +124,7 @@ class SocialMediaPostsManager extends Component
         $this->imgStyle = $document->getMeta('img_style') ?? null;
         $this->language = $document->language->value ?? 'en';
         $this->languages = Language::getLabels();
+        $this->wordCountTarget = 50;
         $this->stylePresets = StylePreset::getMappedValues();
         $this->keyword = $document->getMeta('keyword') ?? '';
         $this->tone = $document->getMeta('tone') ?? 'default';
@@ -120,6 +136,20 @@ class SocialMediaPostsManager extends Component
             'Instagram' => false,
             'Twitter' => false
         ];
+        $this->checkMaxSourceUrls();
+    }
+
+    public function checkMaxSourceUrls()
+    {
+        $isMaxReached = false;
+
+        if (($this->source === SourceProvider::YOUTUBE->value && count($this->sourceUrls) >= 3) ||
+            ($this->source === SourceProvider::WEBSITE_URL->value && count($this->sourceUrls) >= 5)
+        ) {
+            $isMaxReached = true;
+        }
+
+        $this->maxSourceUrlsReached = $isMaxReached;
     }
 
     public function addSourceUrl()
@@ -158,6 +188,7 @@ class SocialMediaPostsManager extends Component
         }
 
         $this->tempSourceUrl = '';
+        $this->checkMaxSourceUrls();
     }
 
     public function removeSourceUrl(string $sourceUrl)
@@ -167,6 +198,7 @@ class SocialMediaPostsManager extends Component
         });
 
         $this->sourceUrls = array_values($this->sourceUrls);
+        $this->checkMaxSourceUrls();
     }
 
 
@@ -201,48 +233,6 @@ class SocialMediaPostsManager extends Component
         $this->showInstructions = !$this->showInstructions;
     }
 
-    public function process()
-    {
-        $this->validate();
-
-        try {
-            $this->generating = true;
-            $this->dispatchBrowserEvent('alert', [
-                'type' => 'info',
-                'message' => __('alerts.generating_posts')
-            ]);
-
-            $filePath = null;
-            if ($this->fileInput) {
-                $accountId = $this->document->account->id;
-                $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
-                $filePath = "documents/$accountId/" . $filename;
-                $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
-            }
-            $this->document->update([
-                'language' => $this->language ?? $this->document->language->value,
-                'meta' => [
-                    'context' => $this->context ?? null,
-                    'tone' => $this->tone ?? Tone::CASUAL->value,
-                    'style' => $this->style ?? null,
-                    'source_file_path' => $filePath ?? null,
-                    'source' => $this->source,
-                    'source_urls' => $this->sourceUrls ?? [],
-                    'keyword' => $this->keyword ?? null,
-                    'more_instructions' => $this->moreInstructions ?? null,
-                    'generate_img' => $this->generateImage,
-                    'img_prompt' => $this->generateImage ? $this->imgPrompt ?? StylePreset::DIGITAL_ART->value : null,
-                    'img_style' => $this->generateImage ? $this->imgStyle : null,
-                    'user_id' => Auth::check() ? Auth::id() : null
-                ]
-            ]);
-
-            ProcessSocialMediaPosts::dispatch($this->document, $this->platforms);
-        } catch (Exception $e) {
-            throw new CreatingSocialMediaPostException($e->getMessage());
-        }
-    }
-
     public function finishedProcess(array $params)
     {
         if (isset($params['parent_document_id']) && $params['parent_document_id'] === $this->document->id) {
@@ -274,6 +264,49 @@ class SocialMediaPostsManager extends Component
             'type' => 'success',
             'message' => (__('alerts.post_deleted'))
         ]);
+    }
+
+    public function process()
+    {
+        $this->validate();
+
+        try {
+            $this->generating = true;
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'info',
+                'message' => __('alerts.generating_posts')
+            ]);
+
+            $filePath = null;
+            if ($this->fileInput) {
+                $accountId = $this->document->account->id;
+                $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
+                $filePath = "documents/$accountId/" . $filename;
+                $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
+            }
+            $this->document->update([
+                'language' => $this->language ?? $this->document->language->value,
+                'meta' => [
+                    'context' => $this->context ?? null,
+                    'tone' => $this->tone ?? Tone::CASUAL->value,
+                    'style' => $this->style ?? null,
+                    'source_file_path' => $filePath ?? null,
+                    'source' => $this->source,
+                    'source_urls' => $this->sourceUrls ?? [],
+                    'keyword' => $this->keyword ?? null,
+                    'target_word_count' => $this->wordCountTarget,
+                    'more_instructions' => $this->moreInstructions ?? null,
+                    'generate_img' => $this->generateImage,
+                    'img_prompt' => $this->generateImage ? $this->imgPrompt ?? StylePreset::DIGITAL_ART->value : null,
+                    'img_style' => $this->generateImage ? $this->imgStyle : null,
+                    'user_id' => Auth::check() ? Auth::id() : null
+                ]
+            ]);
+
+            ProcessSocialMediaPosts::dispatch($this->document, $this->platforms);
+        } catch (Exception $e) {
+            throw new CreatingSocialMediaPostException($e->getMessage());
+        }
     }
 
     public function render()

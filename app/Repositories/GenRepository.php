@@ -140,6 +140,7 @@ class GenRepository
                     'platform' => $platform,
                     'tone' => $document->getMeta('tone'),
                     'style' => $document->getMeta('style'),
+                    'target_word_count' => $document->getMeta('target_word_count'),
                     'more_instructions' => $document->getMeta('more_instructions')
                 ])
             ]
@@ -173,6 +174,7 @@ class GenRepository
             'platform' => $platform,
             'tone' => $document->getMeta('tone'),
             'style' => $document->getMeta('style'),
+            'target_word_count' => $document->getMeta('target_word_count'),
             'more_instructions' => $document->getMeta('more_instructions')
         ]), 'advanced');
 
