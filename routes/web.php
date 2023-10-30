@@ -15,6 +15,7 @@ use App\Http\Livewire\TextToSpeech\TextToAudio;
 use App\Http\Livewire\TextTranscription\NewTranscription;
 use App\Http\Livewire\TextTranscription\TextTranscription;
 use App\Http\Livewire\Trash;
+use App\Models\ShortLink;
 use App\Models\Voice;
 use Talendor\ElevenLabsClient\ElevenLabsClient;
 use Talendor\ElevenLabsClient\TextToSpeech\TextToSpeech;
@@ -69,6 +70,13 @@ Route::middleware([
     Route::get('/text-to-speech/history', History::class)->name('text-to-speech-history');
     Route::get('/documents/text-to-speech/{document}', TextToAudio::class)->name('text-to-speech-view');
 
+    /* Short links */
+    Route::get('/link/{shortLink}', function (string $shortLink) {
+        $shortLink = ShortLink::valid()->where('link', $shortLink)->firstOrFail();
+        return redirect($shortLink->target_url);
+    })->name('short-link');
+
+    /* Document routes */
     Route::get('/documents/{document}', [DocumentViewController::class, 'index'])->name('document-view');
 
 

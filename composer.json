@@ -28,6 +28,7 @@
         "pusher/pusher-php-server": "^7.2",
         "rappasoft/laravel-livewire-tables": "^2.12",
         "sentry/sentry-laravel": "^3.3",
+        "shivella/laravel-bitly": "^1.1",
         "socialiteproviders/apple": "^5.4",
         "socialiteproviders/facebook": "^4.1",
         "socialiteproviders/google": "^4.1",

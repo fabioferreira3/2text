@@ -54,7 +54,7 @@ class ProcessSocialMediaPostsCreation implements ShouldQueue
                         'process_id' => $textProcessId,
                         'meta' => [
                             'platform' => $platformName,
-                            'query_embedding' => true,
+                            'query_embedding' => $this->meta['query_embedding'] ?? false,
                             'collection_name' => $this->document->id
                         ],
                         'order' => 1

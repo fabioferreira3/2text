@@ -34,7 +34,8 @@ class Oraculum
         $this->client = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Accept-Encoding' => 'gzip, deflate, br'
-        ])->baseUrl(config('oraculum.url'));
+        ])->baseUrl(config('oraculum.url'))
+            ->timeout(90);
     }
 
     public function createBot()

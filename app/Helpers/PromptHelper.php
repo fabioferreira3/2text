@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Enums\Tone;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Log;
 
 class PromptHelper
 {
@@ -14,9 +15,9 @@ class PromptHelper
         $this->language = $language;
     }
 
-    public function generic($prompt, $text)
+    public function generic($prompt)
     {
-        return Lang::get('prompt.generic_prompt', ['prompt' => $prompt, 'text' => $text], $this->language);
+        return Lang::get('prompt.generic_prompt', ['prompt' => $prompt], $this->language);
     }
 
     public function summarize($text)
@@ -147,13 +148,16 @@ class PromptHelper
 
     public function writeSocialMediaPost($context, array $params)
     {
+        Log::debug($params);
         $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
         $prompt = Lang::get('social_media_prompt.write_social_media_post', [
             'platform' => $params['platform']
         ], $this->language);
-        if ($params['platform'] === 'twitter') {
-            $prompt .= Lang::get('social_media_prompt.max_words', ['max' => 35], $this->language);
+
+        if ($params['target_word_count'] ?? false) {
+            $prompt .= Lang::get('social_media_prompt.target_word_count', ['target' => $params['platform'] === 'twitter' ? 35 : $params['target_word_count']], $this->language);
         }
+
         if ($params['keyword'] ?? false) {
             $prompt .= Lang::get('social_media_prompt.keyword_instructions', ['keyword' => $params['keyword']], $this->language);
         }

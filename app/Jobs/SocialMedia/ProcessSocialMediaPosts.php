@@ -53,7 +53,7 @@ class ProcessSocialMediaPosts
                     [
                         'process_id' => $this->processId,
                         'meta' => [
-                            'data_type' => DataType::TEXT,
+                            'data_type' => DataType::TEXT->value,
                             'source' => $this->document->getMeta('context'),
                             'collection_name' => $this->document->id
                         ],
@@ -69,7 +69,7 @@ class ProcessSocialMediaPosts
                     [
                         'process_id' => $this->processId,
                         'meta' => [
-                            'data_type' => DataType::WEB_PAGE,
+                            'data_type' => DataType::WEB_PAGE->value,
                             'source' => $sourceUrl,
                             'collection_name' => $this->document->id
                         ],
@@ -92,14 +92,20 @@ class ProcessSocialMediaPosts
                     ]
                 );
             }
-        } elseif ($this->document->meta['source'] === SourceProvider::PDF->value) {
+        } elseif (in_array($this->document->meta['source'], [
+            SourceProvider::PDF->value,
+            SourceProvider::DOCX->value,
+            SourceProvider::CSV->value,
+            SourceProvider::JSON->value
+        ])) {
+            $dataType = DataType::tryFrom($this->document->meta['source']);
             DocumentRepository::createTask(
                 $this->document->id,
                 DocumentTaskEnum::EMBED_SOURCE,
                 [
                     'process_id' => $this->processId,
                     'meta' => [
-                        'data_type' => DataType::PDF,
+                        'data_type' => $dataType->value,
                         'source' => $this->document->getMeta('source_file_path'),
                         'collection_name' => $this->document->id
                     ],
@@ -114,7 +120,8 @@ class ProcessSocialMediaPosts
             [
                 'process_id' => $this->processId,
                 'meta' => [
-                    'platforms' => $this->platforms
+                    'platforms' => $this->platforms,
+                    'query_embedding' => $queryEmbedding
                 ],
                 'order' => 10
             ]

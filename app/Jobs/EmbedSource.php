@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Enums\DataType;
-use App\Enums\SourceProvider;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
@@ -15,7 +14,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class EmbedSource implements ShouldQueue, ShouldBeUnique
@@ -50,14 +48,21 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            Log::debug($this->source);
-            Log::debug($this->dataType->value);
-            if ($this->dataType->value === "pdf_file") {
-                Log::debug('tentando');
-                $newSource = Storage::temporaryUrl($this->source, now()->addMinutes(15));
-                $this->source = $newSource;
+            if (in_array($this->dataType, [
+                DataType::PDF,
+                DataType::DOCX,
+                DataType::CSV,
+                DataType::JSON
+            ], true)) {
+                $expirationDate = now()->addMinutes(15);
+                $tempUrl = Storage::temporaryUrl($this->source, $expirationDate);
+                // $shortLink = SupportHelper::shortenLink($tempUrl, [
+                //     'account_id' => $this->document->account_id,
+                //     'expires_at' => $expirationDate
+                // ]);
+                $shortLink = app('bitly')->getUrl($tempUrl);
+                $this->source = $shortLink;
             }
-            Log::debug($this->source);
             $user = User::findOrFail($this->document->getMeta('user_id'));
             $oraculum = new Oraculum($user, $this->collectionName);
             $oraculum->add($this->dataType, $this->source);

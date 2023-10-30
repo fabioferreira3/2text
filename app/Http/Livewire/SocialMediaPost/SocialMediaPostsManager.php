@@ -55,7 +55,10 @@ class SocialMediaPostsManager extends Component
     public function rules()
     {
         return [
-            'source' => 'required|in:free_text,youtube,website_url,pdf,docx',
+            'source' => [
+                'required',
+                Rule::in(array_map(fn ($value) => $value->value, SourceProvider::cases()))
+            ],
             'sourceUrls' => [
                 'required_if:source,youtube,website_url',
                 'array',
@@ -92,7 +95,7 @@ class SocialMediaPostsManager extends Component
         return [
             'context.required_if' => __('validation.context_required'),
             'sourceUrls.required_if' => __('validation.social_media_sourceurl_required'),
-            'sourceUrls.*.url' => __('validation.social_media_sourceurl_required'),
+            'sourceUrls.*.url' => __('validation.active_url'),
             'keyword.required' => __('validation.keyword_required'),
             'source.required' => __('validation.source_required'),
             'language.required' => __('validation.language_required'),
@@ -124,7 +127,7 @@ class SocialMediaPostsManager extends Component
         $this->imgStyle = $document->getMeta('img_style') ?? null;
         $this->language = $document->language->value ?? 'en';
         $this->languages = Language::getLabels();
-        $this->wordCountTarget = 50;
+        $this->wordCountTarget = $document->getMeta('target_word_count') ?? 50;
         $this->stylePresets = StylePreset::getMappedValues();
         $this->keyword = $document->getMeta('keyword') ?? '';
         $this->tone = $document->getMeta('tone') ?? 'default';

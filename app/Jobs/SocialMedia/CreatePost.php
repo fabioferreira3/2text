@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class CreatePost implements ShouldQueue, ShouldBeUnique
 {
@@ -23,6 +24,16 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
     protected array $meta;
     protected PromptHelper $promptHelper;
     protected DocumentRepository $repo;
+
+    /**
+     * Determine the time at which the job should timeout.
+     *
+     * @return \DateTime
+     */
+    public function retryUntil()
+    {
+        return now()->addMinutes(5);
+    }
 
     /**
      * Create a new job instance.

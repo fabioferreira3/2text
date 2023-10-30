@@ -20,6 +20,7 @@ return [
         'string' => 'The :attribute must be between :min and :max characters.',
     ],
     'boolean' => 'The :attribute field must be true or false.',
+    'blog_post_sourceurl_required' => 'You need to provide a link to be used as context for your blog post.',
     'confirmed' => 'The :attribute confirmation does not match.',
     'context_required' => 'You need to provide some context for the AI to generate your social media post.',
     'current_password' => 'The password is incorrect.',

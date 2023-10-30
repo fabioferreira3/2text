@@ -14,6 +14,7 @@ use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
 use App\Models\User;
 use App\Packages\Oraculum\Oraculum;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Talendor\StabilityAI\Enums\StabilityAIEngine;
@@ -202,7 +203,7 @@ class GenRepository
         $chatGpt = new ChatGPT($model->value);
         $response = $chatGpt->request([[
             'role' => 'user',
-            'content' => $promptHelper->generic($params['prompt'], $params['text'])
+            'content' => $promptHelper->generic($params['prompt'])
         ]]);
         $contentBlock->update(['content' => $response['content']]);
         $repo->addHistory(

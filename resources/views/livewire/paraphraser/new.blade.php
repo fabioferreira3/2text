@@ -6,7 +6,8 @@
                 <div class="flex flex-col gap-6">
                     <div class="flex gap-2 items-center">
                         <label class="font-bold text-lg">{{__('paraphraser.origin')}}:</label>
-                        @include('livewire.common.help-item', ['header' => __('paraphraser.origin'), 'content' => App\Helpers\InstructionsHelper::paraphraserSources()])
+                        @include('livewire.common.help-item', ['header' => __('paraphraser.origin'), 'content' =>
+                        App\Helpers\InstructionsHelper::paraphraserSources()])
                     </div>
                     <select name="provider" wire:model="source" class="p-3 rounded-lg border border-zinc-200">
                         {{-- @include('livewire.common.source-providers-options') --}}
@@ -23,13 +24,15 @@
                     </div>
                     <div class="flex items-center">
                         <div class="mr-4 font-bold">Language:</div>
-                        <select name="language" wire:model="language" class="p-3 rounded-lg border border-zinc-200 w-64">
+                        <select name="language" wire:model="language"
+                            class="p-3 rounded-lg border border-zinc-200 w-64">
                             @include('livewire.common.languages-options')
                         </select>
                     </div>
                     @include('livewire.paraphraser.tones')
                     @endif
-                    <button wire:click="start" :disabled="$isProcessing" wire:loading.remove class="bg-secondary w-1/3 m-auto mt-2 text-white font-bold px-4 py-2 rounded-lg">
+                    <button wire:click="start" :disabled="$isProcessing" wire:loading.remove
+                        class="bg-secondary w-1/3 m-auto mt-2 text-white font-bold px-4 py-2 rounded-lg">
                         @if ($isProcessing){{__('paraphraser.processing')}} @endif
                         @if (!$isProcessing){{__('paraphraser.start')}} @endif
                     </button>

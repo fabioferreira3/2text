@@ -32,6 +32,7 @@ return [
     'language' => 'Language',
     'new_social_media_post' => 'New Social Media Post',
     'placeholder_example' => 'Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary.',
+    'please_wait' => 'Please wait...',
     'provide_guidelines' => 'Feel free to provide any other guidelines so I can write a post that meets your expectations.',
     'regenerate' => 'Regenerate',
     'regenerate_image' => 'Regenerate image',

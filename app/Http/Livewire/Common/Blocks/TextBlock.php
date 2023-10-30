@@ -64,33 +64,33 @@ class TextBlock extends Component
     public function expand()
     {
         if (in_array($this->type, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])) {
-            $this->rewrite(__('prompt.expand_title', ['tone' => $this->tone]));
+            $this->rewrite(__('prompt.expand_title', ['text' => $this->content]));
         } else {
-            $this->rewrite(__('prompt.expand', ['tone' => $this->tone]));
+            $this->rewrite(__('prompt.expand', ['text' => $this->content]));
         }
     }
 
     public function paraphrase()
     {
-        $this->rewrite(__('prompt.paraphrase_text', ['tone' => $this->tone]));
+        $this->rewrite(__('prompt.paraphrase_text', ['tone' => $this->tone, 'text' => $this->content]));
     }
 
     public function moreComplex()
     {
-        $this->rewrite(__('prompt.increase_complexity'));
+        $this->rewrite(__('prompt.increase_complexity', ['text' => $this->content]));
     }
 
     public function lessComplex()
     {
-        $this->rewrite(__('prompt.reduce_complexity'));
+        $this->rewrite(__('prompt.reduce_complexity', ['text' => $this->content]));
     }
 
     public function shorten()
     {
         if (in_array($this->type, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])) {
-            $this->rewrite(__('prompt.shorten_title', ['tone' => $this->tone]));
+            $this->rewrite(__('prompt.shorten_title', ['text' => $this->content]));
         } else {
-            $this->rewrite(__('prompt.shorten', ['tone' => $this->tone]));
+            $this->rewrite(__('prompt.shorten', ['text' => $this->content]));
         }
     }
 

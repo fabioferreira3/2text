@@ -38,12 +38,12 @@ class TextBlock extends Component
 
     public function expand()
     {
-        $this->rewrite(__('prompt.expand'));
+        $this->rewrite(__('prompt.expand', ['text' => $this->content]));
     }
 
     public function shorten()
     {
-        $this->rewrite(__('prompt.shorten'));
+        $this->rewrite(__('prompt.shorten', ['text' => $this->content]));
     }
 
     public function runCustomPrompt()
@@ -74,7 +74,6 @@ class TextBlock extends Component
                 'order' => 1,
                 'process_id' => Str::uuid(),
                 'meta' => [
-                    'text' => $this->content,
                     'document_content_block_id' => $contentBlock->id,
                     'prompt' => $prompt,
                     'faster' => $this->faster

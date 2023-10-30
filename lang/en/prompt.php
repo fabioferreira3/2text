@@ -32,17 +32,17 @@ return [
     'dramatic_tone' => 'Use a writing tone that makes the reader feel like they are watching a dramatic movie',
     'default_tone' => 'Use a tone that suits the context',
     'expand_text' => "Expand the text following these instructions:\n\n
-         - Use a :tone tone\n
-         - The keyword :keyword must be present throughout the text\n
-         - Write three new paragraphs\n
+         - Use a :tone tone.\n
+         - The keyword \":keyword\" (ignoring the quotes) must be present throughout the text.\n
+         - Write three new paragraphs.\n
          - Do not create new <h2> topics.\n
          - This is the text that must be expanded:\n\n
             :context",
-    'expand' => "Rewrite the following paragraph, using a :tone tone, using twice as many words:\n\n :text",
-    'expand_title' => "Rewrite the following title, with a :tone tone, making it slightly longer:\n\n :text",
+    'expand' => "Rewrite the following text, keeping the same tone, and using twice as many words:\n\n :text",
+    'expand_title' => "Rewrite the following title, keeping the same tone, and making it slightly longer:\n\n :text",
     'formal_tone' => 'Use a writing tone that makes the reader feel like they are reading from a serious source like a newspaper',
     'funny_tone' => 'Use a writing tone that makes the reader laught sometimes but not always. A slightly funny tone, while not joking all the time',
-    'generic_prompt' => ":prompt\n\n:text\n\n",
+    'generic_prompt' => ":prompt\n\n",
     'given_following_text' => "Given the following text:\n\n:text\n\n",
     'given_following_context' => "And given the following context:\n\n:context\n\n\n",
     'increase_complexity' => "Rewrite the following text increasing its reading complexity so a college professor would understand:\n\n :text",
@@ -52,13 +52,13 @@ return [
     'meta_description_context_instructions' => "- The meta description must be based on the following context:\n\n\n :context\n\n\n",
     'mysterious_tone' => 'Use a writing tone that makes the reader feel like they are reading a mystery novel or watching a mystery movie. A tone that makes the reader feel intrigued',
     'optimistic_tone' => 'Use a writing tone that makes the reader feel like they are reading a motivational book, highlighting the positive aspects of the topic',
-    'paraphrase_text' => 'Paraphrase the following text, while using a :tone tone, keeping the same number of words and keeping its original language. Just provide the result, without making any additional comments. This is the text:\n\n\n:text',
+    'paraphrase_text' => "Paraphrase the following text, while using a :tone tone, keeping the same number of words and keeping its original language. Just provide the result, without making any additional comments. This is the text:\n\n\n:text",
     'pessimistic_tone' => 'Use a writing tone that makes the reader feel like they are reading a book that highlights the negative aspects of the topic',
     'reduce_complexity' => "Rewrite the following text reducing its reading complexity so a 13 year old kid would understand:\n\n :text",
     'sarcastic_tone' => 'Use a writing tone that makes the reader feel like they are reading a sarcastic book or watching a sarcastic movie. A tone that makes the reader feel like they are being mocked',
-    'shorten' => "Make the following text shorter, while using a :tone tone:\n\n :text",
-    'shorten_title' => "Make the following title shorter, while using a :tone tone:\n\n :text",
-    'simplify_text' => "Simplify the following text:\n\n:text",
+    'shorten' => "Rewrite the following text, keeping the same tone and making it shorter:\n\n :text",
+    'shorten_title' => "Rewrite the following title, keeping the same tone and making it shorter:\n\n :text",
+    'simplify_text' => "Simplify the following text while keeping the same tone:\n\n:text",
     'simplistic_tone' => 'The reading complexity of the text must be low, as if a teenager would be able to read and understand it',
     'summarize_text' => "Summarize the following text:\n\n :text",
     'tone_instructions' => "- Use a :tone tone.\n",
