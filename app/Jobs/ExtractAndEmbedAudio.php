@@ -2,20 +2,21 @@
 
 namespace App\Jobs;
 
+use App\Enums\DataType;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Repositories\MediaRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class DownloadAudio implements ShouldQueue, ShouldBeUnique
+class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
@@ -34,20 +35,6 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
     }
 
     /**
-     * The number of times the job may be attempted.
-     *
-     * @var int
-     */
-    public $tries = 1;
-
-    /**
-     * The maximum number of unhandled exceptions to allow before failing.
-     *
-     * @var int
-     */
-    public $maxExceptions = 1;
-
-    /**
      * Execute the job.
      *
      * @return void
@@ -56,18 +43,16 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
     {
         try {
             $audioParams = MediaRepository::downloadYoutubeAudio($this->meta['source_url']);
-
-            // Update the document
-            $this->document->update(['meta' => [
-                ...$this->document->meta,
-                'audio_file_path' => $audioParams['file_paths'],
-                'duration' => $audioParams['duration']
-            ]]);
-
+            $transcribedText = MediaRepository::transcribeAudio($audioParams['file_paths']);
+            EmbedSource::dispatchSync($this->document, [
+                'data_type' => DataType::TEXT->value,
+                'source' => $transcribedText,
+                'collection_name' => $this->meta['collection_name']
+            ]);
             $this->jobSucceded();
         } catch (Exception $e) {
             Log::error($e->getMessage());
-            $this->jobFailed('Audio download error: ' . $e->getMessage());
+            $this->jobFailed('Audio extraction and embedding error: ' . $e->getMessage());
         }
     }
 
@@ -88,7 +73,7 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
      */
     public function retryUntil()
     {
-        return now()->addMinutes(2);
+        return now()->addMinutes(5);
     }
 
     /**
@@ -96,6 +81,6 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'download_audio_' . $this->document->id;
+        return 'extract_audio_' . $this->document->id;
     }
 }

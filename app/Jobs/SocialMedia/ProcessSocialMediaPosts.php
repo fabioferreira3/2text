@@ -4,6 +4,7 @@ namespace App\Jobs\SocialMedia;
 
 use App\Enums\DataType;
 use App\Enums\DocumentTaskEnum;
+use App\Enums\SourceProvider;
 use App\Jobs\DispatchDocumentTasks;
 use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -31,73 +32,66 @@ class ProcessSocialMediaPosts
     public function handle()
     {
         $queryEmbedding = false;
-        if (isset($this->document->meta['context']) && Str::wordCount($this->document->getMeta('context')) > 1000) {
-            $queryEmbedding = true;
-            DocumentRepository::createTask(
-                $this->document->id,
-                DocumentTaskEnum::REMOVE_EMBEDDINGS,
-                [
-                    'process_id' => $this->processId,
-                    'meta' => [
-                        'collection_name' => $this->document->id
-                    ],
-                    'order' => 1
-                ]
-            );
-            DocumentRepository::createTask(
-                $this->document->id,
-                DocumentTaskEnum::EMBED_SOURCE,
-                [
-                    'process_id' => $this->processId,
-                    'meta' => [
-                        'data_type' => DataType::TEXT,
-                        'source' => $this->document->getMeta('context'),
-                        'collection_name' => $this->document->id
-                    ],
-                    'order' => 2
-                ]
-            );
-        }
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::REMOVE_EMBEDDINGS,
+            [
+                'process_id' => $this->processId,
+                'meta' => [
+                    'collection_name' => $this->document->id
+                ],
+                'order' => 1
+            ]
+        );
 
-        $this->document->refresh();
-
-        if ($this->document->meta['source'] === 'website_url') {
-            DocumentRepository::createTask(
-                $this->document->id,
-                DocumentTaskEnum::EMBED_SOURCE,
-                [
-                    'process_id' => $this->processId,
-                    'meta' => [
-                        'data_type' => DataType::WEB_PAGE,
-                        'source' => $this->document->getMeta('source_url'),
-                        'collection_name' => $this->document->id
-                    ],
-                    'order' => 3
-                ]
-            );
-        } elseif ($this->document->meta['source'] === 'youtube') {
-            DocumentRepository::createTask(
-                $this->document->id,
-                DocumentTaskEnum::DOWNLOAD_AUDIO,
-                [
-                    'process_id' => $this->processId,
-                    'meta' => [
-                        'source_url' => $this->document->meta['source_url']
-                    ],
-                    'order' => 3
-                ]
-            );
-            DocumentRepository::createTask(
-                $this->document->id,
-                DocumentTaskEnum::PROCESS_AUDIO,
-                [
-                    'process_id' => $this->processId,
-                    'meta' => [
-                        'embed_source' => true
-                    ],
-                    'order' => 4
-                ]
-            );
+        if ($this->document->meta['source'] === SourceProvider::FREE_TEXT->value) {
+            if (isset($this->document->meta['context']) && Str::wordCount($this->document->getMeta('context')) > 1000) {
+                $queryEmbedding = true;
+                DocumentRepository::createTask(
+                    $this->document->id,
+                    DocumentTaskEnum::EMBED_SOURCE,
+                    [
+                        'process_id' => $this->processId,
+                        'meta' => [
+                            'data_type' => DataType::TEXT,
+                            'source' => $this->document->getMeta('context'),
+                            'collection_name' => $this->document->id
+                        ],
+                        'order' => 2
+                    ]
+                );
+            }
+        } elseif ($this->document->meta['source'] === SourceProvider::WEBSITE_URL->value) {
+            foreach ($this->document->getMeta('source_urls') as $key => $sourceUrl) {
+                DocumentRepository::createTask(
+                    $this->document->id,
+                    DocumentTaskEnum::EMBED_SOURCE,
+                    [
+                        'process_id' => $this->processId,
+                        'meta' => [
+                            'data_type' => DataType::WEB_PAGE,
+                            'source' => $sourceUrl,
+                            'collection_name' => $this->document->id
+                        ],
+                        'order' => 2 + $key
+                    ]
+                );
+            }
+        } elseif ($this->document->meta['source'] === SourceProvider::YOUTUBE->value) {
+            foreach ($this->document->getMeta('source_urls') as $key => $sourceUrl) {
+                DocumentRepository::createTask(
+                    $this->document->id,
+                    DocumentTaskEnum::EXTRACT_AND_EMBED_AUDIO,
+                    [
+                        'process_id' => $this->processId,
+                        'meta' => [
+                            'source_url' => $sourceUrl,
+                            'collection_name' => $this->document->id
+                        ],
+                        'order' => 2 + $key
+                    ]
+                );
+            }
         }
 
         DocumentRepository::createTask(
@@ -108,7 +102,7 @@ class ProcessSocialMediaPosts
                 'meta' => [
                     'platforms' => $this->platforms
                 ],
-                'order' => 5
+                'order' => 10
             ]
         );
 

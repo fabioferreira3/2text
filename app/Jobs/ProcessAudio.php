@@ -3,11 +3,9 @@
 namespace App\Jobs;
 
 use App\Enums\DataType;
-use App\Enums\AIModel;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
-use App\Packages\Whisper\Whisper;
-use App\Repositories\DocumentRepository;
+use App\Repositories\MediaRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -45,57 +43,20 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $repo = new DocumentRepository($this->document);
-            $transcription = collect([]);
-            if (count($this->document->meta['audio_file_path'])) {
-                foreach ($this->document->meta['audio_file_path'] as $audioFilePath) {
-                    // Get the file from S3 and store it locally if it doesn't exist
-                    if (!Storage::disk('local')->exists($audioFilePath)) {
-                        $fileUrl = Storage::disk('s3')->get($audioFilePath);
-                        Storage::disk('local')->put($audioFilePath, $fileUrl);
-                    }
-
-                    // Check the file size and compress it if necessary
-                    $localFilePath = Storage::disk('local')->path($audioFilePath);
-                    $neededToCompress = $this->compressAndStoreMp3(new \Illuminate\Http\File($localFilePath), $audioFilePath);
-
-                    $whisper = new Whisper($localFilePath);
-                    $response = $whisper->request();
-
-                    // Clean up the local files
-                    Storage::disk('local')->delete($audioFilePath);
-                    if ($neededToCompress) {
-                        Storage::disk('local')->delete('compressed_' . $audioFilePath);
-                    }
-
-                    $transcription->push($response['text']);
-                    $repo->addHistory(
-                        [
-                            'field' => 'content',
-                            'content' => json_decode('"' . $response['text'] . '"')
-                        ],
-                        [
-                            'model' => AIModel::WHISPER->value,
-                            'length' => $this->document->meta['duration']
-                        ]
-                    );
-                }
-            }
-
-            $decodedText = json_decode('"' . $transcription->implode(' ') . '"');
+            $transcribedText = MediaRepository::transcribeAudio($this->document->meta['audio_file_path']);
 
             if ($this->meta['embed_source'] ?? false) {
                 EmbedSource::dispatchSync($this->document, [
                     'data_type' => DataType::TEXT->value,
-                    'source' => $decodedText
+                    'source' => $transcribedText
                 ]);
             }
 
             $this->document->update([
                 'meta' => [
                     ...$this->document->meta,
-                    'context' => $decodedText,
-                    'original_text' => $decodedText
+                    'context' => $transcribedText,
+                    'original_text' => $transcribedText
                 ]
             ]);
 

@@ -102,7 +102,7 @@ class SocialMediaPostsManager extends Component
         $this->checkDocumentStatus();
         $this->source = $document->getMeta('source') ?? 'free_text';
         $this->context = $document->getContext() ?? '';
-        $this->sourceUrls = $document->getMeta('sourceUrls') ?? [];
+        $this->sourceUrls = $document->getMeta('source_urls') ?? [];
         $this->tempSourceUrl = '';
         $this->generateImage = $document->getMeta('generate_img') ?? false;
         $this->imgPrompt = $document->getMeta('img_prompt') ?? '';
