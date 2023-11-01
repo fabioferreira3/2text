@@ -55,7 +55,7 @@ class GenRepository
             'keyword' => $document->getMeta('keyword')
         ]));
 
-        $document->update(['title' => $response['data']]);
+        $document->update(['title' => $response['content']]);
         $repo->addHistory(
             [
                 'field' => 'title',
@@ -182,7 +182,7 @@ class GenRepository
         $document->contentBlocks()->save(
             new DocumentContentBlock([
                 'type' => 'text',
-                'content' => $response['data']
+                'content' => $response['content']
             ])
         );
 

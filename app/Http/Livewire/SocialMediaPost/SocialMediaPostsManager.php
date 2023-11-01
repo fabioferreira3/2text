@@ -32,10 +32,12 @@ class SocialMediaPostsManager extends Component
     public bool $displayHistory = false;
     public string $context;
     public $fileInput = null;
+
     public array $sourceUrls;
     public string $tempSourceUrl;
     public bool $maxSourceUrlsReached;
     public string $source;
+
     public string $imgPrompt;
     public $imgStyle;
     public $wordCountTarget;

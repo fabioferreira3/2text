@@ -25,8 +25,8 @@ class CreateBlogPost
 
     public function handle()
     {
-        CreateFromVideoStream::dispatchIf($this->params['source'] === 'youtube', $this->document, $this->params);
         CreateFromFreeText::dispatchIf($this->params['source'] === 'free_text', $this->document, $this->params);
+        CreateFromVideoStream::dispatchIf($this->params['source'] === 'youtube', $this->document, $this->params);
         CreateFromWebsite::dispatchIf($this->params['source'] === 'website_url', $this->document, $this->params);
     }
 }

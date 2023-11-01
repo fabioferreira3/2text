@@ -109,7 +109,7 @@ class Oraculum
             if ($response->successful()) {
                 $responseTokens = $this->countTokens($response->json('data'));
                 return [
-                    'data' => $response->json('data'),
+                    'content' => $response->json('data'),
                     'token_usage' => [
                         'prompt' => $requestTokens,
                         'completion' => $responseTokens,
@@ -144,7 +144,7 @@ class Oraculum
             if ($response->successful()) {
                 $responseTokens = $this->countTokens($response->json('data'));
                 return [
-                    'data' => $response->json('data'),
+                    'content' => $response->json('data'),
                     'token_usage' => [
                         'prompt' => $requestTokens,
                         'completion' => $responseTokens,

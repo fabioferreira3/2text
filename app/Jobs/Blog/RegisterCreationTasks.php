@@ -51,19 +51,13 @@ class RegisterCreationTasks
 
         DocumentRepository::createTask(
             $this->document->id,
-            DocumentTaskEnum::SUMMARIZE_DOC,
-            [
-                'order' => $this->params['next_order'],
-                'process_id' => $this->params['process_id']
-            ]
-        );
-
-        DocumentRepository::createTask(
-            $this->document->id,
             DocumentTaskEnum::CREATE_OUTLINE,
             [
                 'process_id' => $this->params['process_id'],
-                'meta' => [],
+                'meta' => [
+                    'query_embedding' =>  $this->params['query_embedding'] ?? false,
+                    'collection_name' => $this->params['collection_name'] ?? ''
+                ],
                 'order' => $this->params['next_order'] + 1
             ]
         );
@@ -73,7 +67,10 @@ class RegisterCreationTasks
             DocumentTaskEnum::EXPAND_OUTLINE,
             [
                 'process_id' => $this->params['process_id'],
-                'meta' => [],
+                'meta' => [
+                    'query_embedding' => $this->params['query_embedding'] ?? false,
+                    'collection_name' => $this->params['collection_name'] ?? ''
+                ],
                 'order' => $this->params['next_order'] + 2
             ]
         );
@@ -84,6 +81,8 @@ class RegisterCreationTasks
             [
                 'process_id' => $this->params['process_id'],
                 'meta' => [
+                    'query_embedding' => $this->params['query_embedding'] ?? false,
+                    'collection_name' => $this->params['collection_name'] ?? '',
                     'keyword' => $this->document->getMeta('keyword')
                 ],
                 'order' => $this->params['next_order'] + 3
@@ -96,7 +95,8 @@ class RegisterCreationTasks
             [
                 'process_id' => $this->params['process_id'],
                 'meta' => [
-                    'keyword' => $this->document->getMeta('keyword')
+                    'query_embedding' => $this->params['query_embedding'] ?? false,
+                    'collection_name' => $this->params['collection_name'] ?? ''
                 ],
                 'order' => $this->params['next_order'] + 4
             ]
@@ -107,7 +107,10 @@ class RegisterCreationTasks
             DocumentTaskEnum::CREATE_METADESCRIPTION,
             [
                 'process_id' => $this->params['process_id'],
-                'meta' => [],
+                'meta' => [
+                    'query_embedding' => $this->params['query_embedding'] ?? false,
+                    'collection_name' => $this->params['collection_name'] ?? ''
+                ],
                 'order' => $this->params['next_order'] + 5
             ]
         );

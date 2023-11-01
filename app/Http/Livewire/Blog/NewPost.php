@@ -6,8 +6,10 @@ use App\Enums\Language;
 use App\Enums\SourceProvider;
 use App\Jobs\Blog\CreateBlogPost;
 use App\Repositories\DocumentRepository;
+use App\Rules\CsvFile;
 use App\Rules\DocxFile;
 use App\Rules\PdfFile;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use WireUi\Traits\Actions;
 use Livewire\Component;
@@ -32,8 +34,6 @@ class NewPost extends Component
     public bool $modal;
     public bool $generateImage;
     public string $title;
-
-
 
     public function __construct()
     {
@@ -60,7 +60,10 @@ class NewPost extends Component
     public function rules()
     {
         $rules = [
-            'source' => 'required|in:free_text,youtube,website_url,pdf,csv,docx,json',
+            'source' => [
+                'required',
+                Rule::in(array_map(fn ($value) => $value->value, SourceProvider::cases()))
+            ],
             'sourceUrls' => [
                 'required_if:source,youtube,website_url',
                 'array',
@@ -83,7 +86,8 @@ class NewPost extends Component
                 'required_if:source,docx,pdf',
                 'max:51200', // in kilobytes, 50mb = 50 * 1024 = 51200kb
                 new DocxFile($this->source),
-                new PdfFile($this->source)
+                new PdfFile($this->source),
+                new CsvFile($this->source),
             ]
         ];
 
@@ -110,10 +114,6 @@ class NewPost extends Component
                 'sourceUrls.required_if' => __('validation.blog_post_sourceurl_required'),
                 'sourceUrls.*.url' => __('validation.active_url'),
                 'keyword.required' => 'You need to provide a keyword.',
-                'source' => [
-                    'required',
-                    Rule::in(array_map(fn ($value) => $value->value, SourceProvider::cases()))
-                ],
                 'language.required' => 'Language is a required field.',
                 'targetHeadersCount.min' => 'The minimum number of subtopics is 2.',
                 'targetHeadersCount.max' => 'The maximum number of subtopics is 10.',
@@ -143,5 +143,67 @@ class NewPost extends Component
         CreateBlogPost::dispatch($document, $params);
 
         return redirect()->to('/dashboard');
+    }
+
+    public function checkMaxSourceUrls()
+    {
+        $isMaxReached = false;
+
+        if (($this->source === SourceProvider::YOUTUBE->value && count($this->sourceUrls) >= 3) ||
+            ($this->source === SourceProvider::WEBSITE_URL->value && count($this->sourceUrls) >= 5)
+        ) {
+            $isMaxReached = true;
+        }
+
+        $this->maxSourceUrlsReached = $isMaxReached;
+    }
+
+    public function addSourceUrl()
+    {
+        if ($this->source === SourceProvider::YOUTUBE->value) {
+            $validator = Validator::make(
+                ['url' => $this->tempSourceUrl],
+                [
+                    'url' => [
+                        'required',
+                        'url',
+                        function ($attribute, $value, $fail) {
+                            // Check if it's a valid YouTube URL
+                            if (!preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/', $value)) {
+                                return $fail('The ' . $attribute . ' must be a valid YouTube URL.');
+                            }
+                        },
+                    ],
+                ]
+            );
+            $validationMsg = 'This is not a valid Youtube URL.';
+        } else {
+            $validator = Validator::make(['url' => $this->tempSourceUrl], [
+                'url' => 'required|url',
+            ]);
+            $validationMsg = 'The URL is not valid.';
+        }
+
+        if ($validator->fails()) {
+            $this->addError('tempSourceUrl', $validationMsg);
+            return;
+        }
+
+        if (!in_array($this->tempSourceUrl, $this->sourceUrls, true)) {
+            $this->sourceUrls[] = $this->tempSourceUrl;
+        }
+
+        $this->tempSourceUrl = '';
+        $this->checkMaxSourceUrls();
+    }
+
+    public function removeSourceUrl(string $sourceUrl)
+    {
+        $this->sourceUrls = array_filter($this->sourceUrls, function ($url) use ($sourceUrl) {
+            return $url !== $sourceUrl;
+        });
+
+        $this->sourceUrls = array_values($this->sourceUrls);
+        $this->checkMaxSourceUrls();
     }
 }

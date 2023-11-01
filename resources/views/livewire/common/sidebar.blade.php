@@ -24,7 +24,7 @@
         </div>
         <div class="hidden sm:flex sm:flex-col sm:gap-3 ml-4">
             @include('livewire.common.navlink', [
-            'route' => 'new-social-media-post',
+            'route' => 'create-social-media-post',
             'submenu' => true,
             'name' => __('menus.social_media_post'),
             'icon' => 'hashtag',

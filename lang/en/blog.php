@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'briefly_describe' => 'Briefly describe the subject of the post using at least :maxWords words',
+    'briefly_describe' => 'Briefly describe the subject of the post using at least :minWords words',
     'context' => 'Context',
     'content' => 'Content',
     'copy_all' => 'Copy all',

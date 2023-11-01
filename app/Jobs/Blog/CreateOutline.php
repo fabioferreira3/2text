@@ -77,6 +77,29 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
         }
     }
 
+    protected function queryEmbedding()
+    {
+    }
+
+    protected function queryGpt()
+    {
+        $chatGpt = new ChatGPT();
+        return $chatGpt->request([
+            [
+                'role' => 'user',
+                'content' =>   $this->promptHelper->writeOutline(
+                    $this->document->getContext(),
+                    [
+                        'tone' => $this->document->getMeta('tone'),
+                        'keyword' => $this->document->getMeta('keyword'),
+                        'style' => $this->document->getMeta('style') ?? null,
+                        'maxsubtopics' => $this->document->getMeta('target_headers_count') ?? 2
+                    ]
+                )
+            ]
+        ]);
+    }
+
     /**
      * The unique ID of the job.
      */
