@@ -2,7 +2,9 @@
 
 namespace App\Jobs\Traits;
 
+use App\Events\DocumentTaskFinished;
 use App\Models\DocumentTask;
+use App\Repositories\DocumentRepository;
 use Exception;
 
 trait JobEndings
@@ -12,6 +14,11 @@ trait JobEndings
         if (isset($this->meta['task_id'])) {
             $task = DocumentTask::findOrFail($this->meta['task_id']);
             $task->update(['status' => 'finished']);
+            if ($this->document) {
+                $repo = new DocumentRepository($this->document);
+                $completedTasksCount = $repo->increaseCompletedTasksCount();
+                event(new DocumentTaskFinished($this->meta['task_id'], $completedTasksCount));
+            }
         }
     }
 

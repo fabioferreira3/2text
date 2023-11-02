@@ -150,6 +150,18 @@ class DocumentRepository
         ]);
     }
 
+    public function increaseCompletedTasksCount()
+    {
+        $this->document->refresh();
+        $completedTasksCount = $this->document->getMeta('completed_tasks_count') ?? 0;
+        $completedTasksCount += 1;
+        $meta = $this->document->meta;
+        $meta['completed_tasks_count'] = $completedTasksCount;
+        $this->document->update(['meta' => $meta]);
+
+        return $completedTasksCount;
+    }
+
     public static function createTask(string $documentId, DocumentTaskEnum $task, array $params)
     {
         DocumentTask::create([

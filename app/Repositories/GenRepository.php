@@ -79,7 +79,7 @@ class GenRepository
         $response = $chatGpt->request([[
             'role' => 'user',
             'content' => $promptHelper->writeMetaDescription(
-                $document->normalized_structure,
+                $document->getMeta('outline'),
                 [
                     'tone' => $document->getMeta('tone'),
                     'keyword' => $document->getMeta('keyword')

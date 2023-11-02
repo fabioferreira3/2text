@@ -53,7 +53,7 @@ return [
     'keyword_instructions' => "- The following keyword should have focus and be present throughout the post: \":keyword\".\n",
     'max_words' => "- The text must have a maximum of :max words\n",
     'more_instructions' => "- Follow these others instructions for the creation of the post:\n\n\n :instructions\n\n\n",
-    'meta_description_context_instructions' => "- The meta description must be based on the following context:\n\n\n :context\n\n\n",
+    'meta_description_context_instructions' => "- The meta description must be based on the following outline:\n\n\n :\n\n\n",
     'mysterious_tone' => 'Use a writing tone that makes the reader feel like they are reading a mystery novel or watching a mystery movie. A tone that makes the reader feel intrigued',
     'optimistic_tone' => 'Use a writing tone that makes the reader feel like they are reading a motivational book, highlighting the positive aspects of the topic',
     'outline_base' => "Create a comprehensive :style outline for a blog post.\n\n

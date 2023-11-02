@@ -129,7 +129,7 @@ class NewPost extends Component
         $document = $repo->createBlogPost($params);
         CreateBlogPost::dispatch($document, $params);
 
-        return redirect()->to('/dashboard');
+        return redirect()->route('blog-post-view', ['document' => $document]);
     }
 
     public function checkMaxSourceUrls()

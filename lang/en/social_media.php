@@ -49,7 +49,7 @@ return [
     'target_platforms' => 'Target Platforms',
     'yes' => 'Yes',
     'youtube_option' => 'Youtube url(s):',
-    'url_option' => 'Page(s) URL:',
+    'url_option' => 'Page URL(s):',
     'writing_style' => 'Writing style',
     'write_image_description' => 'Write the image description'
 ];

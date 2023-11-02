@@ -62,57 +62,57 @@ class RegisterCreationTasks
             ]
         );
 
-        // DocumentRepository::createTask(
-        //     $this->document->id,
-        //     DocumentTaskEnum::EXPAND_OUTLINE,
-        //     [
-        //         'process_id' => $this->params['process_id'],
-        //         'meta' => [
-        //             'query_embedding' => $this->params['query_embedding'] ?? false,
-        //             'collection_name' => $this->params['collection_name'] ?? ''
-        //         ],
-        //         'order' => $this->params['next_order'] + 2
-        //     ]
-        // );
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::EXPAND_OUTLINE,
+            [
+                'process_id' => $this->params['process_id'],
+                'meta' => [
+                    'query_embedding' => $this->params['query_embedding'] ?? false,
+                    'collection_name' => $this->params['collection_name'] ?? ''
+                ],
+                'order' => $this->params['next_order'] + 2
+            ]
+        );
 
-        // DocumentRepository::createTask(
-        //     $this->document->id,
-        //     DocumentTaskEnum::EXPAND_TEXT,
-        //     [
-        //         'process_id' => $this->params['process_id'],
-        //         'meta' => [
-        //             'query_embedding' => $this->params['query_embedding'] ?? false,
-        //             'collection_name' => $this->params['collection_name'] ?? '',
-        //             'keyword' => $this->document->getMeta('keyword')
-        //         ],
-        //         'order' => $this->params['next_order'] + 3
-        //     ]
-        // );
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::EXPAND_TEXT,
+            [
+                'process_id' => $this->params['process_id'],
+                'meta' => [
+                    'query_embedding' => $this->params['query_embedding'] ?? false,
+                    'collection_name' => $this->params['collection_name'] ?? '',
+                    'keyword' => $this->document->getMeta('keyword'),
+                ],
+                'order' => $this->params['next_order'] + 3
+            ]
+        );
 
-        // DocumentRepository::createTask(
-        //     $this->document->id,
-        //     DocumentTaskEnum::CREATE_TITLE,
-        //     [
-        //         'process_id' => $this->params['process_id'],
-        //         'meta' => [
-        //             'query_embedding' => $this->params['query_embedding'] ?? false,
-        //             'collection_name' => $this->params['collection_name'] ?? ''
-        //         ],
-        //         'order' => $this->params['next_order'] + 4
-        //     ]
-        // );
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::CREATE_TITLE,
+            [
+                'process_id' => $this->params['process_id'],
+                'meta' => [
+                    'query_embedding' => $this->params['query_embedding'] ?? false,
+                    'collection_name' => $this->params['collection_name'] ?? ''
+                ],
+                'order' => $this->params['next_order'] + 4
+            ]
+        );
 
-        // DocumentRepository::createTask(
-        //     $this->document->id,
-        //     DocumentTaskEnum::CREATE_METADESCRIPTION,
-        //     [
-        //         'process_id' => $this->params['process_id'],
-        //         'meta' => [
-        //             'query_embedding' => $this->params['query_embedding'] ?? false,
-        //             'collection_name' => $this->params['collection_name'] ?? ''
-        //         ],
-        //         'order' => $this->params['next_order'] + 5
-        //     ]
-        // );
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::CREATE_METADESCRIPTION,
+            [
+                'process_id' => $this->params['process_id'],
+                'meta' => [
+                    'query_embedding' => $this->params['query_embedding'] ?? false,
+                    'collection_name' => $this->params['collection_name'] ?? ''
+                ],
+                'order' => $this->params['next_order'] + 5
+            ]
+        );
     }
 }

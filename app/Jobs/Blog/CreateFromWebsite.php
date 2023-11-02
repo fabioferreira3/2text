@@ -5,7 +5,6 @@ namespace App\Jobs\Blog;
 use App\Enums\DataType;
 use App\Enums\DocumentTaskEnum;
 use App\Enums\SourceProvider;
-use App\Helpers\MediaHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
@@ -16,7 +15,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
-use Talendor\StabilityAI\Enums\StylePreset;
 
 class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
 {
@@ -45,6 +43,7 @@ class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
+        $this->defineTasksCount();
         $queryEmbedding = true;
         DocumentRepository::createTask(
             $this->document->id,
@@ -88,6 +87,22 @@ class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
         ]);
 
         DispatchDocumentTasks::dispatch($this->document);
+    }
+
+    public function defineTasksCount()
+    {
+        $tasksCount = 9 + $this->document->getMeta('target_headers_count');
+        if ($this->document->getMeta('source') === SourceProvider::WEBSITE_URL->value) {
+            $tasksCount += count($this->document->getMeta('source_urls'));
+        }
+
+        if ($this->document->getMeta('generate_image') ?? false) {
+            $tasksCount += 1;
+        }
+
+        $repo = new DocumentRepository(($this->document));
+        $repo->updateMeta('total_tasks_count', $tasksCount);
+        $repo->updateMeta('completed_tasks_count', 0);
     }
 
     /**

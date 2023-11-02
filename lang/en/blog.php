@@ -26,7 +26,7 @@ return [
     'title' => 'Title',
     'tone' => 'Tone',
     'topics_number' => 'Number of Topics',
-    'url_option' => 'Page(s) URL:',
+    'url_option' => 'Page URL(s):',
     'youtube_option' => 'Youtube url(s):',
     'word_count' => 'Word count',
     'writing_style' => 'Writing style'
