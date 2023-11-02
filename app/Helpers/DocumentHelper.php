@@ -37,6 +37,7 @@ class DocumentHelper
                     $result[$currentSubheaderIndex]['content'] .= $subtopic . '.';
                 }
             }
+        }
 
         return $result;
     }

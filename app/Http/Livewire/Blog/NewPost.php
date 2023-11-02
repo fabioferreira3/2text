@@ -59,7 +59,8 @@ class NewPost extends Component
 
     public function rules()
     {
-        $rules = [
+        return [
+            'context' => 'required|string',
             'source' => [
                 'required',
                 Rule::in(array_map(fn ($value) => $value->value, SourceProvider::cases()))
@@ -90,20 +91,6 @@ class NewPost extends Component
                 new CsvFile($this->source),
             ]
         ];
-
-        if ($this->source === 'youtube') {
-            $rules['sourceUrl'] = ['required', 'url', new \App\Rules\YouTubeUrl()];
-        } elseif ($this->source === 'website_url') {
-            $rules['sourceUrl'] = ['required', 'url'];
-        }
-
-        if ($this->source === 'free_text') {
-            $rules['context'] = 'required';
-        } else {
-            $rules['context'] = 'nullable';
-        }
-
-        return $rules;
     }
 
     public function messages()

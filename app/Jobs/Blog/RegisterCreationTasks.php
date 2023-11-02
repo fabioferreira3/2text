@@ -102,17 +102,17 @@ class RegisterCreationTasks
             ]
         );
 
-        DocumentRepository::createTask(
-            $this->document->id,
-            DocumentTaskEnum::CREATE_METADESCRIPTION,
-            [
-                'process_id' => $this->params['process_id'],
-                'meta' => [
-                    'query_embedding' => $this->params['query_embedding'] ?? false,
-                    'collection_name' => $this->params['collection_name'] ?? ''
-                ],
-                'order' => $this->params['next_order'] + 5
-            ]
-        );
+        // DocumentRepository::createTask(
+        //     $this->document->id,
+        //     DocumentTaskEnum::CREATE_METADESCRIPTION,
+        //     [
+        //         'process_id' => $this->params['process_id'],
+        //         'meta' => [
+        //             'query_embedding' => $this->params['query_embedding'] ?? false,
+        //             'collection_name' => $this->params['collection_name'] ?? ''
+        //         ],
+        //         'order' => $this->params['next_order'] + 5
+        //     ]
+        // );
     }
 }

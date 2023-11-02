@@ -111,6 +111,7 @@ class Oraculum
                 return [
                     'content' => $response->json('data'),
                     'token_usage' => [
+                        'model' => !$type ? 'gpt-4' : 'gpt-3.5-turbo',
                         'prompt' => $requestTokens,
                         'completion' => $responseTokens,
                         'total' => $requestTokens + $responseTokens
@@ -146,6 +147,7 @@ class Oraculum
                 return [
                     'content' => $response->json('data'),
                     'token_usage' => [
+                        'model' => 'gpt-3.5-turbo',
                         'prompt' => $requestTokens,
                         'completion' => $responseTokens,
                         'total' => $requestTokens + $responseTokens

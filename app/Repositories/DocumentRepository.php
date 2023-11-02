@@ -42,7 +42,7 @@ class DocumentRepository
                 'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,
                 'style' => $params['meta']['style'] ?? null,
                 'source' => $params['source'],
-                'source_url' => $params['meta']['source_url'] ?? null,
+                'source_urls' => $params['meta']['source_urls'] ?? [],
                 'target_headers_count' => $params['meta']['target_headers_count'] ?? null,
                 'keyword' => $params['meta']['keyword'] ?? null,
                 'user_id' => Auth::check() ? Auth::id() : null,

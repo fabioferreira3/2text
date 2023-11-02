@@ -59,7 +59,7 @@ class GenRepository
         $repo->addHistory(
             [
                 'field' => 'title',
-                'content' => $response['data']
+                'content' => $response['content']
             ]
         );
         RegisterProductUsage::dispatch($document->account, $response['token_usage']);

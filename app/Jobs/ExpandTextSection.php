@@ -5,7 +5,9 @@ namespace App\Jobs;
 use App\Helpers\PromptHelper;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
+use App\Models\User;
 use App\Packages\ChatGPT\ChatGPT;
+use App\Packages\Oraculum\Oraculum;
 use App\Repositories\DocumentRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -24,6 +26,30 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
     protected array $meta;
     protected PromptHelper $promptHelper;
     protected DocumentRepository $repo;
+
+    /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public $tries = 10;
+
+    /**
+     * The maximum number of unhandled exceptions to allow before failing.
+     *
+     * @var int
+     */
+    public $maxExceptions = 10;
+
+    /**
+     * Determine the time at which the job should timeout.
+     *
+     * @return \DateTime
+     */
+    public function retryUntil()
+    {
+        return now()->addMinutes(5);
+    }
 
     /**
      * Create a new job instance.
@@ -48,19 +74,14 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
         try {
             $rawStructure = $this->document->meta['raw_structure'];
             $normalizedStructure = $this->document->normalized_structure;
-            $prompt = $this->promptHelper->givenFollowingText($normalizedStructure);
+            $basePrompt = $this->promptHelper->givenFollowingText($normalizedStructure);
 
-            $chatGpt = new ChatGPT();
-            $response = $chatGpt->request([
-                [
-                    'role' => 'user',
-                    'content' =>  $prompt . $this->promptHelper->expandOn($this->meta['text_section'], [
-                        'tone' => $this->document->getMeta('tone'),
-                        'style' => $this->document->getMeta('style') ?? null,
-                        'keyword' => $this->meta['keyword']
-                    ])
-                ]
-            ]);
+            if ($this->meta['query_embedding'] ?? false) {
+                $response = $this->queryEmbedding($normalizedStructure, $basePrompt);
+            } else {
+                $response = $this->queryGpt($normalizedStructure, $basePrompt);
+            }
+
             $rawStructure[$this->meta['section_key']]['content'] = $response['content'];
             $this->repo->updateMeta('raw_structure', $rawStructure);
             $this->repo->addHistory(
@@ -74,5 +95,32 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
         } catch (Exception $e) {
             $this->jobFailed('Failed to expand text section: ' . $e->getMessage());
         }
+    }
+
+    protected function queryEmbedding($basePrompt)
+    {
+        $user = User::findOrFail($this->document->getMeta('user_id'));
+        $oraculum = new Oraculum($user, $this->meta['collection_name']);
+
+        return $oraculum->query($basePrompt . $this->promptHelper->expandEmbeddedOn($this->meta['text_section'], [
+            'tone' => $this->document->getMeta('tone'),
+            'style' => $this->document->getMeta('style') ?? null,
+            'keyword' => $this->meta['keyword']
+        ]), 'advanced');
+    }
+
+    protected function queryGpt($basePrompt)
+    {
+        $chatGpt = new ChatGPT();
+        return $chatGpt->request([
+            [
+                'role' => 'user',
+                'content' =>  $basePrompt . $this->promptHelper->expandOn($this->meta['text_section'], [
+                    'tone' => $this->document->getMeta('tone'),
+                    'style' => $this->document->getMeta('style') ?? null,
+                    'keyword' => $this->meta['keyword']
+                ])
+            ]
+        ]);
     }
 }

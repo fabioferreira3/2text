@@ -31,7 +31,7 @@
             </div>
 
             @if (in_array($source, ['docx', 'pdf_file', 'csv', 'json']))
-            <label class="font-bold text-lg text-zinc-700">{{ __('social_media.file_option') }}</label>
+            <label class="font-bold text-lg text-zinc-700">{{ __('blog.file_option') }}</label>
             <input type="file" name="fileInput" wire:model="fileInput"
                 class="p-3 border border-zinc-200 rounded-lg w-full" />
             @endif
@@ -39,46 +39,49 @@
             <span class="text-red-500 text-sm">{{ $errors->first('fileInput') }}</span>
             @endif
 
-            @if ($source === 'website_url' || $source === 'youtube')
-            <label class="font-bold text-lg text-zinc-700 flex items-center justify-between">
-                @if($source === 'youtube') {{ __('social_media.youtube_option') }} <span
-                    class="text-sm">{{__('social_media.max_permitted_youtube_links', ['max'
-                    => 3])}}</span>
-                @else {{ __('social_media.url_option') }} <span class="text-sm">{{__('social_media.max_permitted_urls',
-                    ['max'
-                    => 5])}}</span>
+            <div>
+                @if ($source === 'website_url' || $source === 'youtube')
+                <label class="font-bold text-lg text-zinc-700 flex items-center justify-between">
+                    @if($source === 'youtube') {{ __('blog.youtube_option') }} <span
+                        class="text-sm">{{__('blog.max_permitted_youtube_links', ['max'
+                        => 3])}}</span>
+                    @else {{ __('blog.url_option') }} <span class="text-sm">{{__('blog.max_permitted_urls',
+                        ['max'
+                        => 5])}}</span>
+                    @endif
+                </label>
+                @if(count($sourceUrls))
+                <div class="flex flex-col gap-1 my-2">
+                    @foreach ($sourceUrls as $sourceUrl)
+                    <div class="flex items-center gap-2">
+                        <div class="bg-gray-100 px-3 py-1 rounded-lg">{{$sourceUrl}}</div>
+                        <button class="outline-none focus:outline-none" wire:click="removeSourceUrl('{{$sourceUrl}}')">
+                            <x-icon name="x-circle" width="24" height="24" class="text-gray-600" />
+                        </button>
+                    </div>
+                    @endforeach
+                </div>
                 @endif
-            </label>
-            @if(count($sourceUrls))
-            <div class="flex flex-col gap-1 my-2">
-                @foreach ($sourceUrls as $sourceUrl)
-                <div class="flex items-center gap-2">
-                    <div class="bg-gray-100 px-3 py-1 rounded-lg">{{$sourceUrl}}</div>
-                    <button class="outline-none focus:outline-none" wire:click="removeSourceUrl('{{$sourceUrl}}')">
-                        <x-icon name="x-circle" width="24" height="24" class="text-gray-600" />
+
+                @if(!$maxSourceUrlsReached)
+                <div class="flex items-center gap-2" x-data="{
+                                                        submitOnEnter: $wire.addSourceUrl,
+                                                        handleEnter(event) {
+                                                            if (!event.shiftKey) {
+                                                                event.preventDefault();
+                                                                this.submitOnEnter();
+                                                            }
+                                                        }
+                                                    }">
+                    <input name="url" placeholder="Paste a url here" x-on:keydown.enter="handleEnter($event)"
+                        wire:model.defer="tempSourceUrl" class="p-3 border border-zinc-200 rounded-lg w-full" />
+                    <button wire:click="addSourceUrl()" class="bg-secondary text-white p-1 rounded-full">
+                        <x-icon name="plus" width="24" height="24" />
                     </button>
                 </div>
-                @endforeach
+                @endif
             </div>
-            @endif
 
-            @if(!$maxSourceUrlsReached)
-            <div class="flex items-center gap-2" x-data="{
-                                            submitOnEnter: $wire.addSourceUrl,
-                                            handleEnter(event) {
-                                                if (!event.shiftKey) {
-                                                    event.preventDefault();
-                                                    this.submitOnEnter();
-                                                }
-                                            }
-                                        }">
-                <input name="url" x-on:keydown.enter="handleEnter($event)" wire:model.defer="tempSourceUrl"
-                    class="p-3 border border-zinc-200 rounded-lg w-full" />
-                <button wire:click="addSourceUrl()" class="bg-secondary text-white p-1 rounded-full">
-                    <x-icon name="plus" width="24" height="24" />
-                </button>
-            </div>
-            @endif
             @if ($errors->has('tempSourceUrl'))
             <span class="text-red-500 text-sm">{{ $errors->first('tempSourceUrl') }}</span>
             @endif

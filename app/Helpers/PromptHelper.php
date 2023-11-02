@@ -46,7 +46,44 @@ class PromptHelper
     public function writeFirstPass($outline, array $params)
     {
         $toneInstructions = ($params['tone'] ?? false) ? $this->getToneInstructions($params['tone']) : '';
-        $prompt = Lang::get('prompt.blog_first_pass', ['tone_instructions' => $toneInstructions, 'outline' => $outline], $this->language);
+        $prompt = Lang::get(
+            'prompt.blog_first_pass',
+            [
+                'first_pass' => Lang::get(
+                    'prompt.first_pass',
+                    [
+                        'tone_instructions' => $toneInstructions,
+                        'outline' => $outline
+                    ],
+                    $this->language
+                ),
+            ],
+            $this->language
+        );
+        if ($params['style'] ?? false) {
+            $prompt .= Lang::get('prompt.style_instructions', ['style' => $params['style']], $this->language);
+        }
+        return $prompt;
+    }
+
+    public function writeEmbeddedFirstPass($outline, array $params)
+    {
+        $toneInstructions = ($params['tone'] ?? false) ? $this->getToneInstructions($params['tone']) : '';
+        $prompt = Lang::get(
+            'prompt.blog_embedded_first_pass',
+            [
+                'first_pass' => Lang::get(
+                    'prompt.first_pass',
+                    [
+                        'tone_instructions' => $toneInstructions,
+                        'outline' => $outline
+                    ],
+                    $this->language
+                ),
+            ],
+            $this->language
+        );
+
         if ($params['style'] ?? false) {
             $prompt .= Lang::get('prompt.style_instructions', ['style' => $params['style']], $this->language);
         }
@@ -79,14 +116,28 @@ class PromptHelper
     {
         $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
         return Lang::get('prompt.write_outline', [
-            'tone' => $tone,
-            'maxsubtopics' => $params['maxsubtopics'],
+            'outline_base' => __('prompt.outline_base', [
+                'tone' => $tone,
+                'maxsubtopics' => $params['maxsubtopics'],
+                'style' => $params['style'],
+                'keyword' => $params['keyword'],
+            ]),
             'context' => $context,
-            'style' => $params['style'],
-            'keyword' => $params['keyword']
         ], $this->language);
     }
 
+    public function writeEmbeddedOutline(array $params)
+    {
+        $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
+        return Lang::get('prompt.write_embbeded_outline', [
+            'outline_base' => __('prompt.outline_base', [
+                'tone' => $tone,
+                'maxsubtopics' => $params['maxsubtopics'],
+                'style' => $params['style'],
+                'keyword' => $params['keyword'],
+            ]),
+        ], $this->language);
+    }
 
     public function givenFollowingText($text)
     {
@@ -98,14 +149,31 @@ class PromptHelper
         return Lang::get('prompt.given_following_context', ['context' => preg_replace('/\s+/', ' ', $text)], $this->language);
     }
 
+    public function expandEmbeddedOn($text, array $params)
+    {
+        $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
+        $prompt = Lang::get('prompt.expand_embedded_text', [
+            'expand_text' => Lang::get('prompt.expand_text', [
+                'tone' => $tone,
+                'context' => $text,
+                'style' => $params['style'] ?? 'default',
+                'keyword' => $params['keyword']
+            ], $this->language)
+        ], $this->language);
+
+        Log::debug($prompt);
+        return $prompt;
+    }
+
     public function expandOn($text, array $params)
     {
         $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
-        $prompt = Lang::get('prompt.expand_text', ['tone' => $tone, 'context' => $text, 'keyword' => $params['keyword']], $this->language);
-        if ($params['style'] ?? false) {
-            $prompt .= Lang::get('prompt.style_instructions', ['style' => $params['style']], $this->language);
-        }
-        return $prompt;
+        return Lang::get('prompt.expand_text', [
+            'tone' => $tone,
+            'context' => $text,
+            'style' => $params['style'] ?? 'default',
+            'keyword' => $params['keyword']
+        ], $this->language);
     }
 
     public function writeMetaDescription($text, array $params)

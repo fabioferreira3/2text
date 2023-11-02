@@ -6,7 +6,9 @@ use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelper;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
+use App\Models\User;
 use App\Packages\ChatGPT\ChatGPT;
+use App\Packages\Oraculum\Oraculum;
 use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -46,23 +48,51 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $chatGpt = new ChatGPT();
+            if ($this->meta['query_embedding'] ?? false) {
+                $response = $this->queryEmbedding();
+            } else {
+                $response = $this->queryGpt();
+            }
 
-            $response = $chatGpt->request([
-                [
-                    'role' => 'user',
-                    'content' => $this->promptHelper->writeFirstPass($this->document->getRawStructureDescription(), [
-                        'tone' => $this->document->meta['tone'],
-                        'style' => $this->document->meta['style'] ?? null
-                    ])
-                ]
-            ]);
             $this->repo->updateMeta('first_pass', $response['content']);
             $this->repo->updateMeta('raw_structure', DocumentHelper::parseHtmlTagsToRawStructure($response['content']));
+            RegisterProductUsage::dispatch($this->document->account, $response['token_usage']);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to expand outline: ' . $e->getMessage());
         }
+    }
+
+    protected function queryEmbedding()
+    {
+        $user = User::findOrFail($this->document->getMeta('user_id'));
+        $oraculum = new Oraculum($user, $this->meta['collection_name']);
+
+        return $oraculum->query($this->promptHelper->writeEmbeddedFirstPass(
+            $this->document->getRawStructureDescription(),
+            [
+                'tone' => $this->document->meta['tone'],
+                'style' => $this->document->meta['style'] ?? null
+            ]
+        ), 'advanced');
+    }
+
+    protected function queryGpt()
+    {
+        $chatGpt = new ChatGPT();
+
+        return $chatGpt->request([
+            [
+                'role' => 'user',
+                'content' => $this->promptHelper->writeFirstPass(
+                    $this->document->getRawStructureDescription(),
+                    [
+                        'tone' => $this->document->meta['tone'],
+                        'style' => $this->document->meta['style'] ?? null
+                    ]
+                )
+            ]
+        ]);
     }
 
     /**

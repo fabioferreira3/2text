@@ -54,7 +54,9 @@ class ExpandText implements ShouldQueue, ShouldBeUnique
                     'meta' => [
                         'text_section' => $section['content'],
                         'section_key' => $key,
-                        'keyword' => $this->meta['keyword']
+                        'keyword' => $this->meta['keyword'],
+                        'query_embedding' => $this->meta['query_embedding'] ?? false,
+                        'collection_name' => $this->meta['collection_name'] ?? '',
                     ]
                 ]);
                 $order++;

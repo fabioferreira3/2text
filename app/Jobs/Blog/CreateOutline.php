@@ -7,7 +7,9 @@ use App\Helpers\PromptHelper;
 use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
+use App\Models\User;
 use App\Packages\ChatGPT\ChatGPT;
+use App\Packages\Oraculum\Oraculum;
 use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -47,21 +49,12 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $chatGpt = new ChatGPT();
-            $response = $chatGpt->request([
-                [
-                    'role' => 'user',
-                    'content' =>   $this->promptHelper->writeOutline(
-                        $this->document->getContext(),
-                        [
-                            'tone' => $this->document->getMeta('tone'),
-                            'keyword' => $this->document->getMeta('keyword'),
-                            'style' => $this->document->getMeta('style') ?? null,
-                            'maxsubtopics' => $this->document->getMeta('target_headers_count') ?? 2
-                        ]
-                    )
-                ]
-            ]);
+            if ($this->meta['query_embedding'] ?? false) {
+                $response = $this->queryEmbedding();
+            } else {
+                $response = $this->queryGpt();
+            }
+
             $this->repo->updateMeta('outline', $response['content']);
             $this->repo->updateMeta('raw_structure', DocumentHelper::parseOutlineToRawStructure($response['content']));
             $this->repo->addHistory(
@@ -79,6 +72,16 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
 
     protected function queryEmbedding()
     {
+        $user = User::findOrFail($this->document->getMeta('user_id'));
+        $oraculum = new Oraculum($user, $this->meta['collection_name']);
+        return $oraculum->query($this->promptHelper->writeEmbeddedOutline(
+            [
+                'tone' => $this->document->getMeta('tone'),
+                'keyword' => $this->document->getMeta('keyword'),
+                'style' => $this->document->getMeta('style') ?? null,
+                'maxsubtopics' => $this->document->getMeta('target_headers_count') ?? 2
+            ]
+        ), 'advanced');
     }
 
     protected function queryGpt()
