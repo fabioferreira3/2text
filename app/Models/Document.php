@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class Document extends Model
 {
@@ -214,6 +215,18 @@ class Document extends Model
     public function scopeOfTextToSpeech($query)
     {
         return $query->where('type', DocumentType::TEXT_TO_SPEECH);
+    }
+
+    public function recalculateWordCount()
+    {
+        $wordCount = 0;
+        if ($this->contentBlocks()->ofTextType()->get()->count()) {
+            $wordCount = $this->contentBlocks()->ofTextType()->get()->reduce(function ($carry, $block) {
+                return $carry + Str::wordCount($block->latest_content);
+            }, 0);
+        }
+
+        $this->update(['word_count' => $wordCount]);
     }
 
     protected static function booted(): void

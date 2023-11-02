@@ -178,6 +178,7 @@ class TextBlock extends Component
     {
         if ($params['document_content_block_id'] === $this->contentBlock->id) {
             $this->contentBlock->refresh();
+            $this->contentBlock->document->recalculateWordCount();
             $this->setup();
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'success',

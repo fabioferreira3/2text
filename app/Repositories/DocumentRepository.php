@@ -11,6 +11,7 @@ use App\Helpers\PromptHelper;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Models\DocumentTask;
+use App\Models\ProductUsage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -176,5 +177,19 @@ class DocumentRepository
     public static function clearContentBlocks(Document $document)
     {
         return $document->contentBlocks()->delete();
+    }
+
+    public static function getProductUsage(Document $document)
+    {
+        return ProductUsage::where('account_id', $document->account_id)
+            ->where('meta->document_id', $document->id)->get();
+    }
+
+    public static function getProductUsageCosts(Document $document)
+    {
+        $productUsage = self::getProductUsage($document);
+        return $productUsage->reduce(function ($carry, $usage) {
+            return $carry + $usage->cost;
+        }, 0);
     }
 }

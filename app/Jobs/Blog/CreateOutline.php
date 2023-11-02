@@ -63,7 +63,10 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
                     'content' => $response['content']
                 ]
             );
-            RegisterProductUsage::dispatch($this->document->account, $response['token_usage']);
+            RegisterProductUsage::dispatch($this->document->account, [
+                ...$response['token_usage'],
+                'meta' => ['document_id' => $this->document->id]
+            ]);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to generate outline: ' . $e->getMessage());

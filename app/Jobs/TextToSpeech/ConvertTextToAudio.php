@@ -78,7 +78,8 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
             ]);
 
             RegisterProductUsage::dispatch($this->document->account, [
-                'model' => AIModel::ELEVEN_LABS->value
+                'model' => AIModel::ELEVEN_LABS->value,
+                'meta' => ['document_id' => $this->document->id]
             ]);
 
             AudioGenerated::dispatchIf(

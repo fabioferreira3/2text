@@ -54,7 +54,8 @@ class RegisterProductUsage implements ShouldQueue
                     'prompt_token_usage' => $this->params['prompt'] ?? 0,
                     'completion_token_usage' => $this->params['completion'] ?? 0,
                     'total_token_usage' => $this->params['total'] ?? 0,
-                    'cost' => $cost
+                    'cost' => $cost,
+                    'meta' => $this->params['meta'] ?? []
                 ])
             );
             $this->jobSucceded();

@@ -41,7 +41,10 @@ class GenRepository
                 'content' => $response['content']
             ]
         );
-        RegisterProductUsage::dispatch($document->account, $response['token_usage']);
+        RegisterProductUsage::dispatch($document->account, [
+            ...$response['token_usage'],
+            'meta' => ['document_id' => $document->id]
+        ]);
     }
 
     public static function generateEmbeddedTitle(Document $document, string $collectionName)
@@ -62,7 +65,10 @@ class GenRepository
                 'content' => $response['content']
             ]
         );
-        RegisterProductUsage::dispatch($document->account, $response['token_usage']);
+        RegisterProductUsage::dispatch($document->account, [
+            ...$response['token_usage'],
+            'meta' => ['document_id' => $document->id]
+        ]);
     }
 
     public static function generateMetaDescription(Document $document)
@@ -87,7 +93,10 @@ class GenRepository
                 'content' => $response['content']
             ]
         );
-        RegisterProductUsage::dispatch($document->account, $response['token_usage']);
+        RegisterProductUsage::dispatch($document->account, [
+            ...$response['token_usage'],
+            'meta' => ['document_id' => $document->id]
+        ]);
     }
 
     public static function generateImage(Document $document, array $params)
@@ -160,7 +169,10 @@ class GenRepository
                 'content' => $response['content']
             ]
         );
-        RegisterProductUsage::dispatch($document->account, $response['token_usage']);
+        RegisterProductUsage::dispatch($document->account, [
+            ...$response['token_usage'],
+            'meta' => ['document_id' => $document->id]
+        ]);
     }
 
     public static function generateEmbeddedSocialMediaPost(Document $document, string $platform, string $collectionName)
@@ -192,7 +204,10 @@ class GenRepository
                 'content' => $response['data']
             ]
         );
-        RegisterProductUsage::dispatch($document->account, $response['token_usage']);
+        RegisterProductUsage::dispatch($document->account, [
+            ...$response['token_usage'],
+            'meta' => ['document_id' => $document->id]
+        ]);
     }
 
     public static function rewriteTextBlock(DocumentContentBlock $contentBlock, array $params)
@@ -212,7 +227,10 @@ class GenRepository
                 'content' => $response['content']
             ]
         );
-        RegisterProductUsage::dispatch($contentBlock->document->account, $response['token_usage']);
+        RegisterProductUsage::dispatch($contentBlock->document->account, [
+            ...$response['token_usage'],
+            'meta' => ['document_id' => $contentBlock->document->id]
+        ]);
     }
 
     public static function paraphraseDocument(Document $document)
@@ -281,6 +299,7 @@ class GenRepository
         );
         RegisterProductUsage::dispatch($document->account, [
             'model' => StabilityAIEngine::SD_XL_V_1->value,
+            'meta' => ['document_id' => $document->id]
         ]);
 
         return $mediaFile;

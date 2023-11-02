@@ -56,7 +56,10 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
 
             $this->repo->updateMeta('first_pass', $response['content']);
             $this->repo->updateMeta('raw_structure', DocumentHelper::parseHtmlTagsToRawStructure($response['content']));
-            RegisterProductUsage::dispatch($this->document->account, $response['token_usage']);
+            RegisterProductUsage::dispatch($this->document->account, [
+                ...$response['token_usage'],
+                'meta' => ['document_id' => $this->document->id]
+            ]);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to expand outline: ' . $e->getMessage());

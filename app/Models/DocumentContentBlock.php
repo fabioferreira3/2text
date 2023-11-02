@@ -25,6 +25,11 @@ class DocumentContentBlock extends Model
         return $this->hasMany(DocumentContentBlockVersion::class);
     }
 
+    public function getLatestContentAttribute()
+    {
+        return $this->versions()->latest()->first()->content;
+    }
+
     public function getMediaFile()
     {
         if ($this->type === 'media_file_image') {
@@ -96,7 +101,7 @@ class DocumentContentBlock extends Model
 
     public function scopeOfTextType($query)
     {
-        return $query->where('type', 'text');
+        return $query->whereIn('type', ['text', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p']);
     }
 
     /**

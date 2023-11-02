@@ -161,7 +161,6 @@ class PromptHelper
             ], $this->language)
         ], $this->language);
 
-        Log::debug($prompt);
         return $prompt;
     }
 
