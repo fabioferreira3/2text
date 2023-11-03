@@ -5,6 +5,7 @@ use App\Http\Controllers\GoogleAuthController;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Blog\BlogPost;
 use App\Http\Livewire\Blog\NewPost;
+use App\Http\Livewire\Blog\ProcessingBlogPost;
 use App\Http\Livewire\Paraphraser\NewParaphraser;
 use App\Http\Livewire\Paraphraser\Paraphraser;
 use App\Http\Livewire\SocialMediaPost\NewSocialMediaPost;
@@ -52,6 +53,8 @@ Route::middleware([
 
     /* Blog routes */
     Route::get('/blog/new', NewPost::class)->name('new-post');
+    Route::get('/documents/blog-post/{document}/processing', ProcessingBlogPost::class)
+        ->name('blog-post-processing-view');
     Route::get('/documents/blog-post/{document}', BlogPost::class)->name('blog-post-view');
 
     /* Text Transcription routes */

@@ -2,9 +2,7 @@
 
 namespace App\Http\Livewire\Blog;
 
-use App\Enums\DocumentStatus;
 use App\Models\Document;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class BlogPost extends Component
@@ -12,16 +10,6 @@ class BlogPost extends Component
     public Document $document;
     public $title;
     public $showInfo = false;
-    public $tasksProgress = '0%';
-    public $thought = 'Hmmm...';
-
-    public function getListeners()
-    {
-        $userId = Auth::user()->id;
-        return [
-            "echo-private:User.$userId,.DocumentTaskFinished" => 'taskFinished',
-        ];
-    }
 
     public function mount(Document $document)
     {
@@ -31,13 +19,6 @@ class BlogPost extends Component
 
     public function defineTitle()
     {
-        if (in_array($this->document->status, [
-            DocumentStatus::DRAFT,
-            DocumentStatus::IN_PROGRESS
-        ])) {
-            return 'Generating...';
-        }
-
         return $this->document->title ?? 'Blog post';
     }
 
@@ -51,20 +32,8 @@ class BlogPost extends Component
         ]);
     }
 
-    public function taskFinished(array $params)
-    {
-        if ($params['document_id'] === $this->document->id) {
-            $this->tasksProgress = $params['tasks_progress'];
-            $this->thought = $params['thought'];
-        }
-    }
-
     public function render()
     {
-        if (in_array($this->document->status, [DocumentStatus::DRAFT, DocumentStatus::IN_PROGRESS])) {
-            return view('livewire.blog.blog-post-processing')->layout('layouts.app');
-        }
-
         return view('livewire.blog.blog-post')->layout('layouts.app', ['title' => $this->title]);
     }
 }

@@ -19,6 +19,8 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
+    protected $document;
+    protected $contentBlock;
     protected array $meta;
 
     /**
@@ -28,6 +30,8 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
      */
     public function __construct(Document $document, array $meta)
     {
+        $this->document = $document->fresh();
+        $this->contentBlock = DocumentContentBlock::findOrFail($meta['document_content_block_id']);
         $this->meta = $meta;
     }
 
@@ -39,9 +43,8 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $contentBlock = DocumentContentBlock::findOrFail($this->meta['document_content_block_id']);
-            GenRepository::rewriteTextBlock($contentBlock, $this->meta);
-            event(new ContentBlockUpdated($contentBlock, $this->meta['process_id']));
+            GenRepository::rewriteTextBlock($this->contentBlock, $this->meta);
+            event(new ContentBlockUpdated($this->contentBlock, $this->meta['process_id']));
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to rewrite text block: ' . $e->getMessage());

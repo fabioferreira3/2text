@@ -37,8 +37,10 @@ class DocumentTaskFinished implements ShouldBroadcast
     {
         $thoughts = $this->task->document->getMeta('thoughts') ?? [];
         if (count($thoughts)) {
-            return $thoughts[$index] ?? 'Hmmm...';
+            return $thoughts[$index] ?? __('oraculum.hmmm');
         }
+
+        return __('oraculum.where_to_start');
     }
 
     public function broadcastOn()

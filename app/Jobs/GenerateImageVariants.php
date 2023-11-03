@@ -41,7 +41,7 @@ class GenerateImageVariants implements ShouldQueue, ShouldBeUnique
     {
         try {
             GenRepository::generateImageVariants($this->document, $this->meta);
-            $this->jobSucceded();
+            $this->jobSucceded(true);
         } catch (Exception $e) {
             $this->jobFailed('Failed to generate image variants: ' . $e->getMessage());
         }

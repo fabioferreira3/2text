@@ -91,7 +91,7 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
                 ]
             );
 
-            $this->jobSucceded();
+            $this->jobSucceded(true);
         } catch (Exception $e) {
             $this->jobFailed('Failed to convert text to audio: ' . $e->getMessage());
         }

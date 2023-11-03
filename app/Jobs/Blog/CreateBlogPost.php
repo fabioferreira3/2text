@@ -63,7 +63,7 @@ class CreateBlogPost
 
     public function defineTasksCount()
     {
-        $tasksCount = 9 + $this->document->getMeta('target_headers_count');
+        $tasksCount = 6 + $this->document->getMeta('target_headers_count');
         if (in_array($this->document->getMeta('source'), [
             SourceProvider::WEBSITE_URL->value,
             SourceProvider::YOUTUBE->value

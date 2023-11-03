@@ -11,12 +11,14 @@ use App\Rules\DocxFile;
 use App\Rules\PdfFile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 use WireUi\Traits\Actions;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class NewPost extends Component
 {
-    use Actions;
+    use Actions, WithFileUploads;
 
     public string $context;
     public array $sourceUrls;
@@ -110,26 +112,41 @@ class NewPost extends Component
 
     public function process()
     {
-        $this->validate($this->rules());
-        $params = [
-            'source' => $this->source,
-            'context' => $this->context,
-            'language' => $this->language,
-            'meta' => [
-                'source_urls' => $this->sourceUrls ?? [],
-                'target_headers_count' => $this->targetHeadersCount,
-                'tone' => $this->tone,
-                'style' => $this->style,
-                'keyword' => $this->keyword,
-                'img_prompt' => $this->imgPrompt ?? null,
-                'generate_image' => $this->generateImage
-            ]
-        ];
-        $repo = new DocumentRepository();
-        $document = $repo->createBlogPost($params);
-        CreateBlogPost::dispatch($document, $params);
+        try {
+            $this->validate($this->rules());
 
-        return redirect()->route('blog-post-view', ['document' => $document]);
+            $filePath = null;
+            if ($this->fileInput) {
+                $accountId = $this->document->account->id;
+                $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
+                $filePath = "documents/$accountId/" . $filename;
+                $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
+            }
+
+            $params = [
+                'source' => $this->source,
+                'context' => $this->context,
+                'language' => $this->language,
+                'meta' => [
+                    'source_urls' => $this->sourceUrls ?? [],
+                    'source_file_path' => $filePath ?? null,
+                    'target_headers_count' => $this->targetHeadersCount,
+                    'tone' => $this->tone,
+                    'style' => $this->style,
+                    'keyword' => $this->keyword,
+                    'img_prompt' => $this->imgPrompt ?? null,
+                    'generate_image' => $this->generateImage
+                ]
+            ];
+            $repo = new DocumentRepository();
+            $document = $repo->createBlogPost($params);
+            CreateBlogPost::dispatch($document, $params);
+
+            return redirect()->route('blog-post-processing-view', ['document' => $document]);
+        } catch (\Throwable $th) {
+            $this->addError('sourceUrls', $th->getMessage());
+            return;
+        }
     }
 
     public function checkMaxSourceUrls()

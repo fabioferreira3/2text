@@ -14,10 +14,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Livewire\WithFileUploads;
 
 class CreatePost implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings, WithFileUploads;
 
     protected Document $document;
     protected array $meta;

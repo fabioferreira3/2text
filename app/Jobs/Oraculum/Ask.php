@@ -42,7 +42,7 @@ class Ask implements ShouldQueue
                 'origin' => 'sys'
             ]);
             event(new ChatMessageReceived($newIteration));
-            $this->jobSucceded();
+            $this->jobSucceded(true);
         } catch (Exception $e) {
             $this->jobFailed('Failed to create title: ' . $e->getMessage());
         }

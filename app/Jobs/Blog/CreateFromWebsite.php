@@ -4,7 +4,6 @@ namespace App\Jobs\Blog;
 
 use App\Enums\DataType;
 use App\Enums\DocumentTaskEnum;
-use App\Enums\SourceProvider;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
@@ -32,7 +31,7 @@ class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
     public function __construct(Document $document, array $params)
     {
         $this->document = $document;
-        $this->processId = Str::uuid();
+        $this->processId = $params['process_id'] ?? Str::uuid();
         $this->params = $params;
     }
 

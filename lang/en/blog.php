@@ -2,7 +2,7 @@
 
 return [
     'briefly_describe' => 'Briefly describe the subject of the post using at least :minWords words',
-    'context' => 'Context',
+    'context' => 'Describe the post',
     'content' => 'Content',
     'copy_all' => 'Copy all',
     'default' => 'Default',
@@ -21,7 +21,7 @@ return [
     'paste_content' => 'You could also paste a larger text to be used as context. (max. :maxChars chars)',
     'placeholder_example' => 'Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary.',
     'selected_language_info' => 'Take into account that the selected language must be the same language of the context you\'re using.',
-    'source' => 'Source',
+    'source' => 'Source of context',
     'style' => 'Writing style',
     'title' => 'Title',
     'tone' => 'Tone',
