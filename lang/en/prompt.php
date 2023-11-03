@@ -47,6 +47,26 @@ return [
     'formal_tone' => 'Use a writing tone that makes the reader feel like they are reading from a serious source like a newspaper',
     'funny_tone' => 'Use a writing tone that makes the reader laught sometimes but not always. A slightly funny tone, while not joking all the time',
     'generic_prompt' => ":prompt\n\n",
+    "generate_thoughts" => "
+        Imagine you're an AI assistant who received the task from your master, :owner, of writing a blog post.
+        Then, create :sentences_count short sentences that you would say to yourself during the process of writing the article.
+        Like thoughts that an experienced writer would have during the process.
+        These sentences should have no more than 9 words each and should be conversational, like talking to yourself.
+        It needs to have the same tone required by the constraints below.
+        And they must be output in a json array format.
+        For example, if the tone is \"funny\":\n\n
+
+        ['What an interesting topic! Let me see...',
+        'Experior AI... it has a lot of features',
+        'I think I\'ll start with a simple introduction, in a casual tone',
+        'Hmmm, nah, let me rephrase this paragraph, too formal',
+        'Ok, I think now it\'s making sense.']\n\n
+
+        These are the constraints of the blog post:\n
+
+        Context: :context\n
+        Tone: :tone\n
+        Writing style: :style\n\n",
     'given_following_text' => "Given the following text:\n\n:text\n\n",
     'given_following_context' => "And given the following context:\n\n:context\n\n\n",
     'increase_complexity' => "Rewrite the following text increasing its reading complexity so a college professor would understand:\n\n :text",

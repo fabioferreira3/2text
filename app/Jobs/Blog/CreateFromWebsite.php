@@ -43,39 +43,24 @@ class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        $this->defineTasksCount();
         $queryEmbedding = true;
-        DocumentRepository::createTask(
-            $this->document->id,
-            DocumentTaskEnum::REMOVE_EMBEDDINGS,
-            [
-                'process_id' => $this->processId,
-                'meta' => [
-                    'collection_name' => $this->document->id
-                ],
-                'order' => 1
-            ]
-        );
-
         $nextOrder = 2;
 
-        if ($this->document->getMeta('source') === SourceProvider::WEBSITE_URL->value) {
-            foreach ($this->document->getMeta('source_urls') as $key => $sourceUrl) {
-                DocumentRepository::createTask(
-                    $this->document->id,
-                    DocumentTaskEnum::EMBED_SOURCE,
-                    [
-                        'process_id' => $this->processId,
-                        'meta' => [
-                            'data_type' => DataType::WEB_PAGE->value,
-                            'source' => $sourceUrl,
-                            'collection_name' => $this->document->id
-                        ],
-                        'order' => $nextOrder
-                    ]
-                );
-                $nextOrder += 1;
-            }
+        foreach ($this->document->getMeta('source_urls') as $key => $sourceUrl) {
+            DocumentRepository::createTask(
+                $this->document->id,
+                DocumentTaskEnum::EMBED_SOURCE,
+                [
+                    'process_id' => $this->processId,
+                    'meta' => [
+                        'data_type' => DataType::WEB_PAGE->value,
+                        'source' => $sourceUrl,
+                        'collection_name' => $this->document->id
+                    ],
+                    'order' => $nextOrder
+                ]
+            );
+            $nextOrder += 1;
         }
 
         RegisterCreationTasks::dispatchSync($this->document, [
@@ -87,22 +72,6 @@ class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
         ]);
 
         DispatchDocumentTasks::dispatch($this->document);
-    }
-
-    public function defineTasksCount()
-    {
-        $tasksCount = 9 + $this->document->getMeta('target_headers_count');
-        if ($this->document->getMeta('source') === SourceProvider::WEBSITE_URL->value) {
-            $tasksCount += count($this->document->getMeta('source_urls'));
-        }
-
-        if ($this->document->getMeta('generate_image') ?? false) {
-            $tasksCount += 1;
-        }
-
-        $repo = new DocumentRepository(($this->document));
-        $repo->updateMeta('total_tasks_count', $tasksCount);
-        $repo->updateMeta('completed_tasks_count', 0);
     }
 
     /**

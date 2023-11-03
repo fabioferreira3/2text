@@ -175,6 +175,17 @@ class PromptHelper
         ], $this->language);
     }
 
+    public function generateThoughts(array $params)
+    {
+        return Lang::get('prompt.generate_thoughts', [
+            'context' => $params['context'],
+            'owner' => $params['owner'],
+            'tone' => $params['tone'],
+            'style' => $params['style'],
+            'sentences_count' => $params['sentences_count']
+        ]);
+    }
+
     public function writeMetaDescription($text, array $params)
     {
         $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);

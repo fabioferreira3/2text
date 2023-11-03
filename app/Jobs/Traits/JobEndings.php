@@ -9,12 +9,12 @@ use Exception;
 
 trait JobEndings
 {
-    protected function jobSucceded()
+    protected function jobSucceded($skipFinishedEvent = false)
     {
         if (isset($this->meta['task_id'])) {
             $task = DocumentTask::findOrFail($this->meta['task_id']);
             $task->update(['status' => 'finished']);
-            if ($this->document) {
+            if ($this->document && !$skipFinishedEvent) {
                 $repo = new DocumentRepository($this->document);
                 $completedTasksCount = $repo->increaseCompletedTasksCount();
                 event(new DocumentTaskFinished($this->meta['task_id'], $completedTasksCount));

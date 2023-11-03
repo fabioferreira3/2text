@@ -17,6 +17,7 @@ enum DocumentTaskEnum: string
     case EXTRACT_AND_EMBED_AUDIO = 'extract_embed_audio';
     case GENERATE_IMAGE = 'generate_image';
     case GENERATE_IMAGE_VARIANTS = 'generate_image_variants';
+    case GENERATE_AI_THOUGHTS = 'generate_ai_thoughts';
     case PARAPHRASE_DOCUMENT = 'paraphrase_document';
     case PARAPHRASE_TEXT = 'paraphrase_text';
     case PROCESS_AUDIO = 'process_audio';
@@ -48,6 +49,7 @@ enum DocumentTaskEnum: string
             self::EMBED_SOURCE => "App\Jobs\EmbedSource",
             self::GENERATE_IMAGE => "App\Jobs\GenerateImage",
             self::GENERATE_IMAGE_VARIANTS => "App\Jobs\GenerateImageVariants",
+            self::GENERATE_AI_THOUGHTS => "App\Jobs\GenerateAIThoughts",
             self::PARAPHRASE_DOCUMENT => "App\Jobs\Paraphraser\ParaphraseDocument",
             self::PARAPHRASE_TEXT => "App\Jobs\Paraphraser\ParaphraseText",
             self::PROCESS_AUDIO => "App\Jobs\ProcessAudio",

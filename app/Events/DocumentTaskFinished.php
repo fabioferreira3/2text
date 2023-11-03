@@ -33,6 +33,14 @@ class DocumentTaskFinished implements ShouldBroadcast
         return floor(($this->completedTasksCount * 100) / $totalTasks);
     }
 
+    public function defineThought($index)
+    {
+        $thoughts = $this->task->document->getMeta('thoughts') ?? [];
+        if (count($thoughts)) {
+            return $thoughts[$index] ?? 'Hmmm...';
+        }
+    }
+
     public function broadcastOn()
     {
         return new PrivateChannel('User.' . $this->task->document->getMeta('user_id'));
@@ -48,7 +56,8 @@ class DocumentTaskFinished implements ShouldBroadcast
         return [
             'document_id' => $this->task->document->id,
             'completed_tasks_count' => $this->completedTasksCount,
-            'tasks_progress' => $this->calculateTasksProgress() . "%"
+            'tasks_progress' => $this->calculateTasksProgress() . "%",
+            'thought' => $this->defineThought($this->completedTasksCount - 1)
         ];
     }
 

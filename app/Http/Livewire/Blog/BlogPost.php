@@ -13,6 +13,7 @@ class BlogPost extends Component
     public $title;
     public $showInfo = false;
     public $tasksProgress = '0%';
+    public $thought = 'Hmmm...';
 
     public function getListeners()
     {
@@ -54,7 +55,7 @@ class BlogPost extends Component
     {
         if ($params['document_id'] === $this->document->id) {
             $this->tasksProgress = $params['tasks_progress'];
-            $this->defineTitle();
+            $this->thought = $params['thought'];
         }
     }
 
