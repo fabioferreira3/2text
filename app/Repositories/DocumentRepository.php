@@ -39,16 +39,17 @@ class DocumentRepository
             'type' => DocumentType::BLOG_POST->value,
             'meta' => [
                 'context' => $params['context'] ?? null,
+                'img_prompt' => $params['meta']['img_prompt'] ?? null,
+                'keyword' => $params['meta']['keyword'] ?? null,
+                'generate_image' => $params['meta']['generate_image'] ?? false,
                 'raw_structure' => [],
-                'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,
                 'style' => $params['meta']['style'] ?? null,
+                'source_file_path' => $params['meta']['source_file_path'] ?? null,
                 'source' => $params['source'],
                 'source_urls' => $params['meta']['source_urls'] ?? [],
                 'target_headers_count' => $params['meta']['target_headers_count'] ?? null,
-                'keyword' => $params['meta']['keyword'] ?? null,
+                'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,
                 'user_id' => Auth::check() ? Auth::id() : null,
-                'generate_image' => $params['meta']['generate_image'] ?? false,
-                'img_prompt' => $params['meta']['img_prompt'] ?? null
             ]
         ]);
     }

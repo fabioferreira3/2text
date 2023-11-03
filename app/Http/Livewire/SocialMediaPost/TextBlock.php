@@ -75,8 +75,7 @@ class TextBlock extends Component
                 'process_id' => Str::uuid(),
                 'meta' => [
                     'document_content_block_id' => $contentBlock->id,
-                    'prompt' => $prompt,
-                    'faster' => $this->faster
+                    'prompt' => $prompt
                 ]
             ]
         );

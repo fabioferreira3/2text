@@ -26,5 +26,4 @@
             <livewire:my-images />
             @endif
         </div>
-
     </div>

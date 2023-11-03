@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Common\Blocks;
 
 use App\Enums\DocumentTaskEnum;
+use App\Helpers\PromptHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\DocumentContentBlock;
 use App\Repositories\DocumentRepository;
@@ -130,8 +131,9 @@ class TextBlock extends Component
     public function runCustomPrompt()
     {
         $this->validate();
+        $promptHelper = new PromptHelper($this->contentBlock->document->language->value);
         $this->showCustomPrompt = false;
-        $this->rewrite($this->customPrompt);
+        $this->rewrite($promptHelper->modifyText($this->customPrompt, $this->content));
     }
 
     public function toggleCustomPrompt()
@@ -157,7 +159,7 @@ class TextBlock extends Component
                     'text' => $this->content,
                     'document_content_block_id' => $this->contentBlock->id,
                     'prompt' => $prompt,
-                    'faster' => $this->faster
+                    'faster' => true
                 ]
             ]
         );

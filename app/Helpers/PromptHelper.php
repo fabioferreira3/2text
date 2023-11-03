@@ -20,6 +20,14 @@ class PromptHelper
         return Lang::get('prompt.generic_prompt', ['prompt' => $prompt], $this->language);
     }
 
+    public function modifyText($customPrompt, $text)
+    {
+        return Lang::get('prompt.modify_text', [
+            'customPrompt' => $customPrompt,
+            'text' => $text
+        ], $this->language);
+    }
+
     public function summarize($text)
     {
         return Lang::get('prompt.summarize_text', ['text' => $text], $this->language);
@@ -33,6 +41,11 @@ class PromptHelper
     public function paraphrase($text, $tone = 'normal')
     {
         return Lang::get('prompt.paraphrase_text', ['text' => $text, 'tone' => $tone], $this->language);
+    }
+
+    public function directOutput()
+    {
+        return Lang::get('prompt.direct_output', [], $this->language);
     }
 
     public function translate($text, $targetLanguage)

@@ -11,7 +11,7 @@ class ProcessingBlogPost extends Component
 {
     public Document $document;
     public $title;
-    public $tasksProgress = '0%';
+    public $tasksProgress = 0;
     public string $thought;
 
     public function getListeners()
