@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Enums\DocumentStatus;
 use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Models\Document;
@@ -31,7 +32,10 @@ class MyDocumentsTable extends DataTableComponent
     public function viewDoc($documentId)
     {
         $document = Document::findOrFail($documentId);
-        if (in_array($document->status->value, ['finished', 'draft', 'in_progress'])) {
+        if (in_array(
+            $document->status,
+            [DocumentStatus::FINISHED, DocumentStatus::DRAFT, DocumentStatus::IN_PROGRESS]
+        )) {
             return redirect()->route('document-view', ['document' => $document]);
         }
     }

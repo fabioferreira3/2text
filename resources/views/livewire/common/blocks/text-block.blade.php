@@ -1,14 +1,17 @@
 <div class="relative bg-white" :wire:key="$document->id">
     <div class="relative">
         @if (in_array($type, ['h2', 'h3', 'h4', 'h5', 'h6']))
-        <input wire:click="displayBlockOptions" class="focus:bg-blue-100 focus:cursor-text cursor-pointer border-0 bg-white w-full font-bold p-0 text-zinc-700
+        <div class="relative group/block">
+            <input class="focus:bg-blue-100 focus:cursor-text cursor-pointer border-0 bg-white w-full font-bold p-0 text-zinc-700
         {{ $type === 'h2' ? 'text-2xl' : ''}}
         {{ $type === 'h3' ? 'text-xl' : ''}}
         {{ $type === 'h4' ? 'text-lg' : ''}}
         {{ $type === 'h5' ? 'text-base' : ''}}
         {{ $type === 'h6' ? 'text-base' : ''}}
         " name="text" wire:model.debounce.500ms="content" wire:ignore />
-        @include('livewire.common.blocks.text-block-actions')
+            @include('livewire.common.blocks.text-block-actions')
+        </div>
+
         @endif
         @if (in_array($type, ['p', 'text']))
         <div class="relative group/block">
