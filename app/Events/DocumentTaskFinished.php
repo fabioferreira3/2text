@@ -58,7 +58,7 @@ class DocumentTaskFinished implements ShouldBroadcast
         return [
             'document_id' => $this->task->document->id,
             'completed_tasks_count' => $this->completedTasksCount,
-            'tasks_progress' => $this->calculateTasksProgress() . "%",
+            'tasks_progress' => (int) $this->calculateTasksProgress(),
             'thought' => $this->defineThought($this->completedTasksCount - 1)
         ];
     }
