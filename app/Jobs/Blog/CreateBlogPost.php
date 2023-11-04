@@ -33,6 +33,16 @@ class CreateBlogPost
 
         DocumentRepository::createTask(
             $this->document->id,
+            DocumentTaskEnum::GENERATE_FINISHED_NOTIFICATION,
+            [
+                'process_id' => Str::uuid(),
+                'meta' => [],
+                'order' => 1
+            ]
+        );
+
+        DocumentRepository::createTask(
+            $this->document->id,
             DocumentTaskEnum::GENERATE_AI_THOUGHTS,
             [
                 'process_id' => Str::uuid(),

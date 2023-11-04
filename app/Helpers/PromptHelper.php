@@ -199,6 +199,15 @@ class PromptHelper
         ]);
     }
 
+    public function generateFinishedNotification(array $params)
+    {
+        return Lang::get('prompt.generate_finished_notification', [
+            'context' => $params['context'],
+            'owner' => $params['owner'],
+            'document_link' => $params['document_link']
+        ]);
+    }
+
     public function writeMetaDescription($text, array $params)
     {
         $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);

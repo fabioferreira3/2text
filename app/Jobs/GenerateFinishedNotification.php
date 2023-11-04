@@ -17,7 +17,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class GenerateAIThoughts implements ShouldQueue, ShouldBeUnique
+class GenerateFinishNotification implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
@@ -52,21 +52,14 @@ class GenerateAIThoughts implements ShouldQueue, ShouldBeUnique
             $response = $chatGpt->request([
                 [
                     'role' => 'user',
-                    'content' =>  $promptHelper->generateThoughts([
+                    'content' =>  $promptHelper->generateFinishedNotification([
                         'context' => $this->document->getContext(),
                         'owner' => $user->name,
-                        'sentences_count' => $this->meta['sentences_count'],
-                        'tone' => $this->document->getMeta('tone'),
-                        'style' => $this->document->getMeta('style') ?? null
+                        'document_link' => route('blog-post-view', ['document' => $this->document])
                     ])
                 ]
             ]);
-            $array = json_decode($response['content']);
-            if ($array === null && json_last_error() !== JSON_ERROR_NONE) {
-                throw new Exception("Error decoding AI thoughts generation: " . json_last_error_msg());
-            } else {
-                $this->repo->updateMeta('thoughts', $array);
-            }
+            $this->repo->updateMeta('finished_email_content', $response['content']);
             $this->jobSucceded(true);
         } catch (Exception $e) {
             $this->jobFailed();
@@ -78,6 +71,6 @@ class GenerateAIThoughts implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'generating_thoughts_' . $this->document->id;
+        return 'generating_finished_notification_' . $this->document->id;
     }
 }

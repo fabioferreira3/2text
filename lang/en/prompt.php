@@ -63,6 +63,14 @@ return [
         Context: :context\n
         Tone: :tone\n
         Writing style: :style\n\n",
+    'generate_finished_notification' => "Write an email with html tags that will be sent to a user notifying that a job was finished. Be friendly. This is an example of a notification of a blog post finished job:\n\n
+        <p>Hey Fabio! We are letting you know you're recent <strong>{{$jobName}}</strong> is completed!</p>
+        <p>You may check the results in the link below:</p>
+        <p>{{$link}}</p>
+        <p><br></p>
+        <p>Cheers!</p>
+        <p>Experior AI</p>
+    ",
     'given_following_text' => "Given the following text:\n\n:text\n\n",
     'given_following_context' => "And given the following context:\n\n:context\n\n\n",
     'increase_complexity' => "Rewrite the following text increasing its reading complexity so a college professor would understand:\n\n :text\n\n",
