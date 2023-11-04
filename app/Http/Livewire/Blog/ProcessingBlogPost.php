@@ -11,7 +11,7 @@ class ProcessingBlogPost extends Component
 {
     public Document $document;
     public $title;
-    public $tasksProgress = 7;
+    public $currentProgress = 7;
     public string $currentThought;
     public $thoughts;
 
@@ -25,21 +25,22 @@ class ProcessingBlogPost extends Component
 
     public function mount(Document $document)
     {
-        $this->checkStatus($document);
-
         $this->document = $document;
         $this->title = __('oraculum.oraculum_is_working');
         $this->currentThought = __('oraculum.hmmm');
         $this->thoughts = null;
+        $this->checkStatus();
+        $this->defineThought();
+        $this->defineProgress();
     }
 
     public function taskFinished(array $params)
     {
         if ($params['document_id'] === $this->document->id) {
             $this->document->refresh();
-            $this->checkStatus($this->document);
+            $this->checkStatus();
             $this->defineThought();
-            $this->tasksProgress = $params['tasks_progress'] > 100 ? 99 : $params['tasks_progress'];
+            $this->defineProgress();
         }
     }
 
@@ -54,13 +55,19 @@ class ProcessingBlogPost extends Component
         }
     }
 
-    protected function checkStatus(Document $document)
+    public function defineProgress()
     {
-        if ($document->status === DocumentStatus::FINISHED) {
+        $currentProgress = $this->document->getMeta('tasks_progress') ?? $this->currentProgress;
+        $this->currentProgress = $currentProgress > 100 ? 99 : $currentProgress;
+    }
+
+    protected function checkStatus()
+    {
+        if ($this->document->status === DocumentStatus::FINISHED) {
             redirect()->route('blog-post-view', [
                 'document' => $this->document
             ]);
-        } elseif (!in_array($document->status, [
+        } elseif (!in_array($this->document->status, [
             DocumentStatus::DRAFT,
             DocumentStatus::FAILED,
             DocumentStatus::IN_PROGRESS

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\DocumentTaskFinished;
 use App\Events\UserCreated;
+use App\Listeners\HandleDocumentTasksCompletedUpdate;
 use App\Listeners\HandleNewUserNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -17,6 +19,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
+        DocumentTaskFinished::class => [
+            HandleDocumentTasksCompletedUpdate::class
+        ],
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],

@@ -27,12 +27,6 @@ class DocumentTaskFinished implements ShouldBroadcast
         $this->completedTasksCount = $completedTasksCount;
     }
 
-    public function calculateTasksProgress()
-    {
-        $totalTasks = $this->task->document->getMeta('total_tasks_count');
-        return floor(($this->completedTasksCount * 100) / $totalTasks);
-    }
-
     public function broadcastOn()
     {
         return new PrivateChannel('User.' . $this->task->document->getMeta('user_id'));
@@ -47,8 +41,7 @@ class DocumentTaskFinished implements ShouldBroadcast
     {
         return [
             'document_id' => $this->task->document->id,
-            'completed_tasks_count' => $this->completedTasksCount,
-            'tasks_progress' => (int) $this->calculateTasksProgress()
+            'task_id' => $this->task->id
         ];
     }
 
