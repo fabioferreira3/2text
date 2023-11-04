@@ -11,8 +11,9 @@ class ProcessingBlogPost extends Component
 {
     public Document $document;
     public $title;
-    public $tasksProgress = 0;
-    public string $thought;
+    public $tasksProgress = 7;
+    public string $currentThought;
+    public $thoughts;
 
     public function getListeners()
     {
@@ -28,16 +29,28 @@ class ProcessingBlogPost extends Component
 
         $this->document = $document;
         $this->title = __('oraculum.oraculum_is_working');
-        $this->thought = __('oraculum.hmmm');
+        $this->currentThought = __('oraculum.hmmm');
+        $this->thoughts = null;
     }
 
     public function taskFinished(array $params)
     {
         if ($params['document_id'] === $this->document->id) {
-            $this->tasksProgress = $params['tasks_progress'];
-            $this->thought = $params['thought'];
             $this->document->refresh();
             $this->checkStatus($this->document);
+            $this->defineThought();
+            $this->tasksProgress = $params['tasks_progress'] > 100 ? 99 : $params['tasks_progress'];
+        }
+    }
+
+    public function defineThought()
+    {
+        $this->thoughts = $this->thoughts ?? $this->document->getMeta('thoughts') ?? null;
+
+        if ($this->thoughts && count($this->thoughts) > 0) {
+            $this->currentThought = $this->thoughts[array_rand($this->thoughts)];
+        } else {
+            $this->currentThought = __('oraculum.where_to_start');
         }
     }
 
@@ -49,6 +62,7 @@ class ProcessingBlogPost extends Component
             ]);
         } elseif (!in_array($document->status, [
             DocumentStatus::DRAFT,
+            DocumentStatus::FAILED,
             DocumentStatus::IN_PROGRESS
         ])) {
             abort(404);
