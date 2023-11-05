@@ -202,6 +202,7 @@ class PromptHelper
     public function generateFinishedNotification(array $params)
     {
         return Lang::get('prompt.generate_finished_notification', [
+            'jobName' => $params['jobName'],
             'context' => $params['context'],
             'owner' => $params['owner'],
             'document_link' => $params['document_link']

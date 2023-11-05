@@ -17,7 +17,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class GenerateFinishNotification implements ShouldQueue, ShouldBeUnique
+class GenerateFinishedNotification implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
@@ -47,12 +47,13 @@ class GenerateFinishNotification implements ShouldQueue, ShouldBeUnique
         try {
             $user = User::findOrFail($this->document->getMeta('user_id'));
             $promptHelper = PromptHelperFactory::create($this->document->language->value);
-            $chatGpt = new ChatGPT(AIModel::GPT_3_TURBO->value);
+            $chatGpt = new ChatGPT(AIModel::GPT_4->value);
 
             $response = $chatGpt->request([
                 [
                     'role' => 'user',
                     'content' =>  $promptHelper->generateFinishedNotification([
+                        'jobName' => $this->document->type->label(),
                         'context' => $this->document->getContext(),
                         'owner' => $user->name,
                         'document_link' => route('blog-post-view', ['document' => $this->document])

@@ -51,7 +51,7 @@ enum DocumentTaskEnum: string
             self::GENERATE_IMAGE => "App\Jobs\GenerateImage",
             self::GENERATE_IMAGE_VARIANTS => "App\Jobs\GenerateImageVariants",
             self::GENERATE_AI_THOUGHTS => "App\Jobs\GenerateAIThoughts",
-            self::GENERATE_FINISHED_NOTIFICATION => "App\Jobs\GenerateFinishNotification",
+            self::GENERATE_FINISHED_NOTIFICATION => "App\Jobs\GenerateFinishedNotification",
             self::PARAPHRASE_DOCUMENT => "App\Jobs\Paraphraser\ParaphraseDocument",
             self::PARAPHRASE_TEXT => "App\Jobs\Paraphraser\ParaphraseText",
             self::PROCESS_AUDIO => "App\Jobs\ProcessAudio",

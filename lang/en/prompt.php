@@ -63,13 +63,22 @@ return [
         Context: :context\n
         Tone: :tone\n
         Writing style: :style\n\n",
-    'generate_finished_notification' => "Write an email with html tags that will be sent to a user notifying that a job was finished. Be friendly. This is an example of a notification of a blog post finished job:\n\n
-        <p>Hey Fabio! We are letting you know you're recent <strong>{{$jobName}}</strong> is completed!</p>
+    'generate_finished_notification' => "Write an email that will be sent to a user notifying him that a job was finished. The message must contain html tags, as if were already inside the tag <body>.
+    Be natural, conversational, and friendly. It is mandatory that the notification contains the link to the document. Just output the HTML directly, without making comments before or after it.
+    It is also mandatory that you sign the message as \"Oraculum, from Experior\"\n\n
+    This is an example of a notification of a finished blog post job:\n\n
+        <p>Hey Fabio! I just finished writing your post about The Batman. Wow, what a hero! It was fun writing about the Joker as well...</p>
+        <p>Anyway, I'm letting you know the <strong>Blog Post</strong> is completed!</p>
         <p>You may check the results in the link below:</p>
-        <p>{{$link}}</p>
+        <p>https://domain.com/link</p>
         <p><br></p>
         <p>Cheers!</p>
-        <p>Experior AI</p>
+        <p>Oraculum, from Experior</p>\n\n
+        These are the parameters that needs to be part of the notification:\n\n
+        - Activity: :jobName creation\n
+        - Requester: :owner\n
+        - Context: \":context\"\n\n
+        - Link: :document_link\n
     ",
     'given_following_text' => "Given the following text:\n\n:text\n\n",
     'given_following_context' => "And given the following context:\n\n:context\n\n\n",
