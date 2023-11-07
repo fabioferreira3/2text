@@ -7,7 +7,7 @@ use App\Helpers\PromptHelperFactory;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
-use App\Packages\ChatGPT\ChatGPT;
+use App\Packages\OpenAI\ChatGPT;
 use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -47,7 +47,7 @@ class GenerateFinishedNotification implements ShouldQueue, ShouldBeUnique
         try {
             $user = User::findOrFail($this->document->getMeta('user_id'));
             $promptHelper = PromptHelperFactory::create($this->document->language->value);
-            $chatGpt = new ChatGPT(AIModel::GPT_4->value);
+            $chatGpt = new ChatGPT(AIModel::GPT_4_TURBO->value);
 
             $response = $chatGpt->request([
                 [

@@ -171,13 +171,13 @@ class Generator extends Component
             return false;
         }
 
-        if (!$this->imgStyle) {
-            $this->dispatchBrowserEvent('alert', [
-                'type' => 'error',
-                'message' => "Please provide an image style"
-            ]);
-            return false;
-        }
+        // if (!$this->imgStyle) {
+        //     $this->dispatchBrowserEvent('alert', [
+        //         'type' => 'error',
+        //         'message' => "Please provide an image style"
+        //     ]);
+        //     return false;
+        // }
 
         return true;
     }

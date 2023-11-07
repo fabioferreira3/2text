@@ -8,7 +8,7 @@ use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
-use App\Packages\ChatGPT\ChatGPT;
+use App\Packages\OpenAI\ChatGPT;
 use App\Packages\Oraculum\Oraculum;
 use App\Repositories\DocumentRepository;
 use Exception;

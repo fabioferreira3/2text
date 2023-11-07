@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Packages\ChatGPT;
+namespace App\Packages\OpenAI;
 
 use Exception;
 use Illuminate\Support\Facades\Artisan;

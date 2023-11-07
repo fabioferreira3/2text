@@ -16,7 +16,7 @@ class SupportHelper
             AIModel::GPT_3_TURBO0301->value,
             AIModel::GPT_3_TURBO0613->value
         ])) {
-            return (($tokenUsage['prompt'] / 1000) * 0.0015) + (($tokenUsage['completion'] / 1000) * 0.002);
+            return (($tokenUsage['prompt'] / 1000) * 0.0010) + (($tokenUsage['completion'] / 1000) * 0.002);
         } elseif (in_array($model, [
             AIModel::GPT_3_TURBO_16->value,
             AIModel::GPT_3_TURBO_16_0613->value
@@ -25,9 +25,14 @@ class SupportHelper
         } elseif (in_array($model, [
             AIModel::GPT_4->value,
             AIModel::GPT_4_0314->value,
-            AIModel::GPT_4_0613->value
+            AIModel::GPT_4_0613->value,
         ])) {
             return (($tokenUsage['prompt'] / 1000) * 0.03) + (($tokenUsage['completion'] / 1000) * 0.06);
+        } elseif (in_array($model, [
+            AIModel::GPT_4_TURBO->value,
+            AIModel::GPT_4_VISION->value
+        ])) {
+            return (($tokenUsage['prompt'] / 1000) * 0.01) + (($tokenUsage['completion'] / 1000) * 0.03);
         } elseif (in_array($model, [
             AIModel::GPT_4_32->value,
             AIModel::GPT_4_32_0314->value,
@@ -40,6 +45,8 @@ class SupportHelper
             return $tokenUsage['char_count'] * 0.000016;
         } elseif (in_array($model, [StabilityAIEngine::SD_XL_V_1->value])) {
             return 0.08;
+        } elseif (in_array($model, [AIModel::DALL_E_3->value])) {
+            return $tokenUsage['size'] === '1024x1024' ? 0.04 : 0.08;
         } else {
             return 0;
         }

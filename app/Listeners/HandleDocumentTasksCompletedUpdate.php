@@ -16,8 +16,8 @@ class HandleDocumentTasksCompletedUpdate
     public function handle(DocumentTaskFinished $event)
     {
         $repo = new DocumentRepository($event->task->document);
-        $totalTasks = $event->task->document->getMeta('total_tasks_count');
-        $progress = floor(($event->completedTasksCount * 100) / $totalTasks);
+        $totalTasks = $event->task->document->getMeta('total_tasks_count') ?? 0;
+        $progress = $totalTasks > 0 ? floor(($event->completedTasksCount * 100) / $totalTasks) : 0;
         $repo->updateMeta('tasks_progress', $progress);
     }
 }

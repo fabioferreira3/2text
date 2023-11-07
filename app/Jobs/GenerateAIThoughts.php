@@ -7,7 +7,7 @@ use App\Helpers\PromptHelperFactory;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
-use App\Packages\ChatGPT\ChatGPT;
+use App\Packages\OpenAI\ChatGPT;
 use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;

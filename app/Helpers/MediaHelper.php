@@ -15,13 +15,13 @@ class MediaHelper
                 $size = ['height' => 1024, 'width' => 1024];
                 break;
             case 'linkedin':
-                $size = ['height' => 768, 'width' => 1344];
+                $size = ['height' => 1024, 'width' => 1792];
                 break;
             case 'facebook':
-                $size = ['height' => 768, 'width' => 1344];
+                $size = ['height' => 1024, 'width' => 1792];
                 break;
             case 'twitter':
-                $size = ['height' => 640, 'width' => 1536];
+                $size = ['height' => 1024, 'width' => 1792];
                 break;
             default:
                 $size = ['height' => 1024, 'width' => 1024];
@@ -37,7 +37,7 @@ class MediaHelper
         }
 
         if ($document->type === DocumentType::BLOG_POST) {
-            return ['height' => 640, 'width' => 1536];
+            return ['height' => 1024, 'width' => 1792];
         }
 
         return ['height' => 1024, 'width' => 1024];

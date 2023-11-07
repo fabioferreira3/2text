@@ -45,6 +45,7 @@ class RegisterProductUsage implements ShouldQueue
                     'completion' => $this->params['completion'] ?? 0,
                     'audio_length' => $this->params['length'] ?? 0,
                     'total' => $this->params['total'] ?? 0,
+                    'size' => $this->params['size'] ?? '1024x1024'
                 ]);
             }
 
@@ -60,7 +61,7 @@ class RegisterProductUsage implements ShouldQueue
             );
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to register finished process: ' . $e->getMessage());
+            $this->jobFailed('Failed to register product usage: ' . $e->getMessage());
         }
     }
 }

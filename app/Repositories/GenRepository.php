@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\DocumentTaskEnum;
-use App\Packages\ChatGPT\ChatGPT;
+use App\Packages\OpenAI\ChatGPT;
 use App\Enums\AIModel;
 use App\Events\ProcessFinished;
 use App\Helpers\PromptHelperFactory;
@@ -13,8 +13,8 @@ use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
 use App\Models\User;
+use App\Packages\OpenAI\DallE;
 use App\Packages\Oraculum\Oraculum;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Talendor\StabilityAI\Enums\StabilityAIEngine;
@@ -101,20 +101,22 @@ class GenRepository
 
     public static function generateImage(Document $document, array $params)
     {
-        $client = app(StabilityAIClient::class);
-        $results = $client->textToImage($params);
-        if (count($results)) {
-            foreach ($results as $result) {
-                $mediaFile = self::processImageResult($document, $result, $params);
-                if ($params['add_content_block'] ?? false) {
-                    $document->contentBlocks()->save(new DocumentContentBlock([
-                        'type' => 'media_file_image',
-                        'content' => $mediaFile->id,
-                        'prompt' => $params['prompt'],
-                        'order' => 1
-                    ]));
-                }
+        //$client = app(StabilityAIClient::class);
+        $client = new DallE();
+        $params['size'] = $params['height'] . 'x' . $params['width'];
+        $results = $client->request($params);
+        if ($results) {
+            // foreach ($results as $result) {
+            $mediaFile = self::processImageResult($document, $results, $params);
+            if ($params['add_content_block'] ?? false) {
+                $document->contentBlocks()->save(new DocumentContentBlock([
+                    'type' => 'media_file_image',
+                    'content' => $mediaFile->id,
+                    'prompt' => $params['prompt'],
+                    'order' => 1
+                ]));
             }
+            //  }
         }
 
         event(new ProcessFinished([
@@ -212,7 +214,7 @@ class GenRepository
 
     public static function rewriteTextBlock(DocumentContentBlock $contentBlock, array $params)
     {
-        $model = isset($params['faster']) && $params['faster'] ? AIModel::GPT_3_TURBO : AIModel::GPT_4;
+        $model = isset($params['faster']) && $params['faster'] ? AIModel::GPT_3_TURBO : AIModel::GPT_4_TURBO;
         $repo = new DocumentRepository($contentBlock->document);
         $promptHelper = PromptHelperFactory::create($contentBlock->document->language->value);
         $chatGpt = new ChatGPT($model->value);
@@ -284,7 +286,8 @@ class GenRepository
                 'document_id' => $document->id,
                 'process_id' => $params['process_id'] ?? null,
                 'style_preset' => $params['style_preset'] ?? null,
-                'model' => StabilityAIEngine::SD_XL_V_1->value,
+                //'model' => StabilityAIEngine::SD_XL_V_1->value,
+                'model' => AIModel::DALL_E_3->value,
                 'steps' => $params['steps'] ?? 0,
                 'prompt' => $params['prompt'] ?? null
             ]
@@ -298,8 +301,12 @@ class GenRepository
             ]
         );
         RegisterProductUsage::dispatch($document->account, [
-            'model' => StabilityAIEngine::SD_XL_V_1->value,
-            'meta' => ['document_id' => $document->id]
+            //'model' => StabilityAIEngine::SD_XL_V_1->value,
+            'model' => AIModel::DALL_E_3->value,
+            'size' => $params['size'] ?? '1024x1024',
+            'meta' => [
+                'document_id' => $document->id,
+            ]
         ]);
 
         return $mediaFile;

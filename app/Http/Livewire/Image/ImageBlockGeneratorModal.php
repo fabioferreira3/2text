@@ -22,8 +22,8 @@ class ImageBlockGeneratorModal extends Component
     public bool $processing = false;
     public string $processId;
     public array $previewImgs;
-    public $stylePresets;
-    public $selectedStylePreset;
+    //  public $stylePresets;
+    //   public $selectedStylePreset;
     public mixed $action = '';
     private $documentRepo;
 
@@ -47,8 +47,8 @@ class ImageBlockGeneratorModal extends Component
         $this->contentBlock = $contentBlock;
         $this->prompt = $this->contentBlock->document->getMeta('img_prompt');
         $this->imgStyle = $this->contentBlock->document->getMeta('img_style') ?? null;
-        $this->stylePresets = StylePreset::getMappedValues();
-        $this->selectedStylePreset = $this->imgStyle ? $this->selectStylePreset($this->imgStyle) : null;
+        //    $this->stylePresets = StylePreset::getMappedValues();
+        //    $this->selectedStylePreset = $this->imgStyle ? $this->selectStylePreset($this->imgStyle) : null;
         $this->processing = false;
         $this->processId = '';
         $this->previewImgs = [
@@ -71,14 +71,14 @@ class ImageBlockGeneratorModal extends Component
         ]);
     }
 
-    public function selectStylePreset($style)
-    {
-        $found = array_values(array_filter($this->stylePresets, function ($item) use ($style) {
-            return $item["value"] === $style;
-        }));
+    // public function selectStylePreset($style)
+    // {
+    //     $found = array_values(array_filter($this->stylePresets, function ($item) use ($style) {
+    //         return $item["value"] === $style;
+    //     }));
 
-        return $found[0] ?? null;
-    }
+    //     return $found[0] ?? null;
+    // }
 
     public function generateNewImages()
     {
@@ -102,9 +102,9 @@ class ImageBlockGeneratorModal extends Component
                     'prompt' => $this->prompt,
                     'height' => $imageSize['height'],
                     'width' => $imageSize['width'],
-                    'style_preset' => $this->imgStyle,
-                    'steps' => 21,
-                    'samples' => 4
+                    //    'style_preset' => $this->imgStyle,
+                    //    'steps' => 21,
+                    //    'samples' => 4
                 ]
             ]
         );
@@ -191,10 +191,10 @@ class ImageBlockGeneratorModal extends Component
         return view('livewire.image.image-block-generator-modal');
     }
 
-    public function updatedImgStyle($newValue)
-    {
-        $this->selectedStylePreset = $this->selectStylePreset($newValue);
-    }
+    // public function updatedImgStyle($newValue)
+    // {
+    //     $this->selectedStylePreset = $this->selectStylePreset($newValue);
+    // }
 
     protected function setProcessingState()
     {
@@ -229,13 +229,13 @@ class ImageBlockGeneratorModal extends Component
             return false;
         }
 
-        if (!$this->imgStyle) {
-            $this->dispatchBrowserEvent('alert', [
-                'type' => 'error',
-                'message' => __('validation.image_style')
-            ]);
-            return false;
-        }
+        // if (!$this->imgStyle) {
+        //     $this->dispatchBrowserEvent('alert', [
+        //         'type' => 'error',
+        //         'message' => __('validation.image_style')
+        //     ]);
+        //     return false;
+        // }
 
         return true;
     }
