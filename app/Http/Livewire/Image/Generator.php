@@ -45,7 +45,7 @@ class Generator extends Component
         $this->processing = false;
         $this->processId = '';
         $this->previewImgs = [];
-        $this->samples = 4;
+        $this->samples = 1;
     }
 
     public function render()

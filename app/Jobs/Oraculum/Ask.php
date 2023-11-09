@@ -38,7 +38,7 @@ class Ask implements ShouldQueue
             $client = new Oraculum($this->iteration->thread->user, $this->taskId);
             $response = $client->chat($this->iteration->response);
             $newIteration = $this->iteration->thread->iterations()->create([
-                'response' => $response['data'],
+                'response' => $response['content'],
                 'origin' => 'sys'
             ]);
             event(new ChatMessageReceived($newIteration));

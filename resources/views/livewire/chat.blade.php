@@ -48,9 +48,10 @@
             <span class="text-red-500 text-sm mb-2">{{ $errors->first('inputMsg') }}</span>
             @endif
             <textarea wire:model="inputMsg" x-on:keydown.enter="handleEnter($event)"
-                placeholder="Type your message here..." rows="4" class="w-full rounded-t-lg border-gray-200"></textarea>
+                placeholder="{{__('chat.type_message_here')}}" rows="4"
+                class="w-full rounded-t-lg border-gray-200"></textarea>
             <button :disabled="$processing" wire:click='submitMsg'
-                class="bg-secondary text-white py-2 rounded-b-lg font-bold text-lg">Send</button>
+                class="bg-secondary text-white py-2 rounded-b-lg font-bold text-lg">{{__('chat.send')}}</button>
         </div>
     </div>
 
@@ -59,7 +60,7 @@
         <button wire:click="$set('isOpen', true)"
             class="flex items-center gap-2 justify-center w-full bg-secondary m-0 px-4 py-1 rounded-xl text-white flex items-center justify-center text-lg font-bold">
             <x-icon name="speakerphone" width="20" height="20" />
-            <div>Chat</div>
+            <div>{{__('chat.ask_for_help')}}</div>
         </button>
     </div>
     @endif

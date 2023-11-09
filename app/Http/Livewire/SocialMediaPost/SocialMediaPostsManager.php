@@ -43,7 +43,7 @@ class SocialMediaPostsManager extends Component
     public $wordCountTarget;
     public string $language;
     public array $languages;
-    public array $stylePresets;
+    // public array $stylePresets;
     public string $keyword;
     public mixed $tone;
     public mixed $style;
@@ -77,7 +77,7 @@ class SocialMediaPostsManager extends Component
             ],
             'sourceUrls.*' => 'url',
             'imgPrompt' => 'required_if:generateImage,true',
-            'imgStyle' => 'required_if:generateImage,true',
+            //   'imgStyle' => 'required_if:generateImage,true',
             'platforms' => ['required', 'array', new \App\Rules\ValidPlatforms()],
             'context' => 'required_if:source,free_text|nullable',
             'keyword' => 'required',
@@ -106,7 +106,7 @@ class SocialMediaPostsManager extends Component
             'source.required' => __('validation.source_required'),
             'language.required' => __('validation.language_required'),
             'imgPrompt.required_if' => __('validation.img_prompt_required'),
-            'imgStyle.required_if' => __('validation.img_style_required')
+            //  'imgStyle.required_if' => __('validation.img_style_required')
         ];
     }
 
@@ -134,7 +134,7 @@ class SocialMediaPostsManager extends Component
         $this->language = $document->language->value ?? 'en';
         $this->languages = Language::getLabels();
         $this->wordCountTarget = $document->getMeta('target_word_count') ?? 50;
-        $this->stylePresets = StylePreset::getMappedValues();
+        //    $this->stylePresets = StylePreset::getMappedValues();
         $this->keyword = $document->getMeta('keyword') ?? '';
         $this->tone = $document->getMeta('tone') ?? 'default';
         $this->style = $document->getMeta('style') ?? 'default';
@@ -228,14 +228,14 @@ class SocialMediaPostsManager extends Component
         }
     }
 
-    public function selectStylePreset($style)
-    {
-        $found = array_values(array_filter($this->stylePresets, function ($item) use ($style) {
-            return $item["value"] === $style;
-        }));
+    // public function selectStylePreset($style)
+    // {
+    //     $found = array_values(array_filter($this->stylePresets, function ($item) use ($style) {
+    //         return $item["value"] === $style;
+    //     }));
 
-        return $found[0] ?? null;
-    }
+    //     return $found[0] ?? null;
+    // }
 
     public function toggleInstructions()
     {
@@ -260,10 +260,10 @@ class SocialMediaPostsManager extends Component
         $this->resetErrorBag('sourceUrls');
     }
 
-    public function updatedImgStyle($newValue)
-    {
-        $this->selectedStylePreset = $this->selectStylePreset($newValue);
-    }
+    // public function updatedImgStyle($newValue)
+    // {
+    //     $this->selectedStylePreset = $this->selectStylePreset($newValue);
+    // }
 
     public function deleteDocument(array $params)
     {

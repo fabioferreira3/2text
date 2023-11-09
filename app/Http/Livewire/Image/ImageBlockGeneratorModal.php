@@ -104,7 +104,7 @@ class ImageBlockGeneratorModal extends Component
                     'width' => $imageSize['width'],
                     //    'style_preset' => $this->imgStyle,
                     //    'steps' => 21,
-                    //    'samples' => 4
+                    'samples' => 4
                 ]
             ]
         );

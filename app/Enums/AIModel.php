@@ -8,7 +8,8 @@ enum AIModel: string
     case DALL_E_2 = 'dall-e-2';
     case ELEVEN_LABS = 'elevenlabs';
     case ESRERGAN = 'esrgan-v1-x2plus';
-    case GPT_3_TURBO = 'gpt-3.5-turbo-1106';
+    case GPT_3_TURBO = 'gpt-3.5-turbo';
+    case GPT_3_TURBO1106 = 'gpt-3.5-turbo-1106';
     case GPT_3_TURBO0301 = 'gpt-3.5-turbo-0301';
     case GPT_3_TURBO0613 = 'gpt-3.5-turbo-0613';
     case GPT_3_TURBO_16 = 'gpt-3.5-turbo-16k';

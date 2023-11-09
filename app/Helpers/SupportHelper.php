@@ -13,6 +13,7 @@ class SupportHelper
     {
         if (in_array($model, [
             AIModel::GPT_3_TURBO->value,
+            AIModel::GPT_3_TURBO1106->value,
             AIModel::GPT_3_TURBO0301->value,
             AIModel::GPT_3_TURBO0613->value
         ])) {

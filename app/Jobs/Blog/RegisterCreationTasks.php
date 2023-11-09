@@ -40,6 +40,7 @@ class RegisterCreationTasks
                         'prompt' => $this->params['meta']['img_prompt'],
                         'height' => $imageSize['height'],
                         'width' => $imageSize['width'],
+                        'quality' => 'standard',
                         'style_preset' => StylePreset::DIGITAL_ART->value,
                         'steps' => 21,
                         'samples' => 1,

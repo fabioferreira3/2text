@@ -121,7 +121,7 @@
                 class="w-full text-base border-1 border-gray-200 bg-gray-100 p-0 rounded-xl p-4" rows="3"
                 wire:model="prompt"></textarea>
         </div>
-        <div class="flex flex-col gap-2 w-full">
+        {{-- <div class="flex flex-col gap-2 w-full">
             <div class="text-xl font-bold">{{ __('social_media.select_style') }}:</div>
             <x-custom.dropdown class="w-full" direction="up">
                 <x-slot name="trigger">
@@ -144,7 +144,7 @@
                 </x-dropdown.item>
                 @endforeach
             </x-custom.dropdown>
-        </div>
+        </div> --}}
     </div>
 
     <div class="flex justify-center mt-8">

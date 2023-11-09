@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Adapters\ImageGeneratorHandler;
 use App\Enums\DocumentTaskEnum;
 use App\Packages\OpenAI\ChatGPT;
 use App\Enums\AIModel;
@@ -26,7 +27,7 @@ class GenRepository
     {
         $repo = new DocumentRepository($document);
         $promptHelper = PromptHelperFactory::create($document->language->value);
-        $chatGpt = new ChatGPT(AIModel::GPT_3_TURBO->value);
+        $chatGpt = new ChatGPT(AIModel::GPT_3_TURBO1106->value);
         $response = $chatGpt->request([[
             'role' => 'user',
             'content' => $promptHelper->writeTitle($context, [
@@ -75,7 +76,7 @@ class GenRepository
     {
         $repo = new DocumentRepository($document);
         $promptHelper = PromptHelperFactory::create($document->language->value);
-        $chatGpt = new ChatGPT(AIModel::GPT_3_TURBO->value);
+        $chatGpt = new ChatGPT(AIModel::GPT_3_TURBO1106->value);
         $response = $chatGpt->request([[
             'role' => 'user',
             'content' => $promptHelper->writeMetaDescription(
@@ -101,13 +102,14 @@ class GenRepository
 
     public static function generateImage(Document $document, array $params)
     {
+        $handler = new ImageGeneratorHandler();
+        $result = $handler->handle('textToImage', $params);
         //$client = app(StabilityAIClient::class);
-        $client = new DallE();
-        $params['size'] = $params['height'] . 'x' . $params['width'];
-        $results = $client->request($params);
-        if ($results) {
-            // foreach ($results as $result) {
-            $mediaFile = self::processImageResult($document, $results, $params);
+        // $client = new DallE();
+        //   $params['size'] = $params['height'] . 'x' . $params['width'];
+        //   $results = $client->request($params);
+        if ($result) {
+            $mediaFile = self::processImageResult($document, $result, $params, AIModel::DALL_E_3->value);
             if ($params['add_content_block'] ?? false) {
                 $document->contentBlocks()->save(new DocumentContentBlock([
                     'type' => 'media_file_image',
@@ -116,7 +118,6 @@ class GenRepository
                     'order' => 1
                 ]));
             }
-            //  }
         }
 
         event(new ProcessFinished([
@@ -129,12 +130,14 @@ class GenRepository
 
     public static function generateImageVariants(Document $document, array $params)
     {
-        $client = app(StabilityAIClient::class);
-        $params['init_image'] = Storage::disk('s3')->get($params['file_name']);
-        $results = $client->imageToImage($params);
+        $handler = new ImageGeneratorHandler();
+        $results = $handler->handle('imageToImage', $params);
+        // $client = app(StabilityAIClient::class);
+        // $params['init_image'] = Storage::disk('s3')->get($params['file_name']);
+        // $results = $client->imageToImage($params);
         if (count($results)) {
             foreach ($results as $result) {
-                self::processImageResult($document, $result, $params);
+                self::processImageResult($document, $result, $params, StabilityAIEngine::SD_XL_V_1->value);
             }
         }
     }
@@ -203,7 +206,7 @@ class GenRepository
         $repo->addHistory(
             [
                 'field' => $platform,
-                'content' => $response['data']
+                'content' => $response['content']
             ]
         );
         RegisterProductUsage::dispatch($document->account, [
@@ -214,7 +217,7 @@ class GenRepository
 
     public static function rewriteTextBlock(DocumentContentBlock $contentBlock, array $params)
     {
-        $model = isset($params['faster']) && $params['faster'] ? AIModel::GPT_3_TURBO : AIModel::GPT_4_TURBO;
+        $model = isset($params['faster']) && $params['faster'] ? AIModel::GPT_3_TURBO1106 : AIModel::GPT_4_TURBO;
         $repo = new DocumentRepository($contentBlock->document);
         $promptHelper = PromptHelperFactory::create($contentBlock->document->language->value);
         $chatGpt = new ChatGPT($model->value);
@@ -276,7 +279,7 @@ class GenRepository
         DispatchDocumentTasks::dispatch($document);
     }
 
-    private static function processImageResult($document, $result, $params): MediaFile
+    private static function processImageResult($document, $result, $params, $model): MediaFile
     {
         $repo = new DocumentRepository($document);
         $mediaFile = MediaRepository::storeImage($document->account, [
@@ -286,8 +289,7 @@ class GenRepository
                 'document_id' => $document->id,
                 'process_id' => $params['process_id'] ?? null,
                 'style_preset' => $params['style_preset'] ?? null,
-                //'model' => StabilityAIEngine::SD_XL_V_1->value,
-                'model' => AIModel::DALL_E_3->value,
+                'model' => $model,
                 'steps' => $params['steps'] ?? 0,
                 'prompt' => $params['prompt'] ?? null
             ]
