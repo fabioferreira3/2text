@@ -9,6 +9,7 @@ use App\Repositories\DocumentRepository;
 use App\Rules\CsvFile;
 use App\Rules\DocxFile;
 use App\Rules\PdfFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
@@ -117,7 +118,7 @@ class NewPost extends Component
 
             $filePath = null;
             if ($this->fileInput) {
-                $accountId = $this->document->account->id;
+                $accountId = Auth::check() ? Auth::user()->account_id : 'guest';
                 $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
                 $filePath = "documents/$accountId/" . $filename;
                 $this->fileInput->storeAs("documents/$accountId", $filename, 's3');

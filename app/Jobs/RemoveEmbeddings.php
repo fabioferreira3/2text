@@ -85,7 +85,7 @@ class RemoveEmbeddings implements ShouldQueue
             $oraculum->deleteCollection();
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to delete collection: ' . $e->getMessage());
+            $this->jobFailedButSkipped('Failed to delete collection: ' . $e->getMessage());
         }
     }
 }

@@ -69,6 +69,11 @@ class CreateBlogPost
         CreateFromFreeText::dispatchIf($this->params['source'] === 'free_text', $this->document, $this->params);
         CreateFromVideoStream::dispatchIf($this->params['source'] === 'youtube', $this->document, $this->params);
         CreateFromWebsite::dispatchIf($this->params['source'] === 'website_url', $this->document, $this->params);
+        CreateFromFile::dispatchIf(in_array($this->params['source'], [
+            SourceProvider::CSV->value,
+            SourceProvider::DOCX->value,
+            SourceProvider::PDF->value
+        ]), $this->document, $this->params);
     }
 
     public function defineTasksCount()

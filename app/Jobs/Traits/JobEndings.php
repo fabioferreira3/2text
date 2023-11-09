@@ -37,7 +37,7 @@ trait JobEndings
             $task->update(['status' => 'skipped']);
         }
 
-        throw new Exception($errorMsg);
+        //throw new Exception($errorMsg);
     }
 
     protected function jobFailed($errorMsg = '')

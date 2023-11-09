@@ -55,7 +55,7 @@ class GenerateAIThoughts implements ShouldQueue, ShouldBeUnique
                     'content' =>  $promptHelper->generateThoughts([
                         'context' => $this->document->getContext(),
                         'owner' => $user->name,
-                        'sentences_count' => $this->meta['sentences_count'],
+                        'sentences_count' => $this->meta['sentences_count'] * 2,
                         'tone' => $this->document->getMeta('tone'),
                         'style' => $this->document->getMeta('style') ?? null
                     ])
