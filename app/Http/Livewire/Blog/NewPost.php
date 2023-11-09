@@ -21,7 +21,7 @@ class NewPost extends Component
 {
     use Actions, WithFileUploads;
 
-    public string $context;
+    public mixed $context;
     public array $sourceUrls;
     public string $source;
     public $fileInput = null;
@@ -42,7 +42,7 @@ class NewPost extends Component
     {
         $this->title = __('blog.new_blog_post');
         $this->source = SourceProvider::FREE_TEXT->value;
-        $this->context = '';
+        $this->context = null;
         $this->sourceUrls = [];
         $this->tempSourceUrl = '';
         $this->language = 'en';
@@ -63,58 +63,14 @@ class NewPost extends Component
     public function rules()
     {
         return [
-            'context' => 'required|string',
-            'source' => [
-                'required',
-                Rule::in(array_map(fn ($value) => $value->value, SourceProvider::cases()))
-            ],
-            'sourceUrls' => [
-                'required_if:source,youtube,website_url',
-                'array',
-                function ($attribute, $value, $fail) {
-                    if (request()->input('source') === 'youtube' && count($value) > 3) {
-                        return $fail('The maximum number of Youtube sources is 3.');
-                    }
-                    if (request()->input('source') === 'website_url' && count($value) > 5) {
-                        return $fail('The maximum number of source URLs is 5.');
-                    }
-                },
-            ],
-            'sourceUrls.*' => 'url',
-            'keyword' => 'required',
-            'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
-            'targetHeadersCount' => 'required|numeric|min:2|max:10',
-            'tone' => 'nullable',
-            'style' => 'nullable',
-            'fileInput' => [
-                'required_if:source,docx,pdf',
-                'max:51200', // in kilobytes, 50mb = 50 * 1024 = 51200kb
-                new DocxFile($this->source),
-                new PdfFile($this->source),
-                new CsvFile($this->source),
-            ]
+            'context' => ['required', 'string']
         ];
-    }
-
-    public function messages()
-    {
-        return
-            [
-                'context.required_if' => 'You need to provide some context for the AI to generate your blog post.',
-                'sourceUrls.required_if' => __('validation.blog_post_sourceurl_required'),
-                'sourceUrls.*.url' => __('validation.active_url'),
-                'keyword.required' => 'You need to provide a keyword.',
-                'language.required' => 'Language is a required field.',
-                'targetHeadersCount.min' => 'The minimum number of subtopics is 2.',
-                'targetHeadersCount.max' => 'The maximum number of subtopics is 10.',
-                'targetHeadersCount.required' => 'The number of subtopics is a required field.',
-            ];
     }
 
     public function process()
     {
         try {
-            $this->validate($this->rules());
+            $this->validate();
 
             $filePath = null;
             if ($this->fileInput) {
