@@ -4,11 +4,13 @@ namespace App\Http\Livewire\Blog;
 
 use App\Enums\Language;
 use App\Enums\SourceProvider;
+use App\Exceptions\CreatingBlogPostException;
 use App\Jobs\Blog\CreateBlogPost;
 use App\Repositories\DocumentRepository;
 use App\Rules\CsvFile;
 use App\Rules\DocxFile;
 use App\Rules\PdfFile;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -63,21 +65,84 @@ class NewPost extends Component
     public function rules()
     {
         return [
-            'context' => ['required', 'string']
+            'context' => ['required', 'string'],
+            'sourceUrls' => [
+                'required_if:source,youtube,website_url',
+                'array',
+                function ($attribute, $value, $fail) {
+                    if (request()->input('source') === 'youtube' && count($value) > 3) {
+                        return $fail('The maximum number of Youtube sources is 3.');
+                    }
+                    if (request()->input('source') === 'website_url' && count($value) > 5) {
+                        return $fail('The maximum number of source URLs is 5.');
+                    }
+                },
+            ],
+            'sourceUrls.*' => 'url',
+            'source' => [
+                'required',
+                Rule::in(array_map(fn ($value) => $value->value, SourceProvider::cases()))
+            ],
+            'keyword' => 'required',
+            'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
+            'targetHeadersCount' => 'required|numeric|min:2|max:10',
+            'tone' => 'nullable',
+            'style' => 'nullable',
+            'fileInput' => [
+                'required_if:source,docx,pdf',
+                'max:51200', // in kilobytes, 50mb = 50 * 1024 = 51200kb
+                new DocxFile($this->source),
+                new PdfFile($this->source),
+                new CsvFile($this->source),
+            ]
         ];
+    }
+
+    public function messages()
+    {
+        return
+            [
+                'context.required' => __('validation.blog_post_context_required'),
+                'sourceUrls.required_if' => __('validation.blog_post_sourceurl_required'),
+                'sourceUrls.*.url' => __('validation.active_url'),
+                'keyword.required' => __('validation.keyword_required'),
+                'language.required' => __('validation.language_required'),
+                'targetHeadersCount.min' => __('validation.min_subtopics', ['min' => 2]),
+                'targetHeadersCount.max' => __('validation.max_subtopics', ['max' => 10]),
+                'targetHeadersCount.required' => __('validation.subtopics_count'),
+            ];
+    }
+
+    public function storeFile()
+    {
+        $accountId = Auth::check() ? Auth::user()->account_id : 'guest';
+        $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
+        $filePath = "documents/$accountId/" . $filename;
+        $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
+
+        return $filePath;
+    }
+
+    public function validateSourceUrls()
+    {
+        if (in_array($this->source, [
+            SourceProvider::YOUTUBE->value,
+            SourceProvider::WEBSITE_URL->value
+        ]) && $this->tempSourceUrl !== '' && !count($this->sourceUrls)) {
+            $this->sourceUrls[] = $this->tempSourceUrl;
+            $this->tempSourceUrl = '';
+        }
     }
 
     public function process()
     {
-        try {
-            $this->validate();
+        $this->validateSourceUrls();
+        $this->validate();
 
+        try {
             $filePath = null;
             if ($this->fileInput) {
-                $accountId = Auth::check() ? Auth::user()->account_id : 'guest';
-                $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
-                $filePath = "documents/$accountId/" . $filename;
-                $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
+                $filePath = $this->storeFile();
             }
 
             $params = [
@@ -100,9 +165,8 @@ class NewPost extends Component
             CreateBlogPost::dispatch($document, $params);
 
             return redirect()->route('blog-post-processing-view', ['document' => $document]);
-        } catch (\Throwable $th) {
-            $this->addError('sourceUrls', $th->getMessage());
-            return;
+        } catch (Exception $e) {
+            throw new CreatingBlogPostException($e->getMessage());
         }
     }
 

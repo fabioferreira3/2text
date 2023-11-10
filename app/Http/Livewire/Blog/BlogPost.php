@@ -11,10 +11,22 @@ class BlogPost extends Component
     public $title;
     public $showInfo = false;
 
+    public function getListeners()
+    {
+        return [
+            'blockDeleted'
+        ];
+    }
+
     public function mount(Document $document)
     {
         $this->document = $document;
         $this->title = $this->defineTitle();
+    }
+
+    public function blockDeleted()
+    {
+        $this->document->refresh();
     }
 
     public function defineTitle()

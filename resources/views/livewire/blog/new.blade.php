@@ -24,7 +24,7 @@
                     'content' => App\Helpers\InstructionsHelper::maxSubtopics()
                     ])
                 </div>
-                <input type="number" max="10" name="target_headers_count" wire:model="targetHeadersCount"
+                <input type="number" min="2" max="10" name="target_headers_count" wire:model="targetHeadersCount"
                     class="p-3 rounded-lg border border-zinc-200" />
                 @if($errors->has('targetHeadersCount'))
                 <span class="text-red-500 text-sm">{{ $errors->first('targetHeadersCount') }}</span>
@@ -88,14 +88,14 @@
 
             @if(!$maxSourceUrlsReached)
             <div class="flex items-center gap-2" x-data="{
-                                                                submitOnEnter: $wire.addSourceUrl,
-                                                                handleEnter(event) {
-                                                                    if (!event.shiftKey) {
-                                                                        event.preventDefault();
-                                                                        this.submitOnEnter();
-                                                                    }
-                                                                }
-                                                            }">
+                    submitOnEnter: $wire.addSourceUrl,
+                    handleEnter(event) {
+                        if (!event.shiftKey) {
+                            event.preventDefault();
+                            this.submitOnEnter();
+                        }
+                    }
+                }">
                 <input name="url" placeholder="Paste a url here" x-on:keydown.enter="handleEnter($event)"
                     wire:model.defer="tempSourceUrl" class="p-3 border border-zinc-200 rounded-lg w-full" />
                 <button wire:click="addSourceUrl()" class="bg-secondary text-white p-1 rounded-full">
@@ -130,11 +130,7 @@
             <div class="w-full flex flex-col gap-6">
                 <div class="flex flex-col gap-3">
                     <div class="flex gap-2 items-center">
-                        <label class="text-xl font-bold text-gray-700">Generate Hero Image:</label>
-                        @include('livewire.common.help-item', [
-                        'header' => __('blog.writing_style'),
-                        'content' => App\Helpers\InstructionsHelper::writingStyles()
-                        ])
+                        <label class="text-xl font-bold text-gray-700">{{__('blog.generate_hero_image')}}:</label>
                     </div>
                     <div class="md:col-span-1">
                         <x-checkbox md id="generate_img" name="generate_img" label="Yes" wire:model="generateImage" />
@@ -145,14 +141,35 @@
                     <div class="flex gap-2 items-center">
                         <label class="text-lg font-medium text-gray-700">{{__('blog.hero_image_description')}}:</label>
                         @include('livewire.common.help-item', [
-                        'header' => __('blog.writing_style'),
-                        'content' => App\Helpers\InstructionsHelper::writingStyles()
+                        'header' => __('instructions.hero_image_tips'),
+                        'content' => App\Helpers\InstructionsHelper::heroImages()
                         ])
                     </div>
-                    <div class="w-full">
+                    <div class="w-full relative flex flex-col gap-1">
                         <textarea placeholder="{{__('blog.placeholder_example')}}"
                             class="border border-zinc-200 rounded-lg w-full" rows="3" maxlength="2000"
                             wire:model="imgPrompt"></textarea>
+                        <!-- Image guidelines -->
+                        <div class="relative hidden md:block place-self-end" x-data="{ open: false }"
+                            @click.away="open = false">
+                            <button @click="open = true"
+                                class="h-8 2-8 flex gap-2 items-center bg-gray-500 text-white px-3 rounded-lg">
+                                <x-icon name="exclamation" class="h-5 w-5" />
+                                <span class="text-sm">{{ __('instructions.check_img_guidelines')}}</span>
+                            </button>
+
+                            <div class="absolute overflow-auto max-h-96 flex flex-col gap-4 bg-white border shadow-lg p-4 w-80 rounded-lg z-40"
+                                x-show="open" @mouseover="open = true" style="display: none;">
+                                <div class="flex gap-2 items-center justify-end w-full">
+                                    <div class="font-bold text-lg">{{ __('instructions.rejected_requests') }}:</div>
+                                    <x-button icon="x" sm @click="open = false" />
+                                </div>
+                                <div>
+                                    {!! App\Helpers\InstructionsHelper::imageGuidelines() !!}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END: Image guidelines -->
                     </div>
                 </div>
                 @endif
@@ -161,7 +178,7 @@
         <!-- END: Context and Image -->
 
         <!-- Keyword, Writing style and Tone -->
-        <div class="w-full flex flex-col md:grid md:grid-cols-3 gap-6">
+        <div class=" w-full flex flex-col md:grid md:grid-cols-3 gap-6">
             <div class="flex flex-col gap-3">
                 <div class="flex gap-2 items-center">
                     <label class="text-xl font-bold text-gray-700">{{__('blog.keyword')}}:</label>
@@ -208,6 +225,13 @@
                 class="bg-secondary text-xl text-white font-bold px-4 py-2 rounded-lg">
                 {{__('blog.generate')}}!
             </button>
+
+            <div wire:loading wire:target="process">
+                <div class="flex items-center gap-2 bg-secondary text-xl text-white font-bold px-4 py-2 rounded-lg">
+                    <x-loader color="white" />
+                    <span>{{__('blog.preparing')}}</span>
+                </div>
+            </div>
         </div>
         <!-- END: Generate button -->
 

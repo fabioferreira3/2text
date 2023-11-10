@@ -50,7 +50,7 @@
             <textarea wire:model="inputMsg" x-on:keydown.enter="handleEnter($event)"
                 placeholder="{{__('chat.type_message_here')}}" rows="4"
                 class="w-full rounded-t-lg border-gray-200"></textarea>
-            <button :disabled="$processing" wire:click='submitMsg'
+            <button @if($processing) disabled @endif wire:click='submitMsg'
                 class="bg-secondary text-white py-2 rounded-b-lg font-bold text-lg">{{__('chat.send')}}</button>
         </div>
     </div>

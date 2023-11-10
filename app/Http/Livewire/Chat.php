@@ -13,7 +13,7 @@ class Chat extends Component
     public $isOpen;
     public $activeThread;
     public $inputMsg;
-    public $processing;
+    public bool $processing;
 
     public function mount()
     {

@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'ai_images' => 'AI Images',
     'briefly_describe' => 'Briefly describe the subject of the post using at least :minWords words',
     'context' => 'Describe the post',
     'content' => 'Content',
@@ -9,6 +10,7 @@ return [
     'define_language' => 'Define the main language of your post.',
     'file_option' => 'File:',
     'generate' => 'Generate',
+    'generate_hero_image' => 'Generate Hero Image',
     'keyword' => 'Keyword',
     'hero_image_description' => 'Hero image description',
     'instructions' => 'Instructions',
@@ -20,6 +22,7 @@ return [
     'new_blog_post' => 'New Blog post',
     'paste_content' => 'You could also paste a larger text to be used as context. (max. :maxChars chars)',
     'placeholder_example' => 'Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary.',
+    'preparing' => 'Preparing...',
     'selected_language_info' => 'Take into account that the selected language must be the same language of the context you\'re using.',
     'source' => 'Source of context',
     'style' => 'Writing style',

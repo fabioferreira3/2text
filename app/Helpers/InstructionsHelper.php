@@ -4,6 +4,66 @@ namespace App\Helpers;
 
 class InstructionsHelper
 {
+    public static function heroImages()
+    {
+        return "<div class='flex flex-col gap-4'>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.hero_images_1_header') . "</h3>
+                <p>" . __('instructions.hero_images_1_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.hero_images_2_header') . "</h3>
+                <p>" . __('instructions.hero_images_2_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.hero_images_3_header') . "</h3>
+                <p>" . __('instructions.hero_images_3_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.hero_images_4_header') . "</h3>
+                <p>" . __('instructions.hero_images_4_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.hero_images_5_header') . "</h3>
+                <p>" . __('instructions.hero_images_5_content') . "</p>
+            </div>
+        </div>";
+    }
+
+    public static function imageGuidelines()
+    {
+        return "<div class='flex flex-col gap-4'>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.image_guideline_1_header') . "</h3>
+                <p>" . __('instructions.image_guideline_1_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.image_guideline_2_header') . "</h3>
+                <p>" . __('instructions.image_guideline_2_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.image_guideline_3_header') . "</h3>
+                <p>" . __('instructions.image_guideline_3_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.image_guideline_4_header') . "</h3>
+                <p>" . __('instructions.image_guideline_4_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.image_guideline_5_header') . "</h3>
+                <p>" . __('instructions.image_guideline_5_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.image_guideline_6_header') . "</h3>
+                <p>" . __('instructions.image_guideline_6_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.image_guideline_7_header') . "</h3>
+                <p>" . __('instructions.image_guideline_7_content') . "</p>
+            </div>
+        </div>";
+    }
+
     public static function transcriptionSource()
     {
         return "Define the source of the transcription. Currently, only Youtube videos are supported.";
@@ -78,11 +138,17 @@ class InstructionsHelper
 
     public static function sources()
     {
-        return "<p>" . __('instructions.define_base_context') . "</p>
-        <h3 class='mt-4 font-bold'>Youtube</h3>
+        return "
+        <h3 class='mt-4 font-bold'>Youtube videos</h3>
         <p>" . __('instructions.new_text_enter_youtube_link') . "</p>
         <h3 class='mt-4 font-bold'>" . __('instructions.website_url') . "</h3>
         <p>" . __('instructions.new_text_enter_external_url') . "</p>
+        <h3 class='mt-4 font-bold'>" . __('instructions.pdf_files') . "</h3>
+        <p>" . __('instructions.new_text_pdf_files') . "</p>
+        <h3 class='mt-4 font-bold'>" . __('instructions.docx_files') . "</h3>
+        <p>" . __('instructions.new_text_docx_files') . "</p>
+        <h3 class='mt-4 font-bold'>" . __('instructions.csv_files') . "</h3>
+        <p>" . __('instructions.new_text_csv_files') . "</p>
         <h3 class='mt-4 font-bold'>" . __('instructions.free_text') . "</h3>
         <p>" . __('instructions.new_text_enter_text') . "</p>";
     }
