@@ -2,18 +2,29 @@
     <div class="mb-8">
         @include('livewire.common.label', ['title' => $title])
     </div>
-    <div class="flex items-center gap-2 justify-start mb-4">
-        <button wire:click="$toggle('showInfo')" class="flex items-center gap-2 bg-gray-500 px-3 py-1 rounded-lg text-gray-100">
-            <x-icon name="information-circle" width="18" height="18" />
-            <div>{{__('blog.info')}}</div>
-        </button>
-        <button type="button" wire:click="copyPost" class="flex items-center gap-2 bg-secondary px-3 py-1 rounded-lg text-white">
-            <x-icon name="clipboard-copy" width="18" height="18" />
-            <div>{{__('blog.copy_all')}}</div>
-        </button>
+    <div class="flex items-center gap-2 justify-between mb-4">
+        <div class="flex gap-2">
+            <button wire:click="$toggle('showInfo')"
+                class="flex items-center gap-2 bg-gray-300 px-3 py-1 rounded-lg text-gray-800">
+                <x-icon name="information-circle" width="18" height="18" />
+                <div>{{__('blog.info')}}</div>
+            </button>
+            <button type="button" wire:click="copyPost"
+                class="flex items-center gap-2 bg-gray-300 px-3 py-1 rounded-lg text-gray-800">
+                <x-icon name="clipboard-copy" width="18" height="18" />
+                <div>{{__('blog.copy_all')}}</div>
+            </button>
+        </div>
+        <div>
+            <button type="button" wire:click="$toggle('showMetaDescription')"
+                class="flex items-center gap-2 bg-gray-500 px-3 py-1 rounded-lg text-white">
+                <x-icon name="document-report" width="18" height="18" />
+                <div>{{__('blog.meta_description')}}</div>
+            </button>
+        </div>
     </div>
     <div class="flex flex-col gap-2">
-        @foreach ($document->contentBlocks as $contentBlock)
+        @foreach ($document->contentBlocks()->mediaRelated()->get() as $contentBlock)
         @if($contentBlock->type === 'media_file_image')
         @livewire('common.blocks.img-block', [
         $contentBlock
@@ -30,8 +41,10 @@
             <div class="flex items-center justify-between">
                 @include('livewire.common.label', ['title' => $title])
                 <div role="button" class="cursor-pointer z-50" id="close" wire:click="$toggle('showInfo')">
-                    <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 18 18">
-                        <path d="M14.1 4.93l-1.4-1.4L9 6.59 5.3 3.53 3.9 4.93 7.59 8.5 3.9 12.07l1.4 1.43L9 10.41l3.7 3.07 1.4-1.43L10.41 8.5l3.7-3.57z">
+                    <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 18 18">
+                        <path
+                            d="M14.1 4.93l-1.4-1.4L9 6.59 5.3 3.53 3.9 4.93 7.59 8.5 3.9 12.07l1.4 1.43L9 10.41l3.7 3.07 1.4-1.43L10.41 8.5l3.7-3.57z">
                         </path>
                     </svg>
                 </div>
@@ -63,6 +76,32 @@
                     <span class="font-bold col-span-1">{{ucfirst(__('blog.word_count'))}}:</span>
                     <span>{{$document->word_count }}</span>
                 </div>
+            </div>
+        </div>
+    </x-experior::modal>
+    @endif
+
+    @if ($showMetaDescription)
+    <x-experior::modal>
+        <div class="p-2">
+            <div class="flex items-center justify-between">
+                @include('livewire.common.label', ['title' => 'Meta Description'])
+                <div role="button" class="cursor-pointer z-50" id="close" wire:click="$toggle('showMetaDescription')">
+                    <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 18 18">
+                        <path
+                            d="M14.1 4.93l-1.4-1.4L9 6.59 5.3 3.53 3.9 4.93 7.59 8.5 3.9 12.07l1.4 1.43L9 10.41l3.7 3.07 1.4-1.43L10.41 8.5l3.7-3.57z">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex flex-col gap-2 mt-8">
+                @if($metaDescription)
+                @livewire('common.blocks.text-block', [
+                $metaDescription,
+                'hide' => ['delete']
+                ], key($metaDescription->id))
+                @endif
             </div>
         </div>
     </x-experior::modal>

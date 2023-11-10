@@ -110,6 +110,11 @@ class Document extends Model
         }, '');
     }
 
+    public function getContentBlockOfType($type)
+    {
+        return $this->contentBlocks()->where('type', $type)->first();
+    }
+
     public function getNormalizedStructureAttribute()
     {
         $text = '';

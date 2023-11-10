@@ -20,7 +20,7 @@ class Generator extends Component
     public $imgStyle;
     public bool $processing = false;
     public bool $shouldPreviewImage = false;
-    public string $processId;
+    public string $processGroupId;
     public $previewImgs;
     public $stylePresets;
     public $selectedStylePreset;
@@ -43,7 +43,7 @@ class Generator extends Component
         $this->stylePresets = StylePreset::getMappedValues();
         $this->selectedStylePreset = $this->imgStyle ? $this->selectStylePreset($this->imgStyle) : null;
         $this->processing = false;
-        $this->processId = '';
+        $this->processGroupId = '';
         $this->previewImgs = [];
         $this->samples = 1;
     }
@@ -77,34 +77,37 @@ class Generator extends Component
 
         $imageSize = MediaHelper::getPossibleImageSize($document);
 
-        DocumentRepository::createTask(
-            $document->id,
-            DocumentTaskEnum::GENERATE_IMAGE,
-            [
-                'order' => 1,
-                'process_id' => $this->processId,
-                'meta' => [
-                    'prompt' => $this->prompt,
-                    'style_preset' => $this->imgStyle,
-                    'steps' => 21,
-                    'samples' => $this->samples,
-                    'height' => $imageSize['height'],
-                    'width' => $imageSize['width']
+        for ($i = 1; $i <= $this->samples; $i++) {
+            $processId = Str::uuid();
+            DocumentRepository::createTask(
+                $document->id,
+                DocumentTaskEnum::GENERATE_IMAGE,
+                [
+                    'order' => 1,
+                    'process_group_id' => $this->processGroupId,
+                    'process_id' => $processId,
+                    'meta' => [
+                        'prompt' => $this->prompt,
+                        'style_preset' => $this->imgStyle,
+                        'steps' => 21,
+                        'samples' => $this->samples,
+                        'height' => $imageSize['height'],
+                        'width' => $imageSize['width']
+                    ]
                 ]
-            ]
-        );
-
-        DocumentRepository::createTask(
-            $document->id,
-            DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
-            [
-                'order' => 2,
-                'process_id' => $this->processId,
-                'meta' => [
-                    'silently' => true
+            );
+            DocumentRepository::createTask(
+                $document->id,
+                DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
+                [
+                    'order' => 2,
+                    'process_id' => $processId,
+                    'meta' => [
+                        'silently' => true
+                    ]
                 ]
-            ]
-        );
+            );
+        }
 
         DispatchDocumentTasks::dispatch($document);
     }
@@ -140,7 +143,7 @@ class Generator extends Component
     protected function setProcessingState()
     {
         $this->processing = true;
-        $this->processId = Str::uuid();
+        $this->processGroupId = Str::uuid();
         $this->dispatchBrowserEvent('alert', [
             'type' => 'info',
             'message' => "Generating images. Please wait..."

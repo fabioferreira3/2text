@@ -108,7 +108,7 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
             $oraculum->add($this->dataType, $this->source);
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailedButSkipped($e->getMessage());
+            $this->jobFailed($e->getMessage());
         }
     }
 

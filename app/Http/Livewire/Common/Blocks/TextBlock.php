@@ -20,6 +20,7 @@ class TextBlock extends Component
     public string $customPrompt;
     public string $tone = 'default';
     public bool $faster = true;
+    public array $hide = [];
     public bool $showCustomPrompt = false;
     public bool $processing;
     public $hasPastVersions;

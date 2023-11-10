@@ -13,11 +13,11 @@
         </div>
 
         @endif
-        @if (in_array($type, ['p', 'text']))
+        @if (in_array($type, ['p', 'text', 'meta_description']))
         <div class="relative group/block">
             <textarea
                 class="focus:bg-blue-100 focus:cursor-text cursor-pointer p-0 text-zinc-700 autoExpandTextarea w-full border-0 text-base group-hover/block:bg-red-100 rounded"
-                name="text" wire:model.debounce.500ms="content" wire:ignore></textarea>
+                name="text" rows="3" wire:model.debounce.500ms="content" wire:ignore></textarea>
             <div class="border border-b border-gray-50"></div>
             @include('livewire.common.blocks.text-block-actions')
         </div>
@@ -78,13 +78,13 @@
                 // Initial adjustment
                 adjustHeight(textarea);
             });
-        }
-        document.addEventListener('DOMContentLoaded', function () {
-            adjustTextArea();
-        });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        adjustTextArea();
+    });
 
-        document.addEventListener('adjustTextArea', function () {
-            adjustTextArea();
-        });
+    document.addEventListener('adjustTextArea', function () {
+        adjustTextArea();
+    });
 </script>
 @endpush

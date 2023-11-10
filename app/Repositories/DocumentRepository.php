@@ -168,6 +168,7 @@ class DocumentRepository
         DocumentTask::create([
             'name' => $task->value,
             'document_id' => $documentId,
+            'process_group_id' => $params['process_group_id'] ?? null,
             'process_id' => $params['process_id'] ?? Str::uuid(),
             'job' => $task->getJob(),
             'status' => $params['status'] ?? 'ready',

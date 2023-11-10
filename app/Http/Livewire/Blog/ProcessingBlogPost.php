@@ -58,7 +58,7 @@ class ProcessingBlogPost extends Component
     public function defineProgress()
     {
         $currentProgress = $this->document->getMeta('tasks_progress') ?? $this->currentProgress;
-        $this->currentProgress = $currentProgress > 100 ? 99 : $currentProgress;
+        $this->currentProgress = $currentProgress >= 100 ? 99 : $currentProgress;
     }
 
     protected function checkStatus()

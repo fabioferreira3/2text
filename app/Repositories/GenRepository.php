@@ -14,12 +14,9 @@ use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
 use App\Models\User;
-use App\Packages\OpenAI\DallE;
 use App\Packages\Oraculum\Oraculum;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Talendor\StabilityAI\Enums\StabilityAIEngine;
-use Talendor\StabilityAI\StabilityAIClient;
 
 class GenRepository
 {
@@ -74,7 +71,6 @@ class GenRepository
 
     public static function generateMetaDescription(Document $document)
     {
-        $repo = new DocumentRepository($document);
         $promptHelper = PromptHelperFactory::create($document->language->value);
         $chatGpt = new ChatGPT(AIModel::GPT_3_TURBO1106->value);
         $response = $chatGpt->request([[
@@ -87,13 +83,12 @@ class GenRepository
                 ]
             )
         ]]);
-        $repo->updateMeta('meta_description', Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"'));
-        $repo->addHistory(
-            [
-                'field' => 'meta_description',
-                'content' => $response['content']
-            ]
-        );
+        $document->contentBlocks()->save(new DocumentContentBlock([
+            'type' => 'meta_description',
+            'content' => Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"'),
+            'prompt' => '',
+            'order' => 1
+        ]));
         RegisterProductUsage::dispatch($document->account, [
             ...$response['token_usage'],
             'meta' => ['document_id' => $document->id]
@@ -104,10 +99,7 @@ class GenRepository
     {
         $handler = new ImageGeneratorHandler();
         $result = $handler->handle('textToImage', $params);
-        //$client = app(StabilityAIClient::class);
-        // $client = new DallE();
-        //   $params['size'] = $params['height'] . 'x' . $params['width'];
-        //   $results = $client->request($params);
+
         if ($result) {
             $mediaFile = self::processImageResult($document, $result, $params, AIModel::DALL_E_3->value);
             if ($params['add_content_block'] ?? false) {

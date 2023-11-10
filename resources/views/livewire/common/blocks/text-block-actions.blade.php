@@ -21,6 +21,7 @@
             </div>
         </button>
         @endif
+        @if(!in_array('copy', $hide))
         <button wire:click="copy"
             class="relative group/button flex items-center text-gray-600 hover:bg-secondary hover:text-white hover:border-white bg-white border border-gray-300 px-3 py-1 rounded-lg transition ease-in-out duration-200">
             <x-icon name="clipboard-copy" width="18" height="18" />
@@ -29,6 +30,8 @@
                 Copy
             </div>
         </button>
+        @endif
+        @if(!in_array('delete', $hide))
         <button wire:click="delete"
             class="relative group/button flex items-center text-gray-600 hover:bg-secondary hover:text-white hover:border-white bg-white border border-gray-300 px-3 py-1 rounded-lg transition ease-in-out duration-200">
             <x-icon name="trash" width="18" height="18" />
@@ -37,6 +40,7 @@
                 Delete
             </div>
         </button>
+        @endif
         <div
             class="relative group/button flex items-center text-gray-600 hover:bg-secondary hover:text-white hover:border-white bg-white border border-gray-300 px-3 py-1 rounded-lg transition ease-in-out duration-200">
             <x-icon name="information-circle" width="18" height="18" />

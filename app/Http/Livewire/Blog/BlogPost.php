@@ -10,6 +10,8 @@ class BlogPost extends Component
     public Document $document;
     public $title;
     public $showInfo = false;
+    public $showMetaDescription = false;
+    public $metaDescription = null;
 
     public function getListeners()
     {
@@ -21,6 +23,7 @@ class BlogPost extends Component
     public function mount(Document $document)
     {
         $this->document = $document;
+        $this->metaDescription = $document->getContentBlockOfType('meta_description') ?? null;
         $this->title = $this->defineTitle();
     }
 

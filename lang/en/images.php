@@ -17,6 +17,7 @@ return [
     'placeholder_example' => 'Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary.',
     'preview' => 'Preview',
     'regenerate_image' => 'Regenerate image',
+    'samples' => 'Samples',
     'use_primary' => 'Use as primary',
     'variants' => 'Variants'
 ];

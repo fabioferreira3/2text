@@ -4,6 +4,7 @@ namespace App\Jobs\Blog;
 
 use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelper;
+use App\Helpers\PromptHelperFactory;
 use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
@@ -18,6 +19,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class CreateOutline implements ShouldQueue, ShouldBeUnique
 {
@@ -25,7 +27,7 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
 
     protected Document $document;
     protected array $meta;
-    protected PromptHelper $promptHelper;
+    protected $promptHelper;
     protected DocumentRepository $repo;
 
     /**
@@ -37,7 +39,7 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->promptHelper = new PromptHelper($document->language->value);
+        $this->promptHelper = PromptHelperFactory::create($document->language->value);
         $this->repo = new DocumentRepository($this->document);
     }
 
@@ -75,6 +77,7 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
 
     protected function queryEmbedding()
     {
+        Log::debug($this->meta);
         $user = User::findOrFail($this->document->getMeta('user_id'));
         $oraculum = new Oraculum($user, $this->meta['collection_name']);
         return $oraculum->query($this->promptHelper->writeEmbeddedOutline(

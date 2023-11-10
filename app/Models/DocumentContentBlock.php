@@ -104,6 +104,11 @@ class DocumentContentBlock extends Model
         return $query->whereIn('type', ['text', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p']);
     }
 
+    public function scopeMediaRelated($query)
+    {
+        return $query->whereIn('type', ['text', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'image', 'media_file_image']);
+    }
+
     /**
      * The "booted" method of the model.
      */

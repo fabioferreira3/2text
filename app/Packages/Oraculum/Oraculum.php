@@ -107,9 +107,12 @@ class Oraculum
             }
 
             if ($response->successful()) {
-                $responseTokens = $this->countTokens($response->json('data'));
+                $responseData = $response->json('data');
+                if (is_array($responseData) || is_object($responseData)) {
+                }
+                $responseTokens = $this->countTokens($responseData);
                 return [
-                    'content' => $response->json('data'),
+                    'content' => $responseData,
                     'token_usage' => [
                         'model' => !$type ? 'gpt-4' : 'gpt-3.5-turbo',
                         'prompt' => $requestTokens,
