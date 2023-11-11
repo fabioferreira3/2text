@@ -15,6 +15,7 @@ use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
 use App\Models\User;
 use App\Packages\Oraculum\Oraculum;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Talendor\StabilityAI\Enums\StabilityAIEngine;
 
@@ -112,12 +113,7 @@ class GenRepository
             }
         }
 
-        event(new ProcessFinished([
-            'document_id' => $document->id,
-            'parent_document_id' => $document->parent_document_id,
-            'process_id' => $params['process_id'],
-            'user_id' => $document->getMeta('user_id')
-        ]));
+        event(new ProcessFinished($params['process_id']));
     }
 
     public static function generateImageVariants(Document $document, array $params)
@@ -280,6 +276,7 @@ class GenRepository
             'meta' => [
                 'document_id' => $document->id,
                 'process_id' => $params['process_id'] ?? null,
+                'process_group_id' => $params['process_group_id'] ?? null,
                 'style_preset' => $params['style_preset'] ?? null,
                 'model' => $model,
                 'steps' => $params['steps'] ?? 0,

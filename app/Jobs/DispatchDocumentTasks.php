@@ -42,6 +42,7 @@ class DispatchDocumentTasks
                     ...$task->meta,
                     'task_id' => $task->id,
                     'process_id' => $task->process_id,
+                    'process_group_id' => $task->process_group_id,
                     'order' => $task->order,
                 ]);
             }

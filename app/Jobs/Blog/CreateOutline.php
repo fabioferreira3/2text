@@ -77,7 +77,6 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
 
     protected function queryEmbedding()
     {
-        Log::debug($this->meta);
         $user = User::findOrFail($this->document->getMeta('user_id'));
         $oraculum = new Oraculum($user, $this->meta['collection_name']);
         return $oraculum->query($this->promptHelper->writeEmbeddedOutline(

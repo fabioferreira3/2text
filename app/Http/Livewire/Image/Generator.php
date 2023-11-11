@@ -88,25 +88,22 @@ class Generator extends Component
                     'process_id' => $processId,
                     'meta' => [
                         'prompt' => $this->prompt,
-                        'style_preset' => $this->imgStyle,
-                        'steps' => 21,
-                        'samples' => $this->samples,
                         'height' => $imageSize['height'],
                         'width' => $imageSize['width']
                     ]
                 ]
             );
-            DocumentRepository::createTask(
-                $document->id,
-                DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
-                [
-                    'order' => 2,
-                    'process_id' => $processId,
-                    'meta' => [
-                        'silently' => true
-                    ]
-                ]
-            );
+            // DocumentRepository::createTask(
+            //     $document->id,
+            //     DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
+            //     [
+            //         'order' => 2,
+            //         'process_id' => $processId,
+            //         'meta' => [
+            //             'silently' => true
+            //         ]
+            //     ]
+            // );
         }
 
         DispatchDocumentTasks::dispatch($document);
@@ -152,9 +149,12 @@ class Generator extends Component
 
     public function onProcessFinished(array $params)
     {
-        if ($params['process_id'] === $this->processId) {
+        if ((!$params['has_siblings'] && $params['process_group_id'] === $this->processGroupId) ||
+            ($params['has_siblings'] && $params['group_finished'])
+        ) {
             $this->emitUp('refreshImages');
-            $mediaFiles = MediaFile::where('meta->process_id', $this->processId)->latest()->take($this->samples)->get();
+            $mediaFiles = MediaFile::where('meta->process_group_id', $this->processGroupId)
+                ->latest()->take($this->samples)->get();
             $this->previewImgs = $mediaFiles->toArray();
             $this->processing = false;
             $this->dispatchBrowserEvent('alert', [

@@ -8,8 +8,7 @@ use Livewire\Component;
 class Dashboard extends Component
 {
     public $title;
-    //public $selectedTab = 'dashboard';
-    public $selectedTab = 'images';
+    public $selectedTab = 'dashboard';
 
     public function mount()
     {

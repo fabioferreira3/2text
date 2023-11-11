@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\DocumentTask;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -12,35 +13,41 @@ class ProcessFinished implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public string $userId;
-    public string $documentId;
-    public mixed $parentDocumentId;
-    public string $processId;
+    public DocumentTask $documentTask;
+    public bool $groupFinished;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(array $params)
+    public function __construct(string $processId)
     {
-        $this->userId = $params['user_id'];
-        $this->documentId = $params['document_id'];
-        $this->parentDocumentId = $params['parent_document_id'] ?? null;
-        $this->processId = $params['process_id'];
+        $this->documentTask = DocumentTask::ofProcess($processId)->firstOrFail();
+        $this->groupFinished = false;
+        if ($this->documentTask->process_group_id) {
+            $processGroupTasksCount = $this->documentTask->siblings()->count();
+            $processGroupTasksFinishedCount = $this->documentTask->siblings()->completed()->count();
+            if ($processGroupTasksCount === $processGroupTasksFinishedCount) {
+                $this->groupFinished = true;
+            }
+        }
     }
 
     public function broadcastOn()
     {
-        return new PrivateChannel('User.' . $this->userId);
+        return new PrivateChannel('User.' . $this->documentTask->document->getMeta('user_id'));
     }
 
     public function broadcastWith()
     {
         return [
-            'document_id' => $this->documentId,
-            'parent_document_id' => $this->parentDocumentId,
-            'process_id' => $this->processId
+            'document_id' => $this->documentTask->document_id,
+            'parent_document_id' => $this->documentTask->document->parent_document_id,
+            'process_id' => $this->documentTask->process_id,
+            'has_siblings' => $this->documentTask->siblings()->count() > 0,
+            'process_group_id' => $this->documentTask->process_group_id ?? null,
+            'group_finished' => $this->groupFinished
         ];
     }
 

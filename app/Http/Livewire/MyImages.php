@@ -21,7 +21,7 @@ class MyImages extends Component
         $this->images = MediaFile::images()->latest()->get();
         $this->selectedImage = null;
         $this->showVariantsGenerator = false;
-        $this->showNewGenerator = true;
+        $this->showNewGenerator = false;
         $this->shouldPreviewImage = false;
     }
 

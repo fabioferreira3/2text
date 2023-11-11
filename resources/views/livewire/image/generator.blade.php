@@ -7,10 +7,8 @@
             </h1>
         </div>
         <div role="button" class="cursor-pointer z-50" id="close" wire:click="toggleModal">
-            <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                viewBox="0 0 18 18">
-                <path
-                    d="M14.1 4.93l-1.4-1.4L9 6.59 5.3 3.53 3.9 4.93 7.59 8.5 3.9 12.07l1.4 1.43L9 10.41l3.7 3.07 1.4-1.43L10.41 8.5l3.7-3.57z">
+            <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 18 18">
+                <path d="M14.1 4.93l-1.4-1.4L9 6.59 5.3 3.53 3.9 4.93 7.59 8.5 3.9 12.07l1.4 1.43L9 10.41l3.7 3.07 1.4-1.43L10.41 8.5l3.7-3.57z">
                 </path>
             </svg>
         </div>
@@ -19,9 +17,8 @@
         @if($processing)
         <div class="w-full">
             <div class="text-2xl font-bold mb-8">{{__('images.images')}}</div>
-            <div class="grid grid-cols-4 gap-4">
-                @for($i = 1; $i <= $samples; $i++) <div
-                    class="bg-black opacity-60 rounded-lg h-48 w-full flex items-center justify-center">
+            <div class="grid grid-cols-2 gap-4">
+                @for($i = 1; $i <= $samples; $i++) <div class="bg-black opacity-60 rounded-lg h-48 w-full flex items-center justify-center">
                     <x-loader width="16" height="16" color="white" />
             </div>
             @endfor
@@ -40,27 +37,21 @@
                     #{{$key+1}}</div>
                 <div class="hidden group-hover:flex absolute top-0 left-0 h-full w-full items-center justify-center">
                     <div class="relative z-20 grid grid-cols-2 xl:flex xl:flex-row text-lg items-center gap-2">
-                        <button wire:click="generateVariants('{{ $mediaFile['id'] }}')"
-                            class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
+                        <button wire:click="generateVariants('{{ $mediaFile['id'] }}')" class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                             <x-icon name="switch-horizontal" class="w-5 h-5" />
-                            <div
-                                class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                            <div class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
                                 {{ __('images.generate_variants') }}
                             </div>
                         </button>
-                        <button wire:click="downloadImage('{{ $mediaFile['id'] }}')"
-                            class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
+                        <button wire:click="downloadImage('{{ $mediaFile['id'] }}')" class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                             <x-icon name="download" class="w-5 h-5" />
-                            <div
-                                class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                            <div class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
                                 {{ __('images.download') }}
                             </div>
                         </button>
-                        <button wire:click="previewImage('{{ $mediaFile['id'] }}')"
-                            class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
+                        <button wire:click="previewImage('{{ $mediaFile['id'] }}')" class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                             <x-icon name="eye" class="w-5 h-5" />
-                            <div
-                                class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
+                            <div class="absolute -bottom-9 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
                                 {{ __('images.preview') }}
                             </div>
                         </button>
@@ -71,8 +62,7 @@
                     <x-loader height="12" width="12" color="white" />
                 </div>
                 @endif
-                <div
-                    class="group-hover:opacity-60 rounded-lg absolute flex items-center justify-center inset-0 bg-black opacity-0 transition-opacity duration-300 ease-in-out">
+                <div class="group-hover:opacity-60 rounded-lg absolute flex items-center justify-center inset-0 bg-black opacity-0 transition-opacity duration-300 ease-in-out">
                 </div>
             </div>
             @endforeach
@@ -84,9 +74,7 @@
 <div class="flex flex-col md:items-center md:justify-between gap-6 mt-4">
     <div class="flex flex-col gap-2 w-full">
         <div class="text-xl font-bold">{{ __('images.describe_new_image') }}:</div>
-        <textarea placeholder="{{__('images.example')}}"
-            class="w-full text-base border-1 border-gray-200 bg-gray-100 p-0 rounded-xl p-4" rows="3"
-            wire:model="prompt"></textarea>
+        <textarea placeholder="{{__('images.example')}}" class="w-full text-base border-1 border-gray-200 bg-gray-100 p-0 rounded-xl p-4" rows="3" wire:model="prompt"></textarea>
     </div>
     <div class="flex items-center gap-2">
         <div class="text-xl font-bold">{{ __('images.samples') }}:</div>
@@ -119,8 +107,7 @@
 </div>
 
 <div class="flex justify-center mt-8">
-    <button wire:click="generate" @if ($processing) disabled @endif
-        class="flex items-center gap-4 bg-secondary text-xl hover:bg-main text-white font-bold px-4 py-2 rounded-xl">
+    <button wire:click="generate" @if ($processing) disabled @endif class="flex items-center gap-4 bg-secondary text-xl hover:bg-main text-white font-bold px-4 py-2 rounded-xl">
         @if (!$processing)
         <x-icon name="play" class="w-8 h-8" />
         @endif
@@ -142,10 +129,8 @@
 <x-experior::modal>
     <div class="flex items-center justify-end mb-4">
         <div role="button" class="cursor-pointer z-50" id="close" wire:click="$toggle('shouldPreviewImage')">
-            <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                viewBox="0 0 18 18">
-                <path
-                    d="M14.1 4.93l-1.4-1.4L9 6.59 5.3 3.53 3.9 4.93 7.59 8.5 3.9 12.07l1.4 1.43L9 10.41l3.7 3.07 1.4-1.43L10.41 8.5l3.7-3.57z">
+            <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 18 18">
+                <path d="M14.1 4.93l-1.4-1.4L9 6.59 5.3 3.53 3.9 4.93 7.59 8.5 3.9 12.07l1.4 1.43L9 10.41l3.7 3.07 1.4-1.43L10.41 8.5l3.7-3.57z">
                 </path>
             </svg>
         </div>
