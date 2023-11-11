@@ -22,8 +22,8 @@ class Generator extends Component
     public bool $shouldPreviewImage = false;
     public string $processGroupId;
     public $previewImgs;
-    public $stylePresets;
-    public $selectedStylePreset;
+    // public $stylePresets;
+    //public $selectedStylePreset;
     public $selectedImage;
     public $samples;
     public $main;
@@ -40,8 +40,8 @@ class Generator extends Component
     {
         $this->prompt = '';
         $this->imgStyle = null;
-        $this->stylePresets = StylePreset::getMappedValues();
-        $this->selectedStylePreset = $this->imgStyle ? $this->selectStylePreset($this->imgStyle) : null;
+        // $this->stylePresets = StylePreset::getMappedValues();
+        //$this->selectedStylePreset = $this->imgStyle ? $this->selectStylePreset($this->imgStyle) : null;
         $this->processing = false;
         $this->processGroupId = '';
         $this->previewImgs = [];
@@ -53,14 +53,14 @@ class Generator extends Component
         return view('livewire.image.generator');
     }
 
-    public function selectStylePreset($style)
-    {
-        $found = array_values(array_filter($this->stylePresets, function ($item) use ($style) {
-            return $item["value"] === $style;
-        }));
+    // public function selectStylePreset($style)
+    // {
+    //     $found = array_values(array_filter($this->stylePresets, function ($item) use ($style) {
+    //         return $item["value"] === $style;
+    //     }));
 
-        return $found[0] ?? null;
-    }
+    //     return $found[0] ?? null;
+    // }
 
     public function generate()
     {
@@ -93,17 +93,6 @@ class Generator extends Component
                     ]
                 ]
             );
-            // DocumentRepository::createTask(
-            //     $document->id,
-            //     DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
-            //     [
-            //         'order' => 2,
-            //         'process_id' => $processId,
-            //         'meta' => [
-            //             'silently' => true
-            //         ]
-            //     ]
-            // );
         }
 
         DispatchDocumentTasks::dispatch($document);
@@ -127,10 +116,10 @@ class Generator extends Component
         $this->shouldPreviewImage = true;
     }
 
-    public function updatedImgStyle($newValue)
-    {
-        $this->selectedStylePreset = $this->selectStylePreset($newValue);
-    }
+    // public function updatedImgStyle($newValue)
+    // {
+    //     $this->selectedStylePreset = $this->selectStylePreset($newValue);
+    // }
 
     public function toggleModal()
     {

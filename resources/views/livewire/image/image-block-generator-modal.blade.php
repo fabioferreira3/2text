@@ -36,7 +36,7 @@
                                 </div>
                             </button>
 
-                            <button @if ($processing) disabled @endif
+                            {{-- <button @if ($processing) disabled @endif
                                 wire:click="generateImageVariants('{{ $previewImgs['original']['id'] }}')"
                                 class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
                                 <x-icon name="switch-horizontal" class="w-6 h-6" />
@@ -44,7 +44,7 @@
                                     class="bg-black py-1 rounded absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
                                     {{__('images.generate_variants')}}
                                 </div>
-                            </button>
+                            </button> --}}
                             <button wire:click="downloadImage('{{ $previewImgs['original']['id'] }}')"
                                 class="relative group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
                                 <x-icon name="download" class="w-6 h-6" />
@@ -92,7 +92,7 @@
                                         {{__('images.use_primary')}}
                                     </div>
                                 </button>
-                                <button @if ($processing) disabled @endif
+                                {{-- <button @if ($processing) disabled @endif
                                     wire:click="generateImageVariants('{{ $mediaFile['id'] }}')"
                                     class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                     <x-icon name="switch-horizontal" class="w-5 h-5" />
@@ -100,7 +100,7 @@
                                         class="bg-black py-1 rounded absolute -bottom-10 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
                                         {{__('images.generate_variants')}}
                                     </div>
-                                </button>
+                                </button> --}}
                                 <button wire:click="downloadImage('{{ $mediaFile['id'] }}')"
                                     class="group/button transition-bg delay-100 duration-200 text-white hover:bg-secondary hover:border-transparent border border-gray-400 bg-gray-500 p-2 rounded-lg flex items-center gap-2">
                                     <x-icon name="download" class="w-5 h-5" />

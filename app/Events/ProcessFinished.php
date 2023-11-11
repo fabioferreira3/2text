@@ -25,12 +25,11 @@ class ProcessFinished implements ShouldBroadcast
     {
         $this->documentTask = DocumentTask::ofProcess($processId)->firstOrFail();
         $this->groupFinished = false;
+
         if ($this->documentTask->process_group_id) {
             $processGroupTasksCount = $this->documentTask->siblings()->count();
             $processGroupTasksFinishedCount = $this->documentTask->siblings()->completed()->count();
-            if ($processGroupTasksCount === $processGroupTasksFinishedCount) {
-                $this->groupFinished = true;
-            }
+            $this->groupFinished = $processGroupTasksCount === $processGroupTasksFinishedCount;
         }
     }
 

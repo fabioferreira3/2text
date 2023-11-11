@@ -226,7 +226,7 @@ return [
                 'nice' => 0,
                 'balance' => 'auto',
                 'autoScalingStrategy' => 'time',
-                'maxProcesses' => 5,
+                'maxProcesses' => 6,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
                 'tries' => 3,
@@ -256,7 +256,7 @@ return [
                 'tries' => 3,
             ],
             'image-generation' => [
-                'maxProcesses' => 1,
+                'maxProcesses' => 3,
                 'timeout' => 900,
                 'memory' => 512,
                 'tries' => 3,

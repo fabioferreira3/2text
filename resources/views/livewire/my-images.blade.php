@@ -18,14 +18,14 @@
                 class="hidden group-hover:flex absolute top-0 left-0 h-full w-full flex-col items-center justify-center gap-12">
                 <div class="flex items-center justify-center">
                     <div class="z-20 flex gap-2">
-                        <button wire:click="generateVariants('{{$image->id}}')"
+                        {{-- <button wire:click="generateVariants('{{$image->id}}')"
                             class="relative group/button transition duration-200 text-white hover:bg-secondary border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
                             <x-icon solid name="photograph" class="w-5 h-5" />
                             <div
                                 class="absolute top-10 mt-4 w-[150px] left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover/button:opacity-100 transition-opacity duration-200 ease-in-out tooltip">
                                 {{ __('images.generate_variants') }}
                             </div>
-                        </button>
+                        </button> --}}
                         <button wire:click="downloadImage('{{$image->id}}')"
                             class="relative group/button transition duration-200 text-white hover:bg-secondary border border-gray-400 bg-gray-500 p-3 rounded-lg flex items-center gap-2">
                             <x-icon solid name="arrow-circle-down" class="w-5 h-5" />
@@ -81,11 +81,11 @@
         <img src="{{$selectedImage->file_url}}" class="h-full w-full" />
     </x-experior::modal>
     @endif
-    @if ($showVariantsGenerator)
+    {{-- @if ($showVariantsGenerator)
     <x-experior::modal>
         @livewire('image.variants-generator', ['main' => $selectedImage])
     </x-experior::modal>
-    @endif
+    @endif --}}
 
     @if ($showNewGenerator)
     <x-experior::modal>
