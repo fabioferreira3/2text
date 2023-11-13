@@ -25,7 +25,7 @@ class TextBlock extends Component
     ];
 
     protected $messages = [
-        'customPrompt.required' => 'Please provide the instructions for me to rewrite the text'
+        'customPrompt.required' => __('validation.custom_prompt_required')
     ];
 
     public function getListeners()

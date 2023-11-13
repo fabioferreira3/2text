@@ -1,13 +1,11 @@
 <?php
 
 return [
-    'ask_to' => 'Ask to...',
     'audio' => 'Audio',
     'back' => 'Back',
     'blog_post' => 'Blog Post',
     'copy' => 'Copy',
     'copied' => 'Copied',
-    'copied_to_clipboard' => 'Copied to Clipboard',
     'close' => 'Close',
     'csv_file' => 'CSV File',
     'delete' => 'Delete',
@@ -20,7 +18,6 @@ return [
     'document.on_hold' => 'On Hold',
     'docx_file' => 'Docx File',
     'free_text' => 'Free Text',
-    'generate_audio' => 'Generate AI audio',
     'go' => 'Go',
     'image' => 'Image',
     'listen' => 'Listen',

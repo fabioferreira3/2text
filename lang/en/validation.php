@@ -25,6 +25,7 @@ return [
     'confirmed' => 'The :attribute confirmation does not match.',
     'context_required' => 'You need to provide some context for the AI to generate your social media post.',
     'current_password' => 'The password is incorrect.',
+    'custom_prompt_required' => 'Please provide the instructions for me to rewrite the text',
     'date' => 'The :attribute is not a valid date.',
     'date_equals' => 'The :attribute must be a date equal to :date.',
     'date_format' => 'The :attribute does not match the format :format.',
@@ -135,6 +136,7 @@ return [
     'required_without' => 'The :attribute field is required when :values is not present.',
     'required_without_all' => 'The :attribute field is required when none of :values are present.',
     'same' => 'The :attribute and :other must match.',
+    'selected_voice_required' => 'You need to select a voice',
     'size' => [
         'array' => 'The :attribute must contain :size items.',
         'file' => 'The :attribute must be :size kilobytes.',
@@ -153,6 +155,7 @@ return [
     'url' => 'The :attribute must be a valid URL.',
     'ulid' => 'The :attribute must be a valid ULID.',
     'uuid' => 'The :attribute must be a valid UUID.',
+    'voice_input_text_required' => 'You need to provide the text you want to convert into audio'
 
     /*
     |--------------------------------------------------------------------------

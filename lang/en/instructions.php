@@ -75,5 +75,5 @@ return [
     'textbooks' => 'How-to articles; textbooks; news stories; scientific writing',
     'tone' => 'Tone',
     'useful_guidelines' => 'Useful guidelines',
-    'website_url' => 'Website URLs',
+    'website_url' => 'Website URLs'
 ];

@@ -58,7 +58,7 @@ class NewAudio extends Component
         }
         $this->dispatchBrowserEvent('alert', [
             'type' => 'success',
-            'message' => "Your audio is ready!"
+            'message' => __('alerts.audio_ready')
         ]);
     }
 
@@ -118,7 +118,7 @@ class NewAudio extends Component
     {
         $this->dispatchBrowserEvent('alert', [
             'type' => 'info',
-            'message' => "Your audio is being generated!"
+            'message' => __('alerts.generating_audio')
         ]);
         $this->isProcessing = true;
         $voice = $this->voices->where('value', $this->selectedVoice)->first();

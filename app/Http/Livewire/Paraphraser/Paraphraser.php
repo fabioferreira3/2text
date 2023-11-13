@@ -47,7 +47,7 @@ class Paraphraser extends Component
             if ($this->isSaving === true) {
                 $this->dispatchBrowserEvent('alert', [
                     'type' => 'success',
-                    'message' => 'Paraphrasing complete. You can make edits to the text below.'
+                    'message' => __('alerts.paraphrase_completed')
                 ]);
             }
 

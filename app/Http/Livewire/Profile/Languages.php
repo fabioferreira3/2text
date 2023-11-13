@@ -49,7 +49,7 @@ class Languages extends Component
         $this->emit('refresh-navigation-menu');
         $this->dispatchBrowserEvent('alert', [
             'type' => 'success',
-            'message' => "Language updated successfully!"
+            'message' => __('alerts.language_updated')
         ]);
     }
 

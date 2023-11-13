@@ -67,7 +67,7 @@ class NewParaphraser extends Component
             $this->validate();
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'info',
-                'message' => "Got it! Working on your request. Please wait..."
+                'message' => __('alerts.working_request')
             ]);
             $this->isProcessing = true;
             $processId = Str::uuid();

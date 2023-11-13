@@ -32,7 +32,7 @@
     <x-experior::modal>
         <div class="py-4 text-left px-6">
             <div role='button' class="flex justify-between items-center pb-3">
-                <p class="text-2xl font-bold">{{ __('common.ask_to') }}</p>
+                <p class="text-2xl font-bold">{{ __('menus.ask_to') }}</p>
                 <div role="button" class="cursor-pointer z-50" id="close" wire:click="toggleCustomPrompt">
                     <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 18 18">

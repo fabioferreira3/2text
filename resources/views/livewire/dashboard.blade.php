@@ -6,19 +6,19 @@
     <div class="flex flex-col bg-white rounded-lg">
         <div class="flex items-center text-zinc-700">
             <div wire:click="$set('selectedTab', 'dashboard')"
-                class="@if($selectedTab !== 'dashboard') cursor-pointer text-zinc-500 @else bg-zinc-100 font-bold @endif flex items-center gap-2 border-t border-l border-zinc-200 border-b-0 hover:bg-zinc-100 rounded-tl-lg px-6 py-2">
-                <x-icon name="document-text" class="text-zinc-600" width="24" height="24" />
+                class="@if($selectedTab !== 'dashboard') cursor-pointer text-zinc-500 @else bg-zinc-100 text-secondary font-bold @endif flex items-center gap-2 border-t border-l border-zinc-200 border-b-0 hover:bg-zinc-100 rounded-tl-lg px-6 py-2">
+                <x-icon name="document-text" class="text-secondary" width="24" height="24" />
                 <h2 class="text-lg">
                     {{__('dashboard.my_documents')}}</h2>
             </div>
             <div wire:click="$set('selectedTab', 'images')"
-                class="@if($selectedTab !== 'images') cursor-pointer text-zinc-500 @else bg-zinc-100 font-bold @endif flex items-center gap-2 border border-tr-zinc-400 border-b-0 bg-white hover:bg-zinc-100 px-6 py-2">
-                <x-icon name="photograph" class="text-zinc-500" width="24" height="24" />
+                class="@if($selectedTab !== 'images') cursor-pointer text-zinc-500 @else bg-zinc-100 text-secondary font-bold @endif flex items-center gap-2 border border-tr-zinc-400 border-b-0 bg-white hover:bg-zinc-100 px-6 py-2">
+                <x-icon name="photograph" class="text-secondary" width="24" height="24" />
                 <h2 class="text-lg">{{__('dashboard.my_images')}}</h2>
             </div>
             <div wire:click="$set('selectedTab', 'audio')"
-                class="@if($selectedTab !== 'audio') cursor-pointer text-zinc-500 @else bg-zinc-100 font-bold @endif flex items-center gap-2 border border-tr-zinc-400 border-b-0 bg-white hover:bg-zinc-100 rounded-tr-lg px-6 py-2">
-                <x-icon name="volume-up" class="text-zinc-500" width="24" height="24" />
+                class="@if($selectedTab !== 'audio') cursor-pointer text-zinc-500 @else bg-zinc-100 text-secondary font-bold @endif flex items-center gap-2 border-t border-r border-tr-zinc-400 border-b-0 bg-white hover:bg-zinc-100 rounded-tr-lg px-6 py-2">
+                <x-icon name="volume-up" class="text-secondary" width="24" height="24" />
                 <h2 class="text-lg">{{__('dashboard.my_audio')}}</h2>
             </div>
         </div>
@@ -36,3 +36,7 @@
             @endif
         </div>
     </div>
+
+    @push('scripts')
+    @include('livewire.text-to-speech.audio-scripts')
+    @endpush

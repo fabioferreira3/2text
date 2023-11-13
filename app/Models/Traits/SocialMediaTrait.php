@@ -86,7 +86,7 @@ trait SocialMediaTrait
         $this->toggleImageGenerator();
         $this->dispatchBrowserEvent('alert', [
             'type' => 'success',
-            'message' => "Image updated successfully!"
+            'message' => __('alerts.image_updated')
         ]);
     }
 

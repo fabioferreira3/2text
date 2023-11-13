@@ -176,7 +176,7 @@ class ImageBlockGeneratorModal extends Component
         $this->processId = Str::uuid();
         $this->dispatchBrowserEvent('alert', [
             'type' => 'info',
-            'message' => __('modals.generating_images')
+            'message' => __('alerts.generating_images')
         ]);
     }
 
@@ -192,18 +192,9 @@ class ImageBlockGeneratorModal extends Component
             $this->processing = false;
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'success',
-                'message' => __('modals.images_generated')
+                'message' => __('alerts.images_generated')
             ]);
         }
-        // if ($params['process_id'] === $this->processId) {
-        //     $this->previewImgs['variants'] = MediaFile::where('meta->document_id', $this->contentBlock->document->id)
-        //         ->where('meta->process_id', $this->processId)->get();
-        //     $this->processing = false;
-        //     $this->dispatchBrowserEvent('alert', [
-        //         'type' => 'success',
-        //         'message' => __('modals.images_generated')
-        //     ]);
-        // }
     }
 
     public function validateParams()
@@ -211,7 +202,7 @@ class ImageBlockGeneratorModal extends Component
         if (!$this->prompt) {
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'error',
-                'message' => __('validation.image_description')
+                'message' => __('alerts.image_description')
             ]);
             return false;
         }

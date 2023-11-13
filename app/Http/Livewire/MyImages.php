@@ -60,7 +60,7 @@ class MyImages extends Component
         $this->refreshImages();
         $this->dispatchBrowserEvent('alert', [
             'type' => 'success',
-            'message' => 'Image deleted successfully'
+            'message' => __('alerts.image_deleted')
         ]);
     }
 

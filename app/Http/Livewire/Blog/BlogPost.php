@@ -29,6 +29,7 @@ class BlogPost extends Component
 
     public function blockDeleted()
     {
+        $this->document->flushWordCount();
         $this->document->refresh();
     }
 
@@ -43,7 +44,7 @@ class BlogPost extends Component
         $this->emit('addToClipboard', $content);
         $this->dispatchBrowserEvent('alert', [
             'type' => 'info',
-            'message' => __('common.copied_to_clipboard')
+            'message' => __('alerts.copied_to_clipboard')
         ]);
     }
 

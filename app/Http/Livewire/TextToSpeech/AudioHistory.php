@@ -99,7 +99,7 @@ class AudioHistory extends Component
         $this->refresh();
         $this->dispatchBrowserEvent('alert', [
             'type' => 'success',
-            'message' => 'Audio file deleted successfully.'
+            'message' => __('alerts.audio_deleted')
         ]);
     }
 

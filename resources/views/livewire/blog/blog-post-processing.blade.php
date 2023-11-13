@@ -14,7 +14,8 @@
                 "{{ $currentThought }}"
             </div>
             <div class="w-full bg-gray-200 rounded-xl dark:bg-gray-700 mt-4">
-                <div class="bg-secondary text-lg font-bold text-white text-center px-3 py-5 leading-none rounded-xl" style="width: {{ $currentProgress }}%;">
+                <div class="bg-secondary text-lg font-bold text-white text-center px-3 py-5 leading-none rounded-xl"
+                    style="width: {{ $currentProgress }}%;">
                     {{ $currentProgress }}%
                 </div>
             </div>
@@ -49,45 +50,6 @@
         initAnimation('binary-code1', '/animations/binary-code.json');
         initAnimation('binary-code2', '/animations/binary-code.json');
         initAnimation('binary-code3', '/animations/binary-code.json');
-        // if (document.getElementById('robot-working')) {
-        //     lottie.loadAnimation({
-        //         container: document.getElementById('robot-working'),
-        //         path: '/animations/robot-working1.json',
-        //         renderer: 'svg',
-        //         loop: true,
-        //         autoplay: true,
-        //     });
-        // }
-
-        // if (document.getElementById('binary-code1')) {
-        //     lottie.loadAnimation({
-        //         container: document.getElementById('binary-code1'),
-        //         path: '/animations/binary-code.json',
-        //         renderer: 'svg',
-        //         loop: true,
-        //         autoplay: true,
-        //     });
-        // }
-
-        // if (document.getElementById('binary-code2')) {
-        //     lottie.loadAnimation({
-        //         container: document.getElementById('binary-code2'),
-        //         path: '/animations/binary-code.json',
-        //         renderer: 'svg',
-        //         loop: true,
-        //         autoplay: true,
-        //     });
-        // }
-
-        // if (document.getElementById('binary-code3')) {
-        //     lottie.loadAnimation({
-        //         container: document.getElementById('binary-code3'),
-        //         path: '/animations/binary-code.json',
-        //         renderer: 'svg',
-        //         loop: true,
-        //         autoplay: true,
-        //     });
-        // }
     }
 
     document.addEventListener('DOMContentLoaded', initAnimations);

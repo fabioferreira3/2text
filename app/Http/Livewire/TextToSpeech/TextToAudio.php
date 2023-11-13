@@ -32,10 +32,13 @@ class TextToAudio extends Component
         'selectedVoice' => 'required|uuid'
     ];
 
-    protected $messages = [
-        'selectedVoice.required' => 'You need to select a voice',
-        'inputText' => 'You need to provide the text you want to convert into audio'
-    ];
+    public function messages()
+    {
+        return [
+            'selectedVoice.required' => __('validation.selected_voice_required'),
+            'inputText' => __('validation.voice_input_text_required')
+        ];
+    }
 
     public function getListeners()
     {
@@ -113,7 +116,7 @@ class TextToAudio extends Component
             $this->currentAudioUrl = $mediaFile->getSignedUrl();
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'success',
-                'message' => 'Audio file generated successfully.'
+                'message' => __('alerts.audio_file_generated')
             ]);
         }
     }

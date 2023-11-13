@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Component;
-use Talendor\StabilityAI\Enums\StylePreset;
 
 class Generator extends Component
 {
@@ -22,8 +21,6 @@ class Generator extends Component
     public bool $shouldPreviewImage = false;
     public string $processGroupId;
     public $previewImgs;
-    // public $stylePresets;
-    //public $selectedStylePreset;
     public $selectedImage;
     public $samples;
     public $main;
@@ -40,8 +37,6 @@ class Generator extends Component
     {
         $this->prompt = '';
         $this->imgStyle = null;
-        // $this->stylePresets = StylePreset::getMappedValues();
-        //$this->selectedStylePreset = $this->imgStyle ? $this->selectStylePreset($this->imgStyle) : null;
         $this->processing = false;
         $this->processGroupId = '';
         $this->previewImgs = [];
@@ -52,15 +47,6 @@ class Generator extends Component
     {
         return view('livewire.image.generator');
     }
-
-    // public function selectStylePreset($style)
-    // {
-    //     $found = array_values(array_filter($this->stylePresets, function ($item) use ($style) {
-    //         return $item["value"] === $style;
-    //     }));
-
-    //     return $found[0] ?? null;
-    // }
 
     public function generate()
     {
@@ -127,7 +113,7 @@ class Generator extends Component
         $this->processGroupId = Str::uuid();
         $this->dispatchBrowserEvent('alert', [
             'type' => 'info',
-            'message' => "Generating images. Please wait..."
+            'message' => __('alerts.generating_wait')
         ]);
     }
 
@@ -143,7 +129,7 @@ class Generator extends Component
             $this->processing = false;
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'success',
-                'message' => "Images generated successfully!"
+                'message' => __('alerts.image_generated')
             ]);
         }
     }
@@ -153,18 +139,10 @@ class Generator extends Component
         if (!$this->prompt) {
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'error',
-                'message' => "Please provide an image description"
+                'message' => __('alerts.image_description')
             ]);
             return false;
         }
-
-        // if (!$this->imgStyle) {
-        //     $this->dispatchBrowserEvent('alert', [
-        //         'type' => 'error',
-        //         'message' => "Please provide an image style"
-        //     ]);
-        //     return false;
-        // }
 
         return true;
     }

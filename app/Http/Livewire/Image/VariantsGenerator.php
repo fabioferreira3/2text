@@ -158,7 +158,7 @@ class VariantsGenerator extends Component
         if (!$this->prompt) {
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'error',
-                'message' => "Please provide an image description"
+                'message' => __('alerts.image_generated')
             ]);
             return false;
         }

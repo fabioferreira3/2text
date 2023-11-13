@@ -27,7 +27,7 @@ class NewTextToSpeech extends Component
 
     public function mount()
     {
-        $this->title = 'New social media post';
+        $this->title = __('social_media.new_social_media_post');
     }
 
     public function __construct()
@@ -67,11 +67,11 @@ class NewTextToSpeech extends Component
     ];
 
     protected $messages = [
-        'context.required_if' => 'You need to provide some context for the AI to generate your social media post.',
-        'source_url.required_if' => 'You need to provide a link for me to use as context for your social media post.',
-        'keyword.required' => 'You need to provide a keyword.',
-        'source.required' => 'Source is a required field.',
-        'language.required' => 'Language is a required field.',
+        'context.required_if' => __('validation.context_required'),
+        'source_url.required_if' => __('validation.social_media_sourceurl_required'),
+        'keyword.required' => __('validation.keyword_required'),
+        'source.required' => __('validation.source_required'),
+        'language.required' => __('validation.language_required'),
     ];
 
     public function process()

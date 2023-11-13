@@ -213,6 +213,12 @@ class Document extends Model
         return $style->label();
     }
 
+    public function flushWordCount()
+    {
+        $wordCount = Str::wordCount($this->getTextContentBlocksAsText());
+        $this->update(['word_count' => $wordCount]);
+    }
+
     public function scopeOfMediaPosts($query)
     {
         return $query->where('type', DocumentType::SOCIAL_MEDIA_POST);

@@ -31,9 +31,12 @@ class TextBlock extends Component
         'customPrompt' => 'required|string'
     ];
 
-    protected $messages = [
-        'customPrompt.required' => 'Please provide the instructions for me to rewrite the text'
-    ];
+    public function messages()
+    {
+        return [
+            'customPrompt.required' => __('validation.custom_prompt_required')
+        ];
+    }
 
     public function getListeners()
     {
@@ -115,7 +118,7 @@ class TextBlock extends Component
         $this->emit('addToClipboard', $this->content);
         $this->dispatchBrowserEvent('alert', [
             'type' => 'info',
-            'message' => __('social_media.text_copied')
+            'message' => __('alerts.text_copied')
         ]);
     }
 

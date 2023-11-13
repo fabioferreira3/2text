@@ -48,7 +48,7 @@ class Timezone extends Component
         $this->emit('refresh-navigation-menu');
         $this->dispatchBrowserEvent('alert', [
             'type' => 'success',
-            'message' => "Timezone updated successfully!"
+            'message' => __('alerts.timezone_updated')
         ]);
     }
 
