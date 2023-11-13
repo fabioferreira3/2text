@@ -134,7 +134,7 @@
             @endif
         </div>
 
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mt-4">
+        <div class="flex flex-col gap-6 mt-4">
             <div class="flex flex-col gap-2 w-full">
                 <div class="text-xl font-bold">{{ __('social_media.write_image_description') }}:</div>
                 <textarea placeholder="{{__('images.placeholder_example')}}"
@@ -142,30 +142,10 @@
                     wire:model="prompt"></textarea>
 
             </div>
-            <!-- <div class="flex flex-col gap-2 w-full">
-                <div class="text-xl font-bold">{{ __('social_media.select_style') }}:</div>
-                <x-custom.dropdown class="w-full" direction="up">
-                    <x-slot name="trigger">
-                        <button class="bg-gray-100 w-full p-4 text-gray-700 rounded-lg">
-                            <div class="flex items-center gap-4">
-                                {{-- @if ($selectedStylePreset)
-                                <img class="w-20 h-20 rounded-lg" src={{ $selectedStylePreset['image_path'] }} />
-                                @endif
-                                <div>{{ $selectedStylePreset['label'] ?? 'Select' }}</div> --}}
-                            </div>
-                        </button>
-                    </x-slot>
-                    {{-- @foreach ($this->stylePresets as $key => $stylePreset)
-                    <x-dropdown.item class="hover:bg-gray-100"
-                        wire:click="$set('imgStyle', '{{ $stylePreset['value'] }}')" :separator="$key > 0">
-                        <div class="flex items-center gap-4 w-full">
-                            <img class="w-20 h-20 rounded-lg" src={{ $stylePreset['image_path'] }} />
-                            <div class="text-lg">{{ $stylePreset['label'] }}</div>
-                        </div>
-                    </x-dropdown.item>
-                    @endforeach --}}
-                </x-custom.dropdown>
-            </div> -->
+            <div class="flex justify-center items-center gap-2">
+                <div class="text-xl font-bold">{{ __('images.samples') }}:</div>
+                <input type="number" wire:model="samples" class="border border-gray-200 rounded-lg" min="1" max="8" />
+            </div>
         </div>
 
         <div class="flex justify-center mt-8">

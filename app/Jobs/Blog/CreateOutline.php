@@ -3,7 +3,6 @@
 namespace App\Jobs\Blog;
 
 use App\Helpers\DocumentHelper;
-use App\Helpers\PromptHelper;
 use App\Helpers\PromptHelperFactory;
 use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;

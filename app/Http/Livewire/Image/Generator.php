@@ -116,11 +116,6 @@ class Generator extends Component
         $this->shouldPreviewImage = true;
     }
 
-    // public function updatedImgStyle($newValue)
-    // {
-    //     $this->selectedStylePreset = $this->selectStylePreset($newValue);
-    // }
-
     public function toggleModal()
     {
         $this->emitUp('toggleNewGenerator');

@@ -12,7 +12,7 @@
                     {{__('dashboard.my_documents')}}</h2>
             </div>
             <div wire:click="$set('selectedTab', 'images')"
-                class="@if($selectedTab !== 'images') cursor-pointer text-zinc-500 @else bg-zinc-100 font-bold @endif flex items-center gap-2 border border-tr-zinc-400 border-b-0 bg-white hover:bg-zinc-100 rounded-tr-lg px-6 py-2">
+                class="@if($selectedTab !== 'images') cursor-pointer text-zinc-500 @else bg-zinc-100 font-bold @endif flex items-center gap-2 border border-tr-zinc-400 border-b-0 bg-white hover:bg-zinc-100 px-6 py-2">
                 <x-icon name="photograph" class="text-zinc-500" width="24" height="24" />
                 <h2 class="text-lg">{{__('dashboard.my_images')}}</h2>
             </div>

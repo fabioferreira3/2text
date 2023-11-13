@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Component;
-use Talendor\StabilityAI\Enums\StylePreset;
 
 class ImageBlockGeneratorModal extends Component
 {
@@ -21,9 +20,9 @@ class ImageBlockGeneratorModal extends Component
     public $imgStyle;
     public bool $processing = false;
     public string $processId;
+    public string $processGroupId;
     public array $previewImgs;
-    //  public $stylePresets;
-    //   public $selectedStylePreset;
+    public int $samples;
     public mixed $action = '';
     private $documentRepo;
 
@@ -47,9 +46,9 @@ class ImageBlockGeneratorModal extends Component
         $this->contentBlock = $contentBlock;
         $this->prompt = $this->contentBlock->document->getMeta('img_prompt');
         $this->imgStyle = $this->contentBlock->document->getMeta('img_style') ?? null;
-        //    $this->stylePresets = StylePreset::getMappedValues();
-        //    $this->selectedStylePreset = $this->imgStyle ? $this->selectStylePreset($this->imgStyle) : null;
+        $this->processGroupId = Str::uuid();
         $this->processing = false;
+        $this->samples = 1;
         $this->processId = '';
         $this->previewImgs = [
             'original' => $this->contentBlock->getMediaFile() ?? null,
@@ -71,15 +70,6 @@ class ImageBlockGeneratorModal extends Component
         ]);
     }
 
-    // public function selectStylePreset($style)
-    // {
-    //     $found = array_values(array_filter($this->stylePresets, function ($item) use ($style) {
-    //         return $item["value"] === $style;
-    //     }));
-
-    //     return $found[0] ?? null;
-    // }
-
     public function generateNewImages()
     {
         if (!$this->validateParams()) {
@@ -92,34 +82,23 @@ class ImageBlockGeneratorModal extends Component
 
         $imageSize = MediaHelper::getPossibleImageSize($this->contentBlock->document);
 
-        DocumentRepository::createTask(
-            $this->contentBlock->document->id,
-            DocumentTaskEnum::GENERATE_IMAGE,
-            [
-                'order' => 1,
-                'process_id' => $this->processId,
-                'meta' => [
-                    'prompt' => $this->prompt,
-                    'height' => $imageSize['height'],
-                    'width' => $imageSize['width'],
-                    //    'style_preset' => $this->imgStyle,
-                    //    'steps' => 21,
-                    'samples' => 4
+        for ($i = 1; $i <= $this->samples; $i++) {
+            $processId = Str::uuid();
+            DocumentRepository::createTask(
+                $this->contentBlock->document->id,
+                DocumentTaskEnum::GENERATE_IMAGE,
+                [
+                    'order' => 1,
+                    'process_group_id' => $this->processGroupId,
+                    'process_id' => $processId,
+                    'meta' => [
+                        'prompt' => $this->prompt,
+                        'height' => $imageSize['height'],
+                        'width' => $imageSize['width']
+                    ]
                 ]
-            ]
-        );
-
-        DocumentRepository::createTask(
-            $this->contentBlock->document->id,
-            DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
-            [
-                'order' => 2,
-                'process_id' => $this->processId,
-                'meta' => [
-                    'silently' => true
-                ]
-            ]
-        );
+            );
+        }
 
         DispatchDocumentTasks::dispatch($this->contentBlock->document);
     }
@@ -148,7 +127,7 @@ class ImageBlockGeneratorModal extends Component
                     'prompt' => $this->prompt,
                     'style_preset' => $this->imgStyle,
                     'steps' => 21,
-                    'samples' => 4
+                    'samples' => $this->samples
                 ]
             ]
         );
@@ -191,11 +170,6 @@ class ImageBlockGeneratorModal extends Component
         return view('livewire.image.image-block-generator-modal');
     }
 
-    // public function updatedImgStyle($newValue)
-    // {
-    //     $this->selectedStylePreset = $this->selectStylePreset($newValue);
-    // }
-
     protected function setProcessingState()
     {
         $this->processing = true;
@@ -208,15 +182,28 @@ class ImageBlockGeneratorModal extends Component
 
     public function onProcessFinished(array $params)
     {
-        if ($params['process_id'] === $this->processId) {
-            $this->previewImgs['variants'] = MediaFile::where('meta->document_id', $this->contentBlock->document->id)
-                ->where('meta->process_id', $this->processId)->get();
+        if ((!$params['has_siblings'] && $params['process_group_id'] === $this->processGroupId) ||
+            ($params['has_siblings'] && $params['group_finished'])
+        ) {
+            $this->emitUp('refreshImages');
+            $mediaFiles = MediaFile::where('meta->process_group_id', $this->processGroupId)
+                ->latest()->take($this->samples)->get();
+            $this->previewImgs['variants'] = $mediaFiles->toArray();
             $this->processing = false;
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'success',
                 'message' => __('modals.images_generated')
             ]);
         }
+        // if ($params['process_id'] === $this->processId) {
+        //     $this->previewImgs['variants'] = MediaFile::where('meta->document_id', $this->contentBlock->document->id)
+        //         ->where('meta->process_id', $this->processId)->get();
+        //     $this->processing = false;
+        //     $this->dispatchBrowserEvent('alert', [
+        //         'type' => 'success',
+        //         'message' => __('modals.images_generated')
+        //     ]);
+        // }
     }
 
     public function validateParams()
@@ -228,14 +215,6 @@ class ImageBlockGeneratorModal extends Component
             ]);
             return false;
         }
-
-        // if (!$this->imgStyle) {
-        //     $this->dispatchBrowserEvent('alert', [
-        //         'type' => 'error',
-        //         'message' => __('validation.image_style')
-        //     ]);
-        //     return false;
-        // }
 
         return true;
     }
