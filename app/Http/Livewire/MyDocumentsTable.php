@@ -88,7 +88,7 @@ class MyDocumentsTable extends DataTableComponent
                 }),
 
             Column::make(__('dashboard.created_at'), "created_at")
-                ->format(fn ($value, $row) => $row->created_at->setTimezone(session('user_timezone') ?? 'America/New_York')->format('m/d/Y - h:ia'))
+                ->format(fn ($value, $row) => $row->created_at->format('m/d/Y - h:ia'))
                 ->sortable()
                 ->collapseOnMobile(),
             Column::make(__('dashboard.actions'))

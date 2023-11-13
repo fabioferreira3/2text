@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire\Profile;
 
-use App\Enums\Language;
+use App\Helpers\SupportHelper;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class Languages extends Component
+class Timezone extends Component
 {
     /**
      * The component's state.
@@ -25,7 +25,7 @@ class Languages extends Component
      */
     public function mount()
     {
-        $this->state = ['language' => Auth::user()->account->language];
+        $this->state = ['timezone' => Auth::user()->timezone];
     }
 
     /**
@@ -34,22 +34,21 @@ class Languages extends Component
      * @param  \Laravel\Fortify\Contracts\UpdatesUserProfileInformation  $updater
      * @return void
      */
-    public function updateLanguage(UpdatesUserProfileInformation $updater)
+    public function updateTimezone(UpdatesUserProfileInformation $updater)
     {
         $this->resetErrorBag();
 
         Validator::make($this->state, [
-            'language' => ['required', 'string', Rule::in(array_column(Language::cases(), 'value'))],
-        ])->validateWithBag('updateLanguage');
+            'timezone' => ['required', 'string', Rule::in(array_column(SupportHelper::getTimezones(), 'value'))],
+        ])->validateWithBag('updateTimezone');
 
-        $account = Auth::user()->account;
-        $account->update(['settings' => [...$account->settings, 'language' => $this->state['language']]]);
+        Auth::user()->update(['timezone' => $this->state['timezone']]);
 
         $this->emit('saved');
         $this->emit('refresh-navigation-menu');
         $this->dispatchBrowserEvent('alert', [
             'type' => 'success',
-            'message' => "Language updated successfully!"
+            'message' => "Timezone updated successfully!"
         ]);
     }
 
@@ -70,6 +69,6 @@ class Languages extends Component
      */
     public function render()
     {
-        return view('profile.languages');
+        return view('profile.timezone');
     }
 }

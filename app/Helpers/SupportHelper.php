@@ -67,4 +67,17 @@ class SupportHelper
 
         return config('app.url') . "/link/" . $shortLink->link;
     }
+
+    public static function getTimezones()
+    {
+        $timezones = [];
+        foreach (\DateTimeZone::listIdentifiers() as $timezone) {
+            $timezones[] = [
+                'value' => $timezone,
+                'label' => $timezone
+            ];
+        }
+
+        return $timezones;
+    }
 }

@@ -64,7 +64,7 @@ enum DocumentTaskEnum: string
             self::REMOVE_EMBEDDINGS => "App\Jobs\RemoveEmbeddings",
             self::REWRITE_TEXT_BLOCK => "App\Jobs\RewriteTextBlock",
             self::SUMMARIZE_DOC => "App\Jobs\SummarizeDocument",
-            self::TEXT_TO_SPEECH => "App\Jobs\TextToSpeech\ConvertTextToAudio",
+            self::TEXT_TO_SPEECH => "App\Jobs\TextToSpeech\GenerateAudio",
             self::TRANSLATE_TEXT => "App\Jobs\Translation\TranslateText",
         };
     }

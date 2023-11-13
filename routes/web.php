@@ -12,18 +12,13 @@ use App\Http\Livewire\SocialMediaPost\NewSocialMediaPost;
 use App\Http\Livewire\SocialMediaPost\SocialMediaPostsManager;
 use App\Http\Livewire\SocialMediaPost\TempNew;
 use App\Http\Livewire\Templates;
-use App\Http\Livewire\TextToSpeech\History;
+use App\Http\Livewire\TextToSpeech\AudioHistory;
 use App\Http\Livewire\TextToSpeech\TextToAudio;
 use App\Http\Livewire\TextTranscription\NewTranscription;
 use App\Http\Livewire\TextTranscription\TextTranscription;
 use App\Http\Livewire\Trash;
 use App\Models\ShortLink;
-use App\Models\Voice;
-use Talendor\ElevenLabsClient\ElevenLabsClient;
-use Talendor\ElevenLabsClient\TextToSpeech\TextToSpeech;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 use Laravel\Socialite\Facades\Socialite;
 
 /*
@@ -72,7 +67,7 @@ Route::middleware([
 
     /* Text to Speech routes */
     Route::get('/text-to-speech/new', TextToAudio::class)->name('new-text-to-speech');
-    Route::get('/text-to-speech/history', History::class)->name('text-to-speech-history');
+    Route::get('/text-to-speech/history', AudioHistory::class)->name('text-to-speech-history');
     Route::get('/documents/text-to-speech/{document}', TextToAudio::class)->name('text-to-speech-view');
 
     /* Short links */
@@ -83,28 +78,6 @@ Route::middleware([
 
     /* Document routes */
     Route::get('/documents/{document}', [DocumentViewController::class, 'index'])->name('document-view');
-
-
-    Route::get('/elevenlabs', function () {
-        //  Voice::truncate();
-        $elevenLabsClient = app()->make(ElevenLabsClient::class);
-        $voices = collect($elevenLabsClient->voices()->getAll());
-        // $voices->each(function ($voice) {
-        //     $model = null;
-        //     if (count($voice['high_quality_base_model_ids'])) {
-        //         $model = $voice['high_quality_base_model_ids'][0];
-        //     }
-        //     Voice::create([
-        //         'external_id' => $voice['voice_id'],
-        //         'name' => $voice['name'],
-        //         'preview_url' => $voice['preview_url'],
-        //         'model' => $model,
-        //         'provider' => 'elevenlabs',
-        //         'meta' => $voice['labels']
-        //     ]);
-        // });
-        return $voices;
-    });
 });
 
 /* Google Auth */
@@ -113,7 +86,9 @@ Route::get('/google/auth/redirect', function () {
     return Socialite::driver('google')->redirect();
 })->name('login.google');
 
-Route::get('/google/auth/callback', [GoogleAuthController::class, 'handleProviderCallback'])->name('login.google.callback');
+Route::get('/google/auth/callback', [GoogleAuthController::class, 'handleProviderCallback'])
+    ->name('login.google.callback');
 
 /* Stripe Webhook */
-Route::post('/stripe/payment', [GoogleAuthController::class, 'handleProviderCallback'])->name('payment.webhook');
+Route::post('/stripe/payment', [GoogleAuthController::class, 'handleProviderCallback'])
+    ->name('payment.webhook');

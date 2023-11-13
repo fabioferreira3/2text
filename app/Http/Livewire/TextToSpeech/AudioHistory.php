@@ -9,10 +9,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
-class History extends Component
+class AudioHistory extends Component
 {
     public $history;
     public $isPlaying;
+    public $displayHeader;
     public $selectedMediaFile;
 
     public function getListeners()
@@ -22,10 +23,11 @@ class History extends Component
         ];
     }
 
-    public function mount()
+    public function mount($displayHeader = true)
     {
         $this->refresh();
         $this->isPlaying = false;
+        $this->displayHeader = $displayHeader;
         $this->selectedMediaFile = null;
     }
 

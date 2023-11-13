@@ -10,7 +10,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class GenerateAudio extends Component
+class NewAudio extends Component
 {
     public Document $document;
     public $menuOpen;

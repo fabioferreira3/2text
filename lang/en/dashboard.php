@@ -8,6 +8,7 @@ return [
     'language' => 'Language',
     'my_documents' => 'My Documents',
     'my_images' => 'My Images',
+    'my_audio' => 'My Audio',
     'new' => 'New',
     'status' => 'Status',
     'trash' => 'Trash',

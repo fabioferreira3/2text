@@ -9,6 +9,7 @@ use App\Enums\SourceProvider;
 use App\Enums\Style;
 use App\Enums\Tone;
 use App\Models\Scopes\SameAccountScope;
+use App\Models\Traits\TimezoneHandler;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +21,7 @@ use Illuminate\Support\Str;
 
 class Document extends Model
 {
-    use HasFactory, HasUuids, SoftDeletes;
+    use HasFactory, HasUuids, SoftDeletes, TimezoneHandler;
 
     protected $guarded = ['id'];
     protected $casts = [

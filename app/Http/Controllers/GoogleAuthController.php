@@ -19,6 +19,7 @@ class GoogleAuthController extends Controller
                 'email' => $googleUser->getEmail(),
                 'provider' => 'google',
                 'provider_id' => $googleUser->getId(),
+                'timezone' => 'America/New_York'
             ];
 
             $user = $userRepository->getUserByEmail($googleUser->getEmail());

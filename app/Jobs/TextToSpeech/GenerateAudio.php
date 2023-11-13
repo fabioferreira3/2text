@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Talendor\ElevenLabsClient\TextToSpeech\TextToSpeech;
 
-class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
+class GenerateAudio implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
@@ -93,7 +93,7 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
 
             $this->jobSucceded(true);
         } catch (Exception $e) {
-            $this->jobFailed('Failed to convert text to audio: ' . $e->getMessage());
+            $this->jobFailed('Failed to generating audio: ' . $e->getMessage());
         }
     }
 
@@ -102,6 +102,6 @@ class ConvertTextToAudio implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'text_to_speech_' . $this->meta['process_id'] ?? $this->document->id;
+        return 'generating_audio_' . $this->meta['process_id'] ?? $this->document->id;
     }
 }
