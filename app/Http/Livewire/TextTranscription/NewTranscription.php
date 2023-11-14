@@ -46,12 +46,15 @@ class NewTranscription extends Component
         ];
     }
 
-    protected $messages = [
-        'source_url.required' => 'You need to provide a Youtube link for the transcription.',
-        'source.required' => 'Source is a required field.',
-        'origin_language.required' => 'Source language is a required field.',
-        'target_language.required' => 'Target language is a required field.',
-    ];
+    public function messages()
+    {
+        return [
+            'source_url.required' => __('validation.youtube_link_required'),
+            'source.required' => __('validation.source_required'),
+            'origin_language.required' => __('validation.source_language_required'),
+            'target_language.required' => __('validation.target_language_required'),
+        ];
+    }
 
     public function process()
     {

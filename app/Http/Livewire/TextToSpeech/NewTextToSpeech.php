@@ -66,13 +66,16 @@ class NewTextToSpeech extends Component
         'style' => 'nullable'
     ];
 
-    protected $messages = [
-        'context.required_if' => __('validation.context_required'),
-        'source_url.required_if' => __('validation.social_media_sourceurl_required'),
-        'keyword.required' => __('validation.keyword_required'),
-        'source.required' => __('validation.source_required'),
-        'language.required' => __('validation.language_required'),
-    ];
+    public function messages()
+    {
+        return [
+            'context.required_if' => __('validation.context_required'),
+            'source_url.required_if' => __('validation.social_media_sourceurl_required'),
+            'keyword.required' => __('validation.keyword_required'),
+            'source.required' => __('validation.source_required'),
+            'language.required' => __('validation.language_required'),
+        ];
+    }
 
     public function process()
     {

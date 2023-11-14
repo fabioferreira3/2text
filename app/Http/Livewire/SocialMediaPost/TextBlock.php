@@ -24,9 +24,12 @@ class TextBlock extends Component
         'customPrompt' => 'required|string'
     ];
 
-    protected $messages = [
-        'customPrompt.required' => __('validation.custom_prompt_required')
-    ];
+    public function messages()
+    {
+        return [
+            'customPrompt.required' => __('validation.custom_prompt_required')
+        ];
+    }
 
     public function getListeners()
     {

@@ -66,12 +66,17 @@ class InstructionsHelper
 
     public static function transcriptionSource()
     {
-        return "Define the source of the transcription. Currently, only Youtube videos are supported.";
+        return __('instructions.transcription_source');
     }
 
     public static function transcriptionLanguage()
     {
-        return "<p>You need to inform the language of the video since I'm currently not able to auto-discover its main language.</p>";
+        return "<p>" . __('instructions.transcription_language') . "</p>";
+    }
+
+    public static function transcriptionTranslate()
+    {
+        return "<p>" . __('instructions.transcription_translation') . "</p>";
     }
 
     public static function socialMediaPlatforms()

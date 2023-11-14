@@ -145,9 +145,11 @@ return [
     ],
     'social_media_sourceurl_required' => 'You need to provide a link to be used as context for your social media post.',
     'source_required' => 'Source is a required field.',
+    'source_language_required' => 'Source language is a required field.',
     'starts_with' => 'The :attribute must start with one of the following: :values.',
     'string' => 'The :attribute must be a string.',
     'subtopics_count' => 'The number of subtopics is a required field.',
+    'target_language_required' => 'Target language is a required field.',
     'timezone' => 'The :attribute must be a valid timezone.',
     'unique' => 'The :attribute has already been taken.',
     'uploaded' => 'The :attribute failed to upload.',
@@ -155,7 +157,8 @@ return [
     'url' => 'The :attribute must be a valid URL.',
     'ulid' => 'The :attribute must be a valid ULID.',
     'uuid' => 'The :attribute must be a valid UUID.',
-    'voice_input_text_required' => 'You need to provide the text you want to convert into audio'
+    'voice_input_text_required' => 'You need to provide the text you want to convert into audio',
+    'youtube_link_required' => 'You need to provide a Youtube link for the transcription.',
 
     /*
     |--------------------------------------------------------------------------

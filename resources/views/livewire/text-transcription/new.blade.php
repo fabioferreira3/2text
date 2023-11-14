@@ -8,7 +8,8 @@
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
                             <label class="font-bold text-lg text-zinc-700">{{__('transcription.source')}}:</label>
-                            @include('livewire.common.help-item', ['header' => __('transcription.source'), 'content' => App\Helpers\InstructionsHelper::transcriptionSource()])
+                            @include('livewire.common.help-item', ['header' => __('transcription.source'), 'content' =>
+                            App\Helpers\InstructionsHelper::transcriptionSource()])
                         </div>
                         <select name="provider" wire:model="source" class="p-3 rounded-lg border border-zinc-200">
                             <option value="youtube">Youtube</option>
@@ -27,10 +28,13 @@
                 <div class="grid grid-cols-2 gap-6">
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
-                            <label class="font-bold text-lg text-zinc-700">{{__('transcription.origin_language')}}:</label>
-                            @include('livewire.common.help-item', ['header' => __('transcription.origin_language'), 'content' => App\Helpers\InstructionsHelper::transcriptionLanguage()])
+                            <label
+                                class="font-bold text-lg text-zinc-700">{{__('transcription.origin_language')}}:</label>
+                            @include('livewire.common.help-item', ['header' => __('transcription.origin_language'),
+                            'content' => App\Helpers\InstructionsHelper::transcriptionLanguage()])
                         </div>
-                        <select name="origin_language" wire:model="origin_language" class="p-3 rounded-lg border border-zinc-200">
+                        <select name="origin_language" wire:model="origin_language"
+                            class="p-3 rounded-lg border border-zinc-200">
                             @foreach ($languages as $option)
                             <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
                             @endforeach
@@ -41,11 +45,14 @@
                     </div>
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
-                            <label class="font-bold text-lg text-zinc-700">{{__('transcription.target_language')}}</label>
-                            {{-- @include('livewire.common.help-item', ['header' => __('transcription.target_language'), 'content' => App\Helpers\InstructionsHelper::transcriptionLanguage()]) --}}
+                            <label
+                                class="font-bold text-lg text-zinc-700">{{__('transcription.target_language')}}</label>
+                            @include('livewire.common.help-item', ['header' => __('transcription.target_language'),
+                            'content' => App\Helpers\InstructionsHelper::transcriptionTranslate()])
                         </div>
-                        <select name="target_language" wire:model="target_language" class="p-3 rounded-lg border border-zinc-200">
-                            <option value="same">No</option>
+                        <select name="target_language" wire:model="target_language"
+                            class="p-3 rounded-lg border border-zinc-200">
+                            <option value="same">{{__('transcription.no')}}</option>
                             @foreach ($languages as $option)
                             <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
                             @endforeach
@@ -56,7 +63,8 @@
                     </div>
                 </div>
                 <div class="flex justify-center mt-4">
-                    <button wire:click="process" wire:loading.remove class="bg-secondary hover:bg-main text-white font-bold px-4 py-2 rounded-lg">
+                    <button wire:click="process" wire:loading.remove
+                        class="bg-secondary hover:bg-main text-white font-bold px-4 py-2 rounded-lg">
                         {{ __('transcription.transcript') }}
                     </button>
                 </div>
