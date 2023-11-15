@@ -29,6 +29,9 @@ class AssemblyAI
             $response = $this->client
                 ->post('/transcript', [
                     'audio_url' => $fileUrl,
+                    'webhook_url' => config('assemblyai.webhook_url'),
+                    'webhook_auth_header_name' => 'Authorization',
+                    'webhook_auth_header_value' => 'Bearer ' . config('assemblyai.token'),
                     'speaker_labels' => true
                 ]);
 

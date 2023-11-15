@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DocumentViewController;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\WebhooksController;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Blog\BlogPost;
 use App\Http\Livewire\Blog\NewPost;

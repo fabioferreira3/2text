@@ -53,11 +53,11 @@ class MyDocumentsTable extends DataTableComponent
     public function builder(): Builder
     {
         return Document::whereIn('type', [
+            DocumentType::AUDIO_TRANSCRIPTION,
             DocumentType::BLOG_POST,
             DocumentType::PARAPHRASED_TEXT,
             DocumentType::SOCIAL_MEDIA_GROUP,
             DocumentType::TEXT_TO_SPEECH,
-            DocumentType::TEXT_TRANSCRIPTION
         ])->latest();
     }
 

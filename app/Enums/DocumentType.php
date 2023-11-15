@@ -9,7 +9,7 @@ enum DocumentType: string
     case SOCIAL_MEDIA_GROUP = 'social_media_group';
     case SOCIAL_MEDIA_POST = 'social_media_post';
     case TEXT_TO_SPEECH = 'text_to_speech';
-    case TEXT_TRANSCRIPTION = 'text_transcription';
+    case AUDIO_TRANSCRIPTION = 'audio_transcription';
     case GENERIC = 'generic';
 
     public function label()
@@ -17,7 +17,7 @@ enum DocumentType: string
         return match ($this) {
             self::BLOG_POST => __('common.blog_post'),
             self::PARAPHRASED_TEXT => __('common.paraphrased_text'),
-            self::TEXT_TRANSCRIPTION => __('common.text_transcription'),
+            self::AUDIO_TRANSCRIPTION => __('common.audio_transcription'),
             self::TEXT_TO_SPEECH => __('common.text_to_speech'),
             self::SOCIAL_MEDIA_GROUP => __('common.social_media'),
             self::SOCIAL_MEDIA_POST => __('common.social_media_post'),
@@ -30,7 +30,7 @@ enum DocumentType: string
         return [
             self::BLOG_POST->value => 'blog-post-view',
             self::PARAPHRASED_TEXT->value => 'paraphrase-view',
-            self::TEXT_TRANSCRIPTION->value => 'transcription-view',
+            self::AUDIO_TRANSCRIPTION->value => 'transcription-view',
             self::TEXT_TO_SPEECH->value => 'text-to-speech-view',
             self::SOCIAL_MEDIA_GROUP->value => 'social-media-view'
         ];
@@ -41,7 +41,7 @@ enum DocumentType: string
         return collect([
             self::BLOG_POST,
             self::PARAPHRASED_TEXT,
-            self::TEXT_TRANSCRIPTION,
+            self::AUDIO_TRANSCRIPTION,
             self::TEXT_TO_SPEECH,
             self::SOCIAL_MEDIA_GROUP
         ])->flatMap(fn ($type) => [$type->value => $type->label()])->toArray();

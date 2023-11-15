@@ -60,7 +60,7 @@ class NewTranscription extends Component
     {
         $this->validate($this->rules());
         $document = DocumentRepository::createGeneric([
-            'type' => DocumentType::TEXT_TRANSCRIPTION->value,
+            'type' => DocumentType::AUDIO_TRANSCRIPTION->value,
             'source' => $this->source,
             'language' => $this->origin_language,
             'meta' => [

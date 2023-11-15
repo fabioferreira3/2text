@@ -221,7 +221,7 @@ class Document extends Model
 
     public function getYoutubeVideoId()
     {
-        if (!$this->getMeta('source_url') || $this->type !== DocumentType::TEXT_TRANSCRIPTION) {
+        if (!$this->getMeta('source_url') || $this->type !== DocumentType::AUDIO_TRANSCRIPTION) {
             return null;
         }
 
