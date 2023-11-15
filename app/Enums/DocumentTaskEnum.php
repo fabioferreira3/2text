@@ -57,7 +57,7 @@ enum DocumentTaskEnum: string
             self::PROCESS_AUDIO => "App\Jobs\ProcessAudio",
             self::PROCESS_SOCIAL_MEDIA_POSTS_CREATION => "App\Jobs\SocialMedia\ProcessSocialMediaPostsCreation",
             self::PREPARE_TEXT_TRANSLATION => "App\Jobs\Translation\PrepareTextTranslation",
-            self::PUBLISH_TRANSCRIPTION => "App\Jobs\TextTranscription\PublishTranscription",
+            self::PUBLISH_TRANSCRIPTION => "App\Jobs\AudioTranscription\PublishTranscription",
             self::PUBLISH_TEXT_BLOCKS => "App\Jobs\Blog\PublishTextBlocks",
             self::REGISTER_FINISHED_PROCESS => "App\Jobs\RegisterFinishedProcess",
             self::REGISTER_CONTENT_HISTORY => "App\Jobs\RegisterContentHistory",

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Livewire\TextTranscription;
+namespace App\Http\Livewire\AudioTranscription;
 
 use App\Enums\DocumentType;
 use App\Enums\Language;
-use App\Jobs\TextTranscription\CreateTranscription;
+use App\Jobs\AudioTranscription\CreateTranscription;
 use App\Repositories\DocumentRepository;
 use WireUi\Traits\Actions;
 use Livewire\Component;

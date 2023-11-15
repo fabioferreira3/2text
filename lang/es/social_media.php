@@ -2,8 +2,8 @@
 
 return [
     'choose_language' => 'Select the language you would like the post to be generated in. If you have provided a YouTube link, please ensure that the selected language matches the main language of the video.',
-    'choose_keyword' => 'Provide a keyword that you would like me to use throughout your post. This keyword will help Oraculum to generate a relevant and focused article.',
-    'choose_platform' => 'Choose for which platforms you would like me to write a post. For each selected platform I will create a different post.',
+    'choose_keyword' => 'Provide a keyword that you would like Oraculum to use throughout your post. This keyword will help Oraculum to generate a relevant and focused article.',
+    'choose_platform' => 'Choose for which platforms you would like Oraculum to write a post. For each selected platform I will create a different post.',
     'choose_source' => 'Provide a source of the context that your post should be based on. It could be a YouTube link, an external web page or just free text.',
     'choose_tone' => 'Define the tone of your post. You may pick from casual, funny, sarcastic, dramatic, academic, and other tones. This will help Oraculum to write a post that is in line with your preference and your audience\'s.',
     'default' => 'Default',

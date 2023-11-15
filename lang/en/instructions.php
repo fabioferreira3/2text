@@ -2,7 +2,7 @@
 
 return [
     'check_img_guidelines' => 'Check these important guidelines first!',
-    'choose_platforms' => 'Choose for which platforms you would like me to write a post. For each selected platform I will create a different post.',
+    'choose_platforms' => 'Choose for which platforms you would like Oraculum to write a post. For each selected platform I will create a different post.',
     'consider_readers' => 'Take into account your readers.',
     'convince_reader' => 'Aims to convince the reader of the validity of a certain position or argument.',
     'csv_files' => 'CSV Files',
@@ -51,7 +51,7 @@ return [
     'expected_reaction' => 'What is the reaction you expect from your readers?',
     'explain_concept' => 'Used to explain a concept and share information to a broader audience.',
     'express_opinions' => 'This type is not meant to express opinions.',
-    'indicate_topics_number' => 'Indicate the number of topics you would like me to cover in your blog post. You may define a minimum of one and a maximum of fifteen topics.',
+    'indicate_topics_number' => 'Indicate the number of topics you would like Oraculum to cover in your blog post. You may define a minimum of one and a maximum of fifteen topics.',
     'fill_information' => 'Please fill out the following information so I can understand your requirements and write you an unique and high-quality post.',
     'free_text' => 'Free text',
     'language' => 'Language',
@@ -61,7 +61,7 @@ return [
     'keyword' => 'Keyword',
     'pdf_files' => 'PDF Files',
     'poetry' => 'Poetry; fictional novels or plays; memoirs or first-hand accounts of events',
-    'provide_keyword' => 'Provide a keyword that you would like me to use throughout your post. This keyword will help Oraculum to generate a relevant and focused article.',
+    'provide_keyword' => 'Provide a keyword that you would like Oraculum to use throughout your post. This keyword will help Oraculum to generate a relevant and focused article.',
     'provide_source' => 'Provide a source of the context that your post should be based on. It could be a YouTube link, an external web page or just free text.',
     'rejected_requests' => 'The following requests will be rejected',
     'select_language' => 'Select the language you would like the post to be generated in. If you have provided a YouTube link, please ensure that the selected language matches the main language of the video.',

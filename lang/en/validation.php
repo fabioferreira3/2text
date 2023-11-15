@@ -25,7 +25,7 @@ return [
     'confirmed' => 'The :attribute confirmation does not match.',
     'context_required' => 'You need to provide some context for the AI to generate your social media post.',
     'current_password' => 'The password is incorrect.',
-    'custom_prompt_required' => 'Please provide the instructions for me to rewrite the text',
+    'custom_prompt_required' => 'Please provide the instructions for Oraculum to rewrite the text',
     'date' => 'The :attribute is not a valid date.',
     'date_equals' => 'The :attribute must be a date equal to :date.',
     'date_format' => 'The :attribute does not match the format :format.',

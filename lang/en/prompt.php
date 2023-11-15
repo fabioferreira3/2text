@@ -103,7 +103,7 @@ return [
     'pessimistic_tone' => "Use a writing tone that makes the reader feel like they are reading a book that highlights the negative aspects of the topic\n",
     'reduce_complexity' => "Rewrite the following text reducing its reading complexity so a 13 year old kid would understand:\n\n :text",
     'sarcastic_tone' => "Use a writing tone that makes the reader feel like they are reading a sarcastic book or watching a sarcastic movie. A tone that makes the reader feel like they are being mocked\n",
-    'shorten' => "Rewrite the following text, keeping the same tone and making it shorter:\n\n :text",
+    'shorten' => "Rewrite the following text using fewer words while keeping the same tone:\n\n :text",
     'shorten_title' => "Rewrite the following title, keeping the same tone and making it shorter:\n\n :text",
     'simplify_text' => "Simplify the following text while keeping the same tone:\n\n:text",
     'simplistic_tone' => "The reading complexity of the text must be low, as if a teenager would be able to read and understand it\n",

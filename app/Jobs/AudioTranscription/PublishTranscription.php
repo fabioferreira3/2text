@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Jobs\TextTranscription;
+namespace App\Jobs\AudioTranscription;
 
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
+use App\Models\DocumentContentBlock;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -40,8 +41,13 @@ class PublishTranscription implements ShouldQueue, ShouldBeUnique
     {
         try {
             $meta = $this->document->meta;
-            $this->document->update([
+            $this->document->contentBlocks()->save(new DocumentContentBlock([
+                'type' => 'text',
                 'content' => $meta['translated_text'] ?? $meta['original_text'],
+                'prompt' => null,
+                'order' => 1
+            ]));
+            $this->document->update([
                 'word_count' => Str::wordCount($meta['translated_text'] ?? $meta['original_text']),
                 'meta' => [
                     ...$meta,

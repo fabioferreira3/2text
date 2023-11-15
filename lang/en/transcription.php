@@ -7,4 +7,5 @@ return [
     'target_language' => 'Translate?',
     'transcript' => 'Transcript',
     'source' => 'Source',
+    'transcription' => 'Transcription'
 ];

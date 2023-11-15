@@ -219,6 +219,16 @@ class Document extends Model
         $this->update(['word_count' => $wordCount]);
     }
 
+    public function getYoutubeVideoId()
+    {
+        if (!$this->getMeta('source_url') || $this->type !== DocumentType::TEXT_TRANSCRIPTION) {
+            return null;
+        }
+
+        preg_match('/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $this->getMeta('source_url'), $matches);
+        return $matches[1] ?? null;
+    }
+
     public function scopeOfMediaPosts($query)
     {
         return $query->where('type', DocumentType::SOCIAL_MEDIA_POST);

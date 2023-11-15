@@ -58,10 +58,11 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
             $audioParams = MediaRepository::downloadYoutubeAudio($this->meta['source_url']);
 
             // Update the document
+            $this->document->update(['title' => $audioParams['title']]);
             $this->document->update(['meta' => [
                 ...$this->document->meta,
                 'audio_file_path' => $audioParams['file_paths'],
-                'duration' => $audioParams['duration']
+                'duration' => $audioParams['total_duration']
             ]]);
 
             $this->jobSucceded();

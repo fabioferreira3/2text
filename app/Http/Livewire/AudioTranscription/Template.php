@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\TextTranscription;
+namespace App\Http\Livewire\AudioTranscription;
 
 use Livewire\Component;
 

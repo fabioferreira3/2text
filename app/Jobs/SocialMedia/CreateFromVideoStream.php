@@ -4,7 +4,7 @@ namespace App\Jobs\SocialMedia;
 
 use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
-use App\Jobs\TextTranscription\RegisterTranscriptionTasks;
+use App\Jobs\AudioTranscription\RegisterTranscriptionTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Illuminate\Bus\Queueable;

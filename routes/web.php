@@ -14,8 +14,8 @@ use App\Http\Livewire\SocialMediaPost\TempNew;
 use App\Http\Livewire\Templates;
 use App\Http\Livewire\TextToSpeech\AudioHistory;
 use App\Http\Livewire\TextToSpeech\TextToAudio;
-use App\Http\Livewire\TextTranscription\NewTranscription;
-use App\Http\Livewire\TextTranscription\TextTranscription;
+use App\Http\Livewire\AudioTranscription\NewTranscription;
+use App\Http\Livewire\AudioTranscription\AudioTranscription;
 use App\Http\Livewire\Trash;
 use App\Models\ShortLink;
 use Illuminate\Support\Facades\Route;
@@ -54,7 +54,7 @@ Route::middleware([
 
     /* Text Transcription routes */
     Route::get('/transcription/new', NewTranscription::class)->name('new-text-transcription');
-    Route::get('/documents/transcription/{document}', TextTranscription::class)->name('transcription-view');
+    Route::get('/documents/transcription/{document}', AudioTranscription::class)->name('transcription-view');
 
     /* Social media posts routes */
     Route::get('/social-media-post/create', TempNew::class)->name('create-social-media-post');

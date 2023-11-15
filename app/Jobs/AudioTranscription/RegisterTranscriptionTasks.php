@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\TextTranscription;
+namespace App\Jobs\AudioTranscription;
 
 use App\Enums\DocumentTaskEnum;
 use App\Models\Document;

@@ -83,11 +83,13 @@ class MediaRepository
         )->getVideos();
 
         $downloadedVideo = null;
+        $videoTitle = null;
         foreach ($collection as $video) {
             if ($video->getError() !== null) {
                 throw new Exception("Error downloading video: {$video->getError()}.");
             } else {
                 $downloadedVideo = $video;
+                $videoTitle = $video->getTitle();
             }
         }
 
@@ -137,7 +139,8 @@ class MediaRepository
 
         return [
             'file_paths' => $audioFilePaths,
-            'total_duration' => $duration
+            'total_duration' => $duration,
+            'title' => $videoTitle
         ];
     }
 

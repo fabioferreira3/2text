@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\TextTranscription;
+namespace App\Jobs\AudioTranscription;
 
 use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
@@ -28,8 +28,8 @@ class CreateTranscription
     public function handle()
     {
         $processId = Str::uuid();
-        $this->repo->setDocument($this->document);
-        $this->repo->createTask(
+        DocumentRepository::createTask(
+            $this->document->id,
             DocumentTaskEnum::DOWNLOAD_AUDIO,
             [
                 'process_id' => $processId,
@@ -39,24 +39,40 @@ class CreateTranscription
                 'order' => 1
             ]
         );
-        $this->repo->createTask(DocumentTaskEnum::PROCESS_AUDIO, [
-            'order' => 2,
-            'process_id' => $processId,
-        ]);
-        if ($this->params['target_language'] !== 'same') {
-            $this->repo->createTask(DocumentTaskEnum::PREPARE_TEXT_TRANSLATION, [
-                'order' => 3,
+
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::PROCESS_AUDIO,
+            [
+                'order' => 2,
                 'process_id' => $processId,
-                'meta' => [
+            ]
+        );
+
+        if ($this->params['target_language'] !== 'same') {
+            DocumentRepository::createTask(
+                $this->document->id,
+                DocumentTaskEnum::PREPARE_TEXT_TRANSLATION,
+                [
+                    'order' => 3,
                     'process_id' => $processId,
-                    'target_language' => $this->params['target_language'],
+                    'meta' => [
+                        'process_id' => $processId,
+                        'target_language' => $this->params['target_language'],
+                    ]
                 ]
-            ]);
+            );
         }
-        $this->repo->createTask(DocumentTaskEnum::PUBLISH_TRANSCRIPTION, [
-            'order' => 1000,
-            'process_id' => $processId
-        ]);
+
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::PUBLISH_TRANSCRIPTION,
+            [
+                'order' => 1000,
+                'process_id' => $processId
+            ]
+        );
+
         DispatchDocumentTasks::dispatch($this->document);
     }
 }
