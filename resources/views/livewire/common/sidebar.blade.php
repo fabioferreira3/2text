@@ -36,9 +36,9 @@
             'icon' => 'newspaper',
             ])
             @include('livewire.common.navlink', [
-            'route' => 'new-text-transcription',
+            'route' => 'new-audio-transcription',
             'submenu' => true,
-            'name' => __('menus.text_transcription'),
+            'name' => __('menus.audio_transcription'),
             'icon' => 'chat-alt',
             ])
             @include('livewire.common.navlink', [

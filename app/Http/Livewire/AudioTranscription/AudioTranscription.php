@@ -21,6 +21,6 @@ class AudioTranscription extends Component
 
     public function render()
     {
-        return view('livewire.text-transcription.transcription');
+        return view('livewire.audio-transcription.transcription');
     }
 }

@@ -33,7 +33,7 @@ class NewTranscription extends Component
 
     public function render()
     {
-        return view('livewire.text-transcription.new')->layout('layouts.app', ['title' => $this->title]);
+        return view('livewire.audio-transcription.new')->layout('layouts.app', ['title' => $this->title]);
     }
 
     public function rules()

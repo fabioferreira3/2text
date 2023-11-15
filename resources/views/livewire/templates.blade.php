@@ -9,7 +9,7 @@
     <div class="grid md:grid-cols-3 xl:grid-cols-4 gap-6 mt-12">
         @livewire('social-media-post.template')
         @livewire('blog.template')
-        @livewire('text-transcription.template')
+        @livewire('audio-transcription.template')
         @livewire('paraphraser.template')
         @livewire('text-to-speech.template')
     </div>

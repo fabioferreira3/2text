@@ -20,7 +20,7 @@ return [
     'social_media_post' => 'Social media',
     'shorten' => 'Shorten',
     'tools' => 'Tools',
-    'text_transcription' => 'Transcription',
+    'audio_transcription' => 'Transcription',
     'text_to_audio' => 'Text to Audio',
     'word_count' => 'Word count'
 ];

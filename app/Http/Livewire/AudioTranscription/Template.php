@@ -13,7 +13,7 @@ class Template extends Component
     public function __construct()
     {
         $this->icon = 'chat-alt';
-        $this->title = __('templates.text_transcription');
+        $this->title = __('templates.audio_transcription');
         $this->description = __('templates.transcribe_audio');
     }
 

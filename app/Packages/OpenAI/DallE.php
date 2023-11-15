@@ -3,7 +3,6 @@
 namespace App\Packages\OpenAI;
 
 use Exception;
-use Illuminate\Support\Facades\Log;
 use OpenAI\Factory as OpenAI;
 
 class DallE

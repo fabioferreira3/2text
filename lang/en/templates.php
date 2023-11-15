@@ -8,7 +8,7 @@ return [
     'create_paraphrase' => 'Paraphrase any text using AI',
     'create_text_to_speech' => 'Convert any text to realistic audio using AI',
     'paraphraser' => 'Paraphraser',
-    'text_transcription' => 'Text Transcription',
+    'audio_transcription' => 'Audio Transcription',
     'transcribe_audio' => 'Transcribe audio into text using AI',
     'tools' => 'Tools',
     'text_to_speech' => 'Text to Audio',

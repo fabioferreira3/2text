@@ -52,8 +52,8 @@ Route::middleware([
         ->name('blog-post-processing-view');
     Route::get('/documents/blog-post/{document}', BlogPost::class)->name('blog-post-view');
 
-    /* Text Transcription routes */
-    Route::get('/transcription/new', NewTranscription::class)->name('new-text-transcription');
+    /* Audio Transcription routes */
+    Route::get('/transcription/new', NewTranscription::class)->name('new-audio-transcription');
     Route::get('/documents/transcription/{document}', AudioTranscription::class)->name('transcription-view');
 
     /* Social media posts routes */
