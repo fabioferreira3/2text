@@ -19,6 +19,7 @@ enum DocumentTaskEnum: string
     case GENERATE_IMAGE_VARIANTS = 'generate_image_variants';
     case GENERATE_AI_THOUGHTS = 'generate_ai_thoughts';
     case GENERATE_FINISHED_NOTIFICATION = 'generate_finished_notification';
+    case POST_PROCESS_AUDIO = "post_process_audio";
     case PARAPHRASE_DOCUMENT = 'paraphrase_document';
     case PARAPHRASE_TEXT = 'paraphrase_text';
     case PROCESS_AUDIO = 'process_audio';
@@ -54,6 +55,7 @@ enum DocumentTaskEnum: string
             self::GENERATE_FINISHED_NOTIFICATION => "App\Jobs\GenerateFinishedNotification",
             self::PARAPHRASE_DOCUMENT => "App\Jobs\Paraphraser\ParaphraseDocument",
             self::PARAPHRASE_TEXT => "App\Jobs\Paraphraser\ParaphraseText",
+            self::POST_PROCESS_AUDIO => "App\Jobs\AudioTranscription\PostProcessAudio",
             self::PROCESS_AUDIO => "App\Jobs\ProcessAudio",
             self::PROCESS_SOCIAL_MEDIA_POSTS_CREATION => "App\Jobs\SocialMedia\ProcessSocialMediaPostsCreation",
             self::PREPARE_TEXT_TRANSLATION => "App\Jobs\Translation\PrepareTextTranslation",

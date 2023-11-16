@@ -19,6 +19,7 @@ class NewTranscription extends Component
     public string $target_language;
     public array $languages;
     public bool $modal;
+    public bool $identify_speakers;
     public string $title;
 
     public function __construct()
@@ -28,6 +29,7 @@ class NewTranscription extends Component
         $this->source_url = '';
         $this->origin_language = 'en';
         $this->target_language = 'same';
+        $this->identify_speakers = false;
         $this->languages = Language::getLabels();
     }
 
@@ -64,7 +66,8 @@ class NewTranscription extends Component
             'source' => $this->source,
             'language' => $this->origin_language,
             'meta' => [
-                'source_url' => $this->source_url
+                'source_url' => $this->source_url,
+                'identify_speakers' => $this->identify_speakers
             ]
         ]);
 

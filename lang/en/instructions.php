@@ -71,6 +71,7 @@ return [
     'source' => 'Source',
     'subtopics_estimate' => 'As an estimate, 1 subtopic covers around 400 ~ 500 words.',
     'target_platforms' => 'Target Platforms',
+    'transcription_diarization' => 'Oraculum will try to identify different speakers in the audio and format the transcription text by separating the speakers as independent text blocks. Take into account that this slows down the transcription process.',
     'transcription_language' => 'You need to inform the language of the video since I\'m currently not able to auto-discover its main language.',
     'transcription_translation' => 'Do you want the final transcription to be translated to another language?',
     'transcription_source' => 'Define the source of the transcription. Currently, only Youtube videos are supported.',

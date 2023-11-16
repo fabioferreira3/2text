@@ -58,9 +58,8 @@
     @if(!$isOpen)
     <div class="fixed bottom-3 right-3 z-40">
         <button wire:click="$set('isOpen', true)"
-            class="flex items-center gap-2 justify-center w-full bg-secondary m-0 px-4 py-1 rounded-xl text-white flex items-center justify-center text-lg font-bold">
-            <x-icon name="speakerphone" width="20" height="20" />
-            <div>{{__('chat.ask_for_help')}}</div>
+            class="flex items-center gap-2 justify-center w-full bg-secondary m-0 p-3 rounded-full text-white flex items-center justify-center text-lg font-bold">
+            <x-icon name="chat" width="40" height="40" />
         </button>
     </div>
     @endif

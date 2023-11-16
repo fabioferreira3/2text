@@ -79,6 +79,11 @@ class InstructionsHelper
         return "<p>" . __('instructions.transcription_translation') . "</p>";
     }
 
+    public static function transcriptionDiarization()
+    {
+        return "<p>" . __('instructions.transcription_diarization') . "</p>";
+    }
+
     public static function socialMediaPlatforms()
     {
         return "<p>" . __('instructions.choose_platforms') . "</p>";

@@ -120,6 +120,12 @@ class DocumentRepository
         return $this->document->update(['meta' => $meta]);
     }
 
+    public static function updateTask(string $taskId, $status)
+    {
+        $documentTask = DocumentTask::findOrFail($taskId);
+        return $documentTask->update(['status' => $status]);
+    }
+
     public function delete($documentId)
     {
         $document = Document::findOrFail($documentId);

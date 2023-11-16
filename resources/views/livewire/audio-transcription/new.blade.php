@@ -61,6 +61,18 @@
                         <span class="text-red-500 text-sm">{{ $errors->first('target_language') }}</span>
                         @endif
                     </div>
+                    <div class="flex flex-col gap-3">
+                        <div class="flex gap-2 items-center">
+                            <label
+                                class="text-xl font-bold text-gray-700">{{__('transcription.identify_speakers')}}?</label>
+                            @include('livewire.common.help-item', ['header' => __('transcription.identify_speakers'),
+                            'content' => App\Helpers\InstructionsHelper::transcriptionDiarization()])
+                        </div>
+                        <div class="md:col-span-1">
+                            <x-checkbox md id="identify_speakers" name="identify_speakers" label="{{__('common.yes')}}"
+                                wire:model="identify_speakers" />
+                        </div>
+                    </div>
                 </div>
                 <div class="flex justify-center mt-4">
                     <button wire:click="process" wire:loading.remove

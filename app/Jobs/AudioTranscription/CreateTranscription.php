@@ -34,7 +34,7 @@ class CreateTranscription
             [
                 'process_id' => $processId,
                 'meta' => [
-                    'source_url' => $this->document->meta['source_url']
+                    'source_url' => $this->document->getMeta('source_url')
                 ],
                 'order' => 1
             ]
@@ -46,10 +46,13 @@ class CreateTranscription
             [
                 'order' => 2,
                 'process_id' => $processId,
+                'meta' => [
+                    'identify_speakers' => $this->document->getMeta('identify_speakers')
+                ]
             ]
         );
 
-        if ($this->params['target_language'] !== 'same') {
+        if ($this->params['target_language'] !== 'same' && !$this->document->getMeta('identify_speakers')) {
             DocumentRepository::createTask(
                 $this->document->id,
                 DocumentTaskEnum::PREPARE_TEXT_TRANSLATION,
@@ -64,14 +67,14 @@ class CreateTranscription
             );
         }
 
-        DocumentRepository::createTask(
-            $this->document->id,
-            DocumentTaskEnum::PUBLISH_TRANSCRIPTION,
-            [
-                'order' => 1000,
-                'process_id' => $processId
-            ]
-        );
+        // DocumentRepository::createTask(
+        //     $this->document->id,
+        //     DocumentTaskEnum::PUBLISH_TRANSCRIPTION,
+        //     [
+        //         'order' => 1000,
+        //         'process_id' => $processId
+        //     ]
+        // );
 
         DispatchDocumentTasks::dispatch($this->document);
     }

@@ -1,4 +1,7 @@
 <div class="relative bg-white" :wire:key="$document->id">
+    @if($contentBlock->prefix)
+    <div class="font-bold">{{$contentBlock->prefix}}</div>
+    @endif
     <div class="relative">
         @if (in_array($type, ['h2', 'h3', 'h4', 'h5', 'h6']))
         <div class="relative group/block">
@@ -17,7 +20,7 @@
         <div class="relative group/block">
             <textarea
                 class="focus:bg-blue-100 focus:cursor-text cursor-pointer p-0 text-zinc-700 autoExpandTextarea w-full border-0 text-base group-hover/block:bg-red-100 rounded"
-                name="text" rows="3" wire:model.debounce.500ms="content" wire:ignore></textarea>
+                name="text" rows="1" wire:model.debounce.500ms="content" wire:ignore></textarea>
             <div class="border border-b border-gray-50"></div>
             @include('livewire.common.blocks.text-block-actions')
         </div>

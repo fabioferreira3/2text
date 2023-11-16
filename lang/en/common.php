@@ -34,6 +34,7 @@ return [
     'undo' => 'Undo',
     'unselect' => 'Unselect',
     'view_history' => 'View History',
+    'yes' => 'Yes',
     'youtube' => 'Youtube',
     'website_url' => 'Website pages'
 ];

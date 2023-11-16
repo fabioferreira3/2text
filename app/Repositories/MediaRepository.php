@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Enums\MediaType;
 use App\Models\Account;
 use App\Models\MediaFile;
+use App\Packages\AssemblyAI\AssemblyAI;
 use App\Packages\Whisper\Whisper;
 use Exception;
 use Illuminate\Support\Facades\Storage;
@@ -144,7 +145,7 @@ class MediaRepository
         ];
     }
 
-    public static function transcribeAudio(array $audioFilePaths): string
+    public static function transcribeAudio(array $audioFilePaths)
     {
         $transcription = collect([]);
         if (count($audioFilePaths)) {
@@ -173,6 +174,34 @@ class MediaRepository
         }
 
         return json_decode('"' . $transcription->implode(' ') . '"');
+    }
+
+    public static function transcribeAudioWithDiarization(array $audioFilePaths, array $meta = [])
+    {
+        $assembly = new AssemblyAI();
+        $tempUrl = Storage::temporaryUrl($audioFilePaths[0], now()->addMinutes(15));
+        $assembly->transcribe($tempUrl, $meta);
+    }
+
+    public static function getTranscriptionSubtitles(string $transcriptionId)
+    {
+        $assembly = new AssemblyAI();
+        $subtitles = $assembly->getTranscriptionSubtitles($transcriptionId);
+        $vttPath = 'subtitles/' . Str::uuid() . '.vtt';
+        $srtPath = 'subtitles/' . Str::uuid() . '.srt';
+        Storage::disk('s3')->put($vttPath, $subtitles['vtt']);
+        Storage::disk('s3')->put($srtPath, $subtitles['srt']);
+
+        return [
+            'srt_file_path' => $srtPath,
+            'vtt_file_path' => $vttPath
+        ];
+    }
+
+    public static function getTranscription(string $transcriptionId)
+    {
+        $assembly = new AssemblyAI();
+        return $assembly->getTranscription($transcriptionId);
     }
 
     protected static function compressAndStoreMp3($localFile, $fileName)

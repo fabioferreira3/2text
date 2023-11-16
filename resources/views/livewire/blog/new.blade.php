@@ -133,7 +133,8 @@
                         <label class="text-xl font-bold text-gray-700">{{__('blog.generate_hero_image')}}:</label>
                     </div>
                     <div class="md:col-span-1">
-                        <x-checkbox md id="generate_img" name="generate_img" label="Yes" wire:model="generateImage" />
+                        <x-checkbox md id="generate_img" name="generate_img" label="{{__('common.yes')}}"
+                            wire:model="generateImage" />
                     </div>
                 </div>
                 @if($generateImage)

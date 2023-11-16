@@ -8,7 +8,7 @@ use Livewire\Component;
 class AudioTranscription extends Component
 {
     public Document $document;
-    public mixed $contentBlock;
+    public $contentBlocks;
     public bool $isProcessing = false;
 
     protected $listeners = ['refreshContent' => 'updateContent', 'editorUpdated', 'closeHistoryModal', 'refresh'];
@@ -16,7 +16,7 @@ class AudioTranscription extends Component
     public function mount(Document $document)
     {
         $this->document = $document;
-        $this->contentBlock = $document->contentBlocks()->where('type', 'text')->first();
+        $this->contentBlocks = $document->contentBlocks()->ofTextType()->get();
     }
 
     public function render()

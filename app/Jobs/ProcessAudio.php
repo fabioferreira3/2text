@@ -43,22 +43,36 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $transcribedText = MediaRepository::transcribeAudio($this->document->meta['audio_file_path']);
+            if ($this->meta['identify_speakers'] ?? false) {
+                MediaRepository::transcribeAudioWithDiarization(
+                    $this->document->getMeta('audio_file_path'),
+                    [
+                        'document_id' => $this->document->id,
+                        'task_id' => $this->meta['task_id']
+                    ]
+                );
+                $this->jobPending();
+                return;
+            } else {
+                $transcribedText = MediaRepository::transcribeAudio(
+                    $this->document->getMeta('audio_file_path')
+                );
 
-            if ($this->meta['embed_source'] ?? false) {
-                EmbedSource::dispatchSync($this->document, [
-                    'data_type' => DataType::TEXT->value,
-                    'source' => $transcribedText
+                if ($this->meta['embed_source'] ?? false) {
+                    EmbedSource::dispatchSync($this->document, [
+                        'data_type' => DataType::TEXT->value,
+                        'source' => $transcribedText
+                    ]);
+                }
+
+                $this->document->update([
+                    'meta' => [
+                        ...$this->document->meta,
+                        'context' => $transcribedText,
+                        'original_text' => $transcribedText
+                    ]
                 ]);
             }
-
-            $this->document->update([
-                'meta' => [
-                    ...$this->document->meta,
-                    'context' => $transcribedText,
-                    'original_text' => $transcribedText
-                ]
-            ]);
 
             $this->jobSucceded();
         } catch (Exception $e) {

@@ -228,41 +228,6 @@
                                             __('social_media.yes') }}" wire:model="generateImage" />
                                     </div>
                                 </div>
-                                <!-- <div class='flex flex-col gap-4 md:gap-0'>
-                                    @if ($generateImage)
-                                    <div class="w-full">
-                                        <div class="font-bold text-lg text-zinc-700">{{ __('social_media.select_style')
-                                            }}:
-                                        </div>
-                                        <x-custom.dropdown class="w-full" direction="down">
-                                            <x-slot name="trigger">
-                                                <button class="bg-gray-100 w-full p-4 text-gray-700 rounded-lg">
-                                                    <div class="flex items-center gap-4">
-                                                        <div>{{ $imgStyle ??
-                                                            'Select' }}</div>
-                                                    </div>
-                                                </button>
-                                            </x-slot>
-                                            {{-- @foreach ($this->stylePresets as $key => $stylePreset)
-                                            <x-dropdown.item class="hover:bg-gray-100"
-                                                wire:click="$set('imgStyle', '{{ $stylePreset['value'] }}')"
-                                                :separator="$key > 0">
-                                                <div class="flex items-center gap-4 w-full">
-                                                    <img class="w-20 h-20 rounded-lg" src={{ $stylePreset['image_path']
-                                                        }} />
-                                                    <div class="text-lg">{{ $stylePreset['label'] }}</div>
-                                                </div>
-                                            </x-dropdown.item>
-                                            @endforeach --}}
-                                        </x-custom.dropdown>
-                                        <div class="mt-2">
-                                            @if ($errors->has('imgStyle'))
-                                            <span class="text-red-500 text-sm">{{ $errors->first('imgStyle') }}</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    @endif
-                                </div> -->
                             </div>
 
                             @if ($generateImage)

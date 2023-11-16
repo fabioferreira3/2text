@@ -22,6 +22,14 @@ trait JobEndings
         }
     }
 
+    protected function jobPending()
+    {
+        if (isset($this->meta['task_id'])) {
+            $task = DocumentTask::findOrFail($this->meta['task_id']);
+            $task->update(['status' => 'pending']);
+        }
+    }
+
     protected function jobSkipped()
     {
         if (isset($this->meta['task_id'])) {

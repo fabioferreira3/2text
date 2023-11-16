@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Enums\DocumentTaskEnum;
+use App\Jobs\DispatchDocumentTasks;
+use App\Models\Document;
+use App\Repositories\DocumentRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class WebhooksController extends Controller
 {
@@ -20,6 +24,23 @@ class WebhooksController extends Controller
             abort(403);
         }
 
-        Log::debug($request->all());
+        $params = $request->all();
+        if ($params['status'] === 'completed') {
+            $document = Document::findOrFail($params['document_id']);
+            DocumentRepository::createTask(
+                $document->id,
+                DocumentTaskEnum::POST_PROCESS_AUDIO,
+                [
+                    'order' => 1,
+                    'process_id' => Str::uuid(),
+                    'meta' => [
+                        'pending_task_id' => $params['task_id'],
+                        'transcript_id' => $params['transcript_id']
+                    ]
+                ]
+            );
+
+            DispatchDocumentTasks::dispatch($document);
+        }
     }
 }
