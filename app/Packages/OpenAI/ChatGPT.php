@@ -2,6 +2,7 @@
 
 namespace App\Packages\OpenAI;
 
+use App\Enums\AIModel;
 use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
@@ -13,9 +14,9 @@ class ChatGPT
     protected array $defaultMessages;
     protected bool $shouldStream;
 
-    public function __construct($model = 'gpt-4', $shouldStream = false)
+    public function __construct($model = null, $shouldStream = false)
     {
-        $this->model = $model;
+        $this->model = $model ?? AIModel::GPT_4_TURBO->value;
         $this->shouldStream = $shouldStream;
         $this->defaultMessages = [
             [

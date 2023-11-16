@@ -226,6 +226,21 @@ class GenRepository
         ]);
     }
 
+    public static function translateText($text, $targetLanguage)
+    {
+        $chatGpt = new ChatGPT();
+        $promptHelper = PromptHelperFactory::create('en');
+        return $chatGpt->request([
+            [
+                'role' => 'user',
+                'content' => $promptHelper->translate(
+                    $text,
+                    $targetLanguage
+                )
+            ]
+        ]);
+    }
+
     public static function paraphraseDocument(Document $document)
     {
         $document->refresh();

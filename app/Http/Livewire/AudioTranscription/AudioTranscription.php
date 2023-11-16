@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\AudioTranscription;
 
 use App\Models\Document;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 
 class AudioTranscription extends Component
@@ -17,6 +18,11 @@ class AudioTranscription extends Component
     {
         $this->document = $document;
         $this->contentBlocks = $document->contentBlocks()->ofTextType()->get();
+    }
+
+    public function downloadSubtitle($format)
+    {
+        return Storage::download($this->document->getMeta($format . '_file_path'));
     }
 
     public function render()

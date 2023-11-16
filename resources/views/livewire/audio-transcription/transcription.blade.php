@@ -2,7 +2,7 @@
     @include('livewire.common.header', ['icon' => 'video-camera', 'label' => $document->title])
 
     <div class="flex flex-col md:flex-row gap-6 p-6 rounded-lg border border-gray-300">
-        <div class="flex flex-col order-2 md:order-none gap-4 w-full md:w-3/5">
+        <div class="flex flex-col order-2 md:order-none gap-4 w-full md:w-1/2">
             <div>
                 <label for="content" class="font-bold text-xl">{{__('transcription.transcription')}}</label>
             </div>
@@ -12,15 +12,27 @@
                 @endforeach
             </div>
         </div>
-        <div class="w-full order-1 md:order-none md:w-2/5">
-            <div>download</div>
+        <div class="flex flex-col w-full order-1 md:order-none md:w-1/2">
+            @if($document->getMeta('vtt_file_path') || $document->getMeta('srt_file_path'))
+            <div class="group place-self-end flex flex-col">
+                <div class="cursor-pointer bg-gray-300 font-bold text-gray-700 px-3 py-2 group-hover:rounded-b-none rounded-lg">
+                    Download subtitles
+                </div>
+
+                <div class="hidden group-hover:flex flex-col bg-gray-100 rounded-b-lg">
+                    @if($document->getMeta('vtt_file_path') ?? false)
+                    <button type="button" wire:click="downloadSubtitle('vtt')" class="text-gray-700 hover:bg-gray-200 px-3 py-2 text-end font-bold">.VVT file</button>
+                    @endif
+                    @if($document->getMeta('srt_file_path') ?? false)
+                    <button type="button" wire:click="downloadSubtitle('srt')" class="text-gray-700 hover:bg-gray-200 px-3 py-2 text-end font-bold rounded-b-lg">.SRT file</button>
+                    @endif
+                </div>
+            </div>
+            @endif
+
             <div class="sticky top-0 z-10">
                 <div class="relative md:mt-10" style="padding-top: 100%;">
-                    <iframe class="absolute top-0 left-0 h-full w-full rounded-lg"
-                        src="https://www.youtube.com/embed/{{$document->getYoutubeVideoId()}}"
-                        title="YouTube video player"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen></iframe>
+                    <iframe class="absolute top-0 left-0 h-full w-full rounded-lg" src="https://www.youtube.com/embed/{{$document->getYoutubeVideoId()}}" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
         </div>

@@ -2,10 +2,11 @@
 
 namespace App\Jobs\AudioTranscription;
 
+use App\Enums\DocumentTaskEnum;
+use App\Jobs\DispatchDocumentTasks;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
-use App\Packages\AssemblyAI\AssemblyAI;
 use App\Repositories\DocumentRepository;
 use App\Repositories\MediaRepository;
 use Exception;
@@ -15,7 +16,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class PostProcessAudio implements ShouldQueue, ShouldBeUnique
 {
@@ -46,7 +47,6 @@ class PostProcessAudio implements ShouldQueue, ShouldBeUnique
             DocumentRepository::updateTask($this->meta['pending_task_id'], 'finished');
             $transcription = MediaRepository::getTranscription($this->meta['transcript_id']);
             $subtitles = MediaRepository::getTranscriptionSubtitles($this->meta['transcript_id']);
-            Log::debug($subtitles);
             $this->document->update([
                 'meta' => [
                     ...$this->document->meta,
@@ -59,13 +59,28 @@ class PostProcessAudio implements ShouldQueue, ShouldBeUnique
             ]);
             $order = 1;
             foreach ($transcription['utterances'] as $utterance) {
-                $this->document->contentBlocks()->save(new DocumentContentBlock([
+                $contentBlock = $this->document->contentBlocks()->save(new DocumentContentBlock([
                     'type' => 'text',
                     'content' => $utterance['text'],
                     'prefix' => 'Speaker ' . $utterance['speaker'],
                     'prompt' => null,
                     'order' => $order
                 ]));
+                if ($this->document->getMeta('target_language')) {
+                    DocumentRepository::createTask(
+                        $this->document->id,
+                        DocumentTaskEnum::TRANSLATE_TEXT_BLOCK,
+                        [
+                            'order' => 1,
+                            'process_id' => Str::uuid(),
+                            'meta' => [
+                                'content_block_id' => $contentBlock->id,
+                                'target_language' => $this->document->getMeta('target_language')
+                            ]
+                        ]
+                    );
+                    DispatchDocumentTasks::dispatch($this->document);
+                }
                 $order++;
             }
             $this->jobSucceded();

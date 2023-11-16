@@ -20,6 +20,7 @@ class NewTranscription extends Component
     public array $languages;
     public bool $modal;
     public bool $identify_speakers;
+    public $speakers_expected;
     public string $title;
 
     public function __construct()
@@ -30,6 +31,7 @@ class NewTranscription extends Component
         $this->origin_language = 'en';
         $this->target_language = 'same';
         $this->identify_speakers = false;
+        $this->speakers_expected = null;
         $this->languages = Language::getLabels();
     }
 
@@ -61,19 +63,23 @@ class NewTranscription extends Component
     public function process()
     {
         $this->validate($this->rules());
+        $targetLanguage = null;
+        if ($this->target_language !== 'same') {
+            $targetLanguage = Language::tryFrom($this->target_language)->label();
+        }
         $document = DocumentRepository::createGeneric([
             'type' => DocumentType::AUDIO_TRANSCRIPTION->value,
             'source' => $this->source,
             'language' => $this->origin_language,
             'meta' => [
                 'source_url' => $this->source_url,
-                'identify_speakers' => $this->identify_speakers
+                'identify_speakers' => $this->identify_speakers,
+                'speakers_expected' => $this->speakers_expected,
+                'target_language' => $targetLanguage
             ]
         ]);
 
-        CreateTranscription::dispatch($document, [
-            'target_language' => $this->target_language
-        ]);
+        CreateTranscription::dispatch($document, []);
 
         return redirect()->to('/dashboard');
     }

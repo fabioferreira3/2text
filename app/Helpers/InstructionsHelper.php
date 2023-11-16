@@ -4,6 +4,11 @@ namespace App\Helpers;
 
 class InstructionsHelper
 {
+    public static function expectedSpeakers()
+    {
+        return "<p>" . __('instructions.expected_speakers') . "</p>";
+    }
+
     public static function heroImages()
     {
         return "<div class='flex flex-col gap-4'>

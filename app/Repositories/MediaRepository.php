@@ -176,11 +176,11 @@ class MediaRepository
         return json_decode('"' . $transcription->implode(' ') . '"');
     }
 
-    public static function transcribeAudioWithDiarization(array $audioFilePaths, array $meta = [])
+    public static function transcribeAudioWithDiarization(array $audioFilePaths, array $params = [])
     {
         $assembly = new AssemblyAI();
         $tempUrl = Storage::temporaryUrl($audioFilePaths[0], now()->addMinutes(15));
-        $assembly->transcribe($tempUrl, $meta);
+        $assembly->transcribe($tempUrl, $params);
     }
 
     public static function getTranscriptionSubtitles(string $transcriptionId)

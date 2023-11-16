@@ -3,8 +3,11 @@
 namespace App\Jobs;
 
 use App\Enums\DataType;
+use App\Enums\DocumentTaskEnum;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
+use App\Models\DocumentContentBlock;
+use App\Repositories\DocumentRepository;
 use App\Repositories\MediaRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -14,6 +17,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -44,12 +48,16 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
     {
         try {
             if ($this->meta['identify_speakers'] ?? false) {
+                $params = [
+                    'document_id' => $this->document->id,
+                    'task_id' => $this->meta['task_id']
+                ];
+                if ($this->document->getMeta('speakers_expected')) {
+                    $params['speakers_expected'] = (int) $this->document->getMeta('speakers_expected');
+                }
                 MediaRepository::transcribeAudioWithDiarization(
                     $this->document->getMeta('audio_file_path'),
-                    [
-                        'document_id' => $this->document->id,
-                        'task_id' => $this->meta['task_id']
-                    ]
+                    $params
                 );
                 $this->jobPending();
                 return;
@@ -72,6 +80,29 @@ class ProcessAudio implements ShouldQueue, ShouldBeUnique
                         'original_text' => $transcribedText
                     ]
                 ]);
+
+                $contentBlock = $this->document->contentBlocks()->save(new DocumentContentBlock([
+                    'type' => 'text',
+                    'content' => $transcribedText,
+                    'prompt' => null,
+                    'order' => 1
+                ]));
+
+                if ($this->meta['target_language']) {
+                    DocumentRepository::createTask(
+                        $this->document->id,
+                        DocumentTaskEnum::TRANSLATE_TEXT_BLOCK,
+                        [
+                            'order' => 1,
+                            'process_id' => Str::uuid(),
+                            'meta' => [
+                                'content_block_id' => $contentBlock->id,
+                                'target_language' => $this->meta['target_language']
+                            ]
+                        ]
+                    );
+                    DispatchDocumentTasks::dispatch($this->document);
+                }
             }
 
             $this->jobSucceded();

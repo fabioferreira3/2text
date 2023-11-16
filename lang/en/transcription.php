@@ -7,6 +7,7 @@ return [
     'origin_language' => 'Source language',
     'target_language' => 'Translate?',
     'transcript' => 'Transcript',
+    'speakers_expected' => 'Expected speakers',
     'source' => 'Source',
     'transcription' => 'Transcription'
 ];

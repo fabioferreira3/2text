@@ -27,17 +27,23 @@ class AssemblyAI
     public function transcribe($fileUrl, $meta = [])
     {
         $urlParams = count($meta) > 0 ? '?' . http_build_query($meta) : '';
+        $params = [
+            'audio_url' => $fileUrl,
+            'webhook_url' => config('assemblyai.webhook_url') . $urlParams,
+            'webhook_auth_header_name' => 'Authorization',
+            'webhook_auth_header_value' => 'Bearer ' . config('assemblyai.token'),
+            'speaker_labels' => true,
+            'filter_profanity' => false,
+            'content_safety' => false
+        ];
+
+        if ($meta['speakers_expected'] ?? false) {
+            $params['speakers_expected'] = $meta['speakers_expected'];
+        }
+
         try {
             $response = $this->client
-                ->post('/transcript' . $urlParams, [
-                    'audio_url' => $fileUrl,
-                    'webhook_url' => config('assemblyai.webhook_url') . $urlParams,
-                    'webhook_auth_header_name' => 'Authorization',
-                    'webhook_auth_header_value' => 'Bearer ' . config('assemblyai.token'),
-                    'speaker_labels' => true,
-                    'filter_profanity' => false,
-                    'content_safety' => false
-                ]);
+                ->post('/transcript' . $urlParams, $params);
 
             if ($response->failed()) {
                 return $response->throw();

@@ -50,6 +50,7 @@ return [
     'new_paraphraser_enter_youtube_link' => 'Enter a youtube link and Oraculum will transcript the entire video in plain text.',
     'expected_reaction' => 'What is the reaction you expect from your readers?',
     'explain_concept' => 'Used to explain a concept and share information to a broader audience.',
+    'expected_speakers' => 'If you know in advance how many speakers are in the audio, please inform here. It will help Oraculum to identify the different speakers better.',
     'express_opinions' => 'This type is not meant to express opinions.',
     'indicate_topics_number' => 'Indicate the number of topics you would like Oraculum to cover in your blog post. You may define a minimum of one and a maximum of fifteen topics.',
     'fill_information' => 'Please fill out the following information so I can understand your requirements and write you an unique and high-quality post.',

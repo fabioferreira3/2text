@@ -16,13 +16,13 @@ class CreateTranscription
 
     protected Document $document;
     protected $repo;
-    protected array $params;
+    protected array $meta;
 
-    public function __construct(Document $document, array $params)
+    public function __construct(Document $document, array $meta)
     {
         $this->repo = new DocumentRepository();
         $this->document = $document;
-        $this->params = $params;
+        $this->meta = $meta;
     }
 
     public function handle()
@@ -47,34 +47,12 @@ class CreateTranscription
                 'order' => 2,
                 'process_id' => $processId,
                 'meta' => [
-                    'identify_speakers' => $this->document->getMeta('identify_speakers')
+                    'identify_speakers' => $this->document->getMeta('identify_speakers'),
+                    'speakers_expected' => $this->document->getMeta('speakers_expected'),
+                    'target_language' => $this->document->getMeta('target_language')
                 ]
             ]
         );
-
-        if ($this->params['target_language'] !== 'same' && !$this->document->getMeta('identify_speakers')) {
-            DocumentRepository::createTask(
-                $this->document->id,
-                DocumentTaskEnum::PREPARE_TEXT_TRANSLATION,
-                [
-                    'order' => 3,
-                    'process_id' => $processId,
-                    'meta' => [
-                        'process_id' => $processId,
-                        'target_language' => $this->params['target_language'],
-                    ]
-                ]
-            );
-        }
-
-        // DocumentRepository::createTask(
-        //     $this->document->id,
-        //     DocumentTaskEnum::PUBLISH_TRANSCRIPTION,
-        //     [
-        //         'order' => 1000,
-        //         'process_id' => $processId
-        //     ]
-        // );
 
         DispatchDocumentTasks::dispatch($this->document);
     }

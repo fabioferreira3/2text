@@ -161,9 +161,9 @@ class Document extends Model
             return DocumentStatus::FAILED;
         }
 
-        $mainTasksinProgressCount = $this->tasks->whereIn('status', ['in_progress', 'on_hold'])->count();
+        $mainTasksinProgressCount = $this->tasks->whereIn('status', ['in_progress', 'pending', 'on_hold'])->count();
         $childTasksInProgressCount = $this->children->reduce(function ($carry, $child) {
-            return $carry + $child->tasks->whereIn('status', ['in_progress', 'on_hold'])->count();
+            return $carry + $child->tasks->whereIn('status', ['in_progress', 'pending', 'on_hold'])->count();
         }, 0);
 
         if (($mainTasksinProgressCount + $childTasksInProgressCount) > 0) {
