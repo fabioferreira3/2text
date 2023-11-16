@@ -1,6 +1,6 @@
 <div class="relative bg-white" :wire:key="$document->id">
-    @if($contentBlock->prefix)
-    <div class="font-bold">{{$contentBlock->prefix}}</div>
+    @if($prefix)
+    <input class="font-bold border-0 p-0" wire:model.lazy="prefix" />
     @endif
     <div class="relative">
         @if (in_array($type, ['h2', 'h3', 'h4', 'h5', 'h6']))

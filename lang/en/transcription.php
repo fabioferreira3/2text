@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'download_subtitles' => 'Download Subtitles',
     'identify_speakers' => 'Identify Speakers',
     'new_transcription' => 'New audio transcription',
     'no' => 'No',
@@ -9,5 +10,7 @@ return [
     'transcript' => 'Transcript',
     'speakers_expected' => 'Expected speakers',
     'source' => 'Source',
-    'transcription' => 'Transcription'
+    'srt_file' => '.SRT file',
+    'transcription' => 'Transcription',
+    'vtt_file' => '.VTT file',
 ];

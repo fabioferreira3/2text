@@ -90,4 +90,11 @@ class NewTranscription extends Component
             $this->target_language = 'same';
         }
     }
+
+    public function updatedIdentifySpeakers($value)
+    {
+        if (!$value) {
+            $this->speakers_expected = null;
+        }
+    }
 }

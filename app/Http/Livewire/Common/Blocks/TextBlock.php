@@ -19,6 +19,7 @@ class TextBlock extends Component
     public string $type;
     public string $customPrompt;
     public string $tone = 'default';
+    public mixed $prefix = null;
     public bool $faster = true;
     public array $hide = [];
     public bool $showCustomPrompt = false;
@@ -50,6 +51,7 @@ class TextBlock extends Component
     public function mount(DocumentContentBlock $contentBlock)
     {
         $this->contentBlock = $contentBlock;
+        $this->prefix = $contentBlock->prefix ?? null;
         $this->setup();
     }
 
@@ -173,6 +175,11 @@ class TextBlock extends Component
     public function updatedContent()
     {
         $this->contentBlock->update(['content' => $this->content]);
+    }
+
+    public function updatedPrefix()
+    {
+        $this->contentBlock->update(['prefix' => $this->prefix]);
     }
 
     public function setTone($newTone)

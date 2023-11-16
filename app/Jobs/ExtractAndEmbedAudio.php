@@ -44,9 +44,11 @@ class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
         try {
             $audioParams = MediaRepository::downloadYoutubeAudio($this->meta['source_url']);
             $transcribedText = MediaRepository::transcribeAudio($audioParams['file_paths']);
+            $finalTranscription = "Title: " . $audioParams['title'] . "\n\n" . "Content:" . "\n" . $transcribedText;
+            Log::debug($finalTranscription);
             EmbedSource::dispatchSync($this->document, [
                 'data_type' => DataType::TEXT->value,
-                'source' => $transcribedText,
+                'source' => $finalTranscription,
                 'collection_name' => $this->meta['collection_name']
             ]);
             $this->jobSucceded();
