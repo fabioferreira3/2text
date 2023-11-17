@@ -17,6 +17,8 @@ use App\Http\Livewire\TextToSpeech\AudioHistory;
 use App\Http\Livewire\TextToSpeech\TextToAudio;
 use App\Http\Livewire\AudioTranscription\NewTranscription;
 use App\Http\Livewire\AudioTranscription\AudioTranscription;
+use App\Http\Livewire\InquiryHub\NewInquiry;
+use App\Http\Livewire\Summarizer\NewSummarizer;
 use App\Http\Livewire\Trash;
 use App\Models\ShortLink;
 use Illuminate\Support\Facades\Route;
@@ -72,11 +74,11 @@ Route::middleware([
     Route::get('/documents/text-to-speech/{document}', TextToAudio::class)->name('text-to-speech-view');
 
     /* Inquiry Hub */
-    Route::get('/inquiry-hub/new', TextToAudio::class)->name('new-inquiry');
+    Route::get('/inquiry-hub/new', NewInquiry::class)->name('new-inquiry');
     Route::get('/documents/inquiry-hub/{document}', SocialMediaPostsManager::class)->name('inquiry-view');
 
     /* Summarizer */
-    Route::get('/summarizer/new', TextToAudio::class)->name('new-summarizer');
+    Route::get('/summarizer/new', NewSummarizer::class)->name('new-summarizer');
     Route::get('/documents/summarizer/{document}', SocialMediaPostsManager::class)->name('summarizer-view');
 
     /* Short links */
