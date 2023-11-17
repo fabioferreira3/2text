@@ -53,6 +53,18 @@
             'name' => __('menus.text_to_audio'),
             'icon' => 'volume-up',
             ])
+            @include('livewire.common.navlink', [
+            'route' => 'new-summarizer',
+            'submenu' => true,
+            'name' => __('menus.summarizer'),
+            'icon' => 'sort-ascending',
+            ])
+            @include('livewire.common.navlink', [
+            'route' => 'new-inquiry',
+            'submenu' => true,
+            'name' => __('menus.inquiry_hub'),
+            'icon' => 'search-circle',
+            ])
         </div>
     </div>
 </nav>

@@ -18,7 +18,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class CreateOutline implements ShouldQueue, ShouldBeUnique
 {
@@ -83,7 +82,8 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
                 'tone' => $this->document->getMeta('tone'),
                 'keyword' => $this->document->getMeta('keyword'),
                 'style' => $this->document->getMeta('style') ?? null,
-                'maxsubtopics' => $this->document->getMeta('target_headers_count') ?? 2
+                'maxsubtopics' => $this->document->getMeta('target_headers_count') ?? 2,
+                'context' => $this->document->getMeta('context')
             ]
         ));
     }

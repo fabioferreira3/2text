@@ -85,7 +85,7 @@ return [
     'keyword_instructions' => "- The following keyword should have focus and be present throughout the post: \":keyword\".\n",
     'max_words' => "- The text must have a maximum of :max words\n",
     'more_instructions' => "- Follow these others instructions for the creation of the post:\n\n\n :instructions\n\n\n",
-    'meta_description_context_instructions' => "- The meta description must be based on the following outline:\n\n\n :\n\n\n",
+    'meta_description_context_instructions' => "- The meta description must be based on the following outline:\n\n :context\n\n",
     'modify_text' => "Follow instructions to modify the following text:\n\n \":text\"\n\n - These are the instructions: \n\n- :customPrompt\n",
     'mysterious_tone' => "Use a writing tone that makes the reader feel like they are reading a mystery novel or watching a mystery movie. A tone that makes the reader feel intrigued\n",
     'optimistic_tone' => "Use a writing tone that makes the reader feel like they are reading a motivational book, highlighting the positive aspects of the topic\n",
@@ -111,11 +111,14 @@ return [
     'tone_instructions' => "- Use a :tone tone.\n",
     'translate_text' => "Translate the following text to :target_language :\n\n:text\n\n",
     'write_meta_description' => "Write a meta description using a maximum of 20 words.\n Follow these instructions to guide your writing:\n\n",
-    'write_embbeded_outline' => "Based on the context provided, :outline_base\n\n",
-    'write_outline' => ":outline_base\n - The outline should be based on the following text: \n
+    'write_outline' => ":outline_base - The outline should be based on the following text:\n
         --- START OF TEXT ---
         \n\n:context\n\n
         --- END OF TEXT ---",
+    'write_embbeded_outline' => ":outline_base - Use the following context and all other embedded information to guide the creation of the outline:\n
+    --- START OF CONTEXT ---
+    \n\n:context\n\n
+    --- END OF CONTEXT ---",
     'write_title' => "Write a title, with a maximum of 7 words, for the following text: \n\n:context\n\n\nExamples of good and bad outputs:\n\nBad output:\nTitle: This is the title\n\nGood output:\nThis is the title\n\nFurther instructions:\n\n- The title must have a :tone tone.\n",
     'write_embedded_title' => "Based on the provided context, write a title, with a maximum of 7 words.\nExamples of good and bad outputs:\n\nBad output:\nTitle: This is the title\n\nGood output:\nThis is the title\n\nFurther instructions:\n\n- The title must have a :tone tone.\n"
 ];

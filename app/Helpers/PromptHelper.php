@@ -4,7 +4,6 @@ namespace App\Helpers;
 
 use App\Enums\Tone;
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\Log;
 
 class PromptHelper
 {
@@ -149,6 +148,7 @@ class PromptHelper
                 'style' => $params['style'],
                 'keyword' => $params['keyword'],
             ]),
+            'context' => $params['context'],
         ], $this->language);
     }
 

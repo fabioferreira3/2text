@@ -22,6 +22,45 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
     protected array $meta;
 
     /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public $tries = 7;
+
+    /**
+     * How many seconds Laravel should wait before retrying a job that has encountered an exception
+     *
+     * @var int
+     */
+    /**
+     * Calculate the number of seconds to wait before retrying the job.
+     *
+     * @return array<int, int>
+     */
+    public function backoff(): array
+    {
+        return [3, 7, 15];
+    }
+
+    /**
+     * The maximum number of unhandled exceptions to allow before failing.
+     *
+     * @var int
+     */
+    public $maxExceptions = 5;
+
+    /**
+     * Determine the time at which the job should timeout.
+     *
+     * @return \DateTime
+     */
+    public function retryUntil()
+    {
+        return now()->addMinutes(5);
+    }
+
+    /**
      * Create a new job instance.
      *
      * @return void

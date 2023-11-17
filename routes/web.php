@@ -71,6 +71,14 @@ Route::middleware([
     Route::get('/text-to-speech/history', AudioHistory::class)->name('text-to-speech-history');
     Route::get('/documents/text-to-speech/{document}', TextToAudio::class)->name('text-to-speech-view');
 
+    /* Inquiry Hub */
+    Route::get('/inquiry-hub/new', TextToAudio::class)->name('new-inquiry');
+    Route::get('/documents/inquiry-hub/{document}', SocialMediaPostsManager::class)->name('inquiry-view');
+
+    /* Summarizer */
+    Route::get('/summarizer/new', TextToAudio::class)->name('new-summarizer');
+    Route::get('/documents/summarizer/{document}', SocialMediaPostsManager::class)->name('summarizer-view');
+
     /* Short links */
     Route::get('/link/{shortLink}', function (string $shortLink) {
         $shortLink = ShortLink::valid()->where('link', $shortLink)->firstOrFail();

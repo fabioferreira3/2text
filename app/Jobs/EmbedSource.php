@@ -14,7 +14,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class EmbedSource implements ShouldQueue, ShouldBeUnique
@@ -88,9 +87,6 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        Log::debug($this->dataType->value);;
-        Log::debug($this->source);
-        Log::debug($this->collectionName);
         try {
             if (in_array($this->dataType, [
                 DataType::PDF,

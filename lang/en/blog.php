@@ -2,7 +2,7 @@
 
 return [
     'ai_images' => 'AI Images',
-    'briefly_describe' => 'Briefly describe the subject of the post using at least :minWords words',
+    'briefly_describe' => 'Describe the subject of the post. What is this blog post about? What are the main ideas you want to convey?',
     'context' => 'Describe the post',
     'content' => 'Content',
     'copy_all' => 'Copy all',

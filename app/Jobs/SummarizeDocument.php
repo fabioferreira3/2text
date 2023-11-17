@@ -40,15 +40,7 @@ class SummarizeDocument implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            if (isset($this->document->meta['context']) && Str::wordCount($this->document->meta['context']) < 1000) {
-                $this->jobSkipped();
-                return;
-            }
 
-            EmbedSource::dispatch($this->document, [
-                'data_type' => DataType::TEXT->value,
-                'source' => $this->document->meta['context']
-            ]);
 
             $this->jobSucceded();
         } catch (Exception $e) {
