@@ -209,6 +209,15 @@ class PromptHelper
         ]);
     }
 
+    public function writeSummary(array $params)
+    {
+        return Lang::get(
+            'prompt.write_summary',
+            ['text' => $params['content'], 'maxWords' => $params['max_words_count']],
+            $this->language
+        );
+    }
+
     public function writeMetaDescription($text, array $params)
     {
         $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);

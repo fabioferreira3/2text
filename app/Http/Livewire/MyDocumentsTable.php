@@ -55,8 +55,10 @@ class MyDocumentsTable extends DataTableComponent
         return Document::whereIn('type', [
             DocumentType::AUDIO_TRANSCRIPTION,
             DocumentType::BLOG_POST,
+            DocumentType::INQUIRY,
             DocumentType::PARAPHRASED_TEXT,
             DocumentType::SOCIAL_MEDIA_GROUP,
+            DOcumentType::SUMMARIZER,
             DocumentType::TEXT_TO_SPEECH,
         ])->latest();
     }

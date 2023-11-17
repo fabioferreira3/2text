@@ -22,7 +22,7 @@ return [
     'meta_description_generated' => 'New meta description generated!',
     'new_blog_post' => 'New Blog post',
     'no_changes' => 'No changes needed to be saved',
-    'paste_content' => 'You could also paste a larger text to be used as context. (max. :maxChars chars)',
+    'paste_content' => 'You may also copy and paste a larger text to be used as context. (max. :maxChars chars)',
     'placeholder_example' => 'Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary.',
     'preparing' => 'Preparing...',
     'selected_language_info' => 'Take into account that the selected language must be the same language of the context you\'re using.',

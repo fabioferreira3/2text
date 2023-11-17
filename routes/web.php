@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\DocumentViewController;
 use App\Http\Controllers\GoogleAuthController;
-use App\Http\Controllers\WebhooksController;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Blog\BlogPost;
 use App\Http\Livewire\Blog\NewPost;
@@ -19,6 +18,7 @@ use App\Http\Livewire\AudioTranscription\NewTranscription;
 use App\Http\Livewire\AudioTranscription\AudioTranscription;
 use App\Http\Livewire\InquiryHub\NewInquiry;
 use App\Http\Livewire\Summarizer\NewSummarizer;
+use App\Http\Livewire\Summarizer\SummaryView;
 use App\Http\Livewire\Trash;
 use App\Models\ShortLink;
 use Illuminate\Support\Facades\Route;
@@ -79,7 +79,7 @@ Route::middleware([
 
     /* Summarizer */
     Route::get('/summarizer/new', NewSummarizer::class)->name('new-summarizer');
-    Route::get('/documents/summarizer/{document}', SocialMediaPostsManager::class)->name('summarizer-view');
+    Route::get('/documents/summarizer/{document}', SummaryView::class)->name('summarizer-view');
 
     /* Short links */
     Route::get('/link/{shortLink}', function (string $shortLink) {

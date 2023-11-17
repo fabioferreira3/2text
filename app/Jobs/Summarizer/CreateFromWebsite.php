@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Jobs\Blog;
+namespace App\Jobs\Summarizer;
 
+use App\Enums\DataType;
 use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
@@ -14,13 +15,13 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
-class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
+class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public Document $document;
-    public array $params;
     public string $processId;
+    public array $params;
 
     /**
      * Create a new job instance.
@@ -44,29 +45,27 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
         $queryEmbedding = true;
         $nextOrder = 2;
 
-        foreach ($this->document->getMeta('source_urls') as $key => $sourceUrl) {
-            DocumentRepository::createTask(
-                $this->document->id,
-                DocumentTaskEnum::EXTRACT_AND_EMBED_AUDIO,
-                [
-                    'process_id' => $this->processId,
-                    'meta' => [
-                        'source_url' => $sourceUrl,
-                        'collection_name' => $this->document->id
-                    ],
-                    'order' => $nextOrder
-                ]
-            );
-            $nextOrder += 1;
-        }
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::EMBED_SOURCE,
+            [
+                'process_id' => $this->processId,
+                'meta' => [
+                    'data_type' => DataType::WEB_PAGE->value,
+                    'source' => $this->document->getMeta('source_url'),
+                    'collection_name' => $this->document->id
+                ],
+                'order' => $nextOrder
+            ]
+        );
 
-        RegisterCreationTasks::dispatchSync($this->document, [
-            ...$this->params,
-            'next_order' => $nextOrder,
-            'process_id' => $this->processId,
-            'query_embedding' => $queryEmbedding,
-            'collection_name' => $this->document->id
-        ]);
+        // RegisterCreationTasks::dispatchSync($this->document, [
+        //     ...$this->params,
+        //     'next_order' => $nextOrder,
+        //     'process_id' => $this->processId,
+        //     'query_embedding' => $queryEmbedding,
+        //     'collection_name' => $this->document->id
+        // ]);
 
         DispatchDocumentTasks::dispatch($this->document);
     }
@@ -76,6 +75,6 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'create_blog_post_from_video_stream_' . $this->document->id;
+        return 'create_summary_from_website_url_' . $this->document->id;
     }
 }

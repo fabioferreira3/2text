@@ -11,7 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
-class CreateBlogPost
+class PrepareCreationTasks
 {
     use Dispatchable, SerializesModels;
 
@@ -33,7 +33,7 @@ class CreateBlogPost
 
         DocumentRepository::createTask(
             $this->document->id,
-            DocumentTaskEnum::GENERATE_FINISHED_NOTIFICATION,
+            DocumentTaskEnum::GENERATE_FINISHED_BLOG_POST_NOTIFICATION,
             [
                 'process_id' => Str::uuid(),
                 'meta' => [],

@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Enums\DataType;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
+use App\Repositories\GenRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -12,9 +12,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Str;
 
-class SummarizeDocument implements ShouldQueue, ShouldBeUnique
+class SummarizeContent implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
@@ -40,11 +39,14 @@ class SummarizeDocument implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-
+            if ($this->meta['query_embedded'] ?? false) {
+            } else {
+                GenRepository::generateSummary($this->document, $this->meta);
+            }
 
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to embed summary: ' . $e->getMessage());
+            $this->jobFailed('Failed to summarize content: ' . $e->getMessage());
         }
     }
 
@@ -53,6 +55,6 @@ class SummarizeDocument implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'create_summary_' . $this->meta['process_id'] ?? $this->document->id;
+        return 'summarizing_content_' . $this->meta['process_id'] ?? $this->document->id;
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Blog;
 use App\Enums\Language;
 use App\Enums\SourceProvider;
 use App\Exceptions\CreatingBlogPostException;
-use App\Jobs\Blog\CreateBlogPost;
+use App\Jobs\Blog\PrepareCreationTasks;
 use App\Repositories\DocumentRepository;
 use App\Rules\CsvFile;
 use App\Rules\DocxFile;
@@ -78,7 +78,7 @@ class NewPost extends Component
                     }
                 },
             ],
-            'sourceUrls.*' => 'url',
+            'sourceUrls.*' => ['url', $this->source === 'youtube' ? new \App\Rules\YouTubeUrl() : ''],
             'source' => [
                 'required',
                 Rule::in(array_map(fn ($value) => $value->value, SourceProvider::cases()))
@@ -162,7 +162,7 @@ class NewPost extends Component
             ];
             $repo = new DocumentRepository();
             $document = $repo->createBlogPost($params);
-            CreateBlogPost::dispatch($document, $params);
+            PrepareCreationTasks::dispatch($document, $params);
 
             return redirect()->route('blog-post-processing-view', ['document' => $document]);
         } catch (Exception $e) {

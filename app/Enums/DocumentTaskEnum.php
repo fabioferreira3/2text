@@ -18,7 +18,7 @@ enum DocumentTaskEnum: string
     case GENERATE_IMAGE = 'generate_image';
     case GENERATE_IMAGE_VARIANTS = 'generate_image_variants';
     case GENERATE_AI_THOUGHTS = 'generate_ai_thoughts';
-    case GENERATE_FINISHED_NOTIFICATION = 'generate_finished_notification';
+    case GENERATE_FINISHED_BLOG_POST_NOTIFICATION = 'generate_finished_blog_post_notification';
     case POST_PROCESS_AUDIO = "post_process_audio";
     case PARAPHRASE_DOCUMENT = 'paraphrase_document';
     case PARAPHRASE_TEXT = 'paraphrase_text';
@@ -30,7 +30,7 @@ enum DocumentTaskEnum: string
     case REGISTER_CONTENT_HISTORY = 'register_content_history';
     case REMOVE_EMBEDDINGS = 'remove_embeddings';
     case REWRITE_TEXT_BLOCK = 'rewrite_text_block';
-    case SUMMARIZE_DOC = 'summarize_doc';
+    case SUMMARIZE_CONTENT = 'summarize_content';
     case TRANSLATE_TEXT = 'translate_text';
     case TEXT_TO_SPEECH = 'text_to_speech';
 
@@ -51,7 +51,7 @@ enum DocumentTaskEnum: string
             self::GENERATE_IMAGE => "App\Jobs\GenerateImage",
             self::GENERATE_IMAGE_VARIANTS => "App\Jobs\GenerateImageVariants",
             self::GENERATE_AI_THOUGHTS => "App\Jobs\GenerateAIThoughts",
-            self::GENERATE_FINISHED_NOTIFICATION => "App\Jobs\GenerateFinishedNotification",
+            self::GENERATE_FINISHED_BLOG_POST_NOTIFICATION => "App\Jobs\Blog\GenerateFinishedNotification",
             self::PARAPHRASE_DOCUMENT => "App\Jobs\Paraphraser\ParaphraseDocument",
             self::PARAPHRASE_TEXT => "App\Jobs\Paraphraser\ParaphraseText",
             self::POST_PROCESS_AUDIO => "App\Jobs\AudioTranscription\PostProcessAudio",
@@ -63,7 +63,7 @@ enum DocumentTaskEnum: string
             self::REGISTER_CONTENT_HISTORY => "App\Jobs\RegisterContentHistory",
             self::REMOVE_EMBEDDINGS => "App\Jobs\RemoveEmbeddings",
             self::REWRITE_TEXT_BLOCK => "App\Jobs\RewriteTextBlock",
-            self::SUMMARIZE_DOC => "App\Jobs\SummarizeDocument",
+            self::SUMMARIZE_CONTENT => "App\Jobs\SummarizeContent",
             self::TEXT_TO_SPEECH => "App\Jobs\TextToSpeech\GenerateAudio",
             self::TRANSLATE_TEXT => "App\Jobs\Translation\TranslateText",
         };

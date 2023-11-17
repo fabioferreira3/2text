@@ -146,6 +146,8 @@ return [
     'social_media_sourceurl_required' => 'You need to provide a link to be used as context for your social media post.',
     'source_required' => 'Source is a required field.',
     'source_language_required' => 'Source language is a required field.',
+    'summarizer_sourceurl_required' => 'You need to provide a link for its content to be summarized.',
+    'summarizer_context_required' => 'You need to provide a text to be summarized.',
     'starts_with' => 'The :attribute must start with one of the following: :values.',
     'string' => 'The :attribute must be a string.',
     'subtopics_count' => 'The number of subtopics is a required field.',

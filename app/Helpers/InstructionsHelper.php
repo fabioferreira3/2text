@@ -104,14 +104,19 @@ class InstructionsHelper
         return "<p>" . __('blog.define_language') . "</p><p class='mt-2 text-sm'>" . __('blog.selected_language_info') . "</p>";
     }
 
+    public static function blogKeyword()
+    {
+        return __('instructions.provide_keyword');
+    }
+
     public static function socialMediaKeyword()
     {
         return __('social_media.define_keyword');
     }
 
-    public static function blogKeyword()
+    public static function summarizerLanguages()
     {
-        return __('instructions.provide_keyword');
+        return "<p>" . __('summarizer.define_language') . "</p>";
     }
 
     public static function maxSubtopics()
@@ -183,6 +188,11 @@ class InstructionsHelper
                 <li>" . __('instructions.telling_story') . "</li>
                 <li>" . __('instructions.expected_reaction') . "</li>
             </ul>";
+    }
+
+    public static function wordsCount()
+    {
+        return "<p>" . __('instructions.words_count') . "</p>";
     }
 
     public static function writingStyles()

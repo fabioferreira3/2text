@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Jobs\Blog;
+namespace App\Jobs\Summarizer;
 
-use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
-use App\Repositories\DocumentRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -41,33 +39,6 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        $queryEmbedding = true;
-        $nextOrder = 2;
-
-        foreach ($this->document->getMeta('source_urls') as $key => $sourceUrl) {
-            DocumentRepository::createTask(
-                $this->document->id,
-                DocumentTaskEnum::EXTRACT_AND_EMBED_AUDIO,
-                [
-                    'process_id' => $this->processId,
-                    'meta' => [
-                        'source_url' => $sourceUrl,
-                        'collection_name' => $this->document->id
-                    ],
-                    'order' => $nextOrder
-                ]
-            );
-            $nextOrder += 1;
-        }
-
-        RegisterCreationTasks::dispatchSync($this->document, [
-            ...$this->params,
-            'next_order' => $nextOrder,
-            'process_id' => $this->processId,
-            'query_embedding' => $queryEmbedding,
-            'collection_name' => $this->document->id
-        ]);
-
         DispatchDocumentTasks::dispatch($this->document);
     }
 
@@ -76,6 +47,6 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'create_blog_post_from_video_stream_' . $this->document->id;
+        return 'create_summary_from_video_stream_' . $this->document->id;
     }
 }

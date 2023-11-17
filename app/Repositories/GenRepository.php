@@ -96,6 +96,33 @@ class GenRepository
         ]);
     }
 
+    public static function generateSummary(Document $document, array $params)
+    {
+        $repo = new DocumentRepository($document);
+        $promptHelper = PromptHelperFactory::create($document->language->value);
+        $chatGpt = new ChatGPT(AIModel::GPT_4_TURBO->value);
+        $response = $chatGpt->request([[
+            'role' => 'user',
+            'content' => $promptHelper->writeSummary($params)
+        ]]);
+        $document->contentBlocks()->save((new DocumentContentBlock([
+            'type' => 'text',
+            'content' => $response['content'],
+            'prompt' => null,
+            'order' => 1
+        ])));
+        $repo->addHistory(
+            [
+                'field' => 'summary',
+                'content' => $response['content']
+            ]
+        );
+        RegisterProductUsage::dispatch($document->account, [
+            ...$response['token_usage'],
+            'meta' => ['document_id' => $document->id]
+        ]);
+    }
+
     public static function generateImage(Document $document, array $params)
     {
         $handler = new ImageGeneratorHandler();
