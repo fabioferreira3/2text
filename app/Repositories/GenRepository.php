@@ -182,7 +182,7 @@ class GenRepository
             'style' => $document->getMeta('style'),
             'target_word_count' => $document->getMeta('target_word_count'),
             'more_instructions' => $document->getMeta('more_instructions')
-        ]), 'advanced');
+        ]));
 
         $document->contentBlocks()->save(
             new DocumentContentBlock([

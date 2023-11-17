@@ -109,7 +109,7 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
             'tone' => $this->document->getMeta('tone'),
             'style' => $this->document->getMeta('style') ?? null,
             'keyword' => $this->meta['keyword']
-        ]), 'advanced');
+        ]));
     }
 
     protected function queryGpt($basePrompt)

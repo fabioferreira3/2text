@@ -77,7 +77,7 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
                 'tone' => $this->document->meta['tone'],
                 'style' => $this->document->meta['style'] ?? null
             ]
-        ), 'advanced');
+        ));
     }
 
     protected function queryGpt()
