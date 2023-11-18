@@ -40,22 +40,44 @@ class CreateTranscription
             ]
         );
 
+        if ($this->document->getMeta('identify_speakers')) {
+            DocumentRepository::createTask(
+                $this->document->id,
+                DocumentTaskEnum::TRANSCRIBE_AUDIO_WITH_DIARIZATION,
+                [
+                    'order' => 2,
+                    'process_id' => $processId,
+                    'meta' => [
+                        'speakers_expected' => $this->document->getMeta('speakers_expected'),
+                    ]
+                ]
+            );
+        } else {
+            DocumentRepository::createTask(
+                $this->document->id,
+                DocumentTaskEnum::TRANSCRIBE_AUDIO,
+                [
+                    'order' => 2,
+                    'process_id' => $processId,
+                    'meta' => []
+                ]
+            );
+        }
+
         DocumentRepository::createTask(
             $this->document->id,
-            DocumentTaskEnum::TRANSCRIBE_AUDIO,
+            DocumentTaskEnum::PUBLISH_TEXT_BLOCK,
             [
-                'order' => 2,
+                'order' => 3,
                 'process_id' => $processId,
                 'meta' => [
                     'identify_speakers' => $this->document->getMeta('identify_speakers'),
                     'speakers_expected' => $this->document->getMeta('speakers_expected'),
-                    'target_language' => $this->document->getMeta('target_language')
                 ]
             ]
         );
 
-        if ($this->meta[]) {
-        }
+        'target_language' => $this->document->getMeta('target_language')
 
         DispatchDocumentTasks::dispatch($this->document);
     }

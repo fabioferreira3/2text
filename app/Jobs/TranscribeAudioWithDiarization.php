@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Enums\DataType;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Repositories\MediaRepository;
@@ -40,28 +39,20 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $transcribedText = MediaRepository::transcribeAudio(
-                $this->document->getMeta('audio_file_path')
-            );
-
-            if ($this->meta['embed_source'] ?? false) {
-                EmbedSource::dispatchSync($this->document, [
-                    'data_type' => DataType::TEXT->value,
-                    'source' => $transcribedText
-                ]);
+            $params = [
+                'document_id' => $this->document->id,
+                'task_id' => $this->meta['task_id']
+            ];
+            if ($this->document->getMeta('speakers_expected')) {
+                $params['speakers_expected'] = (int) $this->document->getMeta('speakers_expected');
             }
-
-            $this->document->update([
-                'meta' => [
-                    ...$this->document->meta,
-                    'context' => $transcribedText,
-                    'original_text' => $transcribedText
-                ]
-            ]);
-
-            $this->jobSucceded();
+            MediaRepository::transcribeAudioWithDiarization(
+                $this->document->getMeta('audio_file_path'),
+                $params
+            );
+            $this->jobPending();
         } catch (Exception $e) {
-            $this->jobFailed('Transcribing audio error: ' . $e->getMessage());
+            $this->jobFailed('Transcribing audio with diarization error: ' . $e->getMessage());
         }
     }
 
@@ -70,6 +61,6 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'transcribing_audio_' . $this->meta['process_id'] ?? $this->document->id;
+        return 'transcribing_audio_with_diarization_' . $this->meta['process_id'] ?? $this->document->id;
     }
 }

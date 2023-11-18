@@ -24,6 +24,7 @@ enum DocumentTaskEnum: string
     case PARAPHRASE_TEXT = 'paraphrase_text';
     case PROCESS_SOCIAL_MEDIA_POSTS_CREATION = 'process_social_media_posts_creation';
     case PUBLISH_TEXT_BLOCKS = 'publish_text_blocks';
+    case PUBLISH_TEXT_BLOCK = 'publish_text_block';
     case TRANSLATE_TEXT_BLOCK = 'translate_text_block';
     case REGISTER_FINISHED_PROCESS = 'register_finished_process';
     case REGISTER_CONTENT_HISTORY = 'register_content_history';
@@ -32,6 +33,7 @@ enum DocumentTaskEnum: string
     case SUMMARIZE_CONTENT = 'summarize_content';
     case TRANSLATE_TEXT = 'translate_text';
     case TRANSCRIBE_AUDIO = 'transcribe_audio';
+    case TRANSCRIBE_AUDIO_WITH_DIARIZATION = 'transcribe_audio_with_diarization';
     case TEXT_TO_SPEECH = 'text_to_speech';
 
     public function getJob()
@@ -58,6 +60,7 @@ enum DocumentTaskEnum: string
             self::PROCESS_SOCIAL_MEDIA_POSTS_CREATION => "App\Jobs\SocialMedia\ProcessSocialMediaPostsCreation",
             self::TRANSLATE_TEXT_BLOCK => "App\Jobs\Translation\TranslateTextBlock",
             self::PUBLISH_TEXT_BLOCKS => "App\Jobs\Blog\PublishTextBlocks",
+            self::PUBLISH_TEXT_BLOCK => "App\Jobs\PublishTextBlock",
             self::REGISTER_FINISHED_PROCESS => "App\Jobs\RegisterFinishedProcess",
             self::REGISTER_CONTENT_HISTORY => "App\Jobs\RegisterContentHistory",
             self::REMOVE_EMBEDDINGS => "App\Jobs\RemoveEmbeddings",
@@ -66,6 +69,7 @@ enum DocumentTaskEnum: string
             self::TEXT_TO_SPEECH => "App\Jobs\TextToSpeech\GenerateAudio",
             self::TRANSLATE_TEXT => "App\Jobs\Translation\TranslateText",
             self::TRANSCRIBE_AUDIO => "App\Jobs\TranscribeAudio",
+            self::TRANSCRIBE_AUDIO_WITH_DIARIZATION => "App\Jobs\TranscribeAudioWithDiarization",
         };
     }
 }

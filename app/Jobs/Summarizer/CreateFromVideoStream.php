@@ -60,6 +60,18 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
                 'order' => 2
             ]
         );
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::PUBLISH_TEXT_BLOCK,
+            [
+                'process_id' => $this->processId,
+                'order' => 3,
+                'meta' => [
+                    'text' => $this->document->getMeta('context'),
+                    'target_language' => $this->document->getMeta('target_language') ?? null
+                ]
+            ]
+        );
         DispatchDocumentTasks::dispatch($this->document);
     }
 
