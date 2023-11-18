@@ -3,6 +3,7 @@
 return [
     'ask_to' => 'Ask to...',
     'api_tokens' => 'API Tokens',
+    'audio_transcription' => 'Transcription',
     'blog_post' => 'Blog post',
     'char_count' => 'Char count',
     'copy' => 'Copy',
@@ -17,12 +18,13 @@ return [
     'paraphraser' => 'Paraphraser',
     'paraphrase' => 'Paraphrase',
     'profile' => 'Profile',
+    'redo' => 'Redo',
     'reduce_complexity' => 'Reduce complexity',
     'social_media_post' => 'Social media',
     'shorten' => 'Shorten',
     'summarizer' => 'Summarizer',
     'tools' => 'Tools',
-    'audio_transcription' => 'Transcription',
     'text_to_audio' => 'Text to Audio',
+    'undo' => 'Undo',
     'word_count' => 'Word count'
 ];

@@ -22,7 +22,6 @@ enum DocumentTaskEnum: string
     case POST_PROCESS_AUDIO = "post_process_audio";
     case PARAPHRASE_DOCUMENT = 'paraphrase_document';
     case PARAPHRASE_TEXT = 'paraphrase_text';
-    case PROCESS_AUDIO = 'process_audio';
     case PROCESS_SOCIAL_MEDIA_POSTS_CREATION = 'process_social_media_posts_creation';
     case PUBLISH_TEXT_BLOCKS = 'publish_text_blocks';
     case TRANSLATE_TEXT_BLOCK = 'translate_text_block';
@@ -32,6 +31,7 @@ enum DocumentTaskEnum: string
     case REWRITE_TEXT_BLOCK = 'rewrite_text_block';
     case SUMMARIZE_CONTENT = 'summarize_content';
     case TRANSLATE_TEXT = 'translate_text';
+    case TRANSCRIBE_AUDIO = 'transcribe_audio';
     case TEXT_TO_SPEECH = 'text_to_speech';
 
     public function getJob()
@@ -55,7 +55,6 @@ enum DocumentTaskEnum: string
             self::PARAPHRASE_DOCUMENT => "App\Jobs\Paraphraser\ParaphraseDocument",
             self::PARAPHRASE_TEXT => "App\Jobs\Paraphraser\ParaphraseText",
             self::POST_PROCESS_AUDIO => "App\Jobs\AudioTranscription\PostProcessAudio",
-            self::PROCESS_AUDIO => "App\Jobs\ProcessAudio",
             self::PROCESS_SOCIAL_MEDIA_POSTS_CREATION => "App\Jobs\SocialMedia\ProcessSocialMediaPostsCreation",
             self::TRANSLATE_TEXT_BLOCK => "App\Jobs\Translation\TranslateTextBlock",
             self::PUBLISH_TEXT_BLOCKS => "App\Jobs\Blog\PublishTextBlocks",
@@ -66,6 +65,7 @@ enum DocumentTaskEnum: string
             self::SUMMARIZE_CONTENT => "App\Jobs\SummarizeContent",
             self::TEXT_TO_SPEECH => "App\Jobs\TextToSpeech\GenerateAudio",
             self::TRANSLATE_TEXT => "App\Jobs\Translation\TranslateText",
+            self::TRANSCRIBE_AUDIO => "App\Jobs\TranscribeAudio",
         };
     }
 }

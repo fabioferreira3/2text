@@ -79,7 +79,7 @@ Route::middleware([
 
     /* Summarizer */
     Route::get('/summarizer/new', NewSummarizer::class)->name('new-summarizer');
-    Route::get('/documents/summarizer/{document}', SummaryView::class)->name('summarizer-view');
+    Route::get('/documents/summarizer/{document}', SummaryView::class)->name('summary-view');
 
     /* Short links */
     Route::get('/link/{shortLink}', function (string $shortLink) {

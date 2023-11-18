@@ -2,8 +2,10 @@
 
 namespace App\Jobs\Summarizer;
 
+use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
+use App\Repositories\DocumentRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -39,6 +41,25 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::DOWNLOAD_AUDIO,
+            [
+                'process_id' => $this->processId,
+                'meta' => [
+                    'source_url' => $this->document->getMeta('source_url')
+                ],
+                'order' => 1
+            ]
+        );
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::TRANSCRIBE_AUDIO,
+            [
+                'process_id' => $this->processId,
+                'order' => 2
+            ]
+        );
         DispatchDocumentTasks::dispatch($this->document);
     }
 

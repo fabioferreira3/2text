@@ -43,22 +43,22 @@ class PrepareCreationTasks
         //     ]
         // );
 
-        // DocumentRepository::createTask(
-        //     $this->document->id,
-        //     DocumentTaskEnum::REMOVE_EMBEDDINGS,
-        //     [
-        //         'process_id' => $this->params['process_id'],
-        //         'meta' => [
-        //             'collection_name' => $this->document->id
-        //         ],
-        //         'order' => 1
-        //     ]
-        // );
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::REMOVE_EMBEDDINGS,
+            [
+                'process_id' => $this->params['process_id'],
+                'meta' => [
+                    'collection_name' => $this->document->id
+                ],
+                'order' => 1
+            ]
+        );
 
-        //DispatchDocumentTasks::dispatch($this->document);
+        DispatchDocumentTasks::dispatch($this->document);
 
         CreateFromFreeText::dispatchIf($this->document->getMeta('source') === 'free_text', $this->document, $this->params);
-        // CreateFromVideoStream::dispatchIf($this->params['source'] === 'youtube', $this->document, $this->params);
+        CreateFromVideoStream::dispatchIf($this->params['source'] === 'youtube', $this->document, $this->params);
         // CreateFromWebsite::dispatchIf($this->params['source'] === 'website_url', $this->document, $this->params);
         // CreateFromFile::dispatchIf(in_array($this->params['source'], [
         //     SourceProvider::CSV->value,

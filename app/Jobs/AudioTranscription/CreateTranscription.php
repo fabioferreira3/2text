@@ -42,7 +42,7 @@ class CreateTranscription
 
         DocumentRepository::createTask(
             $this->document->id,
-            DocumentTaskEnum::PROCESS_AUDIO,
+            DocumentTaskEnum::TRANSCRIBE_AUDIO,
             [
                 'order' => 2,
                 'process_id' => $processId,
@@ -53,6 +53,9 @@ class CreateTranscription
                 ]
             ]
         );
+
+        if ($this->meta[]) {
+        }
 
         DispatchDocumentTasks::dispatch($this->document);
     }

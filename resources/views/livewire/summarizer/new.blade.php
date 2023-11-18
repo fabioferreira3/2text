@@ -1,5 +1,6 @@
 <div class="flex flex-col gap-6">
     @include('livewire.common.header', ['icon' => 'sort-ascending', 'label' => __('summarizer.new_summary')])
+    @if(!$isProcessing)
     <div class="flex flex-col gap-6 p-4 border rounded-lg">
         <div class="w-full flex flex-col md:grid md:grid-cols-3 gap-6">
             <!-- Source -->
@@ -58,8 +59,7 @@
             @if (in_array($source, ['docx', 'pdf_file', 'csv', 'json']))
             <div class="flex flex-col gap-3 col-span-2">
                 <label class="font-bold text-xl text-zinc-700">{{ __('blog.file_option') }}</label>
-                <input type="file" name="fileInput" wire:model="fileInput"
-                    class="p-3 border border-zinc-200 rounded-lg w-full" />
+                <input type="file" name="fileInput" wire:model="fileInput" class="p-3 border border-zinc-200 rounded-lg w-full" />
                 @if ($errors->has('fileInput'))
                 <span class="text-red-500 text-sm">{{ $errors->first('fileInput') }}</span>
                 @endif
@@ -73,8 +73,7 @@
                 <label class="font-bold text-xl text-zinc-700 flex items-center">
                     Text:
                 </label>
-                <textarea class="border border-zinc-200 rounded-lg" rows="5" maxlength="30000"
-                    wire:model="context"></textarea>
+                <textarea class="border border-zinc-200 rounded-lg" rows="5" maxlength="30000" wire:model="context"></textarea>
                 @if($errors->has('context'))
                 <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
                 @endif
@@ -88,8 +87,7 @@
                 <label class="font-bold text-xl text-zinc-700 flex items-center">
                     URL
                 </label>
-                <input type="text" name="sourceUrl" wire:model="sourceUrl"
-                    class="p-3 border border-zinc-200 rounded-lg w-full" />
+                <input type="text" name="sourceUrl" wire:model="sourceUrl" class="p-3 border border-zinc-200 rounded-lg w-full" />
 
                 @if ($errors->has('sourceUrl'))
                 <span class="text-red-500 text-sm">{{ $errors->first('sourceUrl') }}</span>
@@ -107,8 +105,7 @@
                     'content' => App\Helpers\InstructionsHelper::wordsCount()
                     ])
                 </div>
-                <input type="number" min="100" max="3000" name="max_words_count" wire:model.lazy="maxWordsCount"
-                    class="p-3 rounded-lg border border-zinc-200 w-2/3" />
+                <input type="number" min="100" max="3000" name="max_words_count" wire:model.lazy="maxWordsCount" class="p-3 rounded-lg border border-zinc-200 w-2/3" />
                 @if($errors->has('maxWordsCount'))
                 <span class="text-red-500 text-sm">{{ $errors->first('maxWordsCount') }}</span>
                 @endif
@@ -117,19 +114,23 @@
         </div>
 
         <!-- Generate button -->
-        <div class="flex justify-start mt-4">
-            <button wire:click="process" wire:loading.remove
-                class="bg-secondary text-xl text-white font-bold px-4 py-2 rounded-lg">
+        <div class="flex justify-center mt-4">
+            <button wire:click="process" wire:loading.remove class="bg-secondary text-xl text-white font-bold px-4 py-2 rounded-lg">
                 {{__('summarizer.generate')}}!
             </button>
-
-            <div wire:loading wire:target="process">
-                <div class="flex items-center gap-2 bg-secondary text-xl text-white font-bold px-4 py-2 rounded-lg">
-                    <x-loader color="white" />
-                    <span>{{__('summarizer.preparing')}}</span>
-                </div>
-            </div>
         </div>
         <!-- END: Generate button -->
+    </div>
+    @endif
+
+    <div class="{{ $isProcessing ? 'flex' : 'hidden' }} flex flex-col border-1 border rounded-lg bg-white p-8">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <x-loader height="10" width="10" />
+                <label class="font-bold text-zinc-700 text-2xl cursor-pointer">
+                    {{ __('summarizer.generating') }}<span id="typewriter"></span>
+                </label>
+            </div>
+        </div>
     </div>
 </div>

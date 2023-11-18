@@ -21,7 +21,7 @@ use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class ProcessAudio implements ShouldQueue, ShouldBeUnique
+class TranscribeAudio implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 

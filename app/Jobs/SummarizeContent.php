@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\BroadcastEvent;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Repositories\GenRepository;
@@ -43,6 +44,13 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
             } else {
                 GenRepository::generateSummary($this->document, $this->meta);
             }
+            event(new BroadcastEvent([
+                'user_id' => $this->document->getMeta('user_id'),
+                'event_name' => 'SummaryCompleted',
+                'payload' => [
+                    'document_id' => $this->document->id,
+                ]
+            ]));
 
             $this->jobSucceded();
         } catch (Exception $e) {

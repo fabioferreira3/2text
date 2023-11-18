@@ -7,6 +7,7 @@ use App\Enums\Language;
 use App\Enums\SourceProvider;
 use App\Exceptions\CreatingSummaryException;
 use App\Jobs\Summarizer\PrepareCreationTasks;
+use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use App\Rules\CsvFile;
 use App\Rules\DocxFile;
@@ -57,14 +58,13 @@ class NewSummarizer extends Component
 
     public function messages()
     {
-        return
-            [
-                'context.required_if' => __('validation.summarizer_context_required'),
-                'sourceUrl.url' => __('validation.active_url'),
-                'sourceUrl.required_if' => __('validation.summarizer_sourceurl_required'),
-                'sourceLanguage.required' => __('validation.language_required'),
-                'targetLanguage.required' => __('validation.language_required')
-            ];
+        return [
+            'context.required_if' => __('validation.summarizer_context_required'),
+            'sourceUrl.url' => __('validation.active_url'),
+            'sourceUrl.required_if' => __('validation.summarizer_sourceurl_required'),
+            'sourceLanguage.required' => __('validation.language_required'),
+            'targetLanguage.required' => __('validation.language_required')
+        ];
     }
 
     public function getListeners()
@@ -94,11 +94,12 @@ class NewSummarizer extends Component
     {
         $this->validate();
         try {
+            $this->isProcessing = true;
             $filePath = null;
             if ($this->fileInput) {
                 $filePath = $this->storeFile();
             }
-            $document = DocumentRepository::createGeneric([
+            $this->document = DocumentRepository::createGeneric([
                 'type' => DocumentType::SUMMARIZER->value,
                 'source' => $this->source,
                 'language' => $this->sourceLanguage,
@@ -111,34 +112,18 @@ class NewSummarizer extends Component
                 ]
             ]);
 
-            PrepareCreationTasks::dispatch($document, []);
-
-            //return redirect()->route('blog-post-processing-view', ['document' => $document]);
+            PrepareCreationTasks::dispatch($this->document, []);
         } catch (Exception $e) {
             throw new CreatingSummaryException($e->getMessage());
         }
-
-        // $this->document = $document;
-
-        // if ($this->source === SourceProvider::FREE_TEXT->value) {
-        //     $this->redirectToDocument();
-        // } else {
-        //     $this->validate();
-        //     $this->dispatchBrowserEvent('alert', [
-        //         'type' => 'info',
-        //         'message' => __('alerts.working_request')
-        //     ]);
-        //     $this->isProcessing = true;
-        //     $processId = Str::uuid();
-        //     // CreateFromWebsite::dispatchIf($this->source === SourceProvider::WEBSITE_URL->value, $document, [
-        //     //     'process_id' => $processId
-        //     // ]);
-        // }
     }
 
-    public function redirectToDocument()
+    public function onProcessFinished($params)
     {
-        //    redirect()->route('paraphrase-view', ['document' => $this->document]);
+        if ($params['document_id'] === $this->document->id) {
+            $this->isProcessing = false;
+            redirect()->route('summary-view', ['document' => $this->document]);
+        }
     }
 
     public function render()

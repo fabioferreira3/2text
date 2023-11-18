@@ -48,10 +48,11 @@ class TextBlock extends Component
         ];
     }
 
-    public function mount(DocumentContentBlock $contentBlock)
+    public function mount(DocumentContentBlock $contentBlock, $hide = [])
     {
         $this->contentBlock = $contentBlock;
         $this->prefix = $contentBlock->prefix ?? null;
+        $this->hide = $hide;
         $this->setup();
     }
 
