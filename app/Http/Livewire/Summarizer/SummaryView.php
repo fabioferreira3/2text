@@ -10,10 +10,16 @@ class SummaryView extends Component
 {
     public Document $document;
     public DocumentContentBlock $contentBlock;
+    public string $source;
+    public string $title;
+    public $context;
 
     public function mount(Document $document)
     {
-        $this->contentBlock = $document->contentBlocks()->ofTextType()->first();
+        $this->title = $document->title ?? __('summarizer.summary');
+        $this->source = $document->getMeta('source');
+        $this->context = $document->getMeta('context') ?? $document->content;
+        $this->contentBlock = $document->contentBlocks()->ofTextType()->latest()->first();
     }
 
     public function render()

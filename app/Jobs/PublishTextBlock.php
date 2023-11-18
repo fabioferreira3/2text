@@ -30,7 +30,7 @@ class PublishTextBlock implements ShouldQueue, ShouldBeUnique
      */
     public function __construct(Document $document, array $meta = [])
     {
-        $this->document = $document;
+        $this->document = $document->fresh();
         $this->meta = $meta;
     }
 
@@ -42,28 +42,31 @@ class PublishTextBlock implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $contentBlock = $this->document->contentBlocks()->save(new DocumentContentBlock([
-                'type' => 'text',
-                'content' => $this->meta['text'],
-                'prompt' => null,
-                'order' => 1
-            ]));
+            if ($this->meta['text'] || $this->document->getMeta('context')) {
+                $contentBlock = $this->document->contentBlocks()->save(new DocumentContentBlock([
+                    'type' => 'text',
+                    'content' => $this->meta['text'] ?? $this->document->getMeta('context'),
+                    'prompt' => null,
+                    'order' => 1
+                ]));
 
-            if ($this->meta['target_language']) {
-                DocumentRepository::createTask(
-                    $this->document->id,
-                    DocumentTaskEnum::TRANSLATE_TEXT_BLOCK,
-                    [
-                        'order' => 1,
-                        'process_id' => Str::uuid(),
-                        'meta' => [
-                            'content_block_id' => $contentBlock->id,
-                            'target_language' => $this->meta['target_language']
+                if ($this->meta['target_language']) {
+                    DocumentRepository::createTask(
+                        $this->document->id,
+                        DocumentTaskEnum::TRANSLATE_TEXT_BLOCK,
+                        [
+                            'order' => 1,
+                            'process_id' => Str::uuid(),
+                            'meta' => [
+                                'content_block_id' => $contentBlock->id,
+                                'target_language' => $this->meta['target_language']
+                            ]
                         ]
-                    ]
-                );
-                DispatchDocumentTasks::dispatch($this->document);
+                    );
+                    DispatchDocumentTasks::dispatch($this->document);
+                }
             }
+
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to publish text block: ' . $e->getMessage());

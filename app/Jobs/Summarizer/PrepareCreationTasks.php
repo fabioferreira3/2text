@@ -58,7 +58,7 @@ class PrepareCreationTasks
         DispatchDocumentTasks::dispatch($this->document);
 
         CreateFromFreeText::dispatchIf($this->document->getMeta('source') === 'free_text', $this->document, $this->params);
-        CreateFromVideoStream::dispatchIf($this->params['source'] === 'youtube', $this->document, $this->params);
+        CreateFromVideoStream::dispatchIf($this->document->getMeta('source') === 'youtube', $this->document, $this->params);
         // CreateFromWebsite::dispatchIf($this->params['source'] === 'website_url', $this->document, $this->params);
         // CreateFromFile::dispatchIf(in_array($this->params['source'], [
         //     SourceProvider::CSV->value,

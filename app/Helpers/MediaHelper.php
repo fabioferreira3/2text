@@ -42,4 +42,38 @@ class MediaHelper
 
         return ['height' => 1024, 'width' => 1024];
     }
+
+    public static function convertWebVttToPlainText($webVttContent)
+    {
+        // Remove the WebVTT file header
+        $webVttContent = preg_replace('/^WEBVTT.*\n(?:\d{2}:\d{2}:\d{2}.\d{3} --> \d{2}:\d{2}:\d{2}.\d{3}.*\n)?/m', '', $webVttContent);
+
+        // Remove timestamps and cue settings
+        $webVttContent = preg_replace('/\d{2}:\d{2}:\d{2}.\d{3} --> \d{2}:\d{2}:\d{2}.\d{3}.*\n/', '', $webVttContent);
+
+        // Split the content into lines
+        $lines = preg_split('/\n+/', $webVttContent);
+
+        $uniqueLines = [];
+        $previousLine = '';
+
+        foreach ($lines as $line) {
+            // Remove HTML tags and extra whitespace
+            $cleanLine = trim(strip_tags($line));
+
+            // Skip empty lines
+            if (empty($cleanLine)) {
+                continue;
+            }
+
+            // Add the line if it's not a duplicate
+            if ($cleanLine !== $previousLine) {
+                $uniqueLines[] = $cleanLine;
+                $previousLine = $cleanLine;
+            }
+        }
+
+        // Combine the unique lines back into a single string
+        return implode(' ', $uniqueLines);
+    }
 }

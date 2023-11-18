@@ -7,7 +7,6 @@ use App\Enums\Language;
 use App\Enums\SourceProvider;
 use App\Exceptions\CreatingSummaryException;
 use App\Jobs\Summarizer\PrepareCreationTasks;
-use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use App\Rules\CsvFile;
 use App\Rules\DocxFile;
@@ -22,10 +21,10 @@ class NewSummarizer extends Component
 {
     public $document;
     public $context;
-    public $source = SourceProvider::FREE_TEXT->value;
+    public $source;
     public $sourceUrl = null;
-    public $sourceLanguage = Language::ENGLISH->value;
-    public $targetLanguage = Language::ENGLISH->value;
+    public $sourceLanguage;
+    public $targetLanguage;
     public $fileInput = null;
     public string $tempSourceUrl;
     public int $maxWordsCount = 100;
@@ -45,7 +44,7 @@ class NewSummarizer extends Component
             ],
             'sourceLanguage' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
             'targetLanguage' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
-            'maxWordsCount' => 'required|numeric|min:100|max:3000',
+            'maxWordsCount' => 'required|numeric|min:50|max:3000',
             'fileInput' => [
                 'required_if:source,docx,pdf',
                 'max:51200', // in kilobytes, 50mb = 50 * 1024 = 51200kb
@@ -78,6 +77,10 @@ class NewSummarizer extends Component
     public function mount()
     {
         $this->isProcessing = false;
+        $this->document = null;
+        $this->source = SourceProvider::FREE_TEXT->value;
+        $this->sourceLanguage = Language::ENGLISH->value;
+        $this->targetLanguage = Language::ENGLISH->value;
     }
 
     public function storeFile()

@@ -71,13 +71,11 @@ class CreateTranscription
                 'order' => 3,
                 'process_id' => $processId,
                 'meta' => [
-                    'identify_speakers' => $this->document->getMeta('identify_speakers'),
-                    'speakers_expected' => $this->document->getMeta('speakers_expected'),
+                    'text' => $this->document->getMeta('context') ?? null,
+                    'target_language' => $this->document->getMeta('target_language') ?? null
                 ]
             ]
         );
-
-        'target_language' => $this->document->getMeta('target_language')
 
         DispatchDocumentTasks::dispatch($this->document);
     }

@@ -43,7 +43,7 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
     {
         DocumentRepository::createTask(
             $this->document->id,
-            DocumentTaskEnum::DOWNLOAD_AUDIO,
+            DocumentTaskEnum::DOWNLOAD_SUBTITLES,
             [
                 'process_id' => $this->processId,
                 'meta' => [
@@ -57,19 +57,24 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
             DocumentTaskEnum::TRANSCRIBE_AUDIO,
             [
                 'process_id' => $this->processId,
-                'order' => 2
+                'order' => 2,
+                'meta' => [
+                    'abort_when_context_present' => true
+                ]
             ]
         );
+
         DocumentRepository::createTask(
             $this->document->id,
-            DocumentTaskEnum::PUBLISH_TEXT_BLOCK,
+            DocumentTaskEnum::SUMMARIZE_CONTENT,
             [
                 'process_id' => $this->processId,
-                'order' => 3,
                 'meta' => [
-                    'text' => $this->document->getMeta('context'),
-                    'target_language' => $this->document->getMeta('target_language') ?? null
-                ]
+                    'content' => null,
+                    'query_embedding' => false,
+                    'max_words_count' => $this->document->getMeta('max_words_count')
+                ],
+                'order' => 4
             ]
         );
         DispatchDocumentTasks::dispatch($this->document);

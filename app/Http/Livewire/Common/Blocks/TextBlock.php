@@ -107,6 +107,7 @@ class TextBlock extends Component
         $this->contentBlock->rollbackVersion();
         $this->contentBlock->refresh();
         $this->setup();
+        $this->dispatchBrowserEvent('adjustTextArea');
     }
 
     public function redo()
@@ -114,6 +115,7 @@ class TextBlock extends Component
         $this->contentBlock->fastForwardVersion();
         $this->contentBlock->refresh();
         $this->setup();
+        $this->dispatchBrowserEvent('adjustTextArea');
     }
 
     public function copy()

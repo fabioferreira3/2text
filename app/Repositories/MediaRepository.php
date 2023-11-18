@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\MediaType;
+use App\Helpers\MediaHelper;
 use App\Models\Account;
 use App\Models\MediaFile;
 use App\Packages\AssemblyAI\AssemblyAI;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use TypeError;
 use YoutubeDl\YoutubeDl;
 use YoutubeDl\Options;
 
@@ -60,6 +62,56 @@ class MediaRepository
             'file_public_id' => $uploadedFile->getPublicId(),
             'meta' => [...$fileParams['meta'] ?? []]
         ]);
+    }
+
+    public static function downloadYoutubeSubtitles($youtubeUrl)
+    {
+        $yt = new YoutubeDl();
+        if (app()->environment('production')) {
+            $yt->setBinPath('/app/yt-dlp');
+        } else {
+            $yt->setBinPath('/usr/local/bin/yt-dlp');
+        }
+
+        $collection = $yt->download(
+            Options::create()
+                ->downloadPath(storage_path('app'))
+                ->skipDownload(true)
+                ->subLang(['en'])
+                ->writeSub(true)
+                ->writeAutoSub(true)
+                ->subFormat('vtt')
+                ->url($youtubeUrl)
+        )->getVideos();
+
+        $videoTitle = null;
+        $file = null;
+        $transcription = null;
+        $duration = null;
+        $subtitleFilePaths = [];
+
+        foreach ($collection as $video) {
+            if ($video->getError() !== null) {
+                throw new Exception("Error downloading video: {$video->getError()}.");
+            } else {
+                try {
+                    $file = $video->getFile();
+                } catch (TypeError $e) {
+                }
+                $duration = ceil($video->getDuration() / 60);
+                $videoTitle = $video->getTitle();
+                $transcription = $file ?
+                    MediaHelper::convertWebVttToPlainText(file_get_contents($file->getPathname())) : null;
+                $subtitleFilePaths[] = $file ? $file->getBasename() : null;
+            }
+        }
+
+        return [
+            'subtitles' => $transcription,
+            'file_paths' => $subtitleFilePaths,
+            'title' => $videoTitle,
+            'total_duration' => $duration
+        ];
     }
 
     public static function downloadYoutubeAudio($youtubeUrl)
@@ -139,6 +191,7 @@ class MediaRepository
         }
 
         return [
+            'subtitles' => null,
             'file_paths' => $audioFilePaths,
             'total_duration' => $duration,
             'title' => $videoTitle

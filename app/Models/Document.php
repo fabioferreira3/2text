@@ -221,12 +221,12 @@ class Document extends Model
 
     public function getYoutubeVideoId()
     {
-        if (!$this->getMeta('source_url') || $this->type !== DocumentType::AUDIO_TRANSCRIPTION) {
-            return null;
+        if (($this->getMeta('source_url') && $this->type === DocumentType::AUDIO_TRANSCRIPTION) || $this->getMeta('source') === SourceProvider::YOUTUBE->value) {
+            preg_match('/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $this->getMeta('source_url'), $matches);
+            return $matches[1] ?? null;
         }
 
-        preg_match('/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $this->getMeta('source_url'), $matches);
-        return $matches[1] ?? null;
+        return null;
     }
 
     public function scopeOfMediaPosts($query)

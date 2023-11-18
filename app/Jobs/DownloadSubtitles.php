@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Jobs\Translation;
+namespace App\Jobs;
 
-use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
-use App\Models\DocumentContentBlock;
-use App\Repositories\GenRepository;
+use App\Repositories\MediaRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -15,14 +13,25 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
-class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
+class DownloadSubtitles implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected Document $document;
-    protected DocumentContentBlock $contentBlock;
-    protected array $meta;
+    public Document $document;
+    public array $meta;
+
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct(Document $document, $meta = [])
+    {
+        $this->document = $document->fresh();
+        $this->meta = $meta;
+    }
 
     /**
      * The number of times the job may be attempted.
@@ -39,18 +48,6 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
     public $maxExceptions = 3;
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct(Document $document, array $meta = [])
-    {
-        $this->document = $document;
-        $this->contentBlock = DocumentContentBlock::findOrFail($meta['content_block_id']);
-        $this->meta = $meta;
-    }
-
-    /**
      * Execute the job.
      *
      * @return void
@@ -58,21 +55,25 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $response = GenRepository::translateText(
-                $this->contentBlock->content,
-                $this->meta['target_language']
-            );
-            $this->contentBlock->update([
-                'content' => $response['content']
-            ]);
+            $audioParams = MediaRepository::downloadYoutubeSubtitles($this->meta['source_url']);
 
-            RegisterProductUsage::dispatch($this->contentBlock->document->account, [
-                ...$response['token_usage'],
-                'meta' => ['document_id' => $this->contentBlock->document->id]
-            ]);
+            if (!$audioParams['subtitles']) {
+                $audioParams = MediaRepository::downloadYoutubeAudio($this->meta['source_url']);
+            }
+
+            // Update the document
+            $this->document->update(['title' => $audioParams['title']]);
+            $this->document->update(['meta' => [
+                ...$this->document->meta,
+                'context' => $audioParams['subtitles'] ?? null,
+                'audio_file_path' => $audioParams['file_paths'],
+                'duration' => $audioParams['total_duration']
+            ]]);
+
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to translate text block: ' . $e->getMessage());
+            Log::error($e->getMessage());
+            $this->jobFailed('Audio download error: ' . $e->getMessage());
         }
     }
 
@@ -101,6 +102,6 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'translating_text_block_' . $this->contentBlock->id;
+        return 'download_audio_' . $this->document->id;
     }
 }

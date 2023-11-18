@@ -105,7 +105,7 @@
                     'content' => App\Helpers\InstructionsHelper::wordsCount()
                     ])
                 </div>
-                <input type="number" min="100" max="3000" name="max_words_count" wire:model.lazy="maxWordsCount" class="p-3 rounded-lg border border-zinc-200 w-2/3" />
+                <input type="number" min="50" max="3000" name="max_words_count" wire:model.lazy="maxWordsCount" class="p-3 rounded-lg border border-zinc-200 w-2/3" />
                 @if($errors->has('maxWordsCount'))
                 <span class="text-red-500 text-sm">{{ $errors->first('maxWordsCount') }}</span>
                 @endif

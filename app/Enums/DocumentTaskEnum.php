@@ -10,6 +10,7 @@ enum DocumentTaskEnum: string
     case CREATE_TITLE = 'create_title';
     case CREATE_METADESCRIPTION = 'create_meta_description';
     case DOWNLOAD_AUDIO = 'download_audio';
+    case DOWNLOAD_SUBTITLES = 'download_subtitles';
     case EMBED_SOURCE = 'embed_source';
     case EXPAND_OUTLINE = 'expand_outline';
     case EXPAND_TEXT = 'expand_text';
@@ -45,6 +46,7 @@ enum DocumentTaskEnum: string
             self::CREATE_TITLE => "App\Jobs\CreateTitle",
             self::CREATE_METADESCRIPTION => "App\Jobs\Blog\CreateMetaDescription",
             self::DOWNLOAD_AUDIO => "App\Jobs\DownloadAudio",
+            self::DOWNLOAD_SUBTITLES => "App\Jobs\DownloadSubtitles",
             self::EXPAND_OUTLINE => "App\Jobs\ExpandOutline",
             self::EXPAND_TEXT => "App\Jobs\ExpandText",
             self::EXPAND_TEXT_SECTION => "App\Jobs\ExpandTextSection",

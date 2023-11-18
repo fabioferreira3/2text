@@ -40,6 +40,11 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
+            if (($this->meta['abort_when_context_present'] ?? false) && $this->document->getMeta('context')) {
+                $this->jobSkipped();
+                return;
+            }
+
             $transcribedText = MediaRepository::transcribeAudio(
                 $this->document->getMeta('audio_file_path')
             );

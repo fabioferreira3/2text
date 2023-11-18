@@ -42,6 +42,7 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
         try {
             if ($this->meta['query_embedded'] ?? false) {
             } else {
+                $this->meta['content'] = $this->meta['content'] ?? $this->document->getMeta('context');
                 GenRepository::generateSummary($this->document, $this->meta);
             }
             event(new BroadcastEvent([
