@@ -4,6 +4,7 @@ namespace App\Enums;
 
 enum DocumentTaskEnum: string
 {
+    case BROADCAST_CUSTOM_EVENT = 'broadcast_custom_event';
     case CRAWL_WEBSITE = 'crawl_website';
     case CREATE_SOCIAL_MEDIA_POST = 'create_social_media_post';
     case CREATE_OUTLINE = 'create_outline';
@@ -40,6 +41,7 @@ enum DocumentTaskEnum: string
     public function getJob()
     {
         return match ($this) {
+            self::BROADCAST_CUSTOM_EVENT => "App\Jobs\BroadcastCustomEvent",
             self::CRAWL_WEBSITE => "App\Jobs\CrawlWebsite",
             self::CREATE_SOCIAL_MEDIA_POST => "App\Jobs\SocialMedia\CreatePost",
             self::CREATE_OUTLINE => "App\Jobs\Blog\CreateOutline",

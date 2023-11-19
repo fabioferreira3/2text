@@ -9,7 +9,7 @@
         <div class="flex w-full items-center justify-between h-16">
             <div class="mr-8 sm:mr-0">
                 @if ((url()->current() !== url()->route('dashboard')))
-                <a href="{{url()->route('dashboard')}}"
+                <a href="{{url()->previous()}}"
                     class="flex text-white text-sm items-center gap-2 bg-secondary px-4 py-1 rounded-full">
                     <x-icon name="arrow-circle-left" class="w-4 h-4" />
                     <span>{{__('common.back')}}</span>

@@ -77,6 +77,19 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
                 'order' => 4
             ]
         );
+
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::BROADCAST_CUSTOM_EVENT,
+            [
+                'process_id' => $this->params['process_id'] ?? Str::uuid(),
+                'meta' => [
+                    'event_name' => 'SummaryCompleted'
+                ],
+                'order' => 5
+            ]
+        );
+
         DispatchDocumentTasks::dispatch($this->document);
     }
 

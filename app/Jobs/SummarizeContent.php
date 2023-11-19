@@ -2,9 +2,10 @@
 
 namespace App\Jobs;
 
-use App\Events\BroadcastEvent;
 use App\Jobs\Traits\JobEndings;
+use App\Jobs\Translation\TranslateTextBlock;
 use App\Models\Document;
+use App\Models\DocumentContentBlock;
 use App\Repositories\GenRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -41,18 +42,30 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
     {
         try {
             if ($this->meta['query_embedding'] ?? false) {
-                GenRepository::generateEmbeddedSummary($this->document, $this->meta);
+                $response = GenRepository::generateEmbeddedSummary($this->document, $this->meta);
             } else {
                 $this->meta['content'] = $this->meta['content'] ?? $this->document->getMeta('context');
-                GenRepository::generateSummary($this->document, $this->meta);
+                $response = GenRepository::generateSummary($this->document, $this->meta);
             }
-            event(new BroadcastEvent([
-                'user_id' => $this->document->getMeta('user_id'),
-                'event_name' => 'SummaryCompleted',
-                'payload' => [
-                    'document_id' => $this->document->id,
-                ]
-            ]));
+
+            $contentBlock = $this->document->contentBlocks()->save((new DocumentContentBlock([
+                'type' => 'text',
+                'content' => $response['content'],
+                'prompt' => null,
+                'order' => 1
+            ])));
+
+            RegisterProductUsage::dispatch($this->document->account, [
+                ...$response['token_usage'],
+                'meta' => ['document_id' => $this->document->id]
+            ]);
+
+            if ($this->document->getMeta('target_language')) {
+                TranslateTextBlock::dispatchSync($this->document, [
+                    'content_block_id' => $contentBlock->id,
+                    'target_language' => $this->document->getMeta('target_language')
+                ]);
+            }
 
             $this->jobSucceded();
         } catch (Exception $e) {
