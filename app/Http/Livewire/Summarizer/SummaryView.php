@@ -18,7 +18,9 @@ class SummaryView extends Component
     {
         $this->title = $document->title ?? __('summarizer.summary');
         $this->source = $document->getMeta('source');
-        $this->context = $document->getMeta('context') ?? $document->content;
+        $this->context = $document->getMeta('context')
+            ?? $document->content
+            ?? $document->getMeta('source_url');
         $this->contentBlock = $document->contentBlocks()->ofTextType()->latest()->first();
     }
 

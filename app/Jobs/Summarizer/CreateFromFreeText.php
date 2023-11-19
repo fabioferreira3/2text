@@ -12,7 +12,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
@@ -31,7 +30,6 @@ class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document;
         $this->params = $params;
-        Log::debug($params);
     }
 
     /**

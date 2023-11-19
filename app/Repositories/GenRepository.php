@@ -123,6 +123,31 @@ class GenRepository
         ]);
     }
 
+    public static function generateEmbeddedSummary(Document $document, array $params)
+    {
+        $repo = new DocumentRepository($document);
+        $user = User::findOrFail($document->getMeta('user_id'));
+        $promptHelper = PromptHelperFactory::create($document->language->value);
+        $oraculum = new Oraculum($user, $document->id);
+        $response = $oraculum->query($promptHelper->writeEmbeddedSummary($params));
+        $document->contentBlocks()->save((new DocumentContentBlock([
+            'type' => 'text',
+            'content' => $response['content'],
+            'prompt' => null,
+            'order' => 1
+        ])));
+        $repo->addHistory(
+            [
+                'field' => 'summary',
+                'content' => $response['content']
+            ]
+        );
+        RegisterProductUsage::dispatch($document->account, [
+            ...$response['token_usage'],
+            'meta' => ['document_id' => $document->id]
+        ]);
+    }
+
     public static function generateImage(Document $document, array $params)
     {
         $handler = new ImageGeneratorHandler();

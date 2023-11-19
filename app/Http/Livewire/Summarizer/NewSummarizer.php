@@ -16,9 +16,12 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Livewire\WithFileUploads;
 
 class NewSummarizer extends Component
 {
+    use WithFileUploads;
+
     public $document;
     public $context;
     public $source;

@@ -29,20 +29,6 @@ class PrepareCreationTasks
 
     public function handle()
     {
-        $tasksCount = $this->defineTasksCount();
-
-        // DocumentRepository::createTask(
-        //     $this->document->id,
-        //     DocumentTaskEnum::GENERATE_AI_THOUGHTS,
-        //     [
-        //         'process_id' => Str::uuid(),
-        //         'meta' => [
-        //             'sentences_count' => $tasksCount
-        //         ],
-        //         'order' => 1
-        //     ]
-        // );
-
         DocumentRepository::createTask(
             $this->document->id,
             DocumentTaskEnum::REMOVE_EMBEDDINGS,
@@ -57,30 +43,25 @@ class PrepareCreationTasks
 
         DispatchDocumentTasks::dispatch($this->document);
 
-        CreateFromFreeText::dispatchIf($this->document->getMeta('source') === 'free_text', $this->document, $this->params);
-        CreateFromVideoStream::dispatchIf($this->document->getMeta('source') === 'youtube', $this->document, $this->params);
-        // CreateFromWebsite::dispatchIf($this->params['source'] === 'website_url', $this->document, $this->params);
-        // CreateFromFile::dispatchIf(in_array($this->params['source'], [
-        //     SourceProvider::CSV->value,
-        //     SourceProvider::DOCX->value,
-        //     SourceProvider::PDF->value
-        // ]), $this->document, $this->params);
-    }
-
-    public function defineTasksCount()
-    {
-        $tasksCount = 2;
-        if (in_array($this->document->getMeta('source'), [
-            SourceProvider::WEBSITE_URL->value,
-            SourceProvider::YOUTUBE->value
-        ])) {
-            $tasksCount += 1;
-        }
-
-        $repo = new DocumentRepository(($this->document));
-        $repo->updateMeta('total_tasks_count', $tasksCount);
-        $repo->updateMeta('completed_tasks_count', 0);
-
-        return $tasksCount;
+        CreateFromFreeText::dispatchIf(
+            $this->document->getMeta('source') === 'free_text',
+            $this->document,
+            $this->params
+        );
+        CreateFromVideoStream::dispatchIf(
+            $this->document->getMeta('source') === 'youtube',
+            $this->document,
+            $this->params
+        );
+        CreateFromWebsite::dispatchIf(
+            $this->document->getMeta('source') === 'website_url',
+            $this->document,
+            $this->params
+        );
+        CreateFromFile::dispatchIf(in_array($this->document->getMeta('source'), [
+            SourceProvider::CSV->value,
+            SourceProvider::DOCX->value,
+            SourceProvider::PDF->value
+        ]), $this->document, $this->params);
     }
 }

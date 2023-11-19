@@ -209,6 +209,15 @@ class PromptHelper
         ]);
     }
 
+    public function writeEmbeddedSummary(array $params)
+    {
+        return Lang::get(
+            'prompt.write_embedded_summary',
+            ['maxWords' => $params['max_words_count']],
+            $this->language
+        );
+    }
+
     public function writeSummary(array $params)
     {
         return Lang::get(

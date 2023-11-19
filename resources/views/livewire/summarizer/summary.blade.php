@@ -1,7 +1,8 @@
 <div class="flex flex-col gap-6">
-    @include('livewire.common.header', ['icon' => 'sort-ascending', 'label' => $title, 'suffix' => __('summarizer.summary')])
-    <div class="grid grid-cols-2 gap-8">
+    @include('livewire.common.header', ['icon' => 'sort-ascending', 'label' => $title, 'suffix' => $context ? __('summarizer.summary') : ""])
+    <div class="grid @if($context) grid-cols-2 @else grid-cols-1 @endif gap-8">
         <div class="flex flex-col gap-4">
+            @if($context)
             <h2 class="font-bold text-3xl text-zinc-700">{{__('summarizer.source')}}:</h2>
             <div class="text-zinc-700">
                 @if($source === 'youtube')
@@ -16,6 +17,8 @@
                 </div>
                 @endif
             </div>
+            @endif
+
         </div>
         <div class="flex flex-col gap-4">
             <h2 class="font-bold text-3xl text-zinc-700">{{__('summarizer.summary')}}:</h2>

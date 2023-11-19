@@ -15,7 +15,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
-class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
+class CreateFromFile implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -42,14 +42,15 @@ class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
+        $dataType = DataType::tryFrom($this->document->meta['source']);
         DocumentRepository::createTask(
             $this->document->id,
             DocumentTaskEnum::EMBED_SOURCE,
             [
                 'process_id' => $this->processId,
                 'meta' => [
-                    'data_type' => DataType::WEB_PAGE->value,
-                    'source' => $this->document->getMeta('source_url'),
+                    'data_type' => $dataType->value,
+                    'source' => $this->document->getMeta('source_file_path'),
                     'collection_name' => $this->document->id
                 ],
                 'order' => 1
@@ -79,6 +80,6 @@ class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'creating_summary_from_website_url_' . $this->document->id;
+        return 'creating_summary_from_file_' . $this->document->id;
     }
 }
