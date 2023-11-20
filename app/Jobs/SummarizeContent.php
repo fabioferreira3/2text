@@ -21,6 +21,7 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
     protected Document $document;
+    protected GenRepository $generator;
     protected array $meta;
 
     /**
@@ -62,10 +63,11 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
      *
      * @return void
      */
-    public function __construct(Document $document, array $meta = [])
+    public function __construct(Document $document, array $meta = [], GenRepository $generator = null)
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
+        $this->generator = $generator ?? app(GenRepository::class);
     }
 
     /**
@@ -77,10 +79,10 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
     {
         try {
             if ($this->meta['query_embedding'] ?? false) {
-                $response = GenRepository::generateEmbeddedSummary($this->document, $this->meta);
+                $response = $this->generator->generateEmbeddedSummary($this->document, $this->meta);
             } else {
                 $this->meta['content'] = $this->meta['content'] ?? $this->document->getMeta('context');
-                $response = GenRepository::generateSummary($this->document, $this->meta);
+                $response = $this->generator->generateSummary($this->document, $this->meta);
             }
 
             $contentBlock = $this->document->contentBlocks()->save((new DocumentContentBlock([

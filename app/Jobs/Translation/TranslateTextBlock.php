@@ -20,9 +20,9 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected Document $document;
-    protected DocumentContentBlock $contentBlock;
-    protected array $meta;
+    public Document $document;
+    public DocumentContentBlock $contentBlock;
+    public array $params;
 
     /**
      * The number of times the job may be attempted.
@@ -43,11 +43,11 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
      *
      * @return void
      */
-    public function __construct(Document $document, array $meta = [])
+    public function __construct(Document $document, array $params = [])
     {
         $this->document = $document;
-        $this->contentBlock = DocumentContentBlock::findOrFail($meta['content_block_id']);
-        $this->meta = $meta;
+        $this->contentBlock = DocumentContentBlock::findOrFail($params['content_block_id']);
+        $this->params = $params;
     }
 
     /**
@@ -60,7 +60,7 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
         try {
             $response = GenRepository::translateText(
                 $this->contentBlock->content,
-                $this->meta['target_language']
+                $this->params['target_language']
             );
             $this->contentBlock->update([
                 'content' => $response['content']

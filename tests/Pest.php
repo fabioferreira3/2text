@@ -11,10 +11,12 @@
 |
 */
 
+use App\Enums\AIModel;
 use App\Models\User;
 use App\Packages\OpenAI\ChatGPT;
 use App\Packages\OpenAI\DallE;
 use App\Packages\Oraculum\Oraculum;
+use App\Repositories\GenRepository;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 
@@ -25,20 +27,21 @@ uses()->beforeEach(function () {
     $this->authUser = User::factory()->create();
 
     // ChatGPT Mock
+    $this->chatGptRequestResponse = [
+        'content' => 'AI content generated',
+        'token_usage' => [
+            'model' => AIModel::GPT_4_TURBO->value,
+            'prompt' => 150,
+            'completion' => 200,
+            'total' => 350
+        ]
+    ];
     $this->chatGpt = Mockery::mock(ChatGPT::class);
     $this->chatGpt->shouldReceive('countTokens')->andReturn(500);
 
     $this->chatGpt->shouldReceive('request')->withArgs(function ($arg) {
         return is_array($arg);
-    })->andReturn([
-        'content' => 'Hello, how are you?',
-        'token_usage' => [
-            'model' => 'gpt-model',
-            'prompt' => 150,
-            'completion' => 200,
-            'total' => 350
-        ]
-    ]);
+    })->andReturn($this->chatGptRequestResponse);
 
     // Dall-E Mock
     $this->dallE = Mockery::mock(DallE::class);
@@ -61,6 +64,12 @@ uses()->beforeEach(function () {
     $this->oraculum->shouldReceive('chat')->andReturn([]);
     $this->oraculum->shouldReceive('deleteCollection')->andReturn([]);
     $this->oraculum->shouldReceive('countTokens')->andReturn([]);
+
+    // Generator
+    $this->generator = Mockery::mock(GenRepository::class);
+
+    $this->generator->shouldReceive('generateSummary')->andReturn($this->chatGpt->request(['message']));
+    $this->generator->shouldReceive('generateEmbeddedSummary')->andReturn($this->chatGpt->request(['message']));
 })->in(__DIR__);
 
 uses(

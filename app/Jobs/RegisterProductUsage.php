@@ -17,8 +17,8 @@ class RegisterProductUsage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected Account $account;
-    protected array $params;
+    public Account $account;
+    public array $params;
 
     /**
      * Create a new job instance.

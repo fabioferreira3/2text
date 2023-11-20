@@ -20,6 +20,7 @@ use Talendor\StabilityAI\Enums\StabilityAIEngine;
 
 class GenRepository
 {
+
     public static function generateTitle(Document $document, $context)
     {
         $promptHelper = PromptHelperFactory::create($document->language->value);
@@ -81,7 +82,7 @@ class GenRepository
         ]);
     }
 
-    public static function generateSummary(Document $document, array $params)
+    public function generateSummary(Document $document, array $params)
     {
         $promptHelper = PromptHelperFactory::create($document->language->value);
         $chatGpt = new ChatGPT(AIModel::GPT_4_TURBO->value);
@@ -91,7 +92,7 @@ class GenRepository
         ]]);
     }
 
-    public static function generateEmbeddedSummary(Document $document, array $params)
+    public function generateEmbeddedSummary(Document $document, array $params)
     {
         $user = User::findOrFail($document->getMeta('user_id'));
         $promptHelper = PromptHelperFactory::create($document->language->value);
