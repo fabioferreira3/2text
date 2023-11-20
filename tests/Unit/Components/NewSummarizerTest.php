@@ -1,7 +1,14 @@
 <?php
 
+use App\Enums\DocumentType;
+use App\Enums\SourceProvider;
 use App\Http\Livewire\Summarizer\NewSummarizer;
+use App\Jobs\Summarizer\PrepareCreationTasks;
 use App\Models\Document;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Storage;
+
 use function Pest\Laravel\{actingAs};
 use function Pest\Faker\fake;
 
@@ -98,6 +105,111 @@ describe(
                     ->call('process')
                     ->assertHasErrors(['maxWordsCount' => 'max']);
             });
+
+            test('fileInput is required for specific source types', function () {
+                $sourceTypes = ['docx', 'pdf_file', 'csv'];
+                foreach ($sourceTypes as $sourceType) {
+                    actingAs($this->authUser)
+                        ->livewire(NewSummarizer::class)
+                        ->set('document', $this->document)
+                        ->set('source', $sourceType)
+                        ->set('fileInput', null)
+                        ->call('process')
+                        ->assertHasErrors(['fileInput' => 'required_if']);
+                }
+            });
+
+            test('fileInput must be a valid docx file', function () {
+                actingAs($this->authUser)
+                    ->livewire(NewSummarizer::class)
+                    ->set('document', $this->document)
+                    ->set('source', 'docx')
+                    ->set('fileInput', UploadedFile::fake()->create('avatar.txt'))
+                    ->call('process')
+                    ->assertHasErrors('fileInput')
+                    ->assertHasNoErrors(['fileInput' => 'max'])
+                    ->assertHasNoErrors(['fileInput' => 'required_if'])
+                    ->set('fileInput', UploadedFile::fake()->create('avatar.docx'))
+                    ->call('process')
+                    ->assertHasNoErrors('fileInput');
+            });
+
+            test('fileInput must be a valid pdf file', function () {
+                actingAs($this->authUser)
+                    ->livewire(NewSummarizer::class)
+                    ->set('document', $this->document)
+                    ->set('source', 'pdf_file')
+                    ->set('fileInput', UploadedFile::fake()->create('avatar.txt'))
+                    ->call('process')
+                    ->assertHasErrors('fileInput')
+                    ->assertHasNoErrors(['fileInput' => 'max'])
+                    ->assertHasNoErrors(['fileInput' => 'required_if']);
+            });
+
+            test('fileInput must be a valid csv file', function () {
+                actingAs($this->authUser)
+                    ->livewire(NewSummarizer::class)
+                    ->set('document', $this->document)
+                    ->set('source', 'csv')
+                    ->set('fileInput', UploadedFile::fake()->create('avatar.pdf'))
+                    ->call('process')
+                    ->assertHasErrors('fileInput')
+                    ->assertHasNoErrors(['fileInput' => 'max'])
+                    ->assertHasNoErrors(['fileInput' => 'required_if']);
+            });
+
+            test('target language', function () {
+                actingAs($this->authUser)
+                    ->livewire(NewSummarizer::class)
+                    ->set('document', $this->document)
+                    ->set('targetLanguage', null)
+                    ->call('process')
+                    ->assertHasErrors(['targetLanguage' => 'required'])
+                    ->set('targetLanguage', 'maio')
+                    ->call('process')
+                    ->assertHasErrors(['targetLanguage' => 'in']);
+            });
+
+            test('source language', function () {
+                actingAs($this->authUser)
+                    ->livewire(NewSummarizer::class)
+                    ->set('document', $this->document)
+                    ->set('sourceLanguage', null)
+                    ->call('process')
+                    ->assertHasErrors(['sourceLanguage' => 'required'])
+                    ->set('sourceLanguage', 'maio')
+                    ->call('process')
+                    ->assertHasErrors(['sourceLanguage' => 'in']);
+            });
+        });
+
+        test('store file', function () {
+            $response = actingAs($this->authUser)
+                ->livewire(NewSummarizer::class)
+                ->set('document', $this->document)
+                ->set('fileInput', UploadedFile::fake()->create('avatar.pdf'))
+                ->call('storeFile');
+
+            Storage::disk('s3')->assertExists($response->filePath);
+        });
+
+        test('process', function () {
+            actingAs($this->authUser)
+                ->livewire(NewSummarizer::class)
+                ->set('source', SourceProvider::FREE_TEXT->value)
+                ->set('context', 'eita porra')
+                ->set('maxWordsCount', 250)
+                ->call('process')
+                ->assertHasNoErrors();
+
+            $this->assertDatabaseHas('documents', [
+                'type' => DocumentType::SUMMARIZER->value,
+                'content' => 'eita porra',
+                'meta->source' => SourceProvider::FREE_TEXT->value,
+                'meta->max_words_count' => 250
+            ]);
+
+            Bus::assertDispatched(PrepareCreationTasks::class);
         });
     }
 );

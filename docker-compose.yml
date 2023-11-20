@@ -59,7 +59,7 @@ services:
             POSTGRES_MULTIPLE_DATABASES: postgres,postgres_testing
         volumes:
             - "sail-pgsql:/var/lib/postgresql/data"
-           # - "./docker/postgres/create-databases.sql:/docker-entrypoint-initdb.d/10-create-databases.sql"
+            - "./docker/postgres/create-databases.sql:/docker-entrypoint-initdb.d/10-create-databases.sql"
         networks:
             - twotext
     redis:
@@ -75,15 +75,15 @@ services:
             test: ["CMD", "redis-cli", "ping"]
             retries: 3
             timeout: 5s
-    chromadb:
-        container_name: experior-chromadb
-        image: "chromadb/chroma"
-        ports:
-            - "8000:8000"
-        environment:
-            ALLOW_RESET: true
-        networks:
-            - twotext
+    # chromadb:
+    #     container_name: experior-chromadb
+    #     image: "chromadb/chroma"
+    #     ports:
+    #         - "8000:8000"
+    #     environment:
+    #         ALLOW_RESET: true
+    #     networks:
+    #         - twotext
 networks:
     twotext:
         driver: bridge

@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Enums\SourceProvider;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 
@@ -21,7 +22,7 @@ class CsvFile implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if ($this->source !== 'csv') {
+        if ($this->source !== SourceProvider::CSV->value) {
             return;
         }
 

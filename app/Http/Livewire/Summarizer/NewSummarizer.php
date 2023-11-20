@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 use Livewire\WithFileUploads;
 
 class NewSummarizer extends Component
@@ -29,6 +30,7 @@ class NewSummarizer extends Component
     public $sourceLanguage;
     public $targetLanguage;
     public $fileInput = null;
+    public $filePath = null;
     public string $tempSourceUrl;
     public int $maxWordsCount = 100;
     public bool $isProcessing;
@@ -49,7 +51,7 @@ class NewSummarizer extends Component
             'targetLanguage' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
             'maxWordsCount' => 'required|numeric|min:50|max:3000',
             'fileInput' => [
-                'required_if:source,docx,pdf',
+                'required_if:source,docx,pdf_file,csv',
                 'max:51200', // in kilobytes, 50mb = 50 * 1024 = 51200kb
                 new DocxFile($this->source),
                 new PdfFile($this->source),
@@ -90,10 +92,8 @@ class NewSummarizer extends Component
     {
         $accountId = Auth::check() ? Auth::user()->account_id : 'guest';
         $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
-        $filePath = "documents/$accountId/" . $filename;
+        $this->filePath = "documents/$accountId/" . $filename;
         $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
-
-        return $filePath;
     }
 
     public function process()
@@ -101,9 +101,8 @@ class NewSummarizer extends Component
         $this->validate();
         try {
             $this->isProcessing = true;
-            $filePath = null;
             if ($this->fileInput) {
-                $filePath = $this->storeFile();
+                $this->storeFile();
             }
             $this->document = DocumentRepository::createGeneric([
                 'type' => DocumentType::SUMMARIZER->value,
@@ -112,7 +111,7 @@ class NewSummarizer extends Component
                 'content' => $this->context,
                 'meta' => [
                     'source_url' => $this->sourceUrl,
-                    'source_file_path' => $filePath ?? null,
+                    'source_file_path' => $this->filePath ?? null,
                     'max_words_count' => $this->maxWordsCount,
                     'target_language' => $this->sourceLanguage === $this->targetLanguage ? null : $this->targetLanguage
                 ]

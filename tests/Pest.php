@@ -16,10 +16,12 @@ use App\Packages\OpenAI\ChatGPT;
 use App\Packages\OpenAI\DallE;
 use App\Packages\Oraculum\Oraculum;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Storage;
 
 uses()->beforeEach(function () {
 
     Bus::fake();
+    Storage::fake('s3');
     $this->authUser = User::factory()->create();
 
     // ChatGPT Mock
