@@ -20,6 +20,7 @@ class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
 
     public Document $document;
     public array $params;
+    public $processId;
 
     /**
      * Create a new job instance.
@@ -30,6 +31,7 @@ class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document;
         $this->params = $params;
+        $this->processId = $params['process_id'] ?? Str::uuid();
     }
 
     /**
@@ -43,9 +45,8 @@ class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
             $this->document->id,
             DocumentTaskEnum::SUMMARIZE_CONTENT,
             [
-                'process_id' => $this->params['process_id'] ?? Str::uuid(),
+                'process_id' => $this->processId,
                 'meta' => [
-                    'collection_name' => $this->document->id,
                     'content' => $this->document->content ?? null,
                     'query_embedding' => false,
                     'max_words_count' => $this->document->getMeta('max_words_count')
@@ -58,7 +59,7 @@ class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
             $this->document->id,
             DocumentTaskEnum::BROADCAST_CUSTOM_EVENT,
             [
-                'process_id' => $this->params['process_id'] ?? Str::uuid(),
+                'process_id' => $this->processId,
                 'meta' => [
                     'event_name' => 'SummaryCompleted'
                 ],

@@ -14,30 +14,26 @@ use function Pest\Faker\fake;
 
 beforeEach(function () {
     $this->document = Document::factory()->create();
+    $this->component = actingAs($this->authUser)->livewire(NewSummarizer::class);
 });
 
 describe(
     'NewSummarizer component',
     function () {
         test('renders the new correct view', function () {
-            actingAs($this->authUser)
-                ->livewire(NewSummarizer::class)
-                ->assertStatus(200)
+            $this->component->assertStatus(200)
                 ->assertViewIs('livewire.summarizer.new');
         });
 
         test('redirects to document view once finished processing', function () {
-            actingAs($this->authUser)
-                ->livewire(NewSummarizer::class)
-                ->set('document', $this->document)
+            $this->component->set('document', $this->document)
                 ->call('onProcessFinished', ['document_id' => $this->document->id])
                 ->assertRedirect(route('summary-view', ['document' => $this->document]));
         });
 
         describe('NewSummarizer component validation', function () {
             test('context', function () {
-                actingAs($this->authUser)
-                    ->livewire(NewSummarizer::class)
+                $this->component
                     ->set('document', $this->document)
                     ->set('context', fake()->text(30500))
                     ->set('source', 'free_text')
@@ -50,8 +46,7 @@ describe(
             });
 
             test('source url', function () {
-                actingAs($this->authUser)
-                    ->livewire(NewSummarizer::class)
+                $this->component
                     ->set('document', $this->document)
                     ->set('source', 'website_url')
                     ->call('process')
@@ -69,8 +64,7 @@ describe(
             });
 
             test('youtube invalid source url', function (string $url) {
-                actingAs($this->authUser)
-                    ->livewire(NewSummarizer::class)
+                $this->component
                     ->set('document', $this->document)
                     ->set('source', 'youtube')
                     ->call('process')
@@ -79,9 +73,7 @@ describe(
             })->with([fake()->url(), fake()->url(), fake()->url(), fake()->url()]);
 
             test('youtube valid source url', function (string $url) {
-                dump($url);
-                actingAs($this->authUser)
-                    ->livewire(NewSummarizer::class)
+                $this->component
                     ->set('document', $this->document)
                     ->set('source', 'youtube')
                     ->set('context', '')
@@ -95,8 +87,7 @@ describe(
             ]);
 
             test('max words count', function () {
-                actingAs($this->authUser)
-                    ->livewire(NewSummarizer::class)
+                $this->component
                     ->set('document', $this->document)
                     ->set('maxWordsCount', '49')
                     ->call('process')
@@ -109,8 +100,7 @@ describe(
             test('fileInput is required for specific source types', function () {
                 $sourceTypes = ['docx', 'pdf_file', 'csv'];
                 foreach ($sourceTypes as $sourceType) {
-                    actingAs($this->authUser)
-                        ->livewire(NewSummarizer::class)
+                    $this->component
                         ->set('document', $this->document)
                         ->set('source', $sourceType)
                         ->set('fileInput', null)
@@ -120,8 +110,7 @@ describe(
             });
 
             test('fileInput must be a valid docx file', function () {
-                actingAs($this->authUser)
-                    ->livewire(NewSummarizer::class)
+                $this->component
                     ->set('document', $this->document)
                     ->set('source', 'docx')
                     ->set('fileInput', UploadedFile::fake()->create('avatar.txt'))
@@ -135,8 +124,7 @@ describe(
             });
 
             test('fileInput must be a valid pdf file', function () {
-                actingAs($this->authUser)
-                    ->livewire(NewSummarizer::class)
+                $this->component
                     ->set('document', $this->document)
                     ->set('source', 'pdf_file')
                     ->set('fileInput', UploadedFile::fake()->create('avatar.txt'))
@@ -147,8 +135,7 @@ describe(
             });
 
             test('fileInput must be a valid csv file', function () {
-                actingAs($this->authUser)
-                    ->livewire(NewSummarizer::class)
+                $this->component
                     ->set('document', $this->document)
                     ->set('source', 'csv')
                     ->set('fileInput', UploadedFile::fake()->create('avatar.pdf'))
@@ -159,8 +146,7 @@ describe(
             });
 
             test('target language', function () {
-                actingAs($this->authUser)
-                    ->livewire(NewSummarizer::class)
+                $this->component
                     ->set('document', $this->document)
                     ->set('targetLanguage', null)
                     ->call('process')
@@ -171,8 +157,7 @@ describe(
             });
 
             test('source language', function () {
-                actingAs($this->authUser)
-                    ->livewire(NewSummarizer::class)
+                $this->component
                     ->set('document', $this->document)
                     ->set('sourceLanguage', null)
                     ->call('process')
@@ -184,8 +169,7 @@ describe(
         });
 
         test('store file', function () {
-            $response = actingAs($this->authUser)
-                ->livewire(NewSummarizer::class)
+            $response = $this->component
                 ->set('document', $this->document)
                 ->set('fileInput', UploadedFile::fake()->create('avatar.pdf'))
                 ->call('storeFile');
@@ -194,8 +178,7 @@ describe(
         });
 
         test('process', function () {
-            actingAs($this->authUser)
-                ->livewire(NewSummarizer::class)
+            $this->component
                 ->set('source', SourceProvider::FREE_TEXT->value)
                 ->set('context', 'eita porra')
                 ->set('maxWordsCount', 250)

@@ -4,6 +4,7 @@ namespace App\Jobs\Summarizer;
 
 use App\Enums\DataType;
 use App\Enums\DocumentTaskEnum;
+use App\Exceptions\InvalidEmbeddingSummaryDataTypeException;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
@@ -43,6 +44,12 @@ class CreateFromFile implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         $dataType = DataType::tryFrom($this->document->meta['source']);
+
+        if (!in_array($dataType, [DataType::DOCX, DataType::PDF, DataType::CSV])) {
+            throw new InvalidEmbeddingSummaryDataTypeException('Create summary from file:
+            Invalid data type to be embedded');
+        }
+
         DocumentRepository::createTask(
             $this->document->id,
             DocumentTaskEnum::EMBED_SOURCE,

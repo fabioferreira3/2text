@@ -56,32 +56,32 @@ class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
             ]
         );
 
-        // DocumentRepository::createTask(
-        //     $this->document->id,
-        //     DocumentTaskEnum::SUMMARIZE_CONTENT,
-        //     [
-        //         'process_id' => $this->processId,
-        //         'meta' => [
-        //             'content' => null,
-        //             'collection_name' => $this->document->id,
-        //             'query_embedding' => true,
-        //             'max_words_count' => $this->document->getMeta('max_words_count')
-        //         ],
-        //         'order' => 2
-        //     ]
-        // );
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::SUMMARIZE_CONTENT,
+            [
+                'process_id' => $this->processId,
+                'meta' => [
+                    'content' => null,
+                    'collection_name' => $this->document->id,
+                    'query_embedding' => true,
+                    'max_words_count' => $this->document->getMeta('max_words_count')
+                ],
+                'order' => 2
+            ]
+        );
 
-        // DocumentRepository::createTask(
-        //     $this->document->id,
-        //     DocumentTaskEnum::BROADCAST_CUSTOM_EVENT,
-        //     [
-        //         'process_id' => $this->params['process_id'] ?? Str::uuid(),
-        //         'meta' => [
-        //             'event_name' => 'SummaryCompleted'
-        //         ],
-        //         'order' => 3
-        //     ]
-        // );
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::BROADCAST_CUSTOM_EVENT,
+            [
+                'process_id' => $this->params['process_id'] ?? Str::uuid(),
+                'meta' => [
+                    'event_name' => 'SummaryCompleted'
+                ],
+                'order' => 3
+            ]
+        );
 
         DispatchDocumentTasks::dispatch($this->document);
     }

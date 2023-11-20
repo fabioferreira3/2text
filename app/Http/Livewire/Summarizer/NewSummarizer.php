@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\File;
 use Livewire\WithFileUploads;
 
 class NewSummarizer extends Component
@@ -38,11 +37,15 @@ class NewSummarizer extends Component
     public function rules()
     {
         return [
+            'document' => 'nullable',
             'context' => [
                 'required_if:source,free_text',
                 'max:30000'
             ],
-            'sourceUrl' => ['required_if:source,youtube,website_url', 'nullable', 'url', $this->source === 'youtube' ? new \App\Rules\YouTubeUrl() : ''],
+            'sourceUrl' => [
+                'required_if:source,youtube,website_url', 'nullable', 'url',
+                $this->source === 'youtube' ? new \App\Rules\YouTubeUrl() : ''
+            ],
             'source' => [
                 'required',
                 Rule::in(array_map(fn ($value) => $value->value, SourceProvider::cases()))

@@ -52,6 +52,7 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
                 'order' => 1
             ]
         );
+
         DocumentRepository::createTask(
             $this->document->id,
             DocumentTaskEnum::TRANSCRIBE_AUDIO,
@@ -74,7 +75,7 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
                     'query_embedding' => false,
                     'max_words_count' => $this->document->getMeta('max_words_count')
                 ],
-                'order' => 4
+                'order' => 3
             ]
         );
 
@@ -86,7 +87,7 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     'event_name' => 'SummaryCompleted'
                 ],
-                'order' => 5
+                'order' => 4
             ]
         );
 
