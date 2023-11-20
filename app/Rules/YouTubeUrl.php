@@ -2,31 +2,23 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 
-class YouTubeUrl implements Rule
+class YouTubeUrl implements ValidationRule
 {
-    /**
-     * Create a new rule instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
 
     /**
-     * Determine if the validation rule passes.
+     * Run the validation rule.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
+     * @param  \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
      */
-    public function passes($attribute, $value)
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        return preg_match('#^https?://(?:www\.)?youtube\.com/watch\?v=[A-Za-z0-9_-]+$#', $value)
-            || preg_match('#^https?://(?:www\.)?youtu\.be/[A-Za-z0-9_-]+$#', $value);
+        if (!(preg_match('#^https?://(?:www\.)?youtube\.com/watch\?v=[A-Za-z0-9_-]+(&.*)?$#', $value) ||
+            preg_match('#^https?://(?:www\.)?youtu\.be/[A-Za-z0-9_-]+(\?.*)?$#', $value))) {
+            $fail($this->message());
+        }
     }
 
     /**

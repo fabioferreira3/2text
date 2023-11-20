@@ -51,4 +51,9 @@ class Account extends Model implements JWTSubject
     {
         return JWTAuth::fromUser($this);
     }
+
+    public static function newFactory()
+    {
+        return \Database\Factories\AccountFactory::new();
+    }
 }

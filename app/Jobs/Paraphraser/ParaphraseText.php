@@ -57,13 +57,6 @@ class ParaphraseText implements ShouldQueue
                 ]));
             }
 
-            $this->repo->addHistory(
-                [
-                    'field' => 'paraphrased_text',
-                    'content' => $response['content']
-                ]
-            );
-
             RegisterProductUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => ['document_id' => $this->document->id]

@@ -24,40 +24,6 @@ class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
     public array $meta;
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct(Document $document, $meta = [])
-    {
-        $this->document = $document->fresh();
-        $this->meta = $meta;
-    }
-
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle()
-    {
-        try {
-            $audioParams = MediaRepository::downloadYoutubeAudio($this->meta['source_url']);
-            $transcribedText = MediaRepository::transcribeAudio($audioParams['file_paths']);
-            $finalTranscription = "Title: " . $audioParams['title'] . "Content: " . $transcribedText;
-            EmbedSource::dispatchSync($this->document, [
-                'data_type' => DataType::TEXT->value,
-                'source' => $finalTranscription,
-                'collection_name' => $this->meta['collection_name']
-            ]);
-            $this->jobSucceded();
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-            $this->jobFailed('Audio extraction and embedding error: ' . $e->getMessage());
-        }
-    }
-
-    /**
      * The number of times the job may be attempted.
      *
      * @var int
@@ -89,6 +55,40 @@ class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
     public function retryUntil()
     {
         return now()->addMinutes(10);
+    }
+
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct(Document $document, $meta = [])
+    {
+        $this->document = $document->fresh();
+        $this->meta = $meta;
+    }
+
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        try {
+            $audioParams = MediaRepository::downloadYoutubeAudio($this->meta['source_url']);
+            $transcribedText = MediaRepository::transcribeAudio($audioParams['file_paths']);
+            $finalTranscription = "Title: " . $audioParams['title'] . "Content: " . $transcribedText;
+            EmbedSource::dispatchSync($this->document, [
+                'data_type' => DataType::TEXT->value,
+                'source' => $finalTranscription,
+                'collection_name' => $this->meta['collection_name']
+            ]);
+            $this->jobSucceded();
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            $this->jobFailed('Audio extraction and embedding error: ' . $e->getMessage());
+        }
     }
 
     /**

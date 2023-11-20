@@ -70,13 +70,6 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
                 ]
             ]);
 
-            $this->repo->addHistory([
-                'field' => 'audio_generation',
-                'content' => $filePath,
-                'word_count' => Str::wordCount($this->meta['input_text']),
-                'char_count' => iconv_strlen($this->meta['input_text'])
-            ]);
-
             RegisterProductUsage::dispatch($this->document->account, [
                 'model' => AIModel::ELEVEN_LABS->value,
                 'meta' => ['document_id' => $this->document->id]

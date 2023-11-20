@@ -59,7 +59,8 @@
             @if (in_array($source, ['docx', 'pdf_file', 'csv', 'json']))
             <div class="flex flex-col gap-3 col-span-2">
                 <label class="font-bold text-xl text-zinc-700">{{ __('blog.file_option') }}</label>
-                <input type="file" name="fileInput" wire:model="fileInput" class="p-3 border border-zinc-200 rounded-lg w-full" />
+                <input type="file" name="fileInput" wire:model="fileInput"
+                    class="p-3 border border-zinc-200 rounded-lg w-full" />
                 @if ($errors->has('fileInput'))
                 <span class="text-red-500 text-sm">{{ $errors->first('fileInput') }}</span>
                 @endif
@@ -73,7 +74,8 @@
                 <label class="font-bold text-xl text-zinc-700 flex items-center">
                     Text:
                 </label>
-                <textarea class="border border-zinc-200 rounded-lg" rows="5" maxlength="30000" wire:model="context"></textarea>
+                <textarea class="border border-zinc-200 rounded-lg" rows="5" maxlength="30000"
+                    wire:model="context"></textarea>
                 @if($errors->has('context'))
                 <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
                 @endif
@@ -87,7 +89,8 @@
                 <label class="font-bold text-xl text-zinc-700 flex items-center">
                     URL
                 </label>
-                <input type="text" name="sourceUrl" wire:model="sourceUrl" class="p-3 border border-zinc-200 rounded-lg w-full" />
+                <input type="text" name="sourceUrl" wire:model="sourceUrl"
+                    class="p-3 border border-zinc-200 rounded-lg w-full" />
 
                 @if ($errors->has('sourceUrl'))
                 <span class="text-red-500 text-sm">{{ $errors->first('sourceUrl') }}</span>
@@ -105,7 +108,8 @@
                     'content' => App\Helpers\InstructionsHelper::wordsCount()
                     ])
                 </div>
-                <input type="number" min="50" max="3000" name="max_words_count" wire:model.lazy="maxWordsCount" class="p-3 rounded-lg border border-zinc-200 w-2/3" />
+                <input type="number" min="50" max="3000" name="max_words_count" wire:model.lazy="maxWordsCount"
+                    class="p-3 rounded-lg border border-zinc-200 w-2/3" />
                 @if($errors->has('maxWordsCount'))
                 <span class="text-red-500 text-sm">{{ $errors->first('maxWordsCount') }}</span>
                 @endif
@@ -115,7 +119,8 @@
 
         <!-- Generate button -->
         <div class="flex justify-center mt-4">
-            <button wire:click="process" wire:loading.remove class="bg-secondary text-xl text-white font-bold px-4 py-2 rounded-lg">
+            <button wire:click="process" wire:loading.remove
+                class="bg-secondary text-xl text-white font-bold px-4 py-2 rounded-lg">
                 {{__('summarizer.generate')}}!
             </button>
         </div>

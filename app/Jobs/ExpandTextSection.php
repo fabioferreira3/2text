@@ -84,12 +84,6 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
 
             $rawStructure[$this->meta['section_key']]['content'] = $response['content'];
             $this->repo->updateMeta('raw_structure', $rawStructure);
-            $this->repo->addHistory(
-                [
-                    'field' => 'expand_text_section',
-                    'content' => $response['content']
-                ]
-            );
             RegisterProductUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => ['document_id' => $this->document->id]

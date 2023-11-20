@@ -44,9 +44,13 @@
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.5.10",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^7.1",
+        "pestphp/pest": "^2.24",
+        "pestphp/pest-plugin-faker": "^2.0",
+        "pestphp/pest-plugin-laravel": "^2.2",
+        "pestphp/pest-plugin-livewire": "^2.1",
+        "phpunit/phpunit": "^10.4",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {

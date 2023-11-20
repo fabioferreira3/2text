@@ -15,7 +15,6 @@ use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
 use App\Models\User;
 use App\Packages\Oraculum\Oraculum;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Talendor\StabilityAI\Enums\StabilityAIEngine;
 
@@ -23,7 +22,6 @@ class GenRepository
 {
     public static function generateTitle(Document $document, $context)
     {
-        $repo = new DocumentRepository($document);
         $promptHelper = PromptHelperFactory::create($document->language->value);
         $chatGpt = new ChatGPT(AIModel::GPT_3_TURBO1106->value);
         $response = $chatGpt->request([[
@@ -34,12 +32,6 @@ class GenRepository
             ])
         ]]);
         $document->update(['title' => Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"')]);
-        $repo->addHistory(
-            [
-                'field' => 'title',
-                'content' => $response['content']
-            ]
-        );
         RegisterProductUsage::dispatch($document->account, [
             ...$response['token_usage'],
             'meta' => ['document_id' => $document->id]
@@ -48,7 +40,6 @@ class GenRepository
 
     public static function generateEmbeddedTitle(Document $document, string $collectionName)
     {
-        $repo = new DocumentRepository($document);
         $user = User::findOrFail($document->getMeta('user_id'));
         $oraculum = new Oraculum($user, $collectionName);
         $promptHelper = PromptHelperFactory::create($document->language->value);
@@ -58,12 +49,6 @@ class GenRepository
         ]));
 
         $document->update(['title' => $response['content']]);
-        $repo->addHistory(
-            [
-                'field' => 'title',
-                'content' => $response['content']
-            ]
-        );
         RegisterProductUsage::dispatch($document->account, [
             ...$response['token_usage'],
             'meta' => ['document_id' => $document->id]
@@ -108,27 +93,10 @@ class GenRepository
 
     public static function generateEmbeddedSummary(Document $document, array $params)
     {
-        $repo = new DocumentRepository($document);
         $user = User::findOrFail($document->getMeta('user_id'));
         $promptHelper = PromptHelperFactory::create($document->language->value);
         $oraculum = new Oraculum($user, $document->id);
-        $response = $oraculum->query($promptHelper->writeEmbeddedSummary($params));
-        $document->contentBlocks()->save((new DocumentContentBlock([
-            'type' => 'text',
-            'content' => $response['content'],
-            'prompt' => null,
-            'order' => 1
-        ])));
-        $repo->addHistory(
-            [
-                'field' => 'summary',
-                'content' => $response['content']
-            ]
-        );
-        RegisterProductUsage::dispatch($document->account, [
-            ...$response['token_usage'],
-            'meta' => ['document_id' => $document->id]
-        ]);
+        return $oraculum->query($promptHelper->writeEmbeddedSummary($params));
     }
 
     public static function generateImage(Document $document, array $params)
@@ -167,7 +135,6 @@ class GenRepository
 
     public static function generateSocialMediaPost(Document $document, string $platform)
     {
-        $repo = new DocumentRepository($document);
         $promptHelper = PromptHelperFactory::create($document->language->value);
         $chatGpt = new ChatGPT();
         $response = $chatGpt->request([
@@ -191,12 +158,6 @@ class GenRepository
             ])
         );
 
-        $repo->addHistory(
-            [
-                'field' => $platform,
-                'content' => $response['content']
-            ]
-        );
         RegisterProductUsage::dispatch($document->account, [
             ...$response['token_usage'],
             'meta' => ['document_id' => $document->id]
@@ -205,7 +166,6 @@ class GenRepository
 
     public static function generateEmbeddedSocialMediaPost(Document $document, string $platform, string $collectionName)
     {
-        $repo = new DocumentRepository($document);
         $user = User::findOrFail($document->getMeta('user_id'));
         $oraculum = new Oraculum($user, $collectionName);
         $promptHelper = PromptHelperFactory::create($document->language->value);
@@ -226,12 +186,6 @@ class GenRepository
             ])
         );
 
-        $repo->addHistory(
-            [
-                'field' => $platform,
-                'content' => $response['content']
-            ]
-        );
         RegisterProductUsage::dispatch($document->account, [
             ...$response['token_usage'],
             'meta' => ['document_id' => $document->id]
@@ -241,7 +195,6 @@ class GenRepository
     public static function rewriteTextBlock(DocumentContentBlock $contentBlock, array $params)
     {
         $model = isset($params['faster']) && $params['faster'] ? AIModel::GPT_3_TURBO1106 : AIModel::GPT_4_TURBO;
-        $repo = new DocumentRepository($contentBlock->document);
         $promptHelper = PromptHelperFactory::create($contentBlock->document->language->value);
         $chatGpt = new ChatGPT($model->value);
         $response = $chatGpt->request([[
@@ -249,12 +202,6 @@ class GenRepository
             'content' => $promptHelper->generic($params['prompt'])
         ]]);
         $contentBlock->update(['content' => $response['content']]);
-        $repo->addHistory(
-            [
-                'field' => 'title',
-                'content' => $response['content']
-            ]
-        );
         RegisterProductUsage::dispatch($contentBlock->document->account, [
             ...$response['token_usage'],
             'meta' => ['document_id' => $contentBlock->document->id]
@@ -319,7 +266,6 @@ class GenRepository
 
     private static function processImageResult($document, $result, $params, $model): MediaFile
     {
-        $repo = new DocumentRepository($document);
         $mediaFile = MediaRepository::storeImage($document->account, [
             'fileName' => $result['fileName'],
             'imageData' => $result['imageData'],
@@ -333,14 +279,6 @@ class GenRepository
                 'prompt' => $params['prompt'] ?? null
             ]
         ]);
-        $repo->addHistory(
-            [
-                'field' => 'image_generation',
-                'content' => $mediaFile->id,
-                'word_count' => 0,
-                'char_count' => 0
-            ]
-        );
         RegisterProductUsage::dispatch($document->account, [
             //'model' => StabilityAIEngine::SD_XL_V_1->value,
             'model' => AIModel::DALL_E_3->value,

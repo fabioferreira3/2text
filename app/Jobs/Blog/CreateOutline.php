@@ -57,12 +57,7 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
 
             $this->repo->updateMeta('outline', $response['content']);
             $this->repo->updateMeta('raw_structure', DocumentHelper::parseOutlineToRawStructure($response['content']));
-            $this->repo->addHistory(
-                [
-                    'field' => 'outline',
-                    'content' => $response['content']
-                ]
-            );
+
             RegisterProductUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => ['document_id' => $this->document->id]

@@ -121,8 +121,8 @@ return [
     --- END OF CONTEXT ---",
     'write_title' => "Write a title, with a maximum of 7 words, for the following text: \n\n:context\n\n\nExamples of good and bad outputs:\n\nBad output:\nTitle: This is the title\n\nGood output:\nThis is the title\n\nFurther instructions:\n\n- The title must have a :tone tone.\n",
     'write_embedded_title' => "Based on the provided context, write a title, with a maximum of 7 words.\nExamples of good and bad outputs:\n\nBad output:\nTitle: This is the title\n\nGood output:\nThis is the title\n\nFurther instructions:\n\n- The title must have a :tone tone.\n",
-    'write_embedded_summary' => "Summarize the provided context using a maximum of :maxWords words\n\n",
-    'write_summary' => "Summarize the following text using a maximum of :maxWords words: \n\n
+    'write_embedded_summary' => "Summarize the provided context using :maxWords words\n\n",
+    'write_summary' => "Summarize the following text using :maxWords words: \n\n
     --- START OF TEXT ---
         \n\n:text\n\n
     --- END OF TEXT ---"

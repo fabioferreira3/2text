@@ -8,7 +8,7 @@
             <h2 class="font-bold text-3xl text-zinc-700">{{ __('summarizer.source') }}:</h2>
             <div class="text-zinc-700">
                 @if($source === 'youtube')
-                <div class="sticky top-0 z-10 bg-white">
+                <div class="">
                     <div class="relative" style="padding-top: 100%;">
                         <iframe class="absolute top-0 left-0 h-full w-full rounded-lg"
                             src="https://www.youtube.com/embed/{{$document->getYoutubeVideoId()}}"
