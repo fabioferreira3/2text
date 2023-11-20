@@ -5,6 +5,7 @@ use App\Jobs\RegisterProductUsage;
 use App\Jobs\SummarizeContent;
 use App\Jobs\Translation\TranslateTextBlock;
 use App\Models\Document;
+use App\Models\DocumentTask;
 use Illuminate\Support\Facades\Bus;
 
 beforeEach(function () {
@@ -100,5 +101,26 @@ describe('Summarize Content job', function () {
         $job->handle();
 
         Bus::assertNotDispatchedSync(TranslateTextBlock::class);
+    });
+
+    it('finishes the task', function () {
+
+        $document = createDocument(false, 250, null);
+        $task = DocumentTask::factory()->create([
+            'document_id' => $document->id
+        ]);
+        expect($task->status)->toEqual('in_progress');
+
+        $job = new SummarizeContent($document, [
+            'task_id' => $task->id,
+            'content' => 'Content to be summarized',
+            'query_embedding' => true,
+            'collection_name' => $document->id,
+            'max_words_count' => 250
+        ], $this->generator);
+        $job->handle();
+
+        $task->refresh();
+        expect($task->status)->toEqual('finished');
     });
 });

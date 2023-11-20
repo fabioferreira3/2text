@@ -31,11 +31,6 @@ class Document extends Model
     ];
     protected $appends = ['normalized_structure', 'is_finished', 'status', 'source', 'tone', 'style'];
 
-    public function history(): HasMany
-    {
-        return $this->hasMany(DocumentHistory::class)->latest();
-    }
-
     public function tasks(): HasMany
     {
         return $this->hasMany(DocumentTask::class);

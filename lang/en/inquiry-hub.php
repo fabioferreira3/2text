@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'new_inquiry' => 'Inquiry Hub'
+    'inquiry_hub' => 'Inquiry Hub',
+    'new' => 'New inquiry'
 ];

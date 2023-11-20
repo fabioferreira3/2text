@@ -1,11 +1,11 @@
 <div>
     @if($displayHeader)
-    @include('livewire.common.header', ['icon' => 'volume-up', 'label' => __('text-to-speech.audio_history')])
+    @include('livewire.common.header', ['icon' => 'volume-up', 'title' => __('text-to-speech.audio_history')])
     @endif
     @include('livewire.text-to-speech.history-table', ['history' => $history])
     @if ($selectedMediaFile)
     <x-experior::modal>
-        @include('livewire.common.header', ['icon' => 'trash', 'label' =>
+        @include('livewire.common.header', ['icon' => 'trash', 'title' =>
         __('text-to-speech.delete_confirmation_header')])
         <div class="mt-4 text-lg">{{__('text-to-speech.delete_confirmation')}}</div>
         <div class="flex items-center gap-2 mt-6">

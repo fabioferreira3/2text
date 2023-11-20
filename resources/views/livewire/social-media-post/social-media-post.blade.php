@@ -6,7 +6,4 @@
     ])
     <textarea class="text-lg mt-2 rounded-lg border border-zinc-200" name="content" wire:model="content"
         rows="{{ $rows }}"></textarea>
-    @if ($displayHistory)
-    @livewire('common.history-modal', [$document])
-    @endif
 </div>

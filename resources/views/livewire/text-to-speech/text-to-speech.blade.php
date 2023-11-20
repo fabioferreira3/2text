@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-6">
-    @include('livewire.common.header', ['icon' => 'volume-up', 'label' => $document ? __('text-to-speech.text_to_audio')
+    @include('livewire.common.header', ['icon' => 'volume-up', 'title' => $document ? __('text-to-speech.text_to_audio')
     : __('text-to-speech.new_text_to_audio')])
 
     <div class="w-full md:w-1/2 flex flex-col items-center gap-4 md:flex-row">

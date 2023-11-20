@@ -16,6 +16,7 @@ use App\Http\Livewire\TextToSpeech\AudioHistory;
 use App\Http\Livewire\TextToSpeech\TextToAudio;
 use App\Http\Livewire\AudioTranscription\NewTranscription;
 use App\Http\Livewire\AudioTranscription\AudioTranscription;
+use App\Http\Livewire\InquiryHub\InquiryView;
 use App\Http\Livewire\InquiryHub\NewInquiry;
 use App\Http\Livewire\Summarizer\NewSummarizer;
 use App\Http\Livewire\Summarizer\SummaryView;
@@ -75,7 +76,7 @@ Route::middleware([
 
     /* Inquiry Hub */
     Route::get('/inquiry-hub/new', NewInquiry::class)->name('new-inquiry');
-    Route::get('/documents/inquiry-hub/{document}', SocialMediaPostsManager::class)->name('inquiry-view');
+    Route::get('/documents/inquiry-hub/{document}', InquiryView::class)->name('inquiry-view');
 
     /* Summarizer */
     Route::get('/summarizer/new', NewSummarizer::class)->name('new-summarizer');

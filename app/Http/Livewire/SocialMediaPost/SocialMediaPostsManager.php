@@ -29,7 +29,6 @@ class SocialMediaPostsManager extends Component
 
     public Document $document;
     public string $content;
-    public bool $displayHistory = false;
     public string $context;
     public $fileInput = null;
 
@@ -39,18 +38,15 @@ class SocialMediaPostsManager extends Component
     public string $source;
 
     public string $imgPrompt;
-    public $imgStyle;
     public $wordCountTarget;
     public string $language;
     public array $languages;
-    // public array $stylePresets;
     public string $keyword;
     public mixed $tone;
     public mixed $style;
     public array $platforms;
     public mixed $moreInstructions;
     public bool $showInstructions;
-    public $selectedStylePreset;
     public bool $generateImage;
     public bool $modal;
     public $title;
@@ -77,7 +73,6 @@ class SocialMediaPostsManager extends Component
             ],
             'sourceUrls.*' => 'url',
             'imgPrompt' => 'required_if:generateImage,true',
-            //   'imgStyle' => 'required_if:generateImage,true',
             'platforms' => ['required', 'array', new \App\Rules\ValidPlatforms()],
             'context' => 'required_if:source,free_text|nullable',
             'keyword' => 'required',
@@ -105,8 +100,7 @@ class SocialMediaPostsManager extends Component
             'keyword.required' => __('validation.keyword_required'),
             'source.required' => __('validation.source_required'),
             'language.required' => __('validation.language_required'),
-            'imgPrompt.required_if' => __('validation.img_prompt_required'),
-            //  'imgStyle.required_if' => __('validation.img_style_required')
+            'imgPrompt.required_if' => __('validation.img_prompt_required')
         ];
     }
 
@@ -130,11 +124,9 @@ class SocialMediaPostsManager extends Component
         $this->tempSourceUrl = '';
         $this->generateImage = $document->getMeta('generate_img') ?? false;
         $this->imgPrompt = $document->getMeta('img_prompt') ?? '';
-        $this->imgStyle = $document->getMeta('img_style') ?? null;
         $this->language = $document->language->value ?? 'en';
         $this->languages = Language::getLabels();
         $this->wordCountTarget = $document->getMeta('target_word_count') ?? 50;
-        //    $this->stylePresets = StylePreset::getMappedValues();
         $this->keyword = $document->getMeta('keyword') ?? '';
         $this->tone = $document->getMeta('tone') ?? 'default';
         $this->style = $document->getMeta('style') ?? 'default';
@@ -228,15 +220,6 @@ class SocialMediaPostsManager extends Component
         }
     }
 
-    // public function selectStylePreset($style)
-    // {
-    //     $found = array_values(array_filter($this->stylePresets, function ($item) use ($style) {
-    //         return $item["value"] === $style;
-    //     }));
-
-    //     return $found[0] ?? null;
-    // }
-
     public function toggleInstructions()
     {
         $this->showInstructions = !$this->showInstructions;
@@ -259,11 +242,6 @@ class SocialMediaPostsManager extends Component
         $this->resetErrorBag('tempSourceUrl');
         $this->resetErrorBag('sourceUrls');
     }
-
-    // public function updatedImgStyle($newValue)
-    // {
-    //     $this->selectedStylePreset = $this->selectStylePreset($newValue);
-    // }
 
     public function deleteDocument(array $params)
     {
@@ -307,7 +285,6 @@ class SocialMediaPostsManager extends Component
                     'more_instructions' => $this->moreInstructions ?? null,
                     'generate_img' => $this->generateImage,
                     'img_prompt' => $this->generateImage ? $this->imgPrompt ?? StylePreset::DIGITAL_ART->value : null,
-                    'img_style' => $this->generateImage ? $this->imgStyle : null,
                     'user_id' => Auth::check() ? Auth::id() : null
                 ]
             ]);

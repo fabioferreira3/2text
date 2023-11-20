@@ -100,17 +100,6 @@ class DocumentRepository
         ]);
     }
 
-    public function addHistory(array $payload)
-    {
-        $content = is_array($payload['content']) ? json_encode($payload['content']) : $payload['content'];
-        $this->document->history()->create([
-            'description' => $payload['field'],
-            'content' => $content,
-            'word_count' => $payload['word_count'] ?? Str::wordCount($content),
-            'char_count' => $payload['char_count'] ?? Str::wordCount($content)
-        ]);
-    }
-
     public function updateMeta($attribute, $value)
     {
         $this->document->refresh();

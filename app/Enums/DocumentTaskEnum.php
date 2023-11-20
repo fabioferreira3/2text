@@ -29,7 +29,6 @@ enum DocumentTaskEnum: string
     case PUBLISH_TEXT_BLOCK = 'publish_text_block';
     case TRANSLATE_TEXT_BLOCK = 'translate_text_block';
     case REGISTER_FINISHED_PROCESS = 'register_finished_process';
-    case REGISTER_CONTENT_HISTORY = 'register_content_history';
     case REMOVE_EMBEDDINGS = 'remove_embeddings';
     case REWRITE_TEXT_BLOCK = 'rewrite_text_block';
     case SUMMARIZE_CONTENT = 'summarize_content';
@@ -66,7 +65,6 @@ enum DocumentTaskEnum: string
             self::PUBLISH_TEXT_BLOCKS => "App\Jobs\Blog\PublishTextBlocks",
             self::PUBLISH_TEXT_BLOCK => "App\Jobs\PublishTextBlock",
             self::REGISTER_FINISHED_PROCESS => "App\Jobs\RegisterFinishedProcess",
-            self::REGISTER_CONTENT_HISTORY => "App\Jobs\RegisterContentHistory",
             self::REMOVE_EMBEDDINGS => "App\Jobs\RemoveEmbeddings",
             self::REWRITE_TEXT_BLOCK => "App\Jobs\RewriteTextBlock",
             self::SUMMARIZE_CONTENT => "App\Jobs\SummarizeContent",

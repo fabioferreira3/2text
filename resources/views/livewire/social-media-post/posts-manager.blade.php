@@ -1,10 +1,8 @@
 <div class="flex flex-col">
     @include('livewire.common.header', [
     'icon' => 'hashtag',
-    'label' =>
-    $document->status->value == 'draft'
-    ? __('social_media.new_social_media_post')
-    : __('social_media.social_media_post'),
+    'title' => $document->status->value == 'draft' ? __('social_media.new_social_media_post') :
+    __('social_media.social_media_post'),
     'suffix' => $document->title,
     ])
     @if ($errors->any())

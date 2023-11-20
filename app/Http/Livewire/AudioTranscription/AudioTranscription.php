@@ -12,7 +12,7 @@ class AudioTranscription extends Component
     public $contentBlocks;
     public bool $isProcessing = false;
 
-    protected $listeners = ['refreshContent' => 'updateContent', 'editorUpdated', 'closeHistoryModal', 'refresh'];
+    protected $listeners = ['refreshContent' => 'updateContent', 'editorUpdated', 'refresh'];
 
     public function mount(Document $document)
     {

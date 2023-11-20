@@ -12,6 +12,13 @@
 </x-badge>
 @endif
 
+@if ($type->value === \App\Enums\DocumentType::INQUIRY->value)
+<x-badge icon="search-circle" class="font-thin" md orange label="{{ $type->label() }}">
+    <x-slot name="search-circle" class="relative flex items-center">
+    </x-slot>
+</x-badge>
+@endif
+
 @if ($type->value === \App\Enums\DocumentType::PARAPHRASED_TEXT->value)
 <x-badge icon="switch-horizontal" class="font-thin" md fuchsia label="{{ $type->label() }}">
     <x-slot name="prepend" class="relative flex items-center">
@@ -27,7 +34,7 @@
 @endif
 
 @if ($type->value === \App\Enums\DocumentType::SUMMARIZER->value)
-<x-badge icon="sort-ascending" class="font-thin" md fuchsia label="{{ $type->label() }}">
+<x-badge icon="sort-ascending" class="font-thin" md cyan label="{{ $type->label() }}">
     <x-slot name="prepend" class="relative flex items-center">
     </x-slot>
 </x-badge>

@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-6">
-    @include('livewire.common.header', ['icon' => 'chat-alt', 'label' => __('transcription.new_transcription')])
+    @include('livewire.common.header', ['icon' => 'chat-alt', 'title' => __('transcription.new_transcription')])
 
     <div class="flex flex-col gap-6">
         <div class="col-span-3">

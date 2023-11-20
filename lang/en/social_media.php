@@ -43,7 +43,7 @@ return [
     'social_media_post' => 'Social media post',
     'source' => 'Source',
     'source_definition' => 'Define what would be the base context of your text. Choose between a youtube link, a website url, or just from free text.',
-    'start_here' => 'Click here to start',
+    'start_here' => 'New post',
     'target_word_count' => 'Target word count',
     'tone' => 'Tone',
     'target_platforms' => 'Target Platforms',

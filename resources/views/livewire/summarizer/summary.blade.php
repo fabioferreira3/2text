@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-6">
-    @include('livewire.common.header', ['icon' => 'sort-ascending', 'label' => $title, 'suffix' => $context ?
+    @include('livewire.common.header', ['icon' => 'sort-ascending', 'title' => $title, 'suffix' => $context ?
     __('summarizer.summary') : ""])
 
     <div class="grid @if($context) grid-cols-2 @else grid-cols-1 @endif gap-8">

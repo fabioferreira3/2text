@@ -1,6 +1,6 @@
 <div>
     <div class="mb-8 flex justify-between">
-        @include('livewire.common.header', ['icon' => 'trash', 'label' => __('dashboard.trash')])
+        @include('livewire.common.header', ['icon' => 'trash', 'title' => __('dashboard.trash')])
     </div>
     <div class="p-6 bg-white rounded-lg">
         <div class='mb-6'>
