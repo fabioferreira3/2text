@@ -86,4 +86,19 @@ describe('Summarize Content job', function () {
         $chatGptResponse = $this->chatGptRequestResponse;
         commonAssertions($document, $chatGptResponse);
     });
+
+    it('summarizes but don\'t translate', function () {
+
+        $document = createDocument(false, 250, null);
+
+        $job = new SummarizeContent($document, [
+            'content' => 'Content to be summarized',
+            'query_embedding' => true,
+            'collection_name' => $document->id,
+            'max_words_count' => 250
+        ], $this->generator);
+        $job->handle();
+
+        Bus::assertNotDispatchedSync(TranslateTextBlock::class);
+    });
 });
