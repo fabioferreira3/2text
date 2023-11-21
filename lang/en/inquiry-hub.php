@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'inquiry' => 'Inquiry',
     'inquiry_hub' => 'Inquiry Hub',
-    'new' => 'New inquiry'
+    'new_inquiry' => 'New inquiry',
+    'new' => 'New',
+    'send' => 'Send',
+    'sources' => 'Sources',
+    'submit' => 'Submit',
+    'text' => 'Text'
 ];

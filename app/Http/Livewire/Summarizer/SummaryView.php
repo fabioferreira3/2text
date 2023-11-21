@@ -26,6 +26,6 @@ class SummaryView extends Component
 
     public function render()
     {
-        return view('livewire.summarizer.summary');
+        return view('livewire.summarizer.summary-view');
     }
 }

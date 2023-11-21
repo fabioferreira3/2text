@@ -9,11 +9,6 @@ use Livewire\Component;
 
 class NewInquiry extends Component
 {
-    public function render()
-    {
-        return view('livewire.inquiry-hub.new');
-    }
-
     public function createNewInquiry()
     {
         $document = DocumentRepository::createGeneric([
@@ -22,5 +17,10 @@ class NewInquiry extends Component
         ]);
 
         redirect()->route('inquiry-view', ['document' => $document]);
+    }
+
+    public function render()
+    {
+        return view('livewire.inquiry-hub.new');
     }
 }
