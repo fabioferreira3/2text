@@ -1,4 +1,4 @@
-<nav class="flex flex-col min-h-screen">
+<nav class="flex flex-col h-full">
     <div class="relative mb-4 h-24">
         <div class="flex w-full items-center justify-center">
             <a href="{{ route('dashboard') }}">

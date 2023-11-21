@@ -8,14 +8,12 @@
             <h2 class="font-bold text-3xl text-zinc-700">{{ __('summarizer.source') }}:</h2>
             <div class="text-zinc-700">
                 @if($source === 'youtube')
-                <div class="">
-                    <div class="relative" style="padding-top: 100%;">
-                        <iframe class="absolute top-0 left-0 h-full w-full rounded-lg" src="https://www.youtube.com/embed/{{$document->getYoutubeVideoId()}}" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                    </div>
-                </div>
-                <div style="height: 1500px;">
-                    <!-- Keep this for sufficient scrolling content -->
-                    <!-- Additional content goes here -->
+                <div class="relative" style="padding-top: 100%;">
+                    <iframe class="absolute top-0 left-0 h-full w-full rounded-lg"
+                        src="https://www.youtube.com/embed/{{$document->getYoutubeVideoId()}}"
+                        title="YouTube video player"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
                 </div>
                 @else
                 <div class="text-xl">

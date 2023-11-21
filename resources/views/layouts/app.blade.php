@@ -32,6 +32,7 @@
 </head>
 
 <body class="font-sans antialiased w-full bg-main">
+
     <x-notifications />
     <x-jet-banner />
     @livewire('common.notifications')
