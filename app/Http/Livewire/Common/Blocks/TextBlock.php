@@ -8,6 +8,7 @@ use App\Jobs\DispatchDocumentTasks;
 use App\Models\DocumentContentBlock;
 use App\Repositories\DocumentRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
@@ -167,8 +168,7 @@ class TextBlock extends Component
                 'meta' => [
                     'text' => $this->content,
                     'document_content_block_id' => $this->contentBlock->id,
-                    'prompt' => $prompt,
-                    'faster' => true
+                    'prompt' => $prompt
                 ]
             ]
         );

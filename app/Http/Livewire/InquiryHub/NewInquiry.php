@@ -2,22 +2,12 @@
 
 namespace App\Http\Livewire\InquiryHub;
 
-use App\Enums\DocumentType;
-use App\Enums\Language;
-use App\Repositories\DocumentRepository;
+use App\Models\Traits\InquiryHub;
 use Livewire\Component;
 
 class NewInquiry extends Component
 {
-    public function createNewInquiry()
-    {
-        $document = DocumentRepository::createGeneric([
-            'type' => DocumentType::INQUIRY->value,
-            'language' => Language::ENGLISH->value
-        ]);
-
-        redirect()->route('inquiry-view', ['document' => $document]);
-    }
+    use InquiryHub;
 
     public function render()
     {

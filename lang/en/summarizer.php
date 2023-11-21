@@ -5,6 +5,7 @@ return [
     'define_target_language' => 'If you want the summary to be generated in a different language.',
     'generate' => 'Summarize',
     'generating' => 'Summarizing with AI',
+    'new' => 'New',
     'new_summary' => 'New Summary',
     'source' => 'Source',
     'source_language' => 'Source language',

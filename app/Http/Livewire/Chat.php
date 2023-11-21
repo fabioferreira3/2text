@@ -2,26 +2,19 @@
 
 namespace App\Http\Livewire;
 
-use App\Jobs\Oraculum\Ask;
 use App\Models\ChatThread;
+use App\Models\Traits\ChatTrait;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 
 class Chat extends Component
 {
+    use ChatTrait;
+
     public $isOpen;
     public $activeThread;
-    public $inputMsg;
     public bool $processing;
-
-    public function mount()
-    {
-        $this->isOpen = false;
-        $this->activeThread = ChatThread::latest()->firstOrCreate([]);
-        $this->inputMsg = '';
-        $this->processing = false;
-    }
 
     protected $rules = [
         'inputMsg' => 'string|required',
@@ -42,6 +35,14 @@ class Chat extends Component
         ];
     }
 
+    public function mount()
+    {
+        $this->isOpen = false;
+        $this->activeThread = ChatThread::latest()->firstOrCreate([]);
+        $this->inputMsg = '';
+        $this->processing = false;
+    }
+
     public function createThread()
     {
         $this->processing = false;
@@ -49,29 +50,6 @@ class Chat extends Component
             return;
         }
         $this->activeThread = ChatThread::create();
-    }
-
-    public function submitMsg()
-    {
-        $this->validate();
-        $this->processing = true;
-        $iteration = $this->activeThread->iterations()->create([
-            'response' => $this->inputMsg,
-            'origin' => 'user'
-        ]);
-        $this->inputMsg = '';
-        $this->activeThread->refresh();
-        $this->dispatchBrowserEvent('scrollToBottom');
-        Ask::dispatch($iteration, 'oraculum');
-    }
-
-    public function receiveMsg(array $params)
-    {
-        if ($params['chat_thread_id'] === $this->activeThread->id) {
-            $this->processing = false;
-            $this->activeThread->refresh();
-            $this->dispatchBrowserEvent('scrollToBottom');
-        }
     }
 
     public function updatedIsOpen()

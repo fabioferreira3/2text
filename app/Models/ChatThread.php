@@ -26,6 +26,11 @@ class ChatThread extends Model
         return $this->hasMany(ChatThreadIteration::class)->orderBy('created_at', 'ASC');
     }
 
+    public function document(): BelongsTo
+    {
+        return $this->belongsTo(Document::class);
+    }
+
     protected static function booted(): void
     {
         static::addGlobalScope(new SameUserScope());

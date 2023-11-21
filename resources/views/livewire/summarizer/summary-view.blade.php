@@ -2,6 +2,13 @@
     @include('livewire.common.header', ['icon' => 'sort-ascending', 'title' => $title, 'suffix' => $context ?
     __('summarizer.summary') : ""])
 
+    <div class="flex items-center justify-end gap-2">
+        <button wire:click="new()" class="flex items-center gap-1 bg-main text-white font-bold px-5 py-1 rounded-lg">
+            <x-icon name="plus" width="24" height="24" />
+            <span class="text-lg">{{__('summarizer.new')}}</span>
+        </button>
+    </div>
+
     <div class="grid @if($context) grid-cols-2 @else grid-cols-1 @endif gap-8">
         <div class="flex flex-col gap-4">
             @if ($context)

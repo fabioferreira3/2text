@@ -86,7 +86,7 @@ return [
     'max_words' => "- The text must have a maximum of :max words\n",
     'more_instructions' => "- Follow these others instructions for the creation of the post:\n\n\n :instructions\n\n\n",
     'meta_description_context_instructions' => "- The meta description must be based on the following outline:\n\n :context\n\n",
-    'modify_text' => "Follow instructions to modify the following text:\n\n \":text\"\n\n - These are the instructions: \n\n- :customPrompt\n",
+    'modify_text' => ":customPrompt:\n\n \":text\"\n\n",
     'mysterious_tone' => "Use a writing tone that makes the reader feel like they are reading a mystery novel or watching a mystery movie. A tone that makes the reader feel intrigued\n",
     'optimistic_tone' => "Use a writing tone that makes the reader feel like they are reading a motivational book, highlighting the positive aspects of the topic\n",
     'outline_base' => "Create a comprehensive :style outline for a blog post.\n\n

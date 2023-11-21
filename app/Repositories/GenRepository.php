@@ -195,9 +195,8 @@ class GenRepository
 
     public static function rewriteTextBlock(DocumentContentBlock $contentBlock, array $params)
     {
-        $model = isset($params['faster']) && $params['faster'] ? AIModel::GPT_3_TURBO1106 : AIModel::GPT_4_TURBO;
         $promptHelper = PromptHelperFactory::create($contentBlock->document->language->value);
-        $chatGpt = new ChatGPT($model->value);
+        $chatGpt = new ChatGPT();
         $response = $chatGpt->request([[
             'role' => 'user',
             'content' => $promptHelper->generic($params['prompt'])

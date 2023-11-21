@@ -19,15 +19,15 @@ class Oraculum
     protected $client;
     protected $defaultBody;
     protected $user;
-    protected $collectionName;
+    protected $appId;
 
-    public function __construct(User $user, string $collectionName)
+    public function __construct(User $user, string $appId)
     {
         $this->user = $user;
         $token = JWTAuth::fromUser($this->user);
-        $this->collectionName = $collectionName;
+        $this->appId = $appId;
         $this->defaultBody = [
-            'app_id' => $this->user->id,
+            'app_id' => $appId,
             'token' => $token
         ];
 
@@ -69,7 +69,6 @@ class Oraculum
 
             $response = $this->client
                 ->post('/add', array_merge($this->defaultBody, [
-                    'collection_name' => $this->collectionName,
                     'data_type' => $dataType->value,
                     'url_or_text' => $source
                 ]));
@@ -97,7 +96,6 @@ class Oraculum
 
             $response = $this->client
                 ->post('/query', array_merge($this->defaultBody, [
-                    'collection_name' => $this->collectionName,
                     'message' => $message,
                     'type' => $type ?? null
                 ]));
@@ -137,7 +135,6 @@ class Oraculum
 
             $response = $this->client
                 ->post('/chat', array_merge($this->defaultBody, [
-                    'collection_name' => $this->collectionName,
                     'message' => $message
                 ]));
 
@@ -170,9 +167,7 @@ class Oraculum
             }
 
             $response = $this->client
-                ->post('/delete-collection', array_merge($this->defaultBody, [
-                    'collection_name' => $this->collectionName,
-                ]));
+                ->post('/delete-collection', array_merge($this->defaultBody, []));
 
             if ($response->failed()) {
                 return $response->throw();

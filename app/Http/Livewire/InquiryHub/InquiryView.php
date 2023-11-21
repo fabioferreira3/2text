@@ -2,10 +2,13 @@
 
 namespace App\Http\Livewire\InquiryHub;
 
-use App\Enums\DocumentType;
-use App\Enums\Language;
+use App\Enums\DataType;
+use App\Enums\DocumentTaskEnum;
 use App\Enums\SourceProvider;
+use App\Jobs\InquiryHub\PrepareTasks;
 use App\Models\Document;
+use App\Models\Traits\ChatTrait;
+use App\Models\Traits\InquiryHub;
 use App\Repositories\DocumentRepository;
 use App\Rules\CsvFile;
 use App\Rules\DocxFile;
@@ -16,10 +19,14 @@ use Livewire\Component;
 
 class InquiryView extends Component
 {
+    use ChatTrait, InquiryHub;
+
     public $document;
+    public $chatThread;
     public $context;
-    public $source = SourceProvider::FREE_TEXT->value;
+    public $source = null;
     public $sourceUrl = null;
+    public $sourceType = SourceProvider::FREE_TEXT->value;
     public $fileInput = null;
     public $filePath = null;
     public $tempSourceUrl;
@@ -37,7 +44,7 @@ class InquiryView extends Component
                 'required_if:source,youtube,website_url', 'nullable', 'url',
                 $this->source === 'youtube' ? new \App\Rules\YouTubeUrl() : ''
             ],
-            'source' => [
+            'sourceType' => [
                 'required',
                 Rule::in(array_map(fn ($value) => $value->value, SourceProvider::cases()))
             ],
@@ -67,30 +74,31 @@ class InquiryView extends Component
     {
         $userId = Auth::user()->id;
         return [
-            "echo-private:User.$userId,.InquiryCompleted" => 'onProcessFinished',
+            "echo-private:User.$userId,.EmbedCompleted" => 'onEmbeddingFinished',
+            "echo-private:User.$userId,.ChatMessageReceived" => 'receiveMsg',
         ];
     }
 
     public function mount(Document $document)
     {
         $this->document = $document;
+        $this->chatThread = $document->chatThread;
         $this->isProcessing = false;
         $this->dispatchBrowserEvent('scrollInquiryChatToBottom');
-    }
-
-    public function createNewInquiry()
-    {
-        $document = DocumentRepository::createGeneric([
-            'type' => DocumentType::INQUIRY->value,
-            'language' => Language::ENGLISH->value
-        ]);
-
-        redirect()->route('inquiry-view', ['document' => $document]);
     }
 
     public function embed()
     {
         $this->validate();
+        PrepareTasks::dispatch($this->document, [
+            'source' => $this->context,
+            'source_type' => $this->sourceType
+        ]);
+    }
+
+    public function onEmbeddingFinished($params)
+    {
+        dd($params);
     }
 
     public function render()

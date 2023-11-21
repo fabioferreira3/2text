@@ -24,6 +24,11 @@ class SummaryView extends Component
         $this->contentBlock = $document->contentBlocks()->ofTextType()->latest()->first();
     }
 
+    public function new()
+    {
+        redirect()->route('new-summarizer');
+    }
+
     public function render()
     {
         return view('livewire.summarizer.summary-view');

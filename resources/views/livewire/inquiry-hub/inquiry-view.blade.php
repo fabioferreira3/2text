@@ -1,22 +1,18 @@
 <div class="flex flex-col gap-6">
-    <div class="flex items-center justify-between border-b border-zinc-100">
-        <div class="w-full">
-            @livewire('common.header', [
-            'icon' => 'search-circle',
-            'title' => $document->title ?? __('inquiry-hub.new_inquiry'),
-            'suffix' => $document->title ? __('inquiry-hub.inquiry_hub') : "",
-            'document' => $document,
-            'editable' => true
-            ])
-        </div>
-        <div class="flex items-center gap-2">
-            <button wire:click="createNewInquiry()"
-                class="flex items-center gap-1 bg-main text-white font-bold px-3 py-1 rounded-lg">
-                <x-icon name="plus" width="20" height="20" />
-                <span>{{__('inquiry-hub.new')}}</span>
-            </button>
-        </div>
+    @livewire('common.header', [ 'icon'=> 'search-circle',
+    'title' => $document->title ?? __('inquiry-hub.new_inquiry'),
+    'suffix' => $document->title ? __('inquiry-hub.inquiry_hub') : "",
+    'document' => $document,
+    'editable' => true
+    ])
+    <div class="flex items-center justify-end gap-2">
+        <button wire:click="createNewInquiry()"
+            class="flex items-center gap-1 bg-main text-white font-bold px-5 py-1 rounded-lg">
+            <x-icon name="plus" width="24" height="24" />
+            <span class="text-lg">{{__('inquiry-hub.new')}}</span>
+        </button>
     </div>
+
     <div class="flex gap-4">
         <div class="w-full md:w-2/5">
             <div class="flex items-center gap-2">
@@ -30,14 +26,17 @@
                 <div class="w-full flex flex-col gap-6">
                     <!-- Source -->
                     <div class="flex flex-col gap-3">
-                        <select name="provider" wire:model="source" class="p-3 rounded-lg border border-zinc-200">
+                        <select name="provider" wire:model="sourceType" class="p-3 rounded-lg border border-zinc-200">
                             @include('livewire.common.source-providers-options')
                         </select>
+                        @if ($errors->has('sourceType'))
+                        <span class="text-red-500 text-sm">{{ $errors->first('sourceType') }}</span>
+                        @endif
                     </div>
                     <!-- END: Source -->
 
                     <!-- Source URLs -->
-                    @if ($source === 'website_url' || $source === 'youtube')
+                    @if ($sourceType === 'website_url' || $source === 'youtube')
                     <div class="flex flex-col gap-3">
                         <label class="font-bold text-xl text-zinc-700 flex items-center">
                             URL
@@ -53,7 +52,7 @@
                     <!-- END: Source URLs -->
 
                     <!-- File input -->
-                    @if (in_array($source, ['docx', 'pdf_file', 'csv', 'json']))
+                    @if (in_array($sourceType, ['docx', 'pdf_file', 'csv', 'json']))
                     <div class="flex flex-col gap-3 col-span-2">
                         <label class="font-bold text-xl text-zinc-700">{{ __('blog.file_option') }}</label>
                         <input type="file" name="fileInput" wire:model="fileInput"
@@ -66,12 +65,12 @@
                     <!-- END: File input -->
 
                     <!-- Free Text -->
-                    @if ($source === 'free_text')
+                    @if ($sourceType === 'free_text')
                     <div class="flex flex-col gap-3 col-span-2">
                         <label class="font-bold text-xl text-zinc-700 flex items-center">
                             {{__('inquiry-hub.text')}}:
                         </label>
-                        <textarea class="border border-zinc-200 rounded-lg" rows="5" maxlength="30000"
+                        <textarea class="border border-zinc-200 rounded-lg" rows="7" maxlength="30000"
                             wire:model="context"></textarea>
                         @if($errors->has('context'))
                         <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
@@ -92,10 +91,11 @@
             <div class="flex flex-col justify-end gap-2 h-full">
                 <div id="inquiryChatContainer"
                     class="flex-grow overflow-y-auto bg-white rounded-lg border border-gray-200">
+
                     <!-- User Message -->
                     <div class="flex items-end justify-end p-4">
                         <div class="max-w-full lg:max-w-3/4 text-right">
-                            <div class="inline-block bg-blue-500 text-white rounded-t-xl rounded-bl-xl p-3">
+                            <div class="inline-block bg-gray-100 text-gray-700 rounded-t-xl rounded-bl-xl p-3">
                                 Batman tornou-se popular assim que foi apresentado, acabando por ganhar a sua
                                 própria revista de banda desenhada em
                                 1940, Batman. Enquanto as décadas progrediram, foram surgindo divergências sobre a
@@ -121,17 +121,15 @@
                         </div>
                         <div class="max-w-full lg:max-w-3/4">
                             <div class="inline-block bg-gray-300 rounded-t-xl rounded-br-xl p-3">
-                                Batman tornou-se popular assim que foi apresentado, acabando por ganhar a sua
-                                própria revista de banda desenhada em
-                                1940, Batman. Enquanto as décadas progrediram, foram surgindo divergências sobre a
-                                interpretação do personagem....
+                                Good morning!
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Typing Indicator -->
-                <div class="mt-4 flex items-center justify-end">
-                    <div class="italic">...is typing</div>
+                <div class="my-2 flex items-center justify-end italic @if(!$isProcessing) invisible @endif">
+                    <div>{{__('chat.is_typing')}}</div>
+                    <div class="w-[20px]" id="typewriter">...</div>
                 </div>
 
                 <!-- Message Input -->
