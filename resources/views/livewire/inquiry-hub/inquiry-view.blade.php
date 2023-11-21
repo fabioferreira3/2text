@@ -18,7 +18,7 @@
         </div>
     </div>
     <div class="flex gap-4">
-        <div class="w-full md:w-1/2">
+        <div class="w-full md:w-2/5">
             <div class="flex items-center gap-2">
                 <h2 class="font-bold text-3xl text-zinc-700">{{ __('inquiry-hub.sources') }}:</h2>
                 @include('livewire.common.help-item', [
@@ -81,47 +81,69 @@
                     <!-- END: Free Text -->
 
                     <div class="w-full flex justify-center">
-                        <button
+                        <button wire:click="embed"
                             class="bg-secondary text-white rounded-lg py-2 px-4 font-bold text-xl">{{__('inquiry-hub.submit')}}</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="w-full md:w-1/2 border max-h-[32rem] rounded-lg p-4 bg-gray-100">
+
+        <div class="w-full md:w-3/5 border max-h-[32rem] rounded-lg p-4 bg-gray-100">
             <div class="flex flex-col justify-end gap-2 h-full">
                 <div id="inquiryChatContainer"
-                    class="flex-grow flex flex-col overflow-y-auto bg-white rounded-lg border-gray-200 border pt-6">
-                    <div class="mt-auto space-y-6 px-6">
-                        @include('livewire.chat.sys-msg', ['response' => 'yes'])
-                        @include('livewire.chat.user-msg', ['response' => 'eita'])
-                        @include('livewire.chat.user-msg', ['response' => 'eita'])
-                        @include('livewire.chat.user-msg', ['response' => 'eita'])
-                        @include('livewire.chat.sys-msg', ['response' => 'O Batman (inicialmente chamado o Bat-Man)
-                        também conhecido pelas alcunhas Homem-Morcego, Cavaleiro das Trevas, Cruzado
-                        Encapuzado, Maior Detetive do Mundo,[1] é um personagem fictício e super-herói encapuzado da
-                        editora norte-americana DC
-                        Comics'])
-                        @include('livewire.chat.user-msg', ['response' => 'O Batman (inicialmente chamado o Bat-Man)
-                        também conhecido pelas alcunhas Homem-Morcego, Cavaleiro das Trevas, Cruzado
-                        Encapuzado, Maior Detetive do Mundo,[1] é um personagem fictício e super-herói encapuzado da
-                        editora norte-americana DC
-                        Comics.'])
+                    class="flex-grow overflow-y-auto bg-white rounded-lg border border-gray-200">
+                    <!-- User Message -->
+                    <div class="flex items-end justify-end p-4">
+                        <div class="max-w-full lg:max-w-3/4 text-right">
+                            <div class="inline-block bg-blue-500 text-white rounded-t-xl rounded-bl-xl p-3">
+                                Batman tornou-se popular assim que foi apresentado, acabando por ganhar a sua
+                                própria revista de banda desenhada em
+                                1940, Batman. Enquanto as décadas progrediram, foram surgindo divergências sobre a
+                                interpretação do personagem....
+                            </div>
+                        </div>
+                        <div class="ml-3 flex-shrink-0">
+                            <div
+                                class="w-12 h-12 bg-gray-300 rounded-full overflow-hidden flex justify-center items-center">
+                                <!-- Centering the icon -->
+                                <x-icon name="user" width="24" height="24" class="text-gray-600" />
+                                <!-- Smaller icon size -->
+                            </div>
+                        </div>
                     </div>
-                    <div class="my-4 flex items-center justify-end italic @if($isProcessing) invisible @endif">
-                        <div>{{__('chat.is_typing')}}</div>
-                        <div class="w-[20px]" id="typewriter">...</div>
+
+                    <!-- System Message -->
+                    <div class="flex items-end justify-start p-4">
+                        <div class="mr-3 flex-shrink-0">
+                            <div class="w-12 h-12 bg-gray-300 rounded-full overflow-hidden">
+                                <img src="/oraculum.webp" class="object-cover w-full h-full" />
+                            </div>
+                        </div>
+                        <div class="max-w-full lg:max-w-3/4">
+                            <div class="inline-block bg-gray-300 rounded-t-xl rounded-br-xl p-3">
+                                Batman tornou-se popular assim que foi apresentado, acabando por ganhar a sua
+                                própria revista de banda desenhada em
+                                1940, Batman. Enquanto as décadas progrediram, foram surgindo divergências sobre a
+                                interpretação do personagem....
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- Typing Indicator -->
+                <div class="mt-4 flex items-center justify-end">
+                    <div class="italic">...is typing</div>
+                </div>
 
+                <!-- Message Input -->
                 <div class="w-full flex flex-col justify-end" x-data="{
-                    submitOnEnter: $wire.submitMsg,
-                    handleEnter(event) {
-                        if (!event.shiftKey) {
-                            event.preventDefault();
-                            this.submitOnEnter();
-                        }
-                    }
-                }">
+                                    submitOnEnter: $wire.submitMsg,
+                                    handleEnter(event) {
+                                        if (!event.shiftKey) {
+                                            event.preventDefault();
+                                            this.submitOnEnter();
+                                        }
+                                    }
+                                }">
                     @if($errors->has('inputMsg'))
                     <span class="text-red-500 text-sm mb-2">{{ $errors->first('inputMsg') }}</span>
                     @endif
