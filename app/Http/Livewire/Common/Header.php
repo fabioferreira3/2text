@@ -27,6 +27,10 @@ class Header extends Component
     {
         if ($this->document) {
             $this->document->update(['title' => $newTitle]);
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'success',
+                'message' => __('common.title_updated')
+            ]);
         }
     }
 }

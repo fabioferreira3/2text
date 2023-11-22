@@ -47,7 +47,8 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
             [
                 'process_id' => $this->processId,
                 'meta' => [
-                    'source_url' => $this->document->getMeta('source_url')
+                    'source_url' => $this->document->getMeta('source_url'),
+                    'update_title' => true,
                 ],
                 'order' => 1
             ]

@@ -76,7 +76,7 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
         $this->document = $document->fresh();
         $this->dataType = DataType::tryFrom($meta['data_type']);
         $this->source = $meta['source'];
-        $this->collectionName = $meta['collection_name'];
+        $this->collectionName = $meta['collection_name'] ?? $document->id;
         $this->meta = $meta;
     }
 

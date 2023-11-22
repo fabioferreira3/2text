@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\DataType;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Repositories\MediaRepository;
@@ -56,13 +57,22 @@ class DownloadSubtitles implements ShouldQueue, ShouldBeUnique
     {
         try {
             $audioParams = MediaRepository::downloadYoutubeSubtitles($this->meta['source_url']);
-
             if (!$audioParams['subtitles']) {
                 $audioParams = MediaRepository::downloadYoutubeAudio($this->meta['source_url']);
             }
 
+            if (($this->meta['embed_source'] ?? false) && $audioParams['subtitles']) {
+                EmbedSource::dispatchSync($this->document, [
+                    'data_type' => DataType::TEXT->value,
+                    'source' => $audioParams['subtitles']
+                ]);
+            }
+
             // Update the document
-            $this->document->update(['title' => $audioParams['title']]);
+            if (($this->meta['update_title']) ?? false) {
+                $this->document->update(['title' => $audioParams['title']]);
+            }
+
             $this->document->update(['meta' => [
                 ...$this->document->meta,
                 'context' => $audioParams['subtitles'] ?? null,

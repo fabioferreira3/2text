@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'embedding' => 'Processing...',
+    'embed_success' => 'Document processed succesfully',
     'inquiry' => 'Inquiry',
     'inquiry_hub' => 'Inquiry Hub',
     'new_inquiry' => 'New inquiry',

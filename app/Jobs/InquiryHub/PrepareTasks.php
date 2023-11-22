@@ -3,6 +3,7 @@
 namespace App\Jobs\InquiryHub;
 
 use App\Enums\DocumentTaskEnum;
+use App\Enums\SourceProvider;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
@@ -29,10 +30,17 @@ class PrepareTasks
     public function handle()
     {
         RegisterEmbedFreeText::dispatchIf(
-            $this->params['source_type'] === 'free_text',
+            $this->params['source_type'] === SourceProvider::FREE_TEXT->value,
             $this->document,
             $this->params
         );
+
+        RegisterEmbedVideoStream::dispatchIf(
+            $this->params['source_type'] === SourceProvider::YOUTUBE->value,
+            $this->document,
+            $this->params
+        );
+
         DocumentRepository::createTask(
             $this->document->id,
             DocumentTaskEnum::BROADCAST_CUSTOM_EVENT,

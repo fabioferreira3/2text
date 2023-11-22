@@ -44,17 +44,17 @@ class PrepareCreationTasks
         DispatchDocumentTasks::dispatch($this->document);
 
         CreateFromFreeText::dispatchIf(
-            $this->document->getMeta('source') === 'free_text',
+            $this->document->getMeta('source') === SourceProvider::FREE_TEXT->value,
             $this->document,
             $this->params
         );
         CreateFromVideoStream::dispatchIf(
-            $this->document->getMeta('source') === 'youtube',
+            $this->document->getMeta('source') === SourceProvider::YOUTUBE->value,
             $this->document,
             $this->params
         );
         CreateFromWebsite::dispatchIf(
-            $this->document->getMeta('source') === 'website_url',
+            $this->document->getMeta('source') === SourceProvider::WEBSITE_URL->value,
             $this->document,
             $this->params
         );

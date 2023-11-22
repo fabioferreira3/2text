@@ -12,6 +12,7 @@ use App\Packages\Oraculum\Exceptions\QueryRequestException;
 use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class Oraculum
@@ -63,10 +64,6 @@ class Oraculum
     public function add(DataType $dataType, string $source)
     {
         try {
-            if (!$this->user->bot_enabled) {
-                $this->createBot();
-            }
-
             $response = $this->client
                 ->post('/add', array_merge($this->defaultBody, [
                     'data_type' => $dataType->value,

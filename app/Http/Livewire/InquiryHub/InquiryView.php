@@ -15,6 +15,7 @@ use App\Rules\DocxFile;
 use App\Rules\PdfFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class InquiryView extends Component
@@ -90,15 +91,46 @@ class InquiryView extends Component
     public function embed()
     {
         $this->validate();
+        $this->isProcessing = true;
+
+        if ($this->fileInput) {
+            $this->storeFile();
+            $this->document->updateMeta('source_file_path', $this->filePath);
+        }
+
         PrepareTasks::dispatch($this->document, [
-            'source' => $this->context,
-            'source_type' => $this->sourceType
+            'source' => $this->parsedContext(),
+            'source_type' => $this->sourceType,
+            'source_url' => $this->sourceUrl
         ]);
+    }
+
+    public function parsedContext()
+    {
+        $encodedText = htmlspecialchars($this->context, ENT_QUOTES, 'UTF-8');
+        return nl2br(trim($encodedText));
     }
 
     public function onEmbeddingFinished($params)
     {
-        dd($params);
+        if ($params['document_id'] === $this->document->id) {
+            $this->isProcessing = false;
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'success',
+                'message' => __('inquiry-hub.embed_success')
+            ]);
+            $this->context = null;
+            $this->sourceUrl = null;
+            $this->fileInput = null;
+        }
+    }
+
+    public function storeFile()
+    {
+        $accountId = Auth::check() ? Auth::user()->account_id : 'guest';
+        $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
+        $this->filePath = "documents/$accountId/" . $filename;
+        $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
     }
 
     public function render()

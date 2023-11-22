@@ -9,7 +9,7 @@ use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class RegisterEmbedFreeText
+class RegisterEmbedVideoStream
 {
     use Dispatchable, SerializesModels;
 
@@ -26,15 +26,27 @@ class RegisterEmbedFreeText
     {
         DocumentRepository::createTask(
             $this->document->id,
-            DocumentTaskEnum::EMBED_SOURCE,
+            DocumentTaskEnum::DOWNLOAD_SUBTITLES,
             [
+                'order' => 1,
                 'process_id' => $this->params['process_id'],
                 'meta' => [
-                    'data_type' => DataType::TEXT->value,
-                    'source' => $this->params['source'],
-                    'collection_name' => $this->document->id
+                    'source_url' => $this->params['source_url'] ?? $this->document->getMeta('source_url'),
+                    'embed_source' => true
                 ],
-                'order' => 1
+            ]
+        );
+
+        DocumentRepository::createTask(
+            $this->document->id,
+            DocumentTaskEnum::TRANSCRIBE_AUDIO,
+            [
+                'order' => 2,
+                'process_id' => $this->params['process_id'],
+                'meta' => [
+                    'abort_when_context_present' => true,
+                    'embed_source' => true
+                ]
             ]
         );
     }

@@ -26,7 +26,8 @@
                 <div class="w-full flex flex-col gap-6">
                     <!-- Source -->
                     <div class="flex flex-col gap-3">
-                        <select name="provider" wire:model="sourceType" class="p-3 rounded-lg border border-zinc-200">
+                        <select @if ($isProcessing) disabled @endif name="provider" wire:model="sourceType"
+                            class="p-3 rounded-lg border border-zinc-200">
                             @include('livewire.common.source-providers-options')
                         </select>
                         @if ($errors->has('sourceType'))
@@ -36,12 +37,12 @@
                     <!-- END: Source -->
 
                     <!-- Source URLs -->
-                    @if ($sourceType === 'website_url' || $source === 'youtube')
+                    @if ($sourceType === 'website_url' || $sourceType === 'youtube')
                     <div class="flex flex-col gap-3">
                         <label class="font-bold text-xl text-zinc-700 flex items-center">
                             URL
                         </label>
-                        <input type="text" name="sourceUrl" wire:model="sourceUrl"
+                        <input @if ($isProcessing) disabled @endif type="text" name="sourceUrl" wire:model="sourceUrl"
                             class="p-3 border border-zinc-200 rounded-lg w-full" />
 
                         @if ($errors->has('sourceUrl'))
@@ -79,10 +80,30 @@
                     @endif
                     <!-- END: Free Text -->
 
-                    <div class="w-full flex justify-center">
-                        <button wire:click="embed"
-                            class="bg-secondary text-white rounded-lg py-2 px-4 font-bold text-xl">{{__('inquiry-hub.submit')}}</button>
+                    <!-- Generate button -->
+                    @if(!$isProcessing)
+                    <div class="flex mt-4">
+                        <button wire:click="embed" wire:loading.remove
+                            class="bg-secondary text-white rounded-lg py-2 px-4 font-bold text-xl">
+                            {{__('inquiry-hub.submit')}}
+                        </button>
                     </div>
+                    @endif
+                    <!-- END: Generate button -->
+
+                    <!-- Loadinng -->
+                    <div
+                        class="{{ $isProcessing ? 'flex' : 'hidden' }} flex flex-col border-1 border rounded-lg bg-white p-8">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <x-loader height="10" width="10" />
+                                <label class="font-bold text-zinc-700 text-2xl cursor-pointer">
+                                    {{ __('inquiry-hub.embedding') }}<span id="typewriter"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END: Loading -->
                 </div>
             </div>
         </div>

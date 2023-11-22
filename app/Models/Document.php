@@ -252,6 +252,14 @@ class Document extends Model
         $this->update(['word_count' => $wordCount]);
     }
 
+    public function updateMeta($attribute, $value)
+    {
+        $meta = $this->meta;
+        $meta[$attribute] = $value;
+
+        return $this->update(['meta' => $meta]);
+    }
+
     protected static function booted(): void
     {
         static::addGlobalScope(new SameAccountScope());
