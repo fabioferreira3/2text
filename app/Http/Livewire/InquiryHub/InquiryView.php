@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\InquiryHub;
 
 use App\Enums\DataType;
+use App\Enums\DocumentStatus;
 use App\Enums\DocumentTaskEnum;
 use App\Enums\SourceProvider;
 use App\Jobs\InquiryHub\PrepareTasks;
@@ -83,8 +84,9 @@ class InquiryView extends Component
     public function mount(Document $document)
     {
         $this->document = $document;
+        dump($this->document->status);
         $this->chatThread = $document->chatThread;
-        $this->isProcessing = false;
+        $this->isProcessing = $this->document->status !== DocumentStatus::FINISHED;
         $this->dispatchBrowserEvent('scrollInquiryChatToBottom');
     }
 

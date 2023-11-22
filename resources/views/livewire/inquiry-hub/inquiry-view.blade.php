@@ -56,7 +56,7 @@
                     @if (in_array($sourceType, ['docx', 'pdf_file', 'csv', 'json']))
                     <div class="flex flex-col gap-3 col-span-2">
                         <label class="font-bold text-xl text-zinc-700">{{ __('blog.file_option') }}</label>
-                        <input type="file" name="fileInput" wire:model="fileInput"
+                        <input @if ($isProcessing) disabled @endif type="file" name="fileInput" wire:model="fileInput"
                             class="p-3 border border-zinc-200 rounded-lg w-full" />
                         @if ($errors->has('fileInput'))
                         <span class="text-red-500 text-sm">{{ $errors->first('fileInput') }}</span>
@@ -71,8 +71,8 @@
                         <label class="font-bold text-xl text-zinc-700 flex items-center">
                             {{__('inquiry-hub.text')}}:
                         </label>
-                        <textarea class="border border-zinc-200 rounded-lg" rows="7" maxlength="30000"
-                            wire:model="context"></textarea>
+                        <textarea @if ($isProcessing) disabled @endif class="border border-zinc-200 rounded-lg" rows="7"
+                            maxlength="30000" wire:model="context"></textarea>
                         @if($errors->has('context'))
                         <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
                         @endif
