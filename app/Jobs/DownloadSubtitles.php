@@ -56,7 +56,10 @@ class DownloadSubtitles implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $audioParams = MediaRepository::downloadYoutubeSubtitles($this->meta['source_url']);
+            $audioParams = MediaRepository::downloadYoutubeSubtitles(
+                $this->meta['source_url'],
+                $this->meta['video_language'] ?? null
+            );
             if (!$audioParams['subtitles']) {
                 $audioParams = MediaRepository::downloadYoutubeAudio($this->meta['source_url']);
             }

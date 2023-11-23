@@ -12,7 +12,6 @@ use App\Packages\Oraculum\Exceptions\QueryRequestException;
 use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class Oraculum

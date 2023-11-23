@@ -75,6 +75,7 @@ return [
     'json' => 'The :attribute must be a valid JSON string.',
     'keyword_required' => 'You need to provide a keyword.',
     'language_required' => 'Language is a required field.',
+    'language_in' => 'Invalid language provided',
     'lowercase' => 'The :attribute must be lowercase.',
     'lt' => [
         'array' => 'The :attribute must have less than :value items.',
@@ -162,6 +163,7 @@ return [
     'url' => 'The :attribute must be a valid URL.',
     'ulid' => 'The :attribute must be a valid ULID.',
     'uuid' => 'The :attribute must be a valid UUID.',
+    'videoLanguage_required_if' => 'The language of the video is a required field.',
     'voice_input_text_required' => 'You need to provide the text you want to convert into audio',
     'youtube_link_required' => 'You need to provide a Youtube link for the transcription.',
 

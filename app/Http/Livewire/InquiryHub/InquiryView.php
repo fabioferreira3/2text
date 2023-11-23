@@ -3,10 +3,10 @@
 namespace App\Http\Livewire\InquiryHub;
 
 use App\Enums\DocumentStatus;
+use App\Enums\Language;
 use App\Enums\SourceProvider;
 use App\Jobs\InquiryHub\PrepareTasks;
 use App\Models\Document;
-use App\Models\Traits\ChatTrait;
 use App\Models\Traits\InquiryHub;
 use App\Rules\CsvFile;
 use App\Rules\DocxFile;
@@ -15,45 +15,53 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class InquiryView extends Component
 {
-    use ChatTrait, InquiryHub;
+    use InquiryHub, WithFileUploads;
 
     public $document;
-    public $chatThread;
     public $context;
     public $source = null;
     public $sourceUrl = null;
-    public $sourceType = SourceProvider::FREE_TEXT->value;
+    public $sourceType;
+    public $videoLanguage = null;
     public $fileInput = null;
     public $filePath = null;
     public $tempSourceUrl;
     public $isProcessing;
-    public $activeThread;
-    public bool $hasEmbeddings;
+    public $hasEmbeddings;
 
     public function rules()
     {
         return [
             'context' => [
-                'required_if:source,free_text',
+                'required_if:sourceType,free_text',
                 'max:30000'
             ],
             'sourceUrl' => [
-                'required_if:source,youtube,website_url', 'nullable', 'url',
-                $this->source === 'youtube' ? new \App\Rules\YouTubeUrl() : ''
+                Rule::requiredIf(function () {
+                    return in_array($this->sourceType, ['youtube', 'website_url']);
+                }),
+                'nullable',
+                'url',
+                $this->sourceType === 'youtube' ? new \App\Rules\YouTubeUrl() : null,
             ],
             'sourceType' => [
                 'required',
                 Rule::in(array_map(fn ($value) => $value->value, SourceProvider::cases()))
             ],
             'fileInput' => [
-                'required_if:source,docx,pdf_file,csv',
+                'required_if:sourceType,docx,pdf_file,csv',
                 'max:51200', // in kilobytes, 50mb = 50 * 1024 = 51200kb
-                new DocxFile($this->source),
-                new PdfFile($this->source),
-                new CsvFile($this->source),
+                new DocxFile($this->sourceType),
+                new PdfFile($this->sourceType),
+                new CsvFile($this->sourceType),
+            ],
+            'videoLanguage' => [
+                'required_if:sourceType,youtube',
+                Rule::in(Language::getValues())
             ]
         ];
     }
@@ -66,7 +74,9 @@ class InquiryView extends Component
             'sourceUrl.required_if' => __('validation.inquiry_sourceurl_required'),
             'sourceLanguage.required' => __('validation.language_required'),
             'targetLanguage.required' => __('validation.language_required'),
-            'fileInput.required_if' => __('validation.fileInput_required_if')
+            'fileInput.required_if' => __('validation.fileInput_required_if'),
+            'videoLanguage.required_if' => __('validation.videoLanguage_required_if'),
+            'videoLanguage.in' => __('validation.language_in'),
         ];
     }
 
@@ -74,17 +84,17 @@ class InquiryView extends Component
     {
         $userId = Auth::user()->id;
         return [
-            "echo-private:User.$userId,.EmbedCompleted" => 'onEmbeddingFinished',
-            "echo-private:User.$userId,.ChatMessageReceived" => 'receiveMsg',
+            "echo-private:User.$userId,.EmbedCompleted" => 'onEmbeddingFinished'
         ];
     }
 
     public function mount(Document $document)
     {
         $this->document = $document;
-        $this->chatThread = $document->chatThread;
+        $this->hasEmbeddings = $document->getMeta('has_embeddings') ?? false;
+        $this->sourceType = SourceProvider::FREE_TEXT->value;
+        $this->videoLanguage = Language::ENGLISH->value;
         $this->isProcessing = $this->document->status === DocumentStatus::IN_PROGRESS;
-        $this->dispatchBrowserEvent('scrollInquiryChatToBottom');
     }
 
     public function embed()
@@ -100,7 +110,8 @@ class InquiryView extends Component
         PrepareTasks::dispatch($this->document, [
             'source' => $this->parsedContext(),
             'source_type' => $this->sourceType,
-            'source_url' => $this->sourceUrl
+            'source_url' => $this->sourceUrl,
+            'video_language' => $this->videoLanguage,
         ]);
     }
 
@@ -120,14 +131,17 @@ class InquiryView extends Component
             $this->document->updateMeta('has_embeddings', true);
             $this->hasEmbeddings = true;
         }
+
         $this->isProcessing = false;
+        $this->context = null;
+        $this->sourceUrl = null;
+        $this->fileInput = null;
+        $this->videoLanguage = Language::ENGLISH->value;
+
         $this->dispatchBrowserEvent('alert', [
             'type' => 'success',
             'message' => __('inquiry-hub.embed_success')
         ]);
-        $this->context = null;
-        $this->sourceUrl = null;
-        $this->fileInput = null;
     }
 
     public function storeFile()

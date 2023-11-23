@@ -52,7 +52,7 @@ class NewSummarizer extends Component
             ],
             'sourceLanguage' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
             'targetLanguage' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
-            'maxWordsCount' => 'required|numeric|min:50|max:3000',
+            'maxWordsCount' => 'required|numeric|min:50|max:600',
             'fileInput' => [
                 'required_if:source,docx,pdf_file,csv',
                 'max:51200', // in kilobytes, 50mb = 50 * 1024 = 51200kb

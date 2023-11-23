@@ -41,6 +41,22 @@ class PrepareTasks
             $this->params
         );
 
+        RegisterEmbedWebsite::dispatchIf(
+            $this->params['source_type'] === SourceProvider::WEBSITE_URL->value,
+            $this->document,
+            [...$this->params, 'source' => $this->params['source_url']]
+        );
+
+        RegisterEmbedFile::dispatchIf(
+            in_array($this->params['source_type'], [
+                SourceProvider::PDF->value,
+                SourceProvider::DOCX->value,
+                SourceProvider::CSV->value,
+            ]),
+            $this->document,
+            [...$this->params, 'source' => $this->params['source_url']]
+        );
+
         DocumentRepository::createTask(
             $this->document->id,
             DocumentTaskEnum::BROADCAST_CUSTOM_EVENT,

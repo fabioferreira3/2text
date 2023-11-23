@@ -64,7 +64,7 @@ class MediaRepository
         ]);
     }
 
-    public static function downloadYoutubeSubtitles($youtubeUrl)
+    public static function downloadYoutubeSubtitles($youtubeUrl, $videoLanguage = 'en')
     {
         $yt = new YoutubeDl();
         if (app()->environment('production')) {
@@ -77,7 +77,7 @@ class MediaRepository
             Options::create()
                 ->downloadPath(storage_path('app'))
                 ->skipDownload(true)
-                ->subLang(['en'])
+                ->subLang([$videoLanguage])
                 ->writeSub(true)
                 ->writeAutoSub(true)
                 ->subFormat('vtt')

@@ -2,13 +2,15 @@
 
 namespace App\Jobs\InquiryHub;
 
+use App\Enums\DataType;
 use App\Enums\DocumentTaskEnum;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
-class RegisterEmbedVideoStream
+class RegisterEmbedWebsite
 {
     use Dispatchable, SerializesModels;
 
@@ -25,28 +27,15 @@ class RegisterEmbedVideoStream
     {
         DocumentRepository::createTask(
             $this->document->id,
-            DocumentTaskEnum::DOWNLOAD_SUBTITLES,
+            DocumentTaskEnum::EMBED_SOURCE,
             [
-                'order' => 1,
                 'process_id' => $this->params['process_id'],
                 'meta' => [
-                    'source_url' => $this->params['source_url'] ?? $this->document->getMeta('source_url'),
-                    'video_language' => $this->params['video_language'],
-                    'embed_source' => true
+                    'data_type' => DataType::WEB_PAGE->value,
+                    'source' => $this->params['source'],
+                    'collection_name' => $this->document->id
                 ],
-            ]
-        );
-
-        DocumentRepository::createTask(
-            $this->document->id,
-            DocumentTaskEnum::TRANSCRIBE_AUDIO,
-            [
-                'order' => 2,
-                'process_id' => $this->params['process_id'],
-                'meta' => [
-                    'abort_when_context_present' => true,
-                    'embed_source' => true
-                ]
+                'order' => 1
             ]
         );
     }

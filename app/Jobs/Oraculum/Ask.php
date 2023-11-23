@@ -19,12 +19,12 @@ class Ask implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
     protected ChatThreadIteration $iteration;
-    protected string $taskId;
+    protected string $collectionName;
 
-    public function __construct(ChatThreadIteration $iteration, string $taskId)
+    public function __construct(ChatThreadIteration $iteration, string $collectionName)
     {
         $this->iteration = $iteration;
-        $this->taskId = $taskId;
+        $this->collectionName = $collectionName;
     }
 
     /**
@@ -35,7 +35,7 @@ class Ask implements ShouldQueue
     public function handle()
     {
         try {
-            $client = new Oraculum($this->iteration->thread->user, $this->taskId);
+            $client = new Oraculum($this->iteration->thread->user, $this->collectionName);
             $response = $client->chat($this->iteration->response);
             $newIteration = $this->iteration->thread->iterations()->create([
                 'response' => $response['content'],
@@ -44,7 +44,7 @@ class Ask implements ShouldQueue
             event(new ChatMessageReceived($newIteration));
             $this->jobSucceded(true);
         } catch (Exception $e) {
-            $this->jobFailed('Failed to create title: ' . $e->getMessage());
+            $this->jobFailed('Failed to ask question to Oraculum: ' . $e->getMessage());
         }
     }
 }

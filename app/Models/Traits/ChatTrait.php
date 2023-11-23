@@ -8,7 +8,7 @@ trait ChatTrait
 {
     public $inputMsg;
 
-    public function submitMsg()
+    public function submitMsg($collectionName = 'oraculum')
     {
         $this->validate();
         $this->processing = true;
@@ -19,7 +19,7 @@ trait ChatTrait
         $this->inputMsg = '';
         $this->activeThread->refresh();
         $this->dispatchBrowserEvent('scrollToBottom');
-        Ask::dispatch($iteration, 'oraculum');
+        Ask::dispatch($iteration, $collectionName);
     }
 
     public function receiveMsg(array $params)

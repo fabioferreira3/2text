@@ -44,6 +44,11 @@ enum Language: string
         return collect(self::cases())->map(fn ($language) => ['value' => $language->value, 'name' => $language->label()])->toArray();
     }
 
+    public static function getValues(): array
+    {
+        return collect(self::cases())->flatMap(fn ($language) => [$language->value])->toArray();
+    }
+
     public static function getKeyValues(): array
     {
         return collect(self::cases())->flatMap(fn ($language) => [$language->value => $language->label()])->toArray();
