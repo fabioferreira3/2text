@@ -2,15 +2,12 @@
 
 namespace App\Http\Livewire\InquiryHub;
 
-use App\Enums\DataType;
 use App\Enums\DocumentStatus;
-use App\Enums\DocumentTaskEnum;
 use App\Enums\SourceProvider;
 use App\Jobs\InquiryHub\PrepareTasks;
 use App\Models\Document;
 use App\Models\Traits\ChatTrait;
 use App\Models\Traits\InquiryHub;
-use App\Repositories\DocumentRepository;
 use App\Rules\CsvFile;
 use App\Rules\DocxFile;
 use App\Rules\PdfFile;
@@ -34,6 +31,7 @@ class InquiryView extends Component
     public $tempSourceUrl;
     public $isProcessing;
     public $activeThread;
+    public bool $hasEmbeddings;
 
     public function rules()
     {
@@ -84,9 +82,8 @@ class InquiryView extends Component
     public function mount(Document $document)
     {
         $this->document = $document;
-        dump($this->document->status);
         $this->chatThread = $document->chatThread;
-        $this->isProcessing = $this->document->status !== DocumentStatus::FINISHED;
+        $this->isProcessing = $this->document->status === DocumentStatus::IN_PROGRESS;
         $this->dispatchBrowserEvent('scrollInquiryChatToBottom');
     }
 
@@ -115,16 +112,22 @@ class InquiryView extends Component
 
     public function onEmbeddingFinished($params)
     {
-        if ($params['document_id'] === $this->document->id) {
-            $this->isProcessing = false;
-            $this->dispatchBrowserEvent('alert', [
-                'type' => 'success',
-                'message' => __('inquiry-hub.embed_success')
-            ]);
-            $this->context = null;
-            $this->sourceUrl = null;
-            $this->fileInput = null;
+        if ($params['document_id'] !== $this->document->id) {
+            return;
         }
+
+        if (!$this->hasEmbeddings) {
+            $this->document->updateMeta('has_embeddings', true);
+            $this->hasEmbeddings = true;
+        }
+        $this->isProcessing = false;
+        $this->dispatchBrowserEvent('alert', [
+            'type' => 'success',
+            'message' => __('inquiry-hub.embed_success')
+        ]);
+        $this->context = null;
+        $this->sourceUrl = null;
+        $this->fileInput = null;
     }
 
     public function storeFile()

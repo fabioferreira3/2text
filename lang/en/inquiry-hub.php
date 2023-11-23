@@ -7,6 +7,7 @@ return [
     'inquiry_hub' => 'Inquiry Hub',
     'new_inquiry' => 'New inquiry',
     'new' => 'New',
+    'no_inquiries' => 'You need to add at least 1 source to be able to start an inquiry',
     'send' => 'Send',
     'sources' => 'Sources',
     'submit' => 'Submit',
