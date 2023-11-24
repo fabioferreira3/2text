@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'create' => 'Create new inquiry',
     'embedding' => 'Processing...',
     'embed_success' => 'Document processed succesfully',
     'inquiry' => 'Inquiry',

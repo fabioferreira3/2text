@@ -16,8 +16,12 @@ trait InquiryHub
             'language' => Language::ENGLISH->value
         ]);
 
-        ChatThread::create([
+        $thread = ChatThread::create([
             'document_id' => $document->id
+        ]);
+        $thread->iterations()->create([
+            'origin' => 'sys',
+            'response' => "Hi " . auth()->user()->name . "! I just read your source. What would you like to know about it?",
         ]);
 
         redirect()->route('inquiry-view', ['document' => $document]);

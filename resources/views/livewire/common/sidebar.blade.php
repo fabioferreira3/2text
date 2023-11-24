@@ -36,12 +36,6 @@
             'icon' => 'newspaper',
             ])
             @include('livewire.common.navlink', [
-            'route' => 'new-audio-transcription',
-            'submenu' => true,
-            'name' => __('menus.audio_transcription'),
-            'icon' => 'chat-alt',
-            ])
-            @include('livewire.common.navlink', [
             'route' => 'new-paraphraser',
             'submenu' => true,
             'name' => __('menus.paraphraser'),
@@ -52,6 +46,12 @@
             'submenu' => true,
             'name' => __('menus.text_to_audio'),
             'icon' => 'volume-up',
+            ])
+            @include('livewire.common.navlink', [
+            'route' => 'new-audio-transcription',
+            'submenu' => true,
+            'name' => __('menus.audio_transcription'),
+            'icon' => 'chat-alt',
             ])
             @include('livewire.common.navlink', [
             'route' => 'new-summarizer',

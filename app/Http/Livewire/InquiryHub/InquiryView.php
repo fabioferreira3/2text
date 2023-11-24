@@ -105,17 +105,17 @@ class InquiryView extends Component
         $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
     }
 
+    public function updatedFileInput($file)
+    {
+        $this->storeFile($file);
+    }
+
     public function embed()
     {
         $this->validate();
-        $this->dispatchBrowserEvent('alert', [
-            'type' => 'success',
-            'message' => __('inquiry-hub.embed_success')
-        ]);
         $this->isProcessing = true;
 
         if ($this->fileInput) {
-            $this->storeFile();
             $this->document->updateMeta('source_file_path', $this->filePath);
         }
 
@@ -124,7 +124,6 @@ class InquiryView extends Component
             'source_type' => $this->sourceType,
             'source_url' => $this->sourceUrl,
             'video_language' => $this->videoLanguage,
-            'fileInput' => $this->fileInput
         ]);
     }
 

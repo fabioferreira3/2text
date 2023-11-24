@@ -17,8 +17,7 @@
                     ])
                 </div>
                 <div class="flex items-center justify-end gap-2">
-                    <button wire:click="createNewInquiry()"
-                        class="flex items-center gap-1 bg-main text-white font-bold px-2 py-1 rounded-lg">
+                    <button wire:click="createNewInquiry()" class="flex items-center gap-1 bg-main text-white font-bold px-2 py-1 rounded-lg">
                         <x-icon name="plus" width="18" height="18" />
                         <span class="text-xs">{{__('inquiry-hub.new')}}</span>
                     </button>
@@ -28,8 +27,7 @@
                 <div class="w-full flex flex-col gap-6">
                     <!-- Source -->
                     <div class="flex flex-col gap-3">
-                        <select @if ($isProcessing) disabled @endif name="provider" wire:model="sourceType"
-                            class="p-3 rounded-lg border border-zinc-200">
+                        <select @if ($isProcessing) disabled @endif name="provider" wire:model="sourceType" class="p-3 rounded-lg border border-zinc-200">
                             @include('livewire.common.source-providers-options')
                         </select>
                         @if ($errors->has('sourceType'))
@@ -46,8 +44,7 @@
                         <label class="font-bold text-xl text-zinc-700 flex items-center">
                             URL
                         </label>
-                        <input @if ($isProcessing) disabled @endif type="text" name="sourceUrl" wire:model="sourceUrl"
-                            class="p-3 border border-zinc-200 rounded-lg w-full" />
+                        <input @if ($isProcessing) disabled @endif type="text" name="sourceUrl" wire:model="sourceUrl" class="p-3 border border-zinc-200 rounded-lg w-full" />
 
                         @if ($errors->has('sourceUrl'))
                         <span class="text-red-500 text-sm">{{ $errors->first('sourceUrl') }}</span>
@@ -63,8 +60,7 @@
                             'content' => App\Helpers\InstructionsHelper::blogLanguages()
                             ])
                         </div>
-                        <select name="videoLanguage" wire:model="videoLanguage"
-                            class="p-3 rounded-lg border border-zinc-200">
+                        <select name="videoLanguage" wire:model="videoLanguage" class="p-3 rounded-lg border border-zinc-200">
                             @include('livewire.common.languages-options')
                         </select>
                         @if($errors->has('videoLanguage'))
@@ -79,8 +75,7 @@
                     @if (in_array($sourceType, ['docx', 'pdf_file', 'csv', 'json']))
                     <div class="flex flex-col gap-3 col-span-2">
                         <label class="font-bold text-xl text-zinc-700">{{ __('blog.file_option') }}</label>
-                        <input @if ($isProcessing) disabled @endif type="file" name="fileInput" wire:model="fileInput"
-                            class="p-3 border border-zinc-200 rounded-lg w-full" />
+                        <input @if ($isProcessing) disabled @endif type="file" name="fileInput" wire:model="fileInput" class="p-3 border border-zinc-200 rounded-lg w-full" />
 
                         @if ($errors->has('fileInput'))
                         <span class="text-red-500 text-sm">{{ $errors->first('fileInput') }}</span>
@@ -95,8 +90,7 @@
                         <label class="font-bold text-xl text-zinc-700 flex items-center">
                             {{__('inquiry-hub.text')}}:
                         </label>
-                        <textarea @if ($isProcessing) disabled @endif class="border border-zinc-200 rounded-lg" rows="7"
-                            maxlength="30000" wire:model="context"></textarea>
+                        <textarea @if ($isProcessing) disabled @endif class="border border-zinc-200 rounded-lg" rows="7" maxlength="30000" wire:model="context"></textarea>
                         @if($errors->has('context'))
                         <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
                         @endif
@@ -107,9 +101,11 @@
                     <!-- Generate button -->
                     @if(!$isProcessing)
                     <div class="flex mt-4">
-                        <button wire:click="embed" wire:loading.remove wire:target="fileInput"
-                            class="bg-secondary text-white rounded-lg py-2 px-4 font-bold text-xl">
+                        <button wire:click="embed" wire:loading.remove wire:target="fileInput" class="bg-secondary text-white rounded-lg py-2 px-4 font-bold text-xl">
                             {{__('inquiry-hub.submit')}}
+                        </button>
+                        <button disabled wire:loading wire:target="fileInput" class="bg-secondary text-white rounded-lg py-2 px-4 font-bold text-xl">
+                            {{__('inquiry-hub.please_wait')}}
                         </button>
                     </div>
                     @endif
@@ -133,7 +129,7 @@
             </div>
         </div>
 
-        <div class="w-full md:w-3/5 border max-h-[32rem] rounded-lg p-4 bg-gray-100">
+        <div class="w-full md:w-3/5 border max-h-[28rem] rounded-lg p-4 bg-gray-100">
             <div class="flex flex-col justify-end gap-2 h-full">
                 @if ($hasEmbeddings)
                 @livewire('inquiry-hub.inquiry-chat', ['document' => $document])

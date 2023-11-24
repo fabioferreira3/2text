@@ -26,6 +26,11 @@ class ChatThread extends Model
         return $this->hasMany(ChatThreadIteration::class)->orderBy('created_at', 'ASC');
     }
 
+    public function scopeNotDocumentRelated($query)
+    {
+        return $query->whereNull('document_id');
+    }
+
     public function document(): BelongsTo
     {
         return $this->belongsTo(Document::class);
@@ -38,12 +43,6 @@ class ChatThread extends Model
             if (Auth::check()) {
                 $thread->user_id = Auth::user()->id;
             }
-        });
-        static::created(function ($thread) {
-            $thread->iterations()->create([
-                'origin' => 'sys',
-                'response' => "Welcome!"
-            ]);
         });
     }
 }

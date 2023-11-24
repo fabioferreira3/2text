@@ -38,7 +38,10 @@ class Chat extends Component
     public function mount()
     {
         $this->isOpen = false;
-        $this->activeThread = ChatThread::latest()->firstOrCreate([]);
+        $this->activeThread = ChatThread::notDocumentRelated()->latest()->firstOrCreate([]);
+        if (!$this->activeThread->iterations->count()) {
+            $this->createDefaultSysIteration();
+        }
         $this->inputMsg = '';
         $this->processing = false;
     }
@@ -50,6 +53,15 @@ class Chat extends Component
             return;
         }
         $this->activeThread = ChatThread::create();
+        $this->createDefaultSysIteration();
+    }
+
+    public function createDefaultSysIteration()
+    {
+        $this->activeThread->iterations()->create([
+            'origin' => 'sys',
+            'response' => "Hey " . auth()->user()->name . "! How can I help you?",
+        ]);
     }
 
     public function updatedIsOpen()

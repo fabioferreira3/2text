@@ -12,13 +12,9 @@
     <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:weight@400;600;700&display=swap">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Scripts -->
     @wireUiScripts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -37,12 +33,12 @@
     <x-jet-banner />
     @livewire('common.notifications')
 
-    <main class="flex w-full md:grid md:grid-cols-7 xl:grid-cols-6 min-h-screen">
-        <div class="hidden sm:block md:col-span-2 xl:col-span-1 h-full p-6 bg-main">
+    <main class="ml-[250px] flex w-full md:grid md:grid-cols-7 xl:grid-cols-6 min-h-screen">
+        <div class="hidden fixed top-0 left-0 w-[250px] sm:block md:col-span-2 xl:col-span-1 h-full p-6 bg-main">
             @livewire('common.sidebar')
         </div>
         <!-- Page Content -->
-        <div class="w-full md:col-span-5 h-full px-0 mb-8 pb-6">
+        <div class="w-full md:col-span-5 h-full px-0">
             @livewire('navigation-menu')
             <div class='h-0.5 sm:px-8'>
                 <div class='h-full bg-secondary rounded-lg'></div>
