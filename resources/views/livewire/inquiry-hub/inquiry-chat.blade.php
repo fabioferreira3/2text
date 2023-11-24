@@ -10,39 +10,6 @@
         @endif
         @endforeach
         @endif
-        {{--
-        <!-- User Message -->
-        <div class="flex items-end justify-end p-4">
-            <div class="max-w-full lg:max-w-3/4 text-right">
-                <div class="inline-block bg-gray-100 text-gray-700 rounded-t-xl rounded-bl-xl p-3">
-                    Batman tornou-se popular assim que foi apresentado, acabando por ganhar a sua
-                    própria revista de banda desenhada em
-                    1940, Batman. Enquanto as décadas progrediram, foram surgindo divergências sobre a
-                    interpretação do personagem....
-                </div>
-            </div>
-            <div class="ml-3 flex-shrink-0">
-                <div class="w-12 h-12 bg-gray-300 rounded-full overflow-hidden flex justify-center items-center">
-                    <!-- Centering the icon -->
-                    <x-icon name="user" width="24" height="24" class="text-gray-600" />
-                    <!-- Smaller icon size -->
-                </div>
-            </div>
-        </div>
-
-        <!-- System Message -->
-        <div class="flex items-end justify-start p-4">
-            <div class="mr-3 flex-shrink-0">
-                <div class="w-12 h-12 bg-gray-300 rounded-full overflow-hidden">
-                    <img src="/oraculum.webp" class="object-cover w-full h-full" />
-                </div>
-            </div>
-            <div class="max-w-full lg:max-w-3/4">
-                <div class="inline-block bg-gray-300 rounded-t-xl rounded-br-xl p-3">
-                    Good morning!
-                </div>
-            </div>
-        </div> --}}
     </div>
     <!-- Typing Indicator -->
     <div class="my-2 flex items-center justify-end italic @if(!$isProcessing) invisible @endif">

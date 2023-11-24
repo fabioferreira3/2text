@@ -81,6 +81,7 @@
                         <label class="font-bold text-xl text-zinc-700">{{ __('blog.file_option') }}</label>
                         <input @if ($isProcessing) disabled @endif type="file" name="fileInput" wire:model="fileInput"
                             class="p-3 border border-zinc-200 rounded-lg w-full" />
+
                         @if ($errors->has('fileInput'))
                         <span class="text-red-500 text-sm">{{ $errors->first('fileInput') }}</span>
                         @endif
@@ -106,7 +107,7 @@
                     <!-- Generate button -->
                     @if(!$isProcessing)
                     <div class="flex mt-4">
-                        <button wire:click="embed" wire:loading.remove
+                        <button wire:click="embed" wire:loading.remove wire:target="fileInput"
                             class="bg-secondary text-white rounded-lg py-2 px-4 font-bold text-xl">
                             {{__('inquiry-hub.submit')}}
                         </button>
@@ -114,9 +115,9 @@
                     @endif
                     <!-- END: Generate button -->
 
-                    <!-- Loadinng -->
-                    <div
-                        class="{{ $isProcessing ? 'flex' : 'hidden' }} flex flex-col border-1 border rounded-lg bg-white p-8">
+                    @if($isProcessing)
+                    <!-- Loading -->
+                    <div class="flex flex-col border-1 border rounded-lg bg-white p-8">
                         <div class="flex justify-between items-center">
                             <div class="flex items-center gap-2">
                                 <x-loader height="10" width="10" />
@@ -127,6 +128,7 @@
                         </div>
                     </div>
                     <!-- END: Loading -->
+                    @endif
                 </div>
             </div>
         </div>

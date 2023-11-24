@@ -65,6 +65,7 @@
     @endif
 </div>
 
+@push('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         initTypewriter('typewriter', ['...'], 120);
@@ -75,3 +76,4 @@
         container.scrollTop = container.scrollHeight;
     });
 </script>
+@endpush

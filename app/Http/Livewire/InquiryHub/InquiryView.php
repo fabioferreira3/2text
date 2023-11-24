@@ -97,9 +97,21 @@ class InquiryView extends Component
         $this->isProcessing = $this->document->status === DocumentStatus::IN_PROGRESS;
     }
 
+    public function storeFile()
+    {
+        $accountId = Auth::check() ? Auth::user()->account_id : 'guest';
+        $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
+        $this->filePath = "documents/$accountId/" . $filename;
+        $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
+    }
+
     public function embed()
     {
         $this->validate();
+        $this->dispatchBrowserEvent('alert', [
+            'type' => 'success',
+            'message' => __('inquiry-hub.embed_success')
+        ]);
         $this->isProcessing = true;
 
         if ($this->fileInput) {
@@ -112,6 +124,7 @@ class InquiryView extends Component
             'source_type' => $this->sourceType,
             'source_url' => $this->sourceUrl,
             'video_language' => $this->videoLanguage,
+            'fileInput' => $this->fileInput
         ]);
     }
 
@@ -135,6 +148,7 @@ class InquiryView extends Component
         $this->isProcessing = false;
         $this->context = null;
         $this->sourceUrl = null;
+        $this->sourceType = SourceProvider::FREE_TEXT->value;
         $this->fileInput = null;
         $this->videoLanguage = Language::ENGLISH->value;
 
@@ -142,14 +156,6 @@ class InquiryView extends Component
             'type' => 'success',
             'message' => __('inquiry-hub.embed_success')
         ]);
-    }
-
-    public function storeFile()
-    {
-        $accountId = Auth::check() ? Auth::user()->account_id : 'guest';
-        $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
-        $this->filePath = "documents/$accountId/" . $filename;
-        $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
     }
 
     public function render()
