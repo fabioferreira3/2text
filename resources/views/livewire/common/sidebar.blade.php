@@ -42,7 +42,7 @@
             'icon' => 'switch-horizontal',
             ])
             @include('livewire.common.navlink', [
-            'route' => 'new-text-to-speech',
+            'route' => 'new-text-to-audio',
             'submenu' => true,
             'name' => __('menus.text_to_audio'),
             'icon' => 'volume-up',

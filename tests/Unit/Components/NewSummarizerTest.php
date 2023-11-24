@@ -92,7 +92,7 @@ describe(
                     ->set('maxWordsCount', '49')
                     ->call('process')
                     ->assertHasErrors(['maxWordsCount' => 'min'])
-                    ->set('maxWordsCount', '3001')
+                    ->set('maxWordsCount', '601')
                     ->call('process')
                     ->assertHasErrors(['maxWordsCount' => 'max']);
             });

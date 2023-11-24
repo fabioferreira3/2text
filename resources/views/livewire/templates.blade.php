@@ -11,7 +11,7 @@
         @livewire('blog.template')
         @livewire('audio-transcription.template')
         @livewire('paraphraser.template')
-        @livewire('text-to-speech.template')
+        @livewire('text-to-audio.template')
         @livewire('summarizer.template')
         @livewire('inquiry-hub.template')
     </div>

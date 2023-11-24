@@ -2,39 +2,42 @@
     @section('header')
     <div class="flex items-center justify-between">
         @include('livewire.common.header', ['icon' => 'volume-up', 'title' => $document ?
-        __('text-to-speech.text_to_audio')
-        : __('text-to-speech.new_text_to_audio')])
-        <button wire:click="showHistory"
-            class="transition-colors ease-in-out duration-500 delay-150 flex items-center justify-center gap-2 bg-zinc-300 border border-zinc-100 hover:bg-zinc-400 hover:text-white py-2 px-3 rounded-lg text-sm text-gray-700">
+        __('text-to-audio.text_to_audio')
+        : __('text-to-audio.new_text_to_audio')])
+        <a href={{route('text-to-audio-history')}} class="transition-colors ease-in-out duration-500 delay-150
+            flex items-center justify-center gap-2 bg-zinc-300 border border-zinc-100 hover:bg-zinc-400 hover:text-white
+            py-2 px-3 rounded-lg text-sm text-gray-700">
             <x-icon class="w-5 h-5" name="book-open" />
-            <div class="font-bold text-base">{{__('text-to-speech.history')}}
+            <div class="font-bold text-base">{{__('text-to-audio.history')}}
             </div>
-        </button>
+        </a>
     </div>
     @endsection
 
+    @if ($currentAudioFile && !$isProcessing)
     <div class="w-full md:w-1/2 flex flex-col items-center gap-4 md:flex-row">
-        @if ($currentAudioFile && !$isProcessing)
-        <button wire:click="processAudio('listen_current_audio')"
-            class="transition-colors ease-in-out duration-500 delay-150 flex items-center justify-center gap-2 bg-secondary border border-secondary hover:bg-zinc-200 hover:text-zinc-700 hover:border hover:border-zinc-300 py-2 px-3 rounded-lg text-sm text-white w-full">
+        <button wire:click="processAudio('listen_current_audio')" class="transition-colors ease-in-out duration-500
+            delay-150 flex items-center justify-center gap-2 bg-secondary border border-secondary hover:bg-zinc-200
+            hover:text-zinc-700 hover:border hover:border-zinc-300 py-2 px-3 rounded-lg text-sm text-white w-full">
             <x-icon class="w-5 h-5" name="volume-up" />
-            <div class="font-bold text-base">{{$isPlaying ? __('text-to-speech.stop') :
-                __('text-to-speech.listen')}}
+            <div class="font-bold text-base">{{$isPlaying ? __('text-to-audio.stop') :
+                __('text-to-audio.listen')}}
             </div>
         </button>
         <audio id="listen_current_audio" src="{{ $currentAudioUrl }}" preload="auto" wire:ignore></audio>
-        <button
-            class="transition-colors ease-in-out duration-500 delay-150 flex items-center justify-center gap-2 bg-main border border-main hover:bg-zinc-200 hover:text-zinc-700 hover:border hover:border-zinc-300 py-2 px-3 rounded-lg text-sm text-white w-full"
-            wire:click='downloadAudio'>
+        <button class="transition-colors ease-in-out duration-500 delay-150 flex items-center justify-center gap-2
+            bg-main border border-main hover:bg-zinc-200 hover:text-zinc-700 hover:border hover:border-zinc-300 py-2 px-3
+            rounded-lg text-sm text-white w-full" wire:click='downloadAudio'>
             <x-icon class="w-5 h-5" name="cloud-download" />
-            <div class="font-bold text-base">{{__('text-to-speech.download')}}</div>
+            <div class="font-bold text-base">{{__('text-to-audio.download')}}</div>
         </button>
-        @endif
     </div>
+    @endif
+
     <div class="flex flex-col md:flex-row h-full gap-4">
-        <div class="flex flex-col w-1/2 h-full gap-4 py-4">
+        <div class="flex flex-col w-full md:w-1/2 h-[20rem] md:h-full gap-4 py-4">
             <div class="flex items-center">
-                @include('livewire.common.label', ['title' => __('text-to-speech.select_voice')])
+                @include('livewire.common.label', ['title' => __('text-to-audio.select_voice')])
             </div>
             @if ($errors->has('selectedVoice'))
             <span class="text-red-500 text-sm">{{ $errors->first('selectedVoice') }}</span>
@@ -71,9 +74,9 @@
                 @endforeach
             </div>
         </div>
-        <div class="flex flex-col w-1/2 h-full gap-4 py-4">
+        <div class="flex flex-col w-full md:w-1/2 h-full gap-4 py-4">
             <div class="flex items-center">
-                @include('livewire.common.label', ['title' => __('text-to-speech.input_text')])
+                @include('livewire.common.label', ['title' => __('text-to-audio.input_text')])
             </div>
             <textarea rows="15" wire:model="inputText" class="w-full p-4 border border-zinc-200 rounded-lg"
                 wire:model="inputText"></textarea>
@@ -84,7 +87,7 @@
                 class="bg-secondary transition-colors ease-in-out duration-500 delay-150 hover:bg-main text-xl font-bold px-4 py-2 rounded-lg text-sm text-zinc-200">
                 <div class="py-1">
                     @if ($isProcessing)
-                    <x-loader color="white" /> @else <span>{{__('text-to-speech.convert_to_audio')}}</span> @endif
+                    <x-loader color="white" /> @else <span>{{__('text-to-audio.convert_to_audio')}}</span> @endif
                 </div>
             </button>
         </div>
@@ -92,5 +95,5 @@
 </div>
 
 @push('scripts')
-@include('livewire.text-to-speech.audio-scripts')
+@include('livewire.text-to-audio.audio-scripts')
 @endpush

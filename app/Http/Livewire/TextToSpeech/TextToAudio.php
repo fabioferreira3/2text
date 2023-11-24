@@ -121,13 +121,8 @@ class TextToAudio extends Component
         }
     }
 
-    public function showHistory()
-    {
-        return redirect()->route('text-to-speech-history');
-    }
-
     public function render()
     {
-        return view('livewire.text-to-speech.text-to-speech');
+        return view('livewire.text-to-audio.text-to-audio');
     }
 }

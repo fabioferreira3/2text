@@ -110,6 +110,6 @@ class AudioHistory extends Component
 
     public function render()
     {
-        return view('livewire.text-to-speech.history');
+        return view('livewire.text-to-audio.history');
     }
 }

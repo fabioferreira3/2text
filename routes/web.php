@@ -73,9 +73,9 @@ Route::middleware([
     Route::get('/documents/paraphraser/{document}', Paraphraser::class)->name('paraphrase-view');
 
     /* Text to Speech routes */
-    Route::get('/text-to-speech/new', TextToAudio::class)->name('new-text-to-speech');
-    Route::get('/text-to-speech/history', AudioHistory::class)->name('text-to-speech-history');
-    Route::get('/documents/text-to-speech/{document}', TextToAudio::class)->name('text-to-speech-view');
+    Route::get('/text-to-audio/new', TextToAudio::class)->name('new-text-to-audio');
+    Route::get('/text-to-audio/history', AudioHistory::class)->name('text-to-audio-history');
+    Route::get('/documents/text-to-audio/{document}', TextToAudio::class)->name('text-to-audio-view');
 
     /* Inquiry Hub */
     Route::get('/inquiry-hub/new', NewInquiry::class)->name('new-inquiry');

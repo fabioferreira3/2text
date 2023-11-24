@@ -123,7 +123,7 @@
         <div class="flex justify-center mt-4">
             <button wire:click="process" wire:loading.remove
                 class="bg-secondary text-xl text-white font-bold px-4 py-2 rounded-lg">
-                {{__('summarizer.generate')}}!
+                {{__('summarizer.start')}}
             </button>
         </div>
         <!-- END: Generate button -->

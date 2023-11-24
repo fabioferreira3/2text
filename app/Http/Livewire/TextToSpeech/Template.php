@@ -24,6 +24,6 @@ class Template extends Component
 
     public function execute()
     {
-        return redirect()->to('/text-to-speech/new');
+        return redirect()->to('/text-to-audio/new');
     }
 }

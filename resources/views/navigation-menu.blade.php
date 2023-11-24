@@ -1,6 +1,6 @@
 <nav x-data="{ open: false }" class="w-full">
     <!-- Primary Navigation Menu -->
-    <div class="px-4 sm:px-6 lg:px-8 flex items-center md:block bg-main sm:bg-white">
+    <div class="px-4 sm:px-6 flex items-center md:block bg-main sm:bg-white">
         <div class="sm:hidden bg-main p-4">
             <a href="{{ route('dashboard') }}">
                 <img src="/logo.png" class="m-auto w-1/2 h-full" />
@@ -116,8 +116,8 @@
                     :active="request()->routeIs('new-paraphraser')">
                     {{ __('menus.paraphraser') }}
                 </x-jet-responsive-nav-link>
-                <x-jet-responsive-nav-link href="{{ route('new-text-to-speech') }}"
-                    :active="request()->routeIs('new-text-to-speech')">
+                <x-jet-responsive-nav-link href="{{ route('new-text-to-audio') }}"
+                    :active="request()->routeIs('new-text-to-audio')">
                     {{ __('menus.text_to_audio') }}
                 </x-jet-responsive-nav-link>
             </div>

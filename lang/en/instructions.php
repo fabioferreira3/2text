@@ -87,5 +87,5 @@ return [
     'tone' => 'Tone',
     'useful_guidelines' => 'Useful guidelines',
     'website_url' => 'Website URLs',
-    'words_count' => 'Define the number of words you would like Oraculum to generate. You may define a minimum of 100 and a maximum of 3000 words.',
+    'words_count' => 'Define the number of words you would like Oraculum to generate. You may define a minimum of 100 and a maximum of 600 words.',
 ];
