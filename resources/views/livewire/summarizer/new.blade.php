@@ -1,5 +1,7 @@
 <div class="flex flex-col gap-6">
+    @section('header')
     @include('livewire.common.header', ['icon' => 'sort-ascending', 'title' => __('summarizer.new_summary')])
+    @endsection
     @if(!$isProcessing)
     <div class="flex flex-col gap-6 p-4 border rounded-lg">
         <div class="w-full flex flex-col md:grid md:grid-cols-3 gap-6">

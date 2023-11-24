@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-6">
-    @push('header')
+    @section('header')
     @include('livewire.common.header', ['icon' => 'newspaper', 'title' => __('blog.new_blog_post')])
-    @endpush
+    @endsection
     <div class="flex flex-col gap-6 p-4 border rounded-lg">
 
         <!-- Source, number of topics and language -->
@@ -226,7 +226,7 @@
         <div class="flex justify-center mt-4">
             <button wire:click="process" wire:loading.remove
                 class="bg-secondary text-xl text-white font-bold px-4 py-2 rounded-lg">
-                {{__('blog.generate')}}!
+                {{__('blog.generate')}}
             </button>
 
             <div wire:loading wire:target="process">

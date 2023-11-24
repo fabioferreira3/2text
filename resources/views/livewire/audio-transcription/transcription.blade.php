@@ -1,6 +1,7 @@
 <div class="flex flex-col gap-12">
+    @section('header')
     @include('livewire.common.header', ['icon' => 'video-camera', 'label' => $document->title])
-
+    @endsection
     <div class="flex flex-col lg:flex-row gap-6 p-6 rounded-lg border border-gray-300">
         <div class="flex flex-col order-2 lg:order-none gap-4 w-full lg:w-1/2 xl:2/3">
             <div>

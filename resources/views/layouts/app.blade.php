@@ -43,7 +43,8 @@
         </div>
         <!-- End: Sidebar -->
 
-        <div class="flex flex-col w-full md:ml-[250px] h-screen px-0 overflow-hidden bg-white">
+        <div class="flex flex-col w-full md:ml-[250px] h-screen px-0 overflow-hidden bg-white pb-8">
+            <!-- Header -->
             <header class="sticky top-0">
                 <div class="z-50">
                     @livewire('navigation-menu')
@@ -51,10 +52,13 @@
                 <div class='h-[1px]'>
                     <div class='h-full bg-gray-200 rounded-lg'></div>
                 </div>
+                @hasSection('header')
                 <div class="p-4 border-b border-zinc-200">
-                    @stack('header')
+                    @yield('header')
                 </div>
+                @endif
             </header>
+            <!-- End: Header -->
 
             <div class="flex-1 overflow-auto p-6 bg-white">
                 {{ $slot }}

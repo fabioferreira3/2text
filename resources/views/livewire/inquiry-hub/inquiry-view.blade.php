@@ -1,12 +1,12 @@
 <div class="flex flex-col gap-6 h-full overflow-auto">
-    @push('header')
+    @section('header')
     @livewire('common.header', [ 'icon'=> 'search-circle',
     'title' => $document->title ?? __('inquiry-hub.new_inquiry'),
     'suffix' => $document->title ? __('inquiry-hub.inquiry_hub') : "",
     'document' => $document,
     'editable' => true
     ])
-    @endpush
+    @endsection
 
     <div class="flex gap-4 h-full">
         <div class="w-full md:w-2/5 h-full">

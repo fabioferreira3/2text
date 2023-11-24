@@ -1,12 +1,14 @@
 <div class="flex flex-col gap-6">
+    @section('header')
     @include('livewire.common.header', ['icon' => 'switch-horizontal', 'title' => __('paraphraser.new_paraphrase')])
+    @endsection
     <div class="flex flex-col">
         <div class="flex flex-col gap-6 p-4 border rounded-lg">
             <div class="w-full flex flex-col md:grid md:grid-cols-2 gap-6">
                 <div class="flex flex-col gap-6">
                     <div class="flex gap-2 items-center">
-                        <label class="font-bold text-lg">{{__('paraphraser.origin')}}:</label>
-                        @include('livewire.common.help-item', ['header' => __('paraphraser.origin'), 'content' =>
+                        <label class="font-bold font-bold text-3xl text-zinc-700">{{__('paraphraser.source')}}:</label>
+                        @include('livewire.common.help-item', ['header' => __('paraphraser.source'), 'content' =>
                         App\Helpers\InstructionsHelper::paraphraserSources()])
                     </div>
                     <select name="provider" wire:model="source" class="p-3 rounded-lg border border-zinc-200">

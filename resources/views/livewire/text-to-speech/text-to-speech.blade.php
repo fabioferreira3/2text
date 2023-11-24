@@ -1,14 +1,19 @@
-<div class="flex flex-col gap-6">
-    @include('livewire.common.header', ['icon' => 'volume-up', 'title' => $document ? __('text-to-speech.text_to_audio')
-    : __('text-to-speech.new_text_to_audio')])
-
-    <div class="w-full md:w-1/2 flex flex-col items-center gap-4 md:flex-row">
+<div class="flex flex-col gap-6 h-full">
+    @section('header')
+    <div class="flex items-center justify-between">
+        @include('livewire.common.header', ['icon' => 'volume-up', 'title' => $document ?
+        __('text-to-speech.text_to_audio')
+        : __('text-to-speech.new_text_to_audio')])
         <button wire:click="showHistory"
             class="transition-colors ease-in-out duration-500 delay-150 flex items-center justify-center gap-2 bg-zinc-300 border border-zinc-100 hover:bg-zinc-400 hover:text-white py-2 px-3 rounded-lg text-sm text-gray-700">
             <x-icon class="w-5 h-5" name="book-open" />
             <div class="font-bold text-base">{{__('text-to-speech.history')}}
             </div>
         </button>
+    </div>
+    @endsection
+
+    <div class="w-full md:w-1/2 flex flex-col items-center gap-4 md:flex-row">
         @if ($currentAudioFile && !$isProcessing)
         <button wire:click="processAudio('listen_current_audio')"
             class="transition-colors ease-in-out duration-500 delay-150 flex items-center justify-center gap-2 bg-secondary border border-secondary hover:bg-zinc-200 hover:text-zinc-700 hover:border hover:border-zinc-300 py-2 px-3 rounded-lg text-sm text-white w-full">
@@ -26,15 +31,15 @@
         </button>
         @endif
     </div>
-    <div class="flex flex-col md:grid md:grid-cols-2 gap-4">
-        <div class="flex flex-col gap-4 py-4">
+    <div class="flex flex-col md:flex-row h-full gap-4">
+        <div class="flex flex-col w-1/2 h-full gap-4 py-4">
             <div class="flex items-center">
                 @include('livewire.common.label', ['title' => __('text-to-speech.select_voice')])
             </div>
             @if ($errors->has('selectedVoice'))
             <span class="text-red-500 text-sm">{{ $errors->first('selectedVoice') }}</span>
             @endif
-            <div class="h-[400px] overflow-auto">
+            <div class="overflow-auto">
                 @foreach($voices as $key => $voice)
                 <div class="flex items-center justify-between px-4 py-2 border border-t-0 border-x-0 border-b">
                     <div class="flex items-center gap-4">
@@ -66,11 +71,11 @@
                 @endforeach
             </div>
         </div>
-        <div class="flex flex-col gap-4 py-4">
+        <div class="flex flex-col w-1/2 h-full gap-4 py-4">
             <div class="flex items-center">
                 @include('livewire.common.label', ['title' => __('text-to-speech.input_text')])
             </div>
-            <textarea rows="10" wire:model="inputText" class="w-full p-4 border border-zinc-200 rounded-lg"
+            <textarea rows="15" wire:model="inputText" class="w-full p-4 border border-zinc-200 rounded-lg"
                 wire:model="inputText"></textarea>
             @if ($errors->has('inputText'))
             <span class="text-red-500 text-sm">{{ $errors->first('inputText') }}</span>

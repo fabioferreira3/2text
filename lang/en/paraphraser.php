@@ -5,7 +5,6 @@ return [
     'formal' => 'Formal',
     'funny' => 'Funny',
     'new_paraphrase' => 'New Paraphraser',
-    'origin' => 'Origin',
     'original_text' => 'Original text',
     'paraphrase' => 'Paraphrase',
     'paraphrasing' => 'Paraphrasing...',
@@ -13,5 +12,6 @@ return [
     'paraphrased_text' => 'Paraphrased text',
     'processing' => 'Processing...',
     'simple' => 'Simple',
+    'source' => 'Source',
     'start' => 'Start'
 ];

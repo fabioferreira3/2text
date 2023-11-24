@@ -1,10 +1,12 @@
 <div class="flex flex-col">
+    @section('header')
     @include('livewire.common.header', [
     'icon' => 'hashtag',
     'title' => $document->status->value == 'draft' ? __('social_media.new_social_media_post') :
     __('social_media.social_media_post'),
     'suffix' => $document->title,
     ])
+    @endsection
     @if ($errors->any())
     <div class="alert alert-danger">
         <ul>

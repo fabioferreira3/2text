@@ -1,5 +1,7 @@
 <div>
+    @section('header')
     @include('livewire.common.header', ['icon' => 'switch-horizontal', 'title' => __('paraphraser.paraphrase_text')])
+    @endsection
     <div class="flex flex-col md:flex-row items-center justify-center gap-4 border-b py-4">
         <div>
             @include('livewire.paraphraser.tones', ['tone' => $tone])

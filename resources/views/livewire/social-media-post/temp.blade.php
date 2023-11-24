@@ -1,11 +1,12 @@
 <div class="w-full h-full">
-    <div class="flex flex-col">
-        @include('livewire.common.header', [
-        'icon' => 'hashtag',
-        'title' => 'New Social Media Post',
-        'suffix' => '',
-        ])
-    </div>
+    @section('header')
+    @include('livewire.common.header', [
+    'icon' => 'hashtag',
+    'title' => 'New Social Media Post',
+    'suffix' => '',
+    ])
+    @endsection
+
     <div class="flex mt-52 justify-center w-full">
         <button wire:click="redirectToCreationPage"
             class="flex items-center gap-2 bg-secondary text-white px-3 py-2 rounded-lg text-lg">

@@ -1,6 +1,7 @@
 <div class="flex flex-col gap-4">
-    <div class="flex flex-col">
-        <div>
+    <div class="flex items-center gap-2">
+        <x-icon name="hashtag" width="48" height="48" class="text-secondary" />
+        <div class="flex flex-col">
             <h2 class="text-3xl text-primary font-bold">{{__('templates.start_here')}}</h1>
                 <small class="text-zinc-700 text-lg">{{__('templates.choose_template')}}</small>
         </div>

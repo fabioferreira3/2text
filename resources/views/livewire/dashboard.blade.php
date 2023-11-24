@@ -1,10 +1,10 @@
 <div>
-    @push('header')
-    <div class="w-full flex justify-between">
+    @section('header')
+    <div class="w-full flex items-center justify-between">
         @include('livewire.common.header', ['icon' => 'desktop-computer', 'title' => __('dashboard.dashboard')])
         <livewire:common.create-document />
     </div>
-    @endpush
+    @endsection
     <div class="flex flex-col bg-white rounded-lg">
         <div class="flex items-center text-zinc-700">
             <div wire:click="$set('selectedTab', 'dashboard')"
