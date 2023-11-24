@@ -1,8 +1,10 @@
 <div>
-    <div class="w-full mb-8 flex justify-between">
+    @push('header')
+    <div class="w-full flex justify-between">
         @include('livewire.common.header', ['icon' => 'desktop-computer', 'title' => __('dashboard.dashboard')])
         <livewire:common.create-document />
     </div>
+    @endpush
     <div class="flex flex-col bg-white rounded-lg">
         <div class="flex items-center text-zinc-700">
             <div wire:click="$set('selectedTab', 'dashboard')"

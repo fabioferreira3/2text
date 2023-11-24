@@ -12,9 +12,13 @@
     <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:weight@400;600;700&display=swap">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Scripts -->
     @wireUiScripts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -27,23 +31,32 @@
 
 </head>
 
-<body class="font-sans antialiased w-full bg-main">
-
+<body class="font-sans antialiased bg-main overflow-hidden">
     <x-notifications />
     <x-jet-banner />
     @livewire('common.notifications')
 
-    <main class="ml-[250px] flex w-full md:grid md:grid-cols-7 xl:grid-cols-6 min-h-screen">
-        <div class="hidden fixed top-0 left-0 w-[250px] sm:block md:col-span-2 xl:col-span-1 h-full p-6 bg-main">
+    <main class="flex w-full h-screen">
+        <!-- Sidebar -->
+        <div class="hidden fixed top-0 left-0 w-full md:w-[250px] sm:block h-screen p-6 bg-main overflow-y-hidden">
             @livewire('common.sidebar')
         </div>
-        <!-- Page Content -->
-        <div class="w-full md:col-span-5 h-full px-0">
-            @livewire('navigation-menu')
-            <div class='h-0.5 sm:px-8'>
-                <div class='h-full bg-secondary rounded-lg'></div>
-            </div>
-            <div class="p-8 md:p-6 md:rounded-l-lg h-full bg-white">
+        <!-- End: Sidebar -->
+
+        <div class="flex flex-col w-full md:ml-[250px] h-screen px-0 overflow-hidden bg-white">
+            <header class="sticky top-0">
+                <div class="z-50">
+                    @livewire('navigation-menu')
+                </div>
+                <div class='h-[1px]'>
+                    <div class='h-full bg-gray-200 rounded-lg'></div>
+                </div>
+                <div class="p-4 border-b border-zinc-200">
+                    @stack('header')
+                </div>
+            </header>
+
+            <div class="flex-1 overflow-auto p-6 bg-white">
                 {{ $slot }}
             </div>
         </div>

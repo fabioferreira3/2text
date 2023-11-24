@@ -1,5 +1,7 @@
 <div class="flex flex-col gap-6">
+    @push('header')
     @include('livewire.common.header', ['icon' => 'newspaper', 'title' => __('blog.new_blog_post')])
+    @endpush
     <div class="flex flex-col gap-6 p-4 border rounded-lg">
 
         <!-- Source, number of topics and language -->
