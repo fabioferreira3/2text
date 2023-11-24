@@ -34,23 +34,34 @@ return [
     'image_guideline_4_header' => 'Inappropriate Content',
     'image_guideline_4_content' => 'Any prompts that ask for violent, explicit, or otherwise offensive imagery.',
     'image_guideline_5_header' => 'Artist Styles Post-1912',
-    'image_guideline_5_content' => 'Requests to generate images in the style of artists whose latest work was created after 1912 are not allowed. However, it is possible to describe the style using adjectives and refer to earlier art movements.',
+    'image_guideline_5_content' => 'Requests to generate images in the style of artists whose latest work was created
+        after 1912 are not allowed. However, it is possible to describe the style using adjectives and refer to
+        earlier art movements.',
     'image_guideline_6_header' => 'Unrealistic Expectations',
     'image_guideline_6_content' => 'Requests that are too vague or abstract may not produce coherent results.',
     'image_guideline_7_header' => 'Sensitive Subjects',
-    'image_guideline_7_content' => 'Prompts that could be considered insensitive or could perpetuate bias based on race, gender, or other personal characteristics.',
+    'image_guideline_7_content' => 'Prompts that could be considered insensitive or could perpetuate bias based on race,
+        gender, or other personal characteristics.',
     'inquiry_hub_free_text' => 'Enter any text that you want to be indexed up to :maxChars characters.',
-    'inquiry_hub_youtube_link' => 'Provide a Youtube link and Oraculum will extract the audio, transcribe and index it to be inquired.',
-    'inquiry_hub_website_url' => 'Provide a website url and Oraculum will extract its content and index it to be inquired.',
+    'inquiry_hub_youtube_link' => 'Provide a Youtube link and Oraculum will extract the audio, transcribe and
+        index it to be inquired.',
+    'inquiry_hub_website_url' => 'Provide a website url and Oraculum will extract its content and index
+        it to be inquired.',
     'inquiry_hub_pdf_files' => 'Provide a PDF file and Oraculum will read it and and index its content',
     'inquiry_hub_docx_files' => 'Provide a Docx file and Oraculum will read it and index its content',
     'inquiry_hub_csv_files' => 'Provide a CSV file and Oraculum will read it and index its content.',
-    'new_text_enter_external_url' => 'Enter an external website url to be used as context, like another blog post or page. Oraculum will do its best to extract as much information as possible from this page and use it as context for the creation of your text.',
-    'new_text_enter_text' => 'Just enter any text that you want as context and Oraculum will write a text based on the information you provide.',
-    'new_text_enter_youtube_link' => 'Enter a youtube link and Oraculum will write text based on the content of the video.',
+    'new_text_enter_external_url' => 'Enter an external website url to be used as context, like
+        another blog post or page. Oraculum will do its best to extract as much information as possible
+        from this page and use it as context for the creation of your text.',
+    'new_text_enter_text' => 'Just enter any text that you want as context and Oraculum will write a text based
+        on the information you provide.',
+    'new_text_enter_youtube_link' => 'Enter a youtube link and Oraculum will write text based on the
+        content of the video.',
     'new_text_csv_files' => 'Upload a CSV file. Oraculum will do its best to extract this data and use as context.',
-    'new_text_docx_files' => 'Upload a Docx file. Oraculum will do its best to read everything and use this data as context.',
-    'new_text_pdf_files' => 'Upload a PDF file. It can contain multiple pages. Oraculum will do its best to extract data from all pages and use them as context.',
+    'new_text_docx_files' => 'Upload a Docx file. Oraculum will do its best to read everything and use
+        this data as context.',
+    'new_text_pdf_files' => 'Upload a PDF file. It can contain multiple pages. Oraculum will do its best to
+        extract data from all pages and use them as context.',
     'new_paraphraser_enter_external_url' => 'Enter an external website url. Oraculum will do its best to extract as much text as possible from this page.',
     'new_paraphraser_enter_text' => 'You provide the text you want to be paraphrased.',
     'new_paraphraser_enter_youtube_link' => 'Enter a youtube link and Oraculum will transcript the entire video in plain text.',
@@ -68,18 +79,24 @@ return [
     'keyword' => 'Keyword',
     'pdf_files' => 'PDF Files',
     'poetry' => 'Poetry; fictional novels or plays; memoirs or first-hand accounts of events',
-    'provide_keyword' => 'Provide a keyword that you would like Oraculum to use throughout your post. This keyword will help Oraculum to generate a relevant and focused article.',
-    'provide_source' => 'Provide a source of the context that your post should be based on. It could be a YouTube link, an external web page or just free text.',
+    'provide_keyword' => 'Provide a keyword that you would like Oraculum to use throughout your post. This keyword will help
+        Oraculum to generate a relevant and focused article.',
+    'provide_source' => 'Provide a source of the context that your post should be based on. It could be a YouTube link, an external
+        web page or just free text.',
     'rejected_requests' => 'The following requests will be rejected',
-    'select_language' => 'Select the language you would like the post to be generated in. If you have provided a YouTube link, please ensure that the selected language matches the main language of the video.',
+    'select_language' => 'Select the language you would like the post to be generated in. If you have provided a YouTube link,
+        please ensure that the selected language matches the main language of the video.',
     'serious_topic' => 'Is it a serious topic? Or could be a fun one?',
     'share_information' => 'Share information in the context of a story.',
     'short_stories' => 'Short stories; novels; poetry; historical accounts.',
     'source' => 'Source',
     'subtopics_estimate' => 'As an estimate, 1 subtopic covers around 400 ~ 500 words.',
     'target_platforms' => 'Target Platforms',
-    'transcription_diarization' => 'Oraculum will try to identify different speakers in the audio and format the transcription text by separating the speakers as independent text blocks. Take into account that this slows down the transcription process.',
-    'transcription_language' => 'You need to inform the language of the video since I\'m currently not able to auto-discover its main language.',
+    'transcription_diarization' => 'Oraculum will try to identify different speakers in the audio and format
+        the transcription text by separating the speakers as independent text blocks. Take into account that this slows
+        down the transcription process.',
+    'transcription_language' => 'You need to inform the language of the video since I\'m currently not able
+        to auto-discover its main language.',
     'transcription_translation' => 'Do you want the final transcription to be translated to another language?',
     'transcription_source' => 'Define the source of the transcription. Currently, only Youtube videos are supported.',
     'telling_story' => 'Are you telling a story? Of what genre?',
