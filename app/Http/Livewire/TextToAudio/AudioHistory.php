@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\TextToSpeech;
+namespace App\Http\Livewire\TextToAudio;
 
 use App\Models\Document;
 use App\Models\MediaFile;
@@ -33,7 +33,7 @@ class AudioHistory extends Component
 
     public function refresh()
     {
-        $this->history = Document::ofTextToSpeech()->latest()->get()->map(function ($document) {
+        $this->history = Document::ofTextToAudio()->latest()->get()->map(function ($document) {
             if (!$document->getLatestAudios()) {
                 return null;
             }

@@ -247,11 +247,11 @@ class GenRepository
         DispatchDocumentTasks::dispatch($document);
     }
 
-    public static function textToSpeech($document, array $params = [])
+    public static function textToAudio($document, array $params = [])
     {
         DocumentRepository::createTask(
             $document->id,
-            DocumentTaskEnum::TEXT_TO_SPEECH,
+            DocumentTaskEnum::TEXT_TO_AUDIO,
             [
                 'meta' => [
                     'input_text' => $params['input_text'],

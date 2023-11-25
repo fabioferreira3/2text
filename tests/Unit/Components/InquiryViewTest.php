@@ -5,6 +5,7 @@ use App\Enums\Language;
 use App\Enums\SourceProvider;
 use App\Http\Livewire\InquiryHub\InquiryView;
 use App\Jobs\InquiryHub\PrepareTasks;
+use App\Models\ChatThread;
 use App\Models\Document;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
@@ -17,6 +18,10 @@ beforeEach(function () {
     $this->document = Document::factory()->create([
         'type' => DocumentType::INQUIRY->value
     ]);
+    ChatThread::create([
+        'document_id' => $this->document->id,
+        'user_id' => $this->authUser->id
+    ]);
     $this->component = actingAs($this->authUser)->livewire(InquiryView::class);
 });
 
@@ -28,11 +33,22 @@ describe(
                 ->assertViewIs('livewire.inquiry-hub.inquiry-view');
         });
 
-        // test('redirects to document view once finished processing', function () {
-        //     $this->component->set('document', $this->document)
-        //         ->call('onProcessFinished', ['document_id' => $this->document->id])
-        //         ->assertRedirect(route('summary-view', ['document' => $this->document]));
-        // });
+        test('confirms embedding', function () {
+            $this->component
+                ->set('document', $this->document)
+                ->assertSet('hasEmbeddings', false)
+                ->call('onEmbeddingFinished', ['document_id' => $this->document->id])
+                ->assertSet('hasEmbeddings', true)
+                ->assertSet('isProcessing', false)
+                ->assertSet('context', null)
+                ->assertSet('sourceUrl', null)
+                ->assertSet('fileInput', null)
+                ->assertSet('videoLanguage', Language::ENGLISH->value)
+                ->assertSet('sourceType', SourceProvider::FREE_TEXT->value);
+
+            $this->document->refresh();
+            $this->assertTrue($this->document->getMeta('has_embeddings'));
+        });
 
         describe('InquiryView component validation', function () {
             test('context', function () {

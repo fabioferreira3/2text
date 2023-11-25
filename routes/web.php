@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\AIModel;
 use App\Http\Controllers\DocumentViewController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Livewire\Dashboard;
@@ -13,8 +12,8 @@ use App\Http\Livewire\SocialMediaPost\NewSocialMediaPost;
 use App\Http\Livewire\SocialMediaPost\SocialMediaPostsManager;
 use App\Http\Livewire\SocialMediaPost\TempNew;
 use App\Http\Livewire\Templates;
-use App\Http\Livewire\TextToSpeech\AudioHistory;
-use App\Http\Livewire\TextToSpeech\TextToAudio;
+use App\Http\Livewire\TextToAudio\AudioHistory;
+use App\Http\Livewire\TextToAudio\TextToAudio;
 use App\Http\Livewire\AudioTranscription\NewTranscription;
 use App\Http\Livewire\AudioTranscription\AudioTranscription;
 use App\Http\Livewire\InquiryHub\InquiryView;

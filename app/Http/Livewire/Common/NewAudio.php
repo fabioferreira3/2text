@@ -122,7 +122,7 @@ class NewAudio extends Component
         ]);
         $this->isProcessing = true;
         $voice = $this->voices->where('value', $this->selectedVoice)->first();
-        GenRepository::textToSpeech($this->document, [
+        GenRepository::textToAudio($this->document, [
             'voice' => $voice['value'],
             'iso_language' => $voice['iso'],
             'text' => $this->document->content

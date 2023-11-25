@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Livewire\TextToSpeech;
+namespace App\Http\Livewire\TextToAudio;
 
 use App\Enums\Language;
 use App\Jobs\SocialMedia\ProcessSocialMediaPosts;
 use WireUi\Traits\Actions;
 use Livewire\Component;
 
-class NewTextToSpeech extends Component
+class NewTextToAudio extends Component
 {
     use Actions;
 

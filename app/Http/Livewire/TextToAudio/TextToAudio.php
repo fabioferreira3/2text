@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\TextToSpeech;
+namespace App\Http\Livewire\TextToAudio;
 
 
 use App\Helpers\AudioHelper;
@@ -95,12 +95,12 @@ class TextToAudio extends Component
         $this->validate();
         $this->isProcessing = true;
         $this->processId = Str::uuid();
-        $document = DocumentRepository::createTextToSpeech([
+        $document = DocumentRepository::createTextToAudio([
             'input_text' => $this->inputText,
             'voice_id' => $this->selectedVoice,
         ]);
 
-        GenRepository::textToSpeech($document, [
+        GenRepository::textToAudio($document, [
             'voice_id' => $this->selectedVoice,
             'process_id' => $this->processId,
             'input_text' => $this->inputText

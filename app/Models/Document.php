@@ -235,7 +235,7 @@ class Document extends Model
         return $query->where('type', DocumentType::SOCIAL_MEDIA_POST);
     }
 
-    public function scopeOfTextToSpeech($query)
+    public function scopeOfTextToAudio($query)
     {
         return $query->where('type', DocumentType::TEXT_TO_SPEECH);
     }

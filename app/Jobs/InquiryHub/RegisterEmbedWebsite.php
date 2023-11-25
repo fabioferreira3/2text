@@ -8,14 +8,13 @@ use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class RegisterEmbedWebsite
 {
     use Dispatchable, SerializesModels;
 
-    protected Document $document;
-    protected array $params;
+    public Document $document;
+    public array $params;
 
     public function __construct(Document $document, array $params)
     {

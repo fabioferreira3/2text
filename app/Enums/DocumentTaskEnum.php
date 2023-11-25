@@ -35,7 +35,7 @@ enum DocumentTaskEnum: string
     case TRANSLATE_TEXT = 'translate_text';
     case TRANSCRIBE_AUDIO = 'transcribe_audio';
     case TRANSCRIBE_AUDIO_WITH_DIARIZATION = 'transcribe_audio_with_diarization';
-    case TEXT_TO_SPEECH = 'text_to_speech';
+    case TEXT_TO_AUDIO = 'text_to_audio';
 
     public function getJob()
     {
@@ -68,7 +68,7 @@ enum DocumentTaskEnum: string
             self::REMOVE_EMBEDDINGS => "App\Jobs\RemoveEmbeddings",
             self::REWRITE_TEXT_BLOCK => "App\Jobs\RewriteTextBlock",
             self::SUMMARIZE_CONTENT => "App\Jobs\SummarizeContent",
-            self::TEXT_TO_SPEECH => "App\Jobs\TextToSpeech\GenerateAudio",
+            self::TEXT_TO_AUDIO => "App\Jobs\TextToAudio\GenerateAudio",
             self::TRANSLATE_TEXT => "App\Jobs\Translation\TranslateText",
             self::TRANSCRIBE_AUDIO => "App\Jobs\TranscribeAudio",
             self::TRANSCRIBE_AUDIO_WITH_DIARIZATION => "App\Jobs\TranscribeAudioWithDiarization",

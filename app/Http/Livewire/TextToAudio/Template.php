@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\TextToSpeech;
+namespace App\Http\Livewire\TextToAudio;
 
 use Livewire\Component;
 

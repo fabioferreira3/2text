@@ -71,7 +71,7 @@ class DocumentRepository
         ]);
     }
 
-    public static function createTextToSpeech(array $params = []): Document
+    public static function createTextToAudio(array $params = []): Document
     {
         return Document::create([
             ...$params,
