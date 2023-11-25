@@ -180,14 +180,14 @@ describe(
         test('process', function () {
             $this->component
                 ->set('source', SourceProvider::FREE_TEXT->value)
-                ->set('context', 'eita porra')
+                ->set('context', 'any context')
                 ->set('maxWordsCount', 250)
                 ->call('process')
                 ->assertHasNoErrors();
 
             $this->assertDatabaseHas('documents', [
                 'type' => DocumentType::SUMMARIZER->value,
-                'content' => 'eita porra',
+                'content' => 'any context',
                 'meta->source' => SourceProvider::FREE_TEXT->value,
                 'meta->max_words_count' => 250
             ]);

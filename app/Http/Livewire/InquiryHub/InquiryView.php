@@ -36,6 +36,9 @@ class InquiryView extends Component
     public function rules()
     {
         return [
+            'document' => [
+                'required'
+            ],
             'context' => [
                 'required_if:sourceType,free_text',
                 'max:30000'
