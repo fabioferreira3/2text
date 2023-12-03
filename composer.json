@@ -66,6 +66,9 @@
         }
     },
     "scripts": {
+        "test": [
+            "./vendor/bin/pest --parallel"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

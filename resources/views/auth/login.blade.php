@@ -26,12 +26,14 @@
 
             <div>
                 <label for="email">{{ __('Email') }}</label>
-                <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"
+                    required autofocus />
             </div>
 
             <div class="mt-4">
                 <label for="email">{{ __('Password') }}</label>
-                <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+                <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required
+                    autocomplete="current-password" />
             </div>
 
             <div class="flex justify-between py-6">
@@ -47,12 +49,15 @@
             </div>
 
             <div>
-                <button type="submit" class="py-2 text-white font-bold bg-secondary hover:bg-main text-xl xl:text-lg w-full text-center rounded-lg">Sign In</button>
+                <button type="submit"
+                    class="py-2 text-white font-bold bg-secondary hover:bg-main text-xl xl:text-lg w-full text-center rounded-lg">Sign
+                    In</button>
             </div>
         </form>
         <div class="mt-6 flex flex-col gap-2">
-            <a href="{{ route('login.google') }}" class="border border-zinc-300 rounded-lg px-3 py-3 btn btn-primary flex items-center justify-center gap-2 w-full">
-                <img width="20px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+            <a href="{{ route('login.google') }}"
+                class="border border-zinc-300 rounded-lg px-3 py-3 btn btn-primary flex items-center justify-center gap-2 w-full">
+                <img width="20px" alt="Google sign-in" src="/images/google.svg" />
                 <span class="text-center">Sign-in with Google</span>
             </a>
         </div>

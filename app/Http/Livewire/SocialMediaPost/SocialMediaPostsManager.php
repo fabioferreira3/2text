@@ -29,13 +29,13 @@ class SocialMediaPostsManager extends Component
 
     public Document $document;
     public string $content;
-    public string $context;
+    public $context;
     public $fileInput = null;
 
     public array $sourceUrls;
     public string $tempSourceUrl;
     public bool $maxSourceUrlsReached;
-    public string $source;
+    public $sourceType;
 
     public string $imgPrompt;
     public $wordCountTarget;
@@ -51,41 +51,50 @@ class SocialMediaPostsManager extends Component
     public bool $modal;
     public $title;
     public bool $generating;
+    public $filePath = null;
 
     public function rules()
     {
         return [
-            'source' => [
+            'document' => [
+                'required'
+            ],
+            'sourceType' => [
                 'required',
                 Rule::in(array_map(fn ($value) => $value->value, SourceProvider::cases()))
             ],
             'sourceUrls' => [
-                'required_if:source,youtube,website_url',
+                'required_if:sourceType,youtube,website_url',
                 'array',
                 function ($attribute, $value, $fail) {
-                    if (request()->input('source') === 'youtube' && count($value) > 3) {
+                    if (request()->input('sourceType') === 'youtube' && count($value) > 3) {
                         return $fail('The maximum number of Youtube sources is 3.');
                     }
-                    if (request()->input('source') === 'website_url' && count($value) > 5) {
+                    if (request()->input('sourceType') === 'website_url' && count($value) > 5) {
                         return $fail('The maximum number of source URLs is 5.');
                     }
                 },
             ],
-            'sourceUrls.*' => 'url',
+            'sourceUrls.*' => ['url'],
             'imgPrompt' => 'required_if:generateImage,true',
             'platforms' => ['required', 'array', new \App\Rules\ValidPlatforms()],
-            'context' => 'required_if:source,free_text|nullable',
+            'context' => [
+                'required_if:sourceType,free_text',
+                'nullable',
+                'string',
+                'max:30000'
+            ],
             'keyword' => 'required',
             'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
             'tone' => 'nullable',
             'style' => 'nullable',
             'wordCountTarget' => 'numeric|min:20|max:400',
             'fileInput' => [
-                'required_if:source,docx,pdf,csv',
+                'required_if:sourceType,docx,pdf,csv',
                 'max:51200', // in kilobytes, 50mb = 50 * 1024 = 51200kb
-                new DocxFile($this->source),
-                new PdfFile($this->source),
-                new CsvFile($this->source),
+                new DocxFile($this->sourceType),
+                new PdfFile($this->sourceType),
+                new CsvFile($this->sourceType),
                 //    new JsonFile($this->source)
             ]
         ];
@@ -98,7 +107,7 @@ class SocialMediaPostsManager extends Component
             'sourceUrls.required_if' => __('validation.social_media_sourceurl_required'),
             'sourceUrls.*.url' => __('validation.active_url'),
             'keyword.required' => __('validation.keyword_required'),
-            'source.required' => __('validation.source_required'),
+            'sourceType.required' => __('validation.source_required'),
             'language.required' => __('validation.language_required'),
             'imgPrompt.required_if' => __('validation.img_prompt_required')
         ];
@@ -113,12 +122,20 @@ class SocialMediaPostsManager extends Component
         ];
     }
 
+    public function storeFile()
+    {
+        $accountId = Auth::check() ? Auth::user()->account_id : 'guest';
+        $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
+        $this->filePath = "documents/$accountId/" . $filename;
+        $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
+    }
+
     public function mount(Document $document)
     {
         $this->document = $document;
         $this->generating = false;
         $this->checkDocumentStatus();
-        $this->source = $document->getMeta('source') ?? 'free_text';
+        $this->sourceType = $document->getMeta('source') ?? 'free_text';
         $this->context = $document->getContext() ?? '';
         $this->sourceUrls = $document->getMeta('source_urls') ?? [];
         $this->tempSourceUrl = '';
@@ -144,8 +161,8 @@ class SocialMediaPostsManager extends Component
     {
         $isMaxReached = false;
 
-        if (($this->source === SourceProvider::YOUTUBE->value && count($this->sourceUrls) >= 3) ||
-            ($this->source === SourceProvider::WEBSITE_URL->value && count($this->sourceUrls) >= 5)
+        if (($this->sourceType === SourceProvider::YOUTUBE->value && count($this->sourceUrls) >= 3) ||
+            ($this->sourceType === SourceProvider::WEBSITE_URL->value && count($this->sourceUrls) >= 5)
         ) {
             $isMaxReached = true;
         }
@@ -155,19 +172,14 @@ class SocialMediaPostsManager extends Component
 
     public function addSourceUrl()
     {
-        if ($this->source === SourceProvider::YOUTUBE->value) {
+        if ($this->sourceType === SourceProvider::YOUTUBE->value) {
             $validator = Validator::make(
                 ['url' => $this->tempSourceUrl],
                 [
                     'url' => [
                         'required',
                         'url',
-                        function ($attribute, $value, $fail) {
-                            // Check if it's a valid YouTube URL
-                            if (!preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/', $value)) {
-                                return $fail('The ' . $attribute . ' must be a valid YouTube URL.');
-                            }
-                        },
+                        new \App\Rules\YouTubeUrl()
                     ],
                 ]
             );
@@ -190,6 +202,7 @@ class SocialMediaPostsManager extends Component
 
         $this->tempSourceUrl = '';
         $this->checkMaxSourceUrls();
+        $this->resetErrorBag('tempSourceUrl');
     }
 
     public function removeSourceUrl(string $sourceUrl)
@@ -233,7 +246,7 @@ class SocialMediaPostsManager extends Component
         }
     }
 
-    public function updatedSource()
+    public function updatedSourceType()
     {
         $this->context = '';
         $this->moreInstructions = '';
@@ -253,10 +266,14 @@ class SocialMediaPostsManager extends Component
         ]);
     }
 
+    public function updatedFileInput($file)
+    {
+        $this->storeFile($file);
+    }
+
     public function process()
     {
         $this->validate();
-
         try {
             $this->generating = true;
             $this->dispatchBrowserEvent('alert', [
@@ -264,21 +281,22 @@ class SocialMediaPostsManager extends Component
                 'message' => __('alerts.generating_posts')
             ]);
 
-            $filePath = null;
-            if ($this->fileInput) {
-                $accountId = $this->document->account->id;
-                $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
-                $filePath = "documents/$accountId/" . $filename;
-                $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
-            }
+            // $filePath = null;
+            // if ($this->fileInput) {
+            //     $accountId = $this->document->account->id;
+            //     $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
+            //     $filePath = "documents/$accountId/" . $filename;
+            //     $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
+            // }
+
             $this->document->update([
                 'language' => $this->language ?? $this->document->language->value,
                 'meta' => [
                     'context' => $this->context ?? null,
                     'tone' => $this->tone ?? Tone::CASUAL->value,
                     'style' => $this->style ?? null,
-                    'source_file_path' => $filePath ?? null,
-                    'source' => $this->source,
+                    'source_file_path' => $this->filePath ?? null,
+                    'source' => $this->sourceType,
                     'source_urls' => $this->sourceUrls ?? [],
                     'keyword' => $this->keyword ?? null,
                     'target_word_count' => $this->wordCountTarget,

@@ -86,12 +86,12 @@
                                     'content' => App\Helpers\InstructionsHelper::sources(),
                                     ])
                                 </div>
-                                <select name="provider" wire:model="source"
+                                <select name="provider" wire:model="sourceType"
                                     class="p-3 rounded-lg border border-zinc-200 w-full">
                                     @include('livewire.common.source-providers-options')
                                 </select>
-                                @if ($errors->has('source'))
-                                <span class="text-red-500 text-sm">{{ $errors->first('source') }}</span>
+                                @if ($errors->has('sourceType'))
+                                <span class="text-red-500 text-sm">{{ $errors->first('sourceType') }}</span>
                                 @endif
                             </div>
                             <div>
@@ -113,7 +113,7 @@
 
                         {{-- Context --}}
                         <div>
-                            @if ($source === 'free_text')
+                            @if ($sourceType === 'free_text')
                             <div>
                                 <div class="flex flex-col gap-1">
                                     <label class="font-bold text-lg text-zinc-700">{{ __('social_media.description')
@@ -135,7 +135,7 @@
                             </div>
                             @endif
 
-                            @if (in_array($source, ['docx', 'pdf_file', 'csv', 'json']))
+                            @if (in_array($sourceType, ['docx', 'pdf_file', 'csv', 'json']))
                             <label class="font-bold text-lg text-zinc-700">{{ __('social_media.file_option') }}</label>
                             <input type="file" name="fileInput" wire:model="fileInput"
                                 class="p-3 border border-zinc-200 rounded-lg w-full" />
@@ -144,9 +144,9 @@
                             <span class="text-red-500 text-sm">{{ $errors->first('fileInput') }}</span>
                             @endif
 
-                            @if ($source === 'website_url' || $source === 'youtube')
+                            @if ($sourceType === 'website_url' || $sourceType === 'youtube')
                             <label class="font-bold text-lg text-zinc-700 flex items-center justify-between">
-                                @if($source === 'youtube') {{ __('social_media.youtube_option') }} <span
+                                @if($sourceType === 'youtube') {{ __('social_media.youtube_option') }} <span
                                     class="text-sm">{{__('social_media.max_permitted_youtube_links', ['max'
                                     => 3])}}</span>
                                 @else {{ __('social_media.url_option') }} <span
@@ -192,7 +192,7 @@
                             <span class="text-red-500 text-sm">{{ $errors->first('sourceUrls') }}</span>
                             @endif
                         </div>
-                        @if ($source !== 'free_text')
+                        @if ($sourceType !== 'free_text')
                         <div class="flex flex-col gap-3">
                             <div class="flex flex-col gap-1">
                                 <label class="font-bold text-lg text-zinc-700">{{

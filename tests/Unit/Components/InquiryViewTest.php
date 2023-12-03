@@ -55,7 +55,7 @@ describe(
                 $this->component
                     ->set('document', $this->document)
                     ->set('context', fake()->text(30500))
-                    ->set('source', 'free_text')
+                    ->set('sourceType', 'free_text')
                     ->call('embed')
                     ->assertHasErrors(['context' => 'max'])
                     ->assertHasNoErrors(['context' => 'required_if'])
@@ -86,8 +86,8 @@ describe(
                 $this->component
                     ->set('document', $this->document)
                     ->set('sourceType', 'youtube')
-                    ->call('embed')
                     ->set('sourceUrl', $url)
+                    ->call('embed')
                     ->assertHasErrors('sourceUrl');
             })->with([fake()->url(), fake()->url(), fake()->url(), fake()->url()]);
 
@@ -187,8 +187,7 @@ describe(
         test('store file', function () {
             $response = $this->component
                 ->set('document', $this->document)
-                ->set('fileInput', UploadedFile::fake()->create('avatar.pdf'))
-                ->call('storeFile');
+                ->set('fileInput', UploadedFile::fake()->create('avatar.pdf'));
 
             Storage::disk('s3')->assertExists($response->filePath);
         });
