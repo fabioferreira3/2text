@@ -15,10 +15,10 @@ class ProcessSocialMediaPosts
 {
     use Dispatchable, SerializesModels;
 
-    protected $document;
-    protected $platforms;
-    protected $repo;
-    protected string $processId;
+    public $document;
+    public $platforms;
+    public $repo;
+    public string $processId;
 
     public function __construct($document, array $platforms)
     {
@@ -43,7 +43,6 @@ class ProcessSocialMediaPosts
                 'order' => 1
             ]
         );
-
         if ($this->document->getMeta('source') === SourceProvider::FREE_TEXT->value) {
             if ($this->document->getMeta('context') && Str::wordCount($this->document->getMeta('context')) > 1000) {
                 DocumentRepository::createTask(
@@ -97,7 +96,6 @@ class ProcessSocialMediaPosts
             SourceProvider::PDF->value,
             SourceProvider::DOCX->value,
             SourceProvider::CSV->value,
-            //    SourceProvider::JSON->value
         ])) {
             $dataType = DataType::tryFrom($this->document->meta['source']);
             DocumentRepository::createTask(

@@ -281,14 +281,6 @@ class SocialMediaPostsManager extends Component
                 'message' => __('alerts.generating_posts')
             ]);
 
-            // $filePath = null;
-            // if ($this->fileInput) {
-            //     $accountId = $this->document->account->id;
-            //     $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
-            //     $filePath = "documents/$accountId/" . $filename;
-            //     $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
-            // }
-
             $this->document->update([
                 'language' => $this->language ?? $this->document->language->value,
                 'meta' => [

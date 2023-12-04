@@ -29,7 +29,7 @@
     </div>
 
     @if (!$generating)
-    <div class="flex flex-col mt-8 border-1 border rounded-xl bg-white p-8">
+    <div class="flex flex-col border-1 border rounded-xl bg-white p-8">
         <div class="flex justify-between items-center cursor-pointer h-full" wire:click="toggleInstructions">
             @include('livewire.common.label', ['title' => __('social_media.instructions')])
             <div>
@@ -125,7 +125,7 @@
                                     <div class="text-sm">{{ __('social_media.provide_guidelines') }}
                                     </div>
                                 </div>
-                                <textarea class="border border-zinc-200 rounded-lg w-full mt-3" rows="8"
+                                <textarea class="border border-zinc-200 rounded-lg w-full mt-3" rows="6"
                                     maxlength="30000" wire:model.defer="context"></textarea>
                                 <div class="mt-2">
                                     @if ($errors->has('context'))
