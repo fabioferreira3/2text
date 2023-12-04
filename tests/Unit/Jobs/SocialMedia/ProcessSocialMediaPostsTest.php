@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Bus;
 
 
 describe('Social Media - ProcessSocialMediaPosts job', function () {
+
     it('registers remove embedding task', function () {
         Bus::fake([DispatchDocumentTasks::class, ProcessSocialMediaPosts::class]);
 
@@ -21,25 +22,24 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
             ]
         ]);
 
-        $job = new ProcessSocialMediaPosts($document, [
+        $platforms = [
             "Linkedin" => false,
             "Facebook" => true,
             "Instagram" => false,
             "Twitter" => false
-        ]);
+        ];
+
+        $job = new ProcessSocialMediaPosts($document, $platforms);
         $job->handle();
 
-        $removeEmbedTask = DocumentTask::where('process_id', $job->processId)
-            ->where('name', DocumentTaskEnum::REMOVE_EMBEDDINGS->value)->first();
-        expect($removeEmbedTask)->toMatchArray([
+        // Assert Remove Embeddings tasks
+        $this->assertDatabaseHas('document_tasks', [
             'name' => DocumentTaskEnum::REMOVE_EMBEDDINGS->value,
             'job' => DocumentTaskEnum::REMOVE_EMBEDDINGS->getJob(),
             'document_id' => $document->id,
             'process_id' => $job->processId,
             'order' => 1,
-            'meta' => [
-                'collection_name' => $document->id
-            ]
+            'meta->collection_name' => $document->id
         ]);
 
         Bus::assertDispatched(DispatchDocumentTasks::class, function ($job) use ($document) {
@@ -65,24 +65,42 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
             "Linkedin" => false,
             "Facebook" => true,
             "Instagram" => false,
-            "Twitter" => false
+            "Twitter" => true
         ]);
         $job->handle();
 
-        $embedTask = DocumentTask::where('process_id', $job->processId)
-            ->where('name', DocumentTaskEnum::EMBED_SOURCE->value)->firstOrFail();
-
-        expect($embedTask)->toMatchArray([
+        // Assert Embeddings tasks
+        $this->assertDatabaseHas('document_tasks', [
             'name' => DocumentTaskEnum::EMBED_SOURCE->value,
             'job' => DocumentTaskEnum::EMBED_SOURCE->getJob(),
             'document_id' => $document->id,
             'process_id' => $job->processId,
             'order' => 2,
-            'meta' => [
-                'data_type' => DataType::TEXT->value,
-                'source' => $document->getMeta('context'),
-                'collection_name' => $document->id
-            ]
+            'meta->data_type' => DataType::TEXT->value,
+            'meta->source' => $document->getMeta('context'),
+            'meta->collection_name' => $document->id
+        ]);
+
+        // Assert Process Social Media Posts creation task
+        $this->assertDatabaseHas('document_tasks', [
+            'name' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->value,
+            'job' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->getJob(),
+            'document_id' => $document->id,
+            'process_id' => $job->processId,
+            'order' => 10,
+            'meta->platforms' => json_encode(['Facebook' => true, 'Twitter' => true]),
+            'meta->query_embedding' => true
+        ]);
+
+        // Assert Title creation task
+        $this->assertDatabaseHas('document_tasks', [
+            'name' => DocumentTaskEnum::CREATE_TITLE->value,
+            'job' => DocumentTaskEnum::CREATE_TITLE->getJob(),
+            'document_id' => $document->id,
+            'process_id' => $job->processId,
+            'order' => 99,
+            'meta->collection_name' => $document->id,
+            'meta->query_embedding' => true
         ]);
 
         Bus::assertDispatched(DispatchDocumentTasks::class, function ($job) use ($document) {
@@ -107,8 +125,8 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
         ]);
 
         $job = new ProcessSocialMediaPosts($document, [
-            "Linkedin" => false,
-            "Facebook" => true,
+            "Linkedin" => true,
+            "Facebook" => false,
             "Instagram" => false,
             "Twitter" => false
         ]);
@@ -135,6 +153,27 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
             $initialOrder++;
         }
 
+        // Assert Process Social Media Posts creation task
+        $this->assertDatabaseHas('document_tasks', [
+            'name' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->value,
+            'job' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->getJob(),
+            'document_id' => $document->id,
+            'process_id' => $job->processId,
+            'order' => 10,
+            'meta->platforms' => json_encode(['Linkedin' => true]),
+            'meta->query_embedding' => true
+        ]);
+
+        // Assert Title creation task
+        $this->assertDatabaseHas('document_tasks', [
+            'name' => DocumentTaskEnum::CREATE_TITLE->value,
+            'job' => DocumentTaskEnum::CREATE_TITLE->getJob(),
+            'document_id' => $document->id,
+            'process_id' => $job->processId,
+            'order' => 99,
+            'meta->collection_name' => $document->id,
+            'meta->query_embedding' => true
+        ]);
 
         Bus::assertDispatched(DispatchDocumentTasks::class, function ($job) use ($document) {
             return $job->document->id === $document->id;
@@ -180,6 +219,27 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
             $initialOrder++;
         }
 
+        // Assert Process Social Media Posts creation task
+        $this->assertDatabaseHas('document_tasks', [
+            'name' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->value,
+            'job' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->getJob(),
+            'document_id' => $document->id,
+            'process_id' => $job->processId,
+            'order' => 10,
+            'meta->platforms' => json_encode(['Facebook' => true]),
+            'meta->query_embedding' => true
+        ]);
+
+        // Assert Title creation task
+        $this->assertDatabaseHas('document_tasks', [
+            'name' => DocumentTaskEnum::CREATE_TITLE->value,
+            'job' => DocumentTaskEnum::CREATE_TITLE->getJob(),
+            'document_id' => $document->id,
+            'process_id' => $job->processId,
+            'order' => 99,
+            'meta->collection_name' => $document->id,
+            'meta->query_embedding' => true
+        ]);
 
         Bus::assertDispatched(DispatchDocumentTasks::class, function ($job) use ($document) {
             return $job->document->id === $document->id;
@@ -230,9 +290,30 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
             $initialOrder++;
         }
 
+        // Assert Process Social Media Posts creation task
+        $this->assertDatabaseHas('document_tasks', [
+            'name' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->value,
+            'job' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->getJob(),
+            'document_id' => $document->id,
+            'process_id' => $job->processId,
+            'order' => 10,
+            'meta->platforms' => json_encode(['Facebook' => true]),
+            'meta->query_embedding' => true
+        ]);
+
+        // Assert Title creation task
+        $this->assertDatabaseHas('document_tasks', [
+            'name' => DocumentTaskEnum::CREATE_TITLE->value,
+            'job' => DocumentTaskEnum::CREATE_TITLE->getJob(),
+            'document_id' => $document->id,
+            'process_id' => $job->processId,
+            'order' => 99,
+            'meta->collection_name' => $document->id,
+            'meta->query_embedding' => true
+        ]);
 
         Bus::assertDispatched(DispatchDocumentTasks::class, function ($job) use ($document) {
             return $job->document->id === $document->id;
         });
     });
-});
+})->group('socialmedia');

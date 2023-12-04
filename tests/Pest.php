@@ -70,6 +70,9 @@ uses()->beforeEach(function () {
 
     $this->generator->shouldReceive('generateSummary')->andReturn($this->chatGpt->request(['message']));
     $this->generator->shouldReceive('generateEmbeddedSummary')->andReturn($this->chatGpt->request(['message']));
+
+    $this->generator->shouldReceive('generateSocialMediaPost')->andReturn($this->chatGpt->request(['message']));
+    $this->generator->shouldReceive('generateEmbeddedSocialMediaPost')->andReturn($this->chatGpt->request(['message']));
 })->in(__DIR__);
 
 uses(

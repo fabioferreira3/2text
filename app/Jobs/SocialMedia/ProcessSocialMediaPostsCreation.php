@@ -21,13 +21,17 @@ class ProcessSocialMediaPostsCreation implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected $document;
-    protected $meta;
+    public $document;
+    public $meta;
+    public $textProcessId;
+    public $imageProcessId;
 
     public function __construct($document, array $meta = [])
     {
         $this->document = $document;
         $this->meta = $meta;
+        $this->textProcessId = Str::uuid();
+        $this->imageProcessId = Str::uuid();
     }
 
     public function handle()
@@ -37,7 +41,6 @@ class ProcessSocialMediaPostsCreation implements ShouldQueue
 
             foreach ($this->meta['platforms'] as $platform => $value) {
                 $platformName = Str::of($platform)->lower();
-                $textProcessId = Str::uuid();
                 $post = Document::create([
                     'type' => DocumentType::SOCIAL_MEDIA_POST->value,
                     'account_id' => $this->document->account_id,
@@ -51,7 +54,7 @@ class ProcessSocialMediaPostsCreation implements ShouldQueue
                     $post->id,
                     DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST,
                     [
-                        'process_id' => $textProcessId,
+                        'process_id' => $this->textProcessId,
                         'meta' => [
                             'platform' => $platformName,
                             'query_embedding' => $this->meta['query_embedding'] ?? false,
@@ -63,16 +66,15 @@ class ProcessSocialMediaPostsCreation implements ShouldQueue
 
                 if ($post->getMeta('generate_img')) {
                     $imageSize = MediaHelper::getSocialMediaImageSize($platformName);
-                    $processId = Str::uuid();
 
                     DocumentRepository::createTask(
                         $post->id,
                         DocumentTaskEnum::GENERATE_IMAGE,
                         [
                             'order' => 1,
-                            'process_id' => $processId,
+                            'process_id' => $this->imageProcessId,
                             'meta' => [
-                                'process_id' => $processId,
+                                'process_id' => $this->imageProcessId,
                                 'prompt' => $post->getMeta('img_prompt'),
                                 'height' => $imageSize['height'],
                                 'width' => $imageSize['width'],
@@ -87,7 +89,7 @@ class ProcessSocialMediaPostsCreation implements ShouldQueue
                         DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
                         [
                             'order' => 2,
-                            'process_id' => $processId,
+                            'process_id' => $this->imageProcessId,
                             'meta' => [
                                 'silently' => true
                             ]
@@ -100,7 +102,7 @@ class ProcessSocialMediaPostsCreation implements ShouldQueue
                     DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
                     [
                         'order' => 2,
-                        'process_id' => $textProcessId,
+                        'process_id' => $this->textProcessId,
                         'meta' => [
                             'silently' => true
                         ]

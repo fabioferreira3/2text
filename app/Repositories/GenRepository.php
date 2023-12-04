@@ -134,7 +134,7 @@ class GenRepository
         }
     }
 
-    public static function generateSocialMediaPost(Document $document, string $platform)
+    public function generateSocialMediaPost(Document $document, string $platform)
     {
         $promptHelper = PromptHelperFactory::create($document->language->value);
         $chatGpt = new ChatGPT();
@@ -165,12 +165,12 @@ class GenRepository
         ]);
     }
 
-    public static function generateEmbeddedSocialMediaPost(Document $document, string $platform, string $collectionName)
+    public function generateEmbeddedSocialMediaPost(Document $document, string $platform, string $collectionName)
     {
         $user = User::findOrFail($document->getMeta('user_id'));
         $oraculum = new Oraculum($user, $collectionName);
         $promptHelper = PromptHelperFactory::create($document->language->value);
-        $response = $oraculum->query($promptHelper->writeEmbeddedSocialMediaPost([
+        return $oraculum->query($promptHelper->writeEmbeddedSocialMediaPost([
             'query_embedded' => true,
             'keyword' => $document->getMeta('keyword'),
             'platform' => $platform,
@@ -179,18 +179,6 @@ class GenRepository
             'target_word_count' => $document->getMeta('target_word_count'),
             'more_instructions' => $document->getMeta('more_instructions')
         ]));
-
-        $document->contentBlocks()->save(
-            new DocumentContentBlock([
-                'type' => 'text',
-                'content' => $response['content']
-            ])
-        );
-
-        RegisterProductUsage::dispatch($document->account, [
-            ...$response['token_usage'],
-            'meta' => ['document_id' => $document->id]
-        ]);
     }
 
     public static function rewriteTextBlock(DocumentContentBlock $contentBlock, array $params)
