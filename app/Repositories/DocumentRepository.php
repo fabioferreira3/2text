@@ -58,6 +58,7 @@ class DocumentRepository
     {
         return Document::create([
             'type' => $type->value,
+            'language' => $params['language'],
             'meta' => [
                 'context' => $params['context'] ?? null,
                 'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,

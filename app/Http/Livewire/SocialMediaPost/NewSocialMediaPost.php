@@ -11,10 +11,12 @@ class NewSocialMediaPost extends Component
 {
     use Actions;
 
+    public $document;
+
     public function mount()
     {
         $repo = new DocumentRepository();
-        $document = $repo->createSocialMediaDoc([
+        $this->document = $repo->createSocialMediaDoc([
             'source' => null,
             'context' => null,
             'language' => 'en',
@@ -27,6 +29,6 @@ class NewSocialMediaPost extends Component
             ]
         ], DocumentType::SOCIAL_MEDIA_GROUP);
 
-        return redirect()->route('social-media-view', ['document' => $document]);
+        return redirect()->route('social-media-view', ['document' => $this->document]);
     }
 }
