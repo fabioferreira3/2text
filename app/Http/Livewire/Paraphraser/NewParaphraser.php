@@ -40,7 +40,7 @@ class NewParaphraser extends Component
 
     public function render()
     {
-        return view('livewire.paraphraser.new');
+        return view('livewire.paraphraser.new')->layout('layouts.app', ['title' => __('paraphraser.paraphraser')]);;
     }
 
     public function ready()

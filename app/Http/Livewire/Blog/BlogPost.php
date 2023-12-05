@@ -35,7 +35,7 @@ class BlogPost extends Component
 
     public function defineTitle()
     {
-        return $this->document->title ?? 'Blog post';
+        return $this->document->title ?? __('blog.blog_posts');
     }
 
     public function copyPost()

@@ -307,6 +307,6 @@ class SocialMediaPostsManager extends Component
 
     public function render()
     {
-        return view('livewire.social-media-post.posts-manager');
+        return view('livewire.social-media-post.posts-manager')->layout('layouts.app', ['title' => __('social_media.title')]);
     }
 }

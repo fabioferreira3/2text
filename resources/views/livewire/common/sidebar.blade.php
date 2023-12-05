@@ -24,18 +24,21 @@
         </div>
         <div class="hidden sm:flex sm:flex-col sm:gap-3 ml-4">
             @include('livewire.common.navlink', [
+            'activeRoutes' => ['social-media-dashboard', 'new-social-media-post', 'social-media-view'],
             'route' => 'social-media-dashboard',
             'submenu' => true,
             'name' => __('menus.social_media_post'),
             'icon' => 'hashtag',
             ])
             @include('livewire.common.navlink', [
+            'activeRoutes' => ['blog-dashboard', 'new-post', 'blog-post-view'],
             'route' => 'blog-dashboard',
             'submenu' => true,
             'name' => __('menus.blog_post'),
             'icon' => 'newspaper',
             ])
             @include('livewire.common.navlink', [
+            'activeRoutes' => ['paraphraser-dashboard', 'new-paraphraser', 'paraphrase-view'],
             'route' => 'paraphraser-dashboard',
             'submenu' => true,
             'name' => __('menus.paraphraser'),
@@ -48,19 +51,22 @@
             'icon' => 'volume-up',
             ])
             @include('livewire.common.navlink', [
-            'route' => 'new-audio-transcription',
+            'activeRoutes' => ['transcription-dashboard', 'new-audio-transcription', 'transcription-view'],
+            'route' => 'transcription-dashboard',
             'submenu' => true,
             'name' => __('menus.audio_transcription'),
             'icon' => 'chat-alt',
             ])
             @include('livewire.common.navlink', [
-            'route' => 'new-summarizer',
+            'activeRoutes' => ['summarizer-dashboard', 'new-summarizer', 'summary-view'],
+            'route' => 'summarizer-dashboard',
             'submenu' => true,
             'name' => __('menus.summarizer'),
             'icon' => 'sort-ascending',
             ])
             @include('livewire.common.navlink', [
-            'route' => 'new-inquiry',
+            'activeRoutes' => ['inquiry-dashboard', 'inquiry-view'],
+            'route' => 'inquiry-dashboard',
             'submenu' => true,
             'name' => __('menus.inquiry_hub'),
             'icon' => 'search-circle',

@@ -15,7 +15,8 @@ class Dashboard extends Component
 
     public function render()
     {
-        return view('livewire.paraphraser.dashboard')->layout('layouts.app', []);
+        return view('livewire.paraphraser.dashboard')
+            ->layout('layouts.app', ['title' => __('paraphraser.paraphraser')]);
     }
 
     public function new()

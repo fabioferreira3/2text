@@ -1,8 +1,10 @@
 <?php
 
 return [
+    'audio_transcription' => 'Audio Transcription',
     'download_subtitles' => 'Download Subtitles',
     'identify_speakers' => 'Identify Speakers',
+    'new' => 'New',
     'new_transcription' => 'New audio transcription',
     'no' => 'No',
     'origin_language' => 'Source language',

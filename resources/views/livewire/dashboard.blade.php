@@ -24,7 +24,7 @@
                 text-zinc-500 @else bg-zinc-100 text-secondary font-bold @endif flex items-center gap-2 border-t
                 border-r border-tr-zinc-400 border-b-0 bg-white hover:bg-zinc-100 rounded-tr-lg px-6 py-2">
                 <x-icon name="volume-up" class="text-secondary" width="24" height="24" />
-                <h2 class="text-lg">{{__('dashboard.my_audio')}}</h2>
+                <h2 class="text-lg">{{__('dashboard.my_audios')}}</h2>
             </div>
         </div>
         <div class="bg-zinc-100 rounded-b-lg rounded-r-lg px-4 pb-4 pt-4 border border-zinc-200">

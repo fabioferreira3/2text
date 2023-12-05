@@ -46,6 +46,7 @@ return [
     'source' => 'Source',
     'source_definition' => 'Define what would be the base context of your text. Choose between a youtube link, a website url, or just from free text.',
     'target_word_count' => 'Target word count',
+    'title' => 'Social Media',
     'tone' => 'Tone',
     'target_platforms' => 'Target Platforms',
     'yes' => 'Yes',

@@ -2,13 +2,6 @@
     @section('header')
     <div class="flex items-center justify-between">
         @include('livewire.common.header', ['icon' => 'volume-up', 'title' => __('text-to-audio.text_to_audio')])
-        <a href={{route('text-to-audio-history')}} class="transition-colors ease-in-out duration-500 delay-150
-            flex items-center justify-center gap-2 bg-zinc-300 border border-zinc-100 hover:bg-zinc-400 hover:text-white
-            py-2 px-3 rounded-lg text-sm text-gray-700">
-            <x-icon class="w-5 h-5" name="book-open" />
-            <div class="font-bold text-base">{{__('text-to-audio.history')}}
-            </div>
-        </a>
     </div>
     @endsection
 
@@ -18,15 +11,15 @@
             <div wire:click="$set('selectedTab', 'new')" class="@if($selectedTab !== 'new') cursor-pointer
                     text-zinc-500 @else bg-zinc-100 text-secondary font-bold @endif flex items-center gap-2
                     border-t border-l border-zinc-200 border-b-0 hover:bg-zinc-100 rounded-tl-lg px-6 py-2">
-                <x-icon name="document-text" class="text-secondary" width="24" height="24" />
+                <x-icon name="volume-up" class="text-secondary" width="24" height="24" />
                 <h2 class="text-lg">
-                    {{__('dashboard.my_documents')}}</h2>
+                    {{__('text-to-audio.create_audio')}}</h2>
             </div>
-            <div wire:click="$set('selectedTab', 'history')" class="@if($selectedTab !== 'history') cursor-pointer
+            <div wire:click="$set('selectedTab', 'my-audios')" class="@if($selectedTab !== 'my-audios') cursor-pointer
                     text-zinc-500 @else bg-zinc-100 text-secondary font-bold @endif
                     flex items-center gap-2 border border-tr-zinc-400 border-b-0 bg-white hover:bg-zinc-100 px-6 py-2">
-                <x-icon name="photograph" class="text-secondary" width="24" height="24" />
-                <h2 class="text-lg">{{__('dashboard.my_images')}}</h2>
+                <x-icon name="volume-up" class="text-secondary" width="24" height="24" />
+                <h2 class="text-lg">{{__('text-to-audio.my_audios')}}</h2>
             </div>
         </div>
 
@@ -111,7 +104,7 @@
                         <span class="text-red-500 text-sm">{{ $errors->first('inputText') }}</span>
                         @endif
                         <button :disabled="$isProcessing" wire:click="generate"
-                            class="bg-secondary transition-colors ease-in-out duration-500 delay-150 hover:bg-main text-xl font-bold px-4 py-2 rounded-lg text-sm text-zinc-200">
+                            class="w-1/2 place-self-center bg-secondary transition-colors ease-in-out duration-500 delay-150 hover:bg-main text-xl font-bold px-4 py-2 rounded-lg text-sm text-zinc-200">
                             <div class="py-1">
                                 @if ($isProcessing)
                                 <x-loader color="white" /> @else <span>{{__('text-to-audio.convert_to_audio')}}</span>
@@ -123,9 +116,9 @@
             </div>
             @endif
 
-            {{-- @if($selectedTab === 'history')
-            history
-            @endif --}}
+            @if($selectedTab === 'my-audios')
+            @livewire('text-to-audio.audio-history', ['displayHeader' => false])
+            @endif
 
         </div>
     </div>

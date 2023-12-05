@@ -9,6 +9,7 @@ return [
     'source' => 'Source',
     'source_language' => 'Source language',
     'summary' => 'Summary',
+    'summarizer' => 'Summarizer',
     'start' => 'Start',
     'summary_completed' => 'Summary completed!',
     'target_language' => 'Target language',

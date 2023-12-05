@@ -124,6 +124,7 @@ class TextToAudio extends Component
 
     public function render()
     {
-        return view('livewire.text-to-audio.text-to-audio');
+        return view('livewire.text-to-audio.text-to-audio')
+            ->layout('layouts.app', ['title' => __('text-to-audio.text_to_audio')]);;
     }
 }

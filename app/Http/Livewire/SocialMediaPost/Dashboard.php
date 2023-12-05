@@ -15,7 +15,7 @@ class Dashboard extends Component
 
     public function render()
     {
-        return view('livewire.social-media-post.dashboard')->layout('layouts.app');
+        return view('livewire.social-media-post.dashboard')->layout('layouts.app', ['title' => __('social_media.title')]);
     }
 
     public function new()

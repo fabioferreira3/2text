@@ -10,17 +10,18 @@ use App\Http\Livewire\Paraphraser\NewParaphraser;
 use App\Http\Livewire\Paraphraser\Paraphraser;
 use App\Http\Livewire\SocialMediaPost\NewSocialMediaPost;
 use App\Http\Livewire\SocialMediaPost\SocialMediaPostsManager;
-use App\Http\Livewire\SocialMediaPost\TempNew;
 use App\Http\Livewire\Templates;
 use App\Http\Livewire\TextToAudio\AudioHistory;
 use App\Http\Livewire\TextToAudio\TextToAudio;
 use App\Http\Livewire\AudioTranscription\NewTranscription;
 use App\Http\Livewire\AudioTranscription\AudioTranscription;
+use App\Http\Livewire\AudioTranscription\Dashboard as AudioTranscriptionDashboard;
 use App\Http\Livewire\Blog\Dashboard as BlogDashboard;
+use App\Http\Livewire\InquiryHub\Dashboard as InquiryHubDashboard;
 use App\Http\Livewire\InquiryHub\InquiryView;
-use App\Http\Livewire\InquiryHub\NewInquiry;
 use App\Http\Livewire\Paraphraser\Dashboard as ParaphraserDashboard;
 use App\Http\Livewire\SocialMediaPost\Dashboard as SocialMediaPostDashboard;
+use App\Http\Livewire\Summarizer\Dashboard as SummarizerDashboard;
 use App\Http\Livewire\Summarizer\NewSummarizer;
 use App\Http\Livewire\Summarizer\SummaryView;
 use App\Http\Livewire\Trash;
@@ -63,6 +64,7 @@ Route::middleware([
     Route::get('/documents/blog-post/{document}', BlogPost::class)->name('blog-post-view');
 
     /* Audio Transcription routes */
+    Route::get('/transcription', AudioTranscriptionDashboard::class)->name('transcription-dashboard');
     Route::get('/transcription/new', NewTranscription::class)->name('new-audio-transcription');
     Route::get('/documents/transcription/{document}', AudioTranscription::class)->name('transcription-view');
 
@@ -82,10 +84,11 @@ Route::middleware([
     Route::get('/documents/text-to-audio/{document}', TextToAudio::class)->name('text-to-audio-view');
 
     /* Inquiry Hub */
-    Route::get('/inquiry-hub/new', NewInquiry::class)->name('new-inquiry');
+    Route::get('/inquiry-hub', InquiryHubDashboard::class)->name('inquiry-dashboard');
     Route::get('/documents/inquiry-hub/{document}', InquiryView::class)->name('inquiry-view');
 
     /* Summarizer */
+    Route::get('/summarizer', SummarizerDashboard::class)->name('summarizer-dashboard');
     Route::get('/summarizer/new', NewSummarizer::class)->name('new-summarizer');
     Route::get('/documents/summarizer/{document}', SummaryView::class)->name('summary-view');
 
