@@ -21,12 +21,28 @@ class MyDocumentsTable extends DataTableComponent
 
     protected $model = Document::class;
     protected $repo;
+    public $documentTypes;
+
+    public function mount($documentTypes = [])
+    {
+        if (!count($documentTypes)) {
+            $this->documentTypes = [
+                DocumentType::AUDIO_TRANSCRIPTION,
+                DocumentType::BLOG_POST,
+                DocumentType::INQUIRY,
+                DocumentType::PARAPHRASED_TEXT,
+                DocumentType::SOCIAL_MEDIA_GROUP,
+                DOcumentType::SUMMARIZER,
+                DocumentType::TEXT_TO_SPEECH,
+            ];
+        }
+    }
 
     public function configure(): void
     {
         $this->repo = new DocumentRepository();
         $this->setPrimaryKey('id');
-        $this->setRefreshTime(8000);
+        $this->setRefreshTime(10000);
     }
 
     public function viewDoc($documentId)
@@ -44,23 +60,25 @@ class MyDocumentsTable extends DataTableComponent
     {
         try {
             $this->repo->delete($documentId);
-            $this->notification(['icon' => 'success', 'iconColor' => 'text-green-400', 'timeout' => 5000, 'title' => 'Document moved to the trash can!']);
+            $this->notification([
+                'icon' => 'success',
+                'iconColor' => 'text-green-400',
+                'timeout' => 5000,
+                'title' => 'Document moved to the trash can!'
+            ]);
         } catch (Exception) {
-            $this->notification(['icon' => 'error', 'iconColor' => 'text-red-700', 'timeout' => 5000, 'title' => 'There was an error while deleting this document']);
+            $this->notification([
+                'icon' => 'error',
+                'iconColor' => 'text-red-700',
+                'timeout' => 5000,
+                'title' => 'There was an error while deleting this document'
+            ]);
         }
     }
 
     public function builder(): Builder
     {
-        return Document::whereIn('type', [
-            DocumentType::AUDIO_TRANSCRIPTION,
-            DocumentType::BLOG_POST,
-            DocumentType::INQUIRY,
-            DocumentType::PARAPHRASED_TEXT,
-            DocumentType::SOCIAL_MEDIA_GROUP,
-            DOcumentType::SUMMARIZER,
-            DocumentType::TEXT_TO_SPEECH,
-        ])->latest();
+        return Document::whereIn('type', $this->documentTypes)->latest();
     }
 
     public function columns(): array

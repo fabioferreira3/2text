@@ -27,6 +27,7 @@
 @endif
 
 @if ($type->value === \App\Enums\DocumentType::SOCIAL_MEDIA_GROUP->value)
+
 <x-badge icon="hashtag" class="font-thin" md blue label="{{ $type->label() }}">
     <x-slot name="prepend" class="relative flex items-center">
     </x-slot>

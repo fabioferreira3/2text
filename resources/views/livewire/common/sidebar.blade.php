@@ -24,19 +24,19 @@
         </div>
         <div class="hidden sm:flex sm:flex-col sm:gap-3 ml-4">
             @include('livewire.common.navlink', [
-            'route' => 'create-social-media-post',
+            'route' => 'social-media-dashboard',
             'submenu' => true,
             'name' => __('menus.social_media_post'),
             'icon' => 'hashtag',
             ])
             @include('livewire.common.navlink', [
-            'route' => 'new-post',
+            'route' => 'blog-dashboard',
             'submenu' => true,
             'name' => __('menus.blog_post'),
             'icon' => 'newspaper',
             ])
             @include('livewire.common.navlink', [
-            'route' => 'new-paraphraser',
+            'route' => 'paraphraser-dashboard',
             'submenu' => true,
             'name' => __('menus.paraphraser'),
             'icon' => 'switch-horizontal',

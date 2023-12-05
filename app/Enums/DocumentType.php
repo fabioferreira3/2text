@@ -42,9 +42,9 @@ enum DocumentType: string
         ];
     }
 
-    public static function getKeyValues(): array
+    public static function getKeyValues($types = null): array
     {
-        return collect([
+        $collection = $types ? collect($types) : collect([
             self::AUDIO_TRANSCRIPTION,
             self::BLOG_POST,
             self::INQUIRY,
@@ -52,6 +52,7 @@ enum DocumentType: string
             self::SOCIAL_MEDIA_GROUP,
             self::SUMMARIZER,
             self::TEXT_TO_SPEECH,
-        ])->flatMap(fn ($type) => [$type->value => $type->label()])->toArray();
+        ]);
+        return $collection->flatMap(fn ($type) => [$type->value => $type->label()])->toArray();
     }
 }

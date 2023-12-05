@@ -2,6 +2,7 @@
 
 return [
     'ai_images' => 'AI Images',
+    'blog_posts' => 'Blog posts',
     'briefly_describe' => 'Describe the subject of the post. What is this blog post about? What are the main ideas you want to convey?',
     'context' => 'Describe the post',
     'content' => 'Content',
@@ -21,6 +22,7 @@ return [
     'meta_description' => 'Meta Description',
     'meta_description_generated' => 'New meta description generated!',
     'new_blog_post' => 'New Blog post',
+    'new' => 'New',
     'no_changes' => 'No changes needed to be saved',
     'paste_content' => 'You may also copy and paste a larger text to be used as context. (max. :maxChars chars)',
     'placeholder_example' => 'Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary.',

@@ -16,8 +16,11 @@ use App\Http\Livewire\TextToAudio\AudioHistory;
 use App\Http\Livewire\TextToAudio\TextToAudio;
 use App\Http\Livewire\AudioTranscription\NewTranscription;
 use App\Http\Livewire\AudioTranscription\AudioTranscription;
+use App\Http\Livewire\Blog\Dashboard as BlogDashboard;
 use App\Http\Livewire\InquiryHub\InquiryView;
 use App\Http\Livewire\InquiryHub\NewInquiry;
+use App\Http\Livewire\Paraphraser\Dashboard as ParaphraserDashboard;
+use App\Http\Livewire\SocialMediaPost\Dashboard as SocialMediaPostDashboard;
 use App\Http\Livewire\Summarizer\NewSummarizer;
 use App\Http\Livewire\Summarizer\SummaryView;
 use App\Http\Livewire\Trash;
@@ -53,6 +56,7 @@ Route::middleware([
     Route::get('/tools', Templates::class)->name('tools');
 
     /* Blog routes */
+    Route::get('/blog', BlogDashboard::class)->name('blog-dashboard');
     Route::get('/blog/new', NewPost::class)->name('new-post');
     Route::get('/documents/blog-post/{document}/processing', ProcessingBlogPost::class)
         ->name('blog-post-processing-view');
@@ -63,11 +67,12 @@ Route::middleware([
     Route::get('/documents/transcription/{document}', AudioTranscription::class)->name('transcription-view');
 
     /* Social media posts routes */
-    Route::get('/social-media-post/create', TempNew::class)->name('create-social-media-post');
+    Route::get('/social-media-post', SocialMediaPostDashboard::class)->name('social-media-dashboard');
     Route::get('/social-media-post/new', NewSocialMediaPost::class)->name('new-social-media-post');
     Route::get('/documents/social-media/{document}', SocialMediaPostsManager::class)->name('social-media-view');
 
     /* Paraphraser routes */
+    Route::get('/paraphraser', ParaphraserDashboard::class)->name('paraphraser-dashboard');
     Route::get('/paraphraser/new', NewParaphraser::class)->name('new-paraphraser');
     Route::get('/documents/paraphraser/{document}', Paraphraser::class)->name('paraphrase-view');
 
