@@ -6,10 +6,10 @@
     }) => {
         if (currentAudio) {
         // Remove existing listener to avoid duplicate event triggers.
-        currentAudio.removeEventListener('ended', audioEndedHandler);
-        currentAudio.pause();
-        currentAudio.load();
-    }
+            currentAudio.removeEventListener('ended', audioEndedHandler);
+            currentAudio.pause();
+            currentAudio.load();
+        }
 
         currentAudio = document.getElementById(id);
 

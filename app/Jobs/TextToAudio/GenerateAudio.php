@@ -54,7 +54,7 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
         try {
             $user = User::findOrFail($this->document->meta['user_id']);
             $voice = Voice::findOrFail($this->meta['voice_id']);
-            $client = app(TextToAudio::class);
+            $client = app(TextToSpeech::class);
             $response = $client->generate($this->meta['input_text'], $voice->external_id, 0, 'eleven_multilingual_v2');
             $audioContent = $response['response_body'];
 

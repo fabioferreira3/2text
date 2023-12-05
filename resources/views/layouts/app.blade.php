@@ -74,6 +74,7 @@
     <script src="https://unpkg.com/tippy.js@6"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     @vite(['resources/js/typewriter.js'])
+    @stack('scripts')
     <script>
         const Toast = Swal.mixin({
             toast: true,
@@ -119,7 +120,6 @@
             window.open(link, '_blank');
         });
     </script>
-    @stack('scripts')
 </body>
 
 </html>

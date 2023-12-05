@@ -25,6 +25,7 @@ class TextToAudio extends Component
     public $isPlaying;
     public $currentAudioFile;
     public $currentAudioUrl;
+    public $selectedTab = 'new';
     public string $processId = '';
 
     protected $rules = [
