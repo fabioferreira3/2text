@@ -20,11 +20,11 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected Document $document;
-    protected DataType $dataType;
-    protected string $source;
-    protected string $collectionName;
-    protected array $meta;
+    public Document $document;
+    public DataType $dataType;
+    public string $source;
+    public string $collectionName;
+    public array $meta;
 
 
     /**

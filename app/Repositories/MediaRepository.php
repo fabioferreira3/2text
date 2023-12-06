@@ -198,7 +198,7 @@ class MediaRepository
         ];
     }
 
-    public static function transcribeAudio(array $audioFilePaths)
+    public function transcribeAudio(array $audioFilePaths)
     {
         $transcription = collect([]);
         if (count($audioFilePaths)) {
@@ -229,7 +229,7 @@ class MediaRepository
         return json_decode('"' . $transcription->implode(' ') . '"');
     }
 
-    public static function transcribeAudioWithDiarization(array $audioFilePaths, array $params = [])
+    public function transcribeAudioWithDiarization(array $audioFilePaths, array $params = [])
     {
         $assembly = new AssemblyAI();
         $tempUrl = Storage::temporaryUrl($audioFilePaths[0], now()->addMinutes(15));

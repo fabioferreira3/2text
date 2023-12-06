@@ -32,4 +32,4 @@ describe('Inquiry Hub - RegisterEmbedWebsite job', function () {
             'order' => 1
         ]);
     });
-});
+})->group('inquiry-hub');

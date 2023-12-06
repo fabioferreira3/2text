@@ -17,6 +17,7 @@ use App\Packages\OpenAI\ChatGPT;
 use App\Packages\OpenAI\DallE;
 use App\Packages\Oraculum\Oraculum;
 use App\Repositories\GenRepository;
+use App\Repositories\MediaRepository;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 
@@ -73,6 +74,11 @@ uses()->beforeEach(function () {
 
     $this->generator->shouldReceive('generateSocialMediaPost')->andReturn($this->chatGpt->request(['message']));
     $this->generator->shouldReceive('generateEmbeddedSocialMediaPost')->andReturn($this->chatGpt->request(['message']));
+
+    // Media Repository
+    $this->mediaRepo = Mockery::mock(MediaRepository::class);
+    $this->mediaRepo->shouldReceive('transcribeAudio')->andReturn("Transcribed text");
+    $this->mediaRepo->shouldReceive('transcribeAudioWithDiarization');
 })->in(__DIR__);
 
 uses(

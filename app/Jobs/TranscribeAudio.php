@@ -20,6 +20,7 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
 
     public Document $document;
     public array $meta;
+    public $mediaRepo;
 
     /**
      * Create a new job instance.
@@ -30,6 +31,7 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
+        $this->mediaRepo = new MediaRepository();
     }
 
     /**
@@ -45,7 +47,7 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
                 return;
             }
 
-            $transcribedText = MediaRepository::transcribeAudio(
+            $transcribedText = $this->mediaRepo->transcribeAudio(
                 $this->document->getMeta('audio_file_path')
             );
 

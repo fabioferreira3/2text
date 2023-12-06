@@ -43,4 +43,4 @@ describe('Inquiry Hub - RegisterEmbedVideoStream job', function () {
             'order' => 2
         ]);
     })->with(Language::getValues());
-});
+})->group('inquiry-hub');

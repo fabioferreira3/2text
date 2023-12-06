@@ -109,4 +109,4 @@ describe('Inquiry Hub - PrepareTasks job', function () {
         Bus::assertNotDispatched(RegisterEmbedWebsite::class);
         Bus::assertNotDispatched(RegisterEmbedFreeText::class);
     })->with([SourceProvider::PDF->value, SourceProvider::DOCX->value, SourceProvider::CSV->value]);
-});
+})->group('inquiry-hub');

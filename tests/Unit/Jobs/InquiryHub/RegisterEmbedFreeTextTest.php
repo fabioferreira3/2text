@@ -31,4 +31,4 @@ describe('Inquiry Hub - RegisterEmbedText job', function () {
             'order' => 1
         ]);
     });
-});
+})->group('inquiry-hub');

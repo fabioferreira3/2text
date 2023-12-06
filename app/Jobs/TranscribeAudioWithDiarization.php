@@ -19,6 +19,7 @@ class TranscribeAudioWithDiarization implements ShouldQueue, ShouldBeUnique
 
     public Document $document;
     public array $meta;
+    public $mediaRepo;
 
     /**
      * Create a new job instance.
@@ -29,6 +30,7 @@ class TranscribeAudioWithDiarization implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
+        $this->mediaRepo = new MediaRepository();
     }
 
     /**
@@ -46,7 +48,7 @@ class TranscribeAudioWithDiarization implements ShouldQueue, ShouldBeUnique
             if ($this->document->getMeta('speakers_expected')) {
                 $params['speakers_expected'] = (int) $this->document->getMeta('speakers_expected');
             }
-            MediaRepository::transcribeAudioWithDiarization(
+            $this->mediaRepo->transcribeAudioWithDiarization(
                 $this->document->getMeta('audio_file_path'),
                 $params
             );
