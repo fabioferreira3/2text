@@ -23,10 +23,12 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected Document $document;
-    protected array $meta;
-    protected $promptHelper;
-    protected DocumentRepository $repo;
+    public Document $document;
+    public array $meta;
+    public $promptHelper;
+    public DocumentRepository $repo;
+    public $oraculum;
+    public $chatGpt;
 
     /**
      * Create a new job instance.
@@ -39,6 +41,9 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
         $this->meta = $meta;
         $this->promptHelper = PromptHelperFactory::create($document->language->value);
         $this->repo = new DocumentRepository($this->document);
+        $user = User::findOrFail($this->document->getMeta('user_id'));
+        $this->oraculum = new Oraculum($user, $this->meta['collection_name']);
+        $this->chatGpt = new ChatGPT();
     }
 
     /**
@@ -70,9 +75,7 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
 
     protected function queryEmbedding()
     {
-        $user = User::findOrFail($this->document->getMeta('user_id'));
-        $oraculum = new Oraculum($user, $this->meta['collection_name']);
-        return $oraculum->query($this->promptHelper->writeEmbeddedOutline(
+        return $this->oraculum->query($this->promptHelper->writeEmbeddedOutline(
             [
                 'tone' => $this->document->getMeta('tone'),
                 'keyword' => $this->document->getMeta('keyword'),
@@ -85,8 +88,7 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
 
     protected function queryGpt()
     {
-        $chatGpt = new ChatGPT();
-        return $chatGpt->request([
+        return $this->chatGpt->request([
             [
                 'role' => 'user',
                 'content' =>   $this->promptHelper->writeOutline(

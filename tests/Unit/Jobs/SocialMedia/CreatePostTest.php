@@ -50,7 +50,7 @@ describe('Social Media - CreatePost job', function () {
         ], $this->generator);
         $job->handle();
 
-        $chatGptResponse = $this->chatGptRequestResponse;
+        $chatGptResponse = $this->aiModelResponseResponse;
         commonCreateSocialPostAssertions($document, $chatGptResponse);
     });
 
@@ -71,7 +71,7 @@ describe('Social Media - CreatePost job', function () {
         ], $this->generator);
         $job->handle();
 
-        $chatGptResponse = $this->chatGptRequestResponse;
+        $chatGptResponse = $this->aiModelResponseResponse;
         commonCreateSocialPostAssertions($document, $chatGptResponse);
     });
 })->group('socialmedia');

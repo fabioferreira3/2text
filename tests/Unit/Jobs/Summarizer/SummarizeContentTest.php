@@ -68,7 +68,7 @@ describe('Summarize Content job', function () {
             'prompt' => null
         ]);
 
-        $chatGptResponse = $this->chatGptRequestResponse;
+        $chatGptResponse = $this->aiModelResponseResponse;
         commonAssertions($document, $chatGptResponse);
     });
 
@@ -84,7 +84,7 @@ describe('Summarize Content job', function () {
         ], $this->generator);
         $job->handle();
 
-        $chatGptResponse = $this->chatGptRequestResponse;
+        $chatGptResponse = $this->aiModelResponseResponse;
         commonAssertions($document, $chatGptResponse);
     });
 

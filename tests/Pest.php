@@ -27,8 +27,8 @@ uses()->beforeEach(function () {
     Storage::fake('s3');
     $this->authUser = User::factory()->create();
 
-    // ChatGPT Mock
-    $this->chatGptRequestResponse = [
+    // AI Response Mock
+    $this->aiModelResponseResponse = [
         'content' => 'AI content generated',
         'token_usage' => [
             'model' => AIModel::GPT_4_TURBO->value,
@@ -42,7 +42,7 @@ uses()->beforeEach(function () {
 
     $this->chatGpt->shouldReceive('request')->withArgs(function ($arg) {
         return is_array($arg);
-    })->andReturn($this->chatGptRequestResponse);
+    })->andReturn($this->aiModelResponseResponse);
 
     // Dall-E Mock
     $this->dallE = Mockery::mock(DallE::class);
@@ -61,7 +61,7 @@ uses()->beforeEach(function () {
     $this->oraculum = Mockery::mock(new Oraculum($this->authUser, '12345'));
     $this->oraculum->shouldReceive('createBot')->andReturn([]);
     $this->oraculum->shouldReceive('add')->andReturn([]);
-    $this->oraculum->shouldReceive('query')->andReturn([]);
+    $this->oraculum->shouldReceive('query')->andReturn($this->aiModelResponseResponse);
     $this->oraculum->shouldReceive('chat')->andReturn([]);
     $this->oraculum->shouldReceive('deleteCollection')->andReturn([]);
     $this->oraculum->shouldReceive('countTokens')->andReturn([]);

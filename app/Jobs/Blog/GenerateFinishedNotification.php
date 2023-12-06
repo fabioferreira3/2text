@@ -21,9 +21,10 @@ class GenerateFinishedNotification implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected Document $document;
-    protected array $meta;
-    protected $repo;
+    public Document $document;
+    public array $meta;
+    public $repo;
+    public $chatGpt;
 
     /**
      * Create a new job instance.
@@ -35,6 +36,7 @@ class GenerateFinishedNotification implements ShouldQueue, ShouldBeUnique
         $this->document = $document->fresh();
         $this->repo = new DocumentRepository($this->document);
         $this->meta = $meta;
+        $this->chatGpt = new ChatGPT(AIModel::GPT_4_TURBO->value);
     }
 
     /**
@@ -47,9 +49,8 @@ class GenerateFinishedNotification implements ShouldQueue, ShouldBeUnique
         try {
             $user = User::findOrFail($this->document->getMeta('user_id'));
             $promptHelper = PromptHelperFactory::create($this->document->language->value);
-            $chatGpt = new ChatGPT(AIModel::GPT_4_TURBO->value);
 
-            $response = $chatGpt->request([
+            $response = $this->chatGpt->request([
                 [
                     'role' => 'user',
                     'content' =>  $promptHelper->generateFinishedNotification([
