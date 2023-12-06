@@ -44,7 +44,7 @@ describe(
                     ->assertHasErrors(['context' => 'required_if']);
             });
 
-            test('123source url', function () {
+            test('source url', function () {
                 $this->component
                     ->set('document', $this->document)
                     ->set('sourceType', 'website_url')

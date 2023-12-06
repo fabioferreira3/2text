@@ -17,22 +17,23 @@ class CreateTranscription
     protected Document $document;
     protected $repo;
     protected array $meta;
+    public $processId;
 
     public function __construct(Document $document, array $meta)
     {
         $this->repo = new DocumentRepository();
         $this->document = $document;
         $this->meta = $meta;
+        $this->processId = Str::uuid();
     }
 
     public function handle()
     {
-        $processId = Str::uuid();
         DocumentRepository::createTask(
             $this->document->id,
             DocumentTaskEnum::DOWNLOAD_AUDIO,
             [
-                'process_id' => $processId,
+                'process_id' => $this->processId,
                 'meta' => [
                     'source_url' => $this->document->getMeta('source_url')
                 ],
@@ -46,7 +47,7 @@ class CreateTranscription
                 DocumentTaskEnum::TRANSCRIBE_AUDIO_WITH_DIARIZATION,
                 [
                     'order' => 2,
-                    'process_id' => $processId,
+                    'process_id' => $this->processId,
                     'meta' => [
                         'speakers_expected' => $this->document->getMeta('speakers_expected'),
                     ]
@@ -58,7 +59,7 @@ class CreateTranscription
                 DocumentTaskEnum::TRANSCRIBE_AUDIO,
                 [
                     'order' => 2,
-                    'process_id' => $processId,
+                    'process_id' => $this->processId,
                     'meta' => []
                 ]
             );
@@ -69,7 +70,7 @@ class CreateTranscription
             DocumentTaskEnum::PUBLISH_TEXT_BLOCK,
             [
                 'order' => 3,
-                'process_id' => $processId,
+                'process_id' => $this->processId,
                 'meta' => [
                     'text' => $this->document->getMeta('context') ?? null,
                     'target_language' => $this->document->getMeta('target_language') ?? null

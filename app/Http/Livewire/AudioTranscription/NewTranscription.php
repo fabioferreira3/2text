@@ -14,7 +14,7 @@ class NewTranscription extends Component
     use Actions;
 
     public string $source_url;
-    public string $source;
+    public string $sourceType;
     public string $origin_language;
     public string $target_language;
     public array $languages;
@@ -26,7 +26,7 @@ class NewTranscription extends Component
     public function __construct()
     {
         $this->title = 'New Transcription';
-        $this->source = 'youtube';
+        $this->sourceType = 'youtube';
         $this->source_url = '';
         $this->origin_language = 'en';
         $this->target_language = 'same';
@@ -43,8 +43,8 @@ class NewTranscription extends Component
     public function rules()
     {
         return [
-            'source' => 'required|in:youtube',
-            'source_url' => ['required', 'url', $this->source === 'youtube' ? new \App\Rules\YouTubeUrl() : ''],
+            'sourceType' => 'required|in:youtube',
+            'source_url' => ['required', 'url', $this->sourceType === 'youtube' ? new \App\Rules\YouTubeUrl() : ''],
             'origin_language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
             'target_language' => 'required|in:same,en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr'
         ];
@@ -54,7 +54,7 @@ class NewTranscription extends Component
     {
         return [
             'source_url.required' => __('validation.youtube_link_required'),
-            'source.required' => __('validation.source_required'),
+            'sourceType.required' => __('validation.source_required'),
             'origin_language.required' => __('validation.source_language_required'),
             'target_language.required' => __('validation.target_language_required'),
         ];
@@ -62,14 +62,14 @@ class NewTranscription extends Component
 
     public function process()
     {
-        $this->validate($this->rules());
+        $this->validate();
         $targetLanguage = null;
         if ($this->target_language !== 'same') {
             $targetLanguage = Language::tryFrom($this->target_language)->label();
         }
         $document = DocumentRepository::createGeneric([
             'type' => DocumentType::AUDIO_TRANSCRIPTION->value,
-            'source' => $this->source,
+            'source' => $this->sourceType,
             'language' => $this->origin_language,
             'meta' => [
                 'source_url' => $this->source_url,
