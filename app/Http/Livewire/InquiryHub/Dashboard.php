@@ -2,19 +2,13 @@
 
 namespace App\Http\Livewire\InquiryHub;
 
-use App\Enums\DocumentType;
-use App\Enums\Language;
-use App\Models\ChatThread;
 use App\Models\Traits\InquiryHub;
-use App\Repositories\DocumentRepository;
 use WireUi\Traits\Actions;
 use Livewire\Component;
 
 class Dashboard extends Component
 {
     use InquiryHub, Actions;
-
-    public $document;
 
     protected $listeners = ['invokeNew' => 'new'];
 

@@ -9,8 +9,6 @@ class Dashboard extends Component
 {
     use Actions;
 
-    public $document;
-
     protected $listeners = ['invokeNew' => 'new'];
 
     public function render()
