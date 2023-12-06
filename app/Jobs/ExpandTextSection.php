@@ -72,7 +72,7 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $rawStructure = $this->document->meta['raw_structure'];
+            $rawStructure = $this->document->getMeta('raw_structure');
             $normalizedStructure = $this->document->normalized_structure;
             $basePrompt = $this->promptHelper->givenFollowingText($normalizedStructure);
 

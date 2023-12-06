@@ -45,7 +45,7 @@ class CreateFromFile implements ShouldQueue, ShouldBeUnique
         $queryEmbedding = true;
         $nextOrder = 2;
 
-        $dataType = DataType::tryFrom($this->document->meta['source']);
+        $dataType = DataType::tryFrom($this->document->getMeta('source'));
         DocumentRepository::createTask(
             $this->document->id,
             DocumentTaskEnum::EMBED_SOURCE,

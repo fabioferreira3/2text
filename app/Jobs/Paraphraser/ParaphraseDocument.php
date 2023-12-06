@@ -35,7 +35,7 @@ class ParaphraseDocument implements ShouldQueue
             $repo = new DocumentRepository($this->document);
             $processId = $this->meta['process_id'] ?? Str::uuid();
 
-            foreach ($this->document->meta['original_sentences'] as $sentence) {
+            foreach ($this->document->getMeta('original_sentences') as $sentence) {
                 $repo->createTask(DocumentTaskEnum::PARAPHRASE_TEXT, [
                     'order' => $this->meta['initial_order'] ?? 1,
                     'process_id' => $processId,

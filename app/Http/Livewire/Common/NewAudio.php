@@ -36,8 +36,9 @@ class NewAudio extends Component
     {
         $this->document = $document;
         $this->isProcessing = false;
-        $this->currentAudioFile = $this->document->meta['audio_file'] ?? null;
-        $this->currentAudioUrl = ($this->document->meta['audio_file'] ?? false) ? AudioHelper::getAudioUrl($this->document->meta['audio_file']) : null;
+        $this->currentAudioFile = $this->document->getMeta('audio_file') ?? null;
+        $this->currentAudioUrl = ($this->document->getMeta('audio_file') ?? false) ?
+            AudioHelper::getAudioUrl($this->document->getMeta('audio_file')) : null;
         $this->isPlaying = false;
         $this->menuOpen = false;
         $this->setOptions($this->language ?? $document->language->value);

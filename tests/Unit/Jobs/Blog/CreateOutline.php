@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Blog;
 
 use App\Helpers\DocumentHelper;
-use App\Helpers\PromptHelper;
+use App\Helpers\PromptHelperFactory;
+use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
@@ -18,13 +19,13 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ExpandOutline implements ShouldQueue, ShouldBeUnique
+class CreateOutline implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
     protected Document $document;
     protected array $meta;
-    protected PromptHelper $promptHelper;
+    protected $promptHelper;
     protected DocumentRepository $repo;
 
     /**
@@ -36,7 +37,7 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->promptHelper = new PromptHelper($document->language->value);
+        $this->promptHelper = PromptHelperFactory::create($document->language->value);
         $this->repo = new DocumentRepository($this->document);
     }
 
@@ -54,15 +55,16 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
                 $response = $this->queryGpt();
             }
 
-            $this->repo->updateMeta('first_pass', $response['content']);
-            $this->repo->updateMeta('raw_structure', DocumentHelper::parseHtmlTagsToRawStructure($response['content']));
+            $this->repo->updateMeta('outline', $response['content']);
+            $this->repo->updateMeta('raw_structure', DocumentHelper::parseOutlineToRawStructure($response['content']));
+
             RegisterProductUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => ['document_id' => $this->document->id]
             ]);
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to expand outline: ' . $e->getMessage());
+            $this->jobFailed('Failed to generate outline: ' . $e->getMessage());
         }
     }
 
@@ -70,12 +72,13 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
     {
         $user = User::findOrFail($this->document->getMeta('user_id'));
         $oraculum = new Oraculum($user, $this->meta['collection_name']);
-
-        return $oraculum->query($this->promptHelper->writeEmbeddedFirstPass(
-            $this->document->getRawStructureDescription(),
+        return $oraculum->query($this->promptHelper->writeEmbeddedOutline(
             [
                 'tone' => $this->document->getMeta('tone'),
-                'style' => $this->document->getMeta('style') ?? null
+                'keyword' => $this->document->getMeta('keyword'),
+                'style' => $this->document->getMeta('style') ?? null,
+                'maxsubtopics' => $this->document->getMeta('target_headers_count') ?? 2,
+                'context' => $this->document->getMeta('context')
             ]
         ));
     }
@@ -83,15 +86,16 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
     protected function queryGpt()
     {
         $chatGpt = new ChatGPT();
-
         return $chatGpt->request([
             [
                 'role' => 'user',
-                'content' => $this->promptHelper->writeFirstPass(
-                    $this->document->getRawStructureDescription(),
+                'content' =>   $this->promptHelper->writeOutline(
+                    $this->document->getContext(),
                     [
                         'tone' => $this->document->getMeta('tone'),
-                        'style' => $this->document->getMeta('style') ?? null
+                        'keyword' => $this->document->getMeta('keyword'),
+                        'style' => $this->document->getMeta('style') ?? null,
+                        'maxsubtopics' => $this->document->getMeta('target_headers_count') ?? 2
                     ]
                 )
             ]
@@ -103,6 +107,6 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'expand_outline_' . $this->meta['process_id'] ?? $this->document->id;
+        return 'create_outline_' . $this->meta['process_id'] ?? $this->document->id;
     }
 }

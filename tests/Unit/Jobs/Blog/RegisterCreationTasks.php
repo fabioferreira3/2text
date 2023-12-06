@@ -16,8 +16,8 @@ class RegisterCreationTasks
     use Dispatchable, SerializesModels;
 
     public Document $document;
-    public $repo;
-    public array $params;
+    protected $repo;
+    protected array $params;
 
     public function __construct(Document $document, array $params)
     {

@@ -56,11 +56,11 @@ class GenRepository
         ]);
     }
 
-    public static function generateMetaDescription(Document $document)
+    public function generateMetaDescription(Document $document)
     {
         $promptHelper = PromptHelperFactory::create($document->language->value);
         $chatGpt = new ChatGPT(AIModel::GPT_3_TURBO1106->value);
-        $response = $chatGpt->request([[
+        return $chatGpt->request([[
             'role' => 'user',
             'content' => $promptHelper->writeMetaDescription(
                 $document->getMeta('outline'),
@@ -70,16 +70,6 @@ class GenRepository
                 ]
             )
         ]]);
-        $document->contentBlocks()->save(new DocumentContentBlock([
-            'type' => 'meta_description',
-            'content' => Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"'),
-            'prompt' => '',
-            'order' => 1
-        ]));
-        RegisterProductUsage::dispatch($document->account, [
-            ...$response['token_usage'],
-            'meta' => ['document_id' => $document->id]
-        ]);
     }
 
     public function generateSummary(Document $document, array $params)

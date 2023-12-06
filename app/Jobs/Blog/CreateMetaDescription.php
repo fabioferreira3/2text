@@ -3,8 +3,10 @@
 namespace App\Jobs\Blog;
 
 use App\Events\MetaDescriptionGenerated;
+use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
+use App\Models\DocumentContentBlock;
 use App\Repositories\GenRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -12,14 +14,16 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 use Exception;
 
 class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected Document $document;
-    protected array $meta;
+    public Document $document;
+    public array $meta;
+    public $genRepo;
 
     /**
      * The number of times the job may be attempted.
@@ -69,6 +73,7 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
+        $this->genRepo = new GenRepository();
     }
 
     /**
@@ -79,7 +84,17 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            GenRepository::generateMetaDescription($this->document);
+            $response = $this->genRepo->generateMetaDescription($this->document);
+            $this->document->contentBlocks()->save(new DocumentContentBlock([
+                'type' => 'meta_description',
+                'content' => Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"'),
+                'prompt' => '',
+                'order' => 1
+            ]));
+            RegisterProductUsage::dispatch($this->document->account, [
+                ...$response['token_usage'],
+                'meta' => ['document_id' => $this->document->id]
+            ]);
             event(new MetaDescriptionGenerated($this->document, $this->meta['process_id']));
             $this->jobSucceded();
         } catch (Exception $e) {

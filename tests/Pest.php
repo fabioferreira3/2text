@@ -74,6 +74,7 @@ uses()->beforeEach(function () {
 
     $this->generator->shouldReceive('generateSocialMediaPost')->andReturn($this->chatGpt->request(['message']));
     $this->generator->shouldReceive('generateEmbeddedSocialMediaPost')->andReturn($this->chatGpt->request(['message']));
+    $this->generator->shouldReceive('generateMetaDescription')->andReturn($this->chatGpt->request(['message']));
 
     // Media Repository
     $this->mediaRepo = Mockery::mock(MediaRepository::class);
