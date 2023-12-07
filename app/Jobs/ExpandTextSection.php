@@ -3,11 +3,11 @@
 namespace App\Jobs;
 
 use App\Helpers\PromptHelper;
+use App\Interfaces\ChatGPTFactoryInterface;
+use App\Interfaces\OraculumFactoryInterface;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
-use App\Packages\OpenAI\ChatGPT;
-use App\Packages\Oraculum\Oraculum;
 use App\Repositories\DocumentRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -26,6 +26,8 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
     protected array $meta;
     protected PromptHelper $promptHelper;
     protected DocumentRepository $repo;
+    public OraculumFactoryInterface $oraculumFactory;
+    public ChatGPTFactoryInterface $chatGptFactory;
 
     /**
      * The number of times the job may be attempted.
@@ -62,6 +64,8 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
         $this->meta = $meta;
         $this->promptHelper = new PromptHelper($document->language->value);
         $this->repo = new DocumentRepository($this->document);
+        $this->oraculumFactory = app(OraculumFactoryInterface::class);
+        $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
     }
 
     /**
@@ -77,10 +81,11 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
             $basePrompt = $this->promptHelper->givenFollowingText($normalizedStructure);
 
             if ($this->meta['query_embedding'] ?? false) {
-                $response = $this->queryEmbedding($normalizedStructure, $basePrompt);
+                $response = $this->queryEmbedding($basePrompt);
             } else {
-                $response = $this->queryGpt($normalizedStructure, $basePrompt);
+                $response = $this->queryGpt($basePrompt);
             }
+            Log::debug($response);
 
             $rawStructure[$this->meta['section_key']]['content'] = $response['content'];
             $this->repo->updateMeta('raw_structure', $rawStructure);
@@ -97,7 +102,7 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
     protected function queryEmbedding($basePrompt)
     {
         $user = User::findOrFail($this->document->getMeta('user_id'));
-        $oraculum = new Oraculum($user, $this->meta['collection_name']);
+        $oraculum = $this->oraculumFactory->make($user, $this->meta['collection_name']);
 
         return $oraculum->query($basePrompt . $this->promptHelper->expandEmbeddedOn($this->meta['text_section'], [
             'tone' => $this->document->getMeta('tone'),
@@ -108,7 +113,7 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
 
     protected function queryGpt($basePrompt)
     {
-        $chatGpt = new ChatGPT();
+        $chatGpt = $this->chatGptFactory->make();
         return $chatGpt->request([
             [
                 'role' => 'user',

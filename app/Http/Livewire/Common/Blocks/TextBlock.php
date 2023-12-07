@@ -8,7 +8,6 @@ use App\Jobs\DispatchDocumentTasks;
 use App\Models\DocumentContentBlock;
 use App\Repositories\DocumentRepository;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
@@ -25,6 +24,7 @@ class TextBlock extends Component
     public array $hide = [];
     public bool $showCustomPrompt = false;
     public bool $processing;
+    public $rows;
     public $hasPastVersions;
     public $hasFutureVersions;
     public array $info;
@@ -49,11 +49,12 @@ class TextBlock extends Component
         ];
     }
 
-    public function mount(DocumentContentBlock $contentBlock, $hide = [])
+    public function mount(DocumentContentBlock $contentBlock, $hide = [], $rows = 1)
     {
         $this->contentBlock = $contentBlock;
         $this->prefix = $contentBlock->prefix ?? null;
         $this->hide = $hide;
+        $this->rows = $rows;
         $this->setup();
     }
 

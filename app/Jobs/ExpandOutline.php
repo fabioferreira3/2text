@@ -4,11 +4,11 @@ namespace App\Jobs;
 
 use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelper;
+use App\Interfaces\ChatGPTFactoryInterface;
+use App\Interfaces\OraculumFactoryInterface;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
-use App\Packages\OpenAI\ChatGPT;
-use App\Packages\Oraculum\Oraculum;
 use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -26,6 +26,8 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
     protected array $meta;
     protected PromptHelper $promptHelper;
     protected DocumentRepository $repo;
+    public OraculumFactoryInterface $oraculumFactory;
+    public ChatGPTFactoryInterface $chatGptFactory;
 
     /**
      * Create a new job instance.
@@ -38,6 +40,8 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
         $this->meta = $meta;
         $this->promptHelper = new PromptHelper($document->language->value);
         $this->repo = new DocumentRepository($this->document);
+        $this->oraculumFactory = app(OraculumFactoryInterface::class);
+        $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
     }
 
     /**
@@ -69,7 +73,7 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
     protected function queryEmbedding()
     {
         $user = User::findOrFail($this->document->getMeta('user_id'));
-        $oraculum = new Oraculum($user, $this->meta['collection_name']);
+        $oraculum = $this->oraculumFactory->make($user, $this->meta['collection_name']);
 
         return $oraculum->query($this->promptHelper->writeEmbeddedFirstPass(
             $this->document->getRawStructureDescription(),
@@ -82,8 +86,7 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
 
     protected function queryGpt()
     {
-        $chatGpt = new ChatGPT();
-
+        $chatGpt = $this->chatGptFactory->make();
         return $chatGpt->request([
             [
                 'role' => 'user',

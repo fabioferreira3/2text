@@ -4,12 +4,12 @@ namespace App\Jobs\Blog;
 
 use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelperFactory;
+use App\Interfaces\ChatGPTFactoryInterface;
+use App\Interfaces\OraculumFactoryInterface;
 use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
-use App\Packages\OpenAI\ChatGPT;
-use App\Packages\Oraculum\Oraculum;
 use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -27,23 +27,24 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
     public array $meta;
     public $promptHelper;
     public DocumentRepository $repo;
-    public $oraculum;
-    public $chatGpt;
+    public OraculumFactoryInterface $oraculumFactory;
+    public ChatGPTFactoryInterface $chatGptFactory;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Document $document, array $meta = [])
-    {
+    public function __construct(
+        Document $document,
+        array $meta = []
+    ) {
         $this->document = $document->fresh();
         $this->meta = $meta;
         $this->promptHelper = PromptHelperFactory::create($document->language->value);
         $this->repo = new DocumentRepository($this->document);
-        $user = User::findOrFail($this->document->getMeta('user_id'));
-        $this->oraculum = new Oraculum($user, $this->meta['collection_name']);
-        $this->chatGpt = new ChatGPT();
+        $this->oraculumFactory = app(OraculumFactoryInterface::class);
+        $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
     }
 
     /**
@@ -75,7 +76,9 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
 
     protected function queryEmbedding()
     {
-        return $this->oraculum->query($this->promptHelper->writeEmbeddedOutline(
+        $user = User::findOrFail($this->document->getMeta('user_id'));
+        $oraculum = $this->oraculumFactory->make($user, $this->meta['collection_name']);
+        return $oraculum->query($this->promptHelper->writeEmbeddedOutline(
             [
                 'tone' => $this->document->getMeta('tone'),
                 'keyword' => $this->document->getMeta('keyword'),
@@ -88,7 +91,8 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
 
     protected function queryGpt()
     {
-        return $this->chatGpt->request([
+        $chatGpt = $this->chatGptFactory->make();
+        return $chatGpt->request([
             [
                 'role' => 'user',
                 'content' =>   $this->promptHelper->writeOutline(

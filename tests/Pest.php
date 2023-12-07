@@ -25,6 +25,7 @@ uses()->beforeEach(function () {
 
     Bus::fake();
     Storage::fake('s3');
+    Storage::fake('tmp-for-tests');
     $this->authUser = User::factory()->create();
 
     // AI Response Mock

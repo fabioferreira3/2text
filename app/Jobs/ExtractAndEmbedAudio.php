@@ -22,6 +22,7 @@ class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
 
     public Document $document;
     public array $meta;
+    public $mediaRepo;
 
     /**
      * The number of times the job may be attempted.
@@ -66,6 +67,7 @@ class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
+        $this->mediaRepo = app(MediaRepository::class);
     }
 
     /**
@@ -76,8 +78,8 @@ class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $audioParams = MediaRepository::downloadYoutubeAudio($this->meta['source_url']);
-            $transcribedText = MediaRepository::transcribeAudio($audioParams['file_paths']);
+            $audioParams = $this->mediaRepo->downloadYoutubeAudio($this->meta['source_url']);
+            $transcribedText = $this->mediaRepo->transcribeAudio($audioParams['file_paths']);
             $finalTranscription = "Title: " . $audioParams['title'] . "Content: " . $transcribedText;
             EmbedSource::dispatchSync($this->document, [
                 'data_type' => DataType::TEXT->value,

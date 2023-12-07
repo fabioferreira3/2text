@@ -7,6 +7,7 @@ return [
     'context' => 'Describe the post',
     'content' => 'Content',
     'copy_all' => 'Copy all',
+    'created_at' => 'Created at',
     'default' => 'Default',
     'define_language' => 'Define the main language of your post.',
     'file_option' => 'File:',

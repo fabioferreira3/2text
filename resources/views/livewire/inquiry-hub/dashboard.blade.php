@@ -1,4 +1,4 @@
-<div class="w-full h-full">
+<div class="w-full h-screen flex flex-col">
     @section('header')
     <div class="flex items-center gap-4">
         @include('livewire.common.header', [
@@ -13,5 +13,7 @@
     </div>
     @endsection
 
-    @livewire('my-documents-table', ['documentTypes' => [\App\Enums\DocumentType::INQUIRY]])
+    <div>
+        @livewire('my-documents-table', ['documentTypes' => [\App\Enums\DocumentType::INQUIRY]])
+    </div>
 </div>

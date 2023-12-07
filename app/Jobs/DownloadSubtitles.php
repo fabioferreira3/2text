@@ -22,6 +22,7 @@ class DownloadSubtitles implements ShouldQueue, ShouldBeUnique
 
     public Document $document;
     public array $meta;
+    public $mediaRepo;
 
     /**
      * Create a new job instance.
@@ -32,6 +33,7 @@ class DownloadSubtitles implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
+        $this->mediaRepo = new MediaRepository();
     }
 
     /**
@@ -56,12 +58,12 @@ class DownloadSubtitles implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $audioParams = MediaRepository::downloadYoutubeSubtitles(
+            $audioParams = $this->mediaRepo->downloadYoutubeSubtitles(
                 $this->meta['source_url'],
                 $this->meta['video_language'] ?? null
             );
             if (!$audioParams['subtitles']) {
-                $audioParams = MediaRepository::downloadYoutubeAudio($this->meta['source_url']);
+                $audioParams = $this->mediaRepo->downloadYoutubeAudio($this->meta['source_url']);
             }
 
             if (($this->meta['embed_source'] ?? false) && $audioParams['subtitles']) {

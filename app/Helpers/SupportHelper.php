@@ -25,7 +25,6 @@ class SupportHelper
             return (($tokenUsage['prompt'] / 1000) * 0.003) + (($tokenUsage['completion'] / 1000) * 0.004);
         } elseif (in_array($model, [
             AIModel::GPT_4->value,
-            AIModel::GPT_4_0314->value,
             AIModel::GPT_4_0613->value,
         ])) {
             return (($tokenUsage['prompt'] / 1000) * 0.03) + (($tokenUsage['completion'] / 1000) * 0.06);
@@ -36,7 +35,6 @@ class SupportHelper
             return (($tokenUsage['prompt'] / 1000) * 0.01) + (($tokenUsage['completion'] / 1000) * 0.03);
         } elseif (in_array($model, [
             AIModel::GPT_4_32->value,
-            AIModel::GPT_4_32_0314->value,
             AIModel::GPT_4_32_0613->value
         ])) {
             return (($tokenUsage['prompt'] / 1000) * 0.06) + (($tokenUsage['completion'] / 1000) * 0.12);

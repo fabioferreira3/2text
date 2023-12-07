@@ -1,8 +1,8 @@
 <div>
-    <div class="mb-8">
+    <div>
         @include('livewire.common.label', ['title' => $title])
     </div>
-    <div class="flex items-center gap-2 justify-between mb-4">
+    <div class="flex items-center gap-2 justify-between mt-8">
         <div class="flex gap-2">
             <button wire:click="$toggle('showInfo')"
                 class="flex items-center gap-2 bg-gray-300 px-3 py-1 rounded-lg text-gray-800">
@@ -23,7 +23,7 @@
             </button>
         </div>
     </div>
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 mt-6">
         @foreach ($document->contentBlocks()->mediaRelated()->get() as $contentBlock)
         @if($contentBlock->type === 'media_file_image')
         @livewire('common.blocks.img-block', [
@@ -52,7 +52,7 @@
             <div class="flex flex-col gap-2 mt-8">
                 <div class="grid grid-cols-3">
                     <span class="font-bold col-span-1">{{ucfirst(__('blog.keyword'))}}:</span>
-                    <span class="col-span-2">{{ucfirst($document->keyword) }}</span>
+                    <span class="col-span-2">"{{ucfirst($document->getMeta('keyword')) }}"</span>
                 </div>
                 <div class="grid grid-cols-3">
                     <span class="font-bold col-span-1">{{ucfirst(__('blog.source'))}}:</span>
@@ -76,6 +76,10 @@
                     <span class="font-bold col-span-1">{{ucfirst(__('blog.word_count'))}}:</span>
                     <span>{{$document->word_count }}</span>
                 </div>
+                <div class="grid grid-cols-3">
+                    <span class="font-bold col-span-1">{{ucfirst(__('blog.created_at'))}}:</span>
+                    <span>{{$document->created_at->format('m/d/Y - H:ia') }}</span>
+                </div>
             </div>
         </div>
     </x-experior::modal>
@@ -95,11 +99,12 @@
                     </svg>
                 </div>
             </div>
-            <div class="flex flex-col gap-2 mt-8">
+            <div class="flex flex-col gap-2 mb-8 mt-4">
                 @if($metaDescription)
                 @livewire('common.blocks.text-block', [
                 $metaDescription,
-                'hide' => ['delete']
+                'hide' => ['delete'],
+                'rows' => 5
                 ], key($metaDescription->id))
                 @endif
             </div>

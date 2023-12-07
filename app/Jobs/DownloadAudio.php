@@ -21,6 +21,7 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
 
     public Document $document;
     public array $meta;
+    public $mediaRepo;
 
     /**
      * Create a new job instance.
@@ -31,6 +32,7 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
+        $this->mediaRepo = new MediaRepository();
     }
 
     /**
@@ -55,7 +57,7 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $audioParams = MediaRepository::downloadYoutubeAudio($this->meta['source_url']);
+            $audioParams = $this->mediaRepo->downloadYoutubeAudio($this->meta['source_url']);
 
             // Update the document
             $this->document->update(['title' => $audioParams['title']]);

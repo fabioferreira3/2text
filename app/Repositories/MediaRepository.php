@@ -64,7 +64,7 @@ class MediaRepository
         ]);
     }
 
-    public static function downloadYoutubeSubtitles($youtubeUrl, $videoLanguage = 'en')
+    public function downloadYoutubeSubtitles($youtubeUrl, $videoLanguage = 'en')
     {
         $yt = new YoutubeDl();
         if (app()->environment('production')) {
@@ -114,7 +114,7 @@ class MediaRepository
         ];
     }
 
-    public static function downloadYoutubeAudio($youtubeUrl)
+    public function downloadYoutubeAudio($youtubeUrl)
     {
         $yt = new YoutubeDl();
         if (app()->environment('production')) {

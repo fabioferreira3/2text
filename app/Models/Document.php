@@ -252,6 +252,16 @@ class Document extends Model
         $this->update(['word_count' => $wordCount]);
     }
 
+    public function getCurrentCosts()
+    {
+        return ProductUsage::where('account_id', $this->account_id)
+            ->where('meta->document_id', $this->id)
+            ->get()
+            ->reduce(function ($carry, $usage) {
+                return $usage->cost + $carry;
+            }, 0);
+    }
+
     public function updateMeta($attribute, $value)
     {
         $meta = $this->meta;

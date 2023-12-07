@@ -20,7 +20,7 @@
         <div class="relative group/block">
             <textarea
                 class="max-h-[500px] focus:bg-blue-100 focus:cursor-text cursor-pointer p-0 text-zinc-700 autoExpandTextarea w-full border-0 text-xl group-hover/block:bg-red-100 rounded"
-                name="text" rows="1" wire:model.debounce.500ms="content" wire:ignore></textarea>
+                name="text" rows={{$rows}} wire:model.debounce.500ms="content" wire:ignore></textarea>
             <div class="border border-b border-gray-50"></div>
             @include('livewire.common.blocks.text-block-actions')
         </div>
