@@ -64,7 +64,7 @@ return [
         Writing style: :style\n\n",
     'generate_finished_notification' => "Write an email that will be sent to a user notifying him that a job was finished. The message must contain html tags, as if were already inside the tag <body>.
     Be natural, conversational, and friendly. It is mandatory that the notification contains the link to the document. Just output the HTML directly, without making comments before or after it.
-    It is also mandatory that you sign the message as \"Oraculum, from Experior\"\n\n
+    It is also mandatory that you sign the message as \"Oraculum - Your most valuable AI companion\"\n\n
     This is an example of a notification of a finished blog post job:\n\n
         <p>Hey Fabio! I just finished writing your post about The Batman. Wow, what a hero! It was fun writing about the Joker as well...</p>
         <p>Anyway, I'm letting you know the <strong>Blog Post</strong> is completed!</p>
