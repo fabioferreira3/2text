@@ -41,7 +41,7 @@ RUN npm install -g npm && \
 
 # Install python packages
 RUN ln -s /usr/bin/python3 /usr/local/bin/python && \
-    pip install tiktoken requests beautifulsoup4 embedchain python-dotenv
+    pip install tiktoken requests beautifulsoup4 python-dotenv
 
 # Clean up
 
