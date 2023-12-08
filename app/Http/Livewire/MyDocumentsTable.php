@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Enums\DocumentStatus;
 use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Models\Document;
@@ -12,7 +13,6 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\MultiSelectFilter;
 use WireUi\Traits\Actions;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MyDocumentsTable extends DataTableComponent
@@ -21,18 +21,37 @@ class MyDocumentsTable extends DataTableComponent
 
     protected $model = Document::class;
     protected $repo;
+    public $documentTypes;
+
+    public function mount($documentTypes = [])
+    {
+        if (!count($documentTypes)) {
+            $this->documentTypes = [
+                DocumentType::AUDIO_TRANSCRIPTION,
+                DocumentType::BLOG_POST,
+                DocumentType::INQUIRY,
+                DocumentType::PARAPHRASED_TEXT,
+                DocumentType::SOCIAL_MEDIA_GROUP,
+                DOcumentType::SUMMARIZER,
+                DocumentType::TEXT_TO_SPEECH,
+            ];
+        }
+    }
 
     public function configure(): void
     {
         $this->repo = new DocumentRepository();
         $this->setPrimaryKey('id');
-        $this->setRefreshTime(8000);
+        $this->setRefreshTime(10000);
     }
 
     public function viewDoc($documentId)
     {
         $document = Document::findOrFail($documentId);
-        if ($document->status->value === 'finished') {
+        if (in_array(
+            $document->status,
+            [DocumentStatus::FINISHED, DocumentStatus::DRAFT, DocumentStatus::IN_PROGRESS]
+        )) {
             return redirect()->route('document-view', ['document' => $document]);
         }
     }
@@ -41,15 +60,25 @@ class MyDocumentsTable extends DataTableComponent
     {
         try {
             $this->repo->delete($documentId);
-            $this->notification(['icon' => 'success', 'iconColor' => 'text-green-400', 'timeout' => 5000, 'title' => 'Document moved to the trash can!']);
+            $this->notification([
+                'icon' => 'success',
+                'iconColor' => 'text-green-400',
+                'timeout' => 5000,
+                'title' => 'Document moved to the trash can!'
+            ]);
         } catch (Exception) {
-            $this->notification(['icon' => 'error', 'iconColor' => 'text-red-700', 'timeout' => 5000, 'title' => 'There was an error while deleting this document']);
+            $this->notification([
+                'icon' => 'error',
+                'iconColor' => 'text-red-700',
+                'timeout' => 5000,
+                'title' => 'There was an error while deleting this document'
+            ]);
         }
     }
 
     public function builder(): Builder
     {
-        return Document::query()->latest();
+        return Document::whereIn('type', $this->documentTypes)->latest();
     }
 
     public function columns(): array
@@ -79,7 +108,7 @@ class MyDocumentsTable extends DataTableComponent
                 }),
 
             Column::make(__('dashboard.created_at'), "created_at")
-                ->format(fn ($value, $row) => $row->created_at->setTimezone(session('user_timezone') ?? 'America/New_York')->format('m/d/Y - h:ia'))
+                ->format(fn ($value, $row) => $row->created_at->format('m/d/Y - h:ia'))
                 ->sortable()
                 ->collapseOnMobile(),
             Column::make(__('dashboard.actions'))
@@ -88,8 +117,8 @@ class MyDocumentsTable extends DataTableComponent
                         return view('livewire.tables.my-documents.view-action', [
                             'rowId' => $row->id,
                             'status' => $row->status,
-                            'canView' => $row->status->value === 'finished',
-                            'canDelete' => in_array($row->status->value, ['finished', 'aborted', 'failed'])
+                            'canView' => in_array($row->status->value, ['finished', 'draft', 'in_progress']),
+                            'canDelete' => in_array($row->status->value, ['finished', 'aborted', 'failed', 'draft'])
                         ]);
                     }
                 ),

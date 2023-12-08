@@ -5,7 +5,7 @@ namespace App\Jobs\Translation;
 use App\Helpers\PromptHelper;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
-use App\Packages\ChatGPT\ChatGPT;
+use App\Packages\OpenAI\ChatGPT;
 use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;

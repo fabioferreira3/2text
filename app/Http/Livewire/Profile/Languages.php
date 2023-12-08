@@ -5,15 +5,12 @@ namespace App\Http\Livewire\Profile;
 use App\Enums\Language;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class Languages extends Component
 {
-    use WithFileUploads;
-
     /**
      * The component's state.
      *
@@ -43,7 +40,7 @@ class Languages extends Component
 
         Validator::make($this->state, [
             'language' => ['required', 'string', Rule::in(array_column(Language::cases(), 'value'))],
-        ])->validateWithBag('updateAccessToken');
+        ])->validateWithBag('updateLanguage');
 
         $account = Auth::user()->account;
         $account->update(['settings' => [...$account->settings, 'language' => $this->state['language']]]);
@@ -52,7 +49,7 @@ class Languages extends Component
         $this->emit('refresh-navigation-menu');
         $this->dispatchBrowserEvent('alert', [
             'type' => 'success',
-            'message' => "Language updated successfully!"
+            'message' => __('alerts.language_updated')
         ]);
     }
 

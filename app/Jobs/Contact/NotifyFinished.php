@@ -47,7 +47,8 @@ class NotifyFinished implements ShouldQueue, ShouldBeUnique
             'name' => $this->user->name,
             'jobName' => $this->jobName,
             'link' => route($routeName, ['document' => $this->document]),
-            'subject' => "Your $this->jobName is ready!"
+            'subject' => "Your $this->jobName is ready!",
+            'content' => $this->document->getMeta('finished_email_content') ?? null
         ];
         Mail::to($this->user->email)->send(new FinishedProcessEmail($data));
     }

@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Blog;
 
+use App\Enums\DataType;
 use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
@@ -12,13 +13,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
 class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public Document $document;
-    public DocumentRepository $repo;
+    public string $processId;
     public array $params;
 
     /**
@@ -29,7 +31,7 @@ class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
     public function __construct(Document $document, array $params)
     {
         $this->document = $document;
-        $this->repo = new DocumentRepository($this->document);
+        $this->processId = $params['process_id'] ?? Str::uuid();
         $this->params = $params;
     }
 
@@ -40,20 +42,34 @@ class CreateFromWebsite implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        $this->repo->createTask(
-            DocumentTaskEnum::CRAWL_WEBSITE,
-            [
-                'process_id' => $this->params['process_id'],
-                'meta' => [
-                    'parse_sentences' => false
-                ],
-                'order' => 1
-            ]
-        );
+        $queryEmbedding = true;
+        $nextOrder = 2;
+
+        foreach ($this->document->getMeta('source_urls') as $key => $sourceUrl) {
+            DocumentRepository::createTask(
+                $this->document->id,
+                DocumentTaskEnum::EMBED_SOURCE,
+                [
+                    'process_id' => $this->processId,
+                    'meta' => [
+                        'data_type' => DataType::WEB_PAGE->value,
+                        'source' => $sourceUrl,
+                        'collection_name' => $this->document->id
+                    ],
+                    'order' => $nextOrder
+                ]
+            );
+            $nextOrder += 1;
+        }
+
         RegisterCreationTasks::dispatchSync($this->document, [
             ...$this->params,
-            'next_order' => 2
+            'next_order' => $nextOrder,
+            'process_id' => $this->processId,
+            'query_embedding' => $queryEmbedding,
+            'collection_name' => $this->document->id
         ]);
+
         DispatchDocumentTasks::dispatch($this->document);
     }
 

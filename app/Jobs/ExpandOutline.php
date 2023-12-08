@@ -4,9 +4,11 @@ namespace App\Jobs;
 
 use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelper;
+use App\Interfaces\ChatGPTFactoryInterface;
+use App\Interfaces\OraculumFactoryInterface;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
-use App\Packages\ChatGPT\ChatGPT;
+use App\Models\User;
 use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -24,6 +26,8 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
     protected array $meta;
     protected PromptHelper $promptHelper;
     protected DocumentRepository $repo;
+    public OraculumFactoryInterface $oraculumFactory;
+    public ChatGPTFactoryInterface $chatGptFactory;
 
     /**
      * Create a new job instance.
@@ -36,6 +40,8 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
         $this->meta = $meta;
         $this->promptHelper = new PromptHelper($document->language->value);
         $this->repo = new DocumentRepository($this->document);
+        $this->oraculumFactory = app(OraculumFactoryInterface::class);
+        $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
     }
 
     /**
@@ -46,23 +52,53 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $chatGpt = new ChatGPT();
+            if ($this->meta['query_embedding'] ?? false) {
+                $response = $this->queryEmbedding();
+            } else {
+                $response = $this->queryGpt();
+            }
 
-            $response = $chatGpt->request([
-                [
-                    'role' => 'user',
-                    'content' => $this->promptHelper->writeFirstPass($this->document->meta['outline'], [
-                        'tone' => $this->document->meta['tone'],
-                        'style' => $this->document->meta['style'] ?? null
-                    ])
-                ]
-            ]);
             $this->repo->updateMeta('first_pass', $response['content']);
             $this->repo->updateMeta('raw_structure', DocumentHelper::parseHtmlTagsToRawStructure($response['content']));
+            RegisterProductUsage::dispatch($this->document->account, [
+                ...$response['token_usage'],
+                'meta' => ['document_id' => $this->document->id]
+            ]);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to expand outline: ' . $e->getMessage());
         }
+    }
+
+    protected function queryEmbedding()
+    {
+        $user = User::findOrFail($this->document->getMeta('user_id'));
+        $oraculum = $this->oraculumFactory->make($user, $this->meta['collection_name']);
+
+        return $oraculum->query($this->promptHelper->writeEmbeddedFirstPass(
+            $this->document->getRawStructureDescription(),
+            [
+                'tone' => $this->document->getMeta('tone'),
+                'style' => $this->document->getMeta('style') ?? null
+            ]
+        ));
+    }
+
+    protected function queryGpt()
+    {
+        $chatGpt = $this->chatGptFactory->make();
+        return $chatGpt->request([
+            [
+                'role' => 'user',
+                'content' => $this->promptHelper->writeFirstPass(
+                    $this->document->getRawStructureDescription(),
+                    [
+                        'tone' => $this->document->getMeta('tone'),
+                        'style' => $this->document->getMeta('style') ?? null
+                    ]
+                )
+            ]
+        ]);
     }
 
     /**

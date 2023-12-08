@@ -4,14 +4,89 @@ namespace App\Helpers;
 
 class InstructionsHelper
 {
+    public static function expectedSpeakers()
+    {
+        return "<p>" . __('instructions.expected_speakers') . "</p>";
+    }
+
+    public static function heroImages()
+    {
+        return "<div class='flex flex-col gap-4'>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.hero_images_1_header') . "</h3>
+                <p>" . __('instructions.hero_images_1_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.hero_images_2_header') . "</h3>
+                <p>" . __('instructions.hero_images_2_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.hero_images_3_header') . "</h3>
+                <p>" . __('instructions.hero_images_3_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.hero_images_4_header') . "</h3>
+                <p>" . __('instructions.hero_images_4_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.hero_images_5_header') . "</h3>
+                <p>" . __('instructions.hero_images_5_content') . "</p>
+            </div>
+        </div>";
+    }
+
+    public static function imageGuidelines()
+    {
+        return "<div class='flex flex-col gap-4'>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.image_guideline_1_header') . "</h3>
+                <p>" . __('instructions.image_guideline_1_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.image_guideline_2_header') . "</h3>
+                <p>" . __('instructions.image_guideline_2_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.image_guideline_3_header') . "</h3>
+                <p>" . __('instructions.image_guideline_3_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.image_guideline_4_header') . "</h3>
+                <p>" . __('instructions.image_guideline_4_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.image_guideline_5_header') . "</h3>
+                <p>" . __('instructions.image_guideline_5_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.image_guideline_6_header') . "</h3>
+                <p>" . __('instructions.image_guideline_6_content') . "</p>
+            </div>
+            <div>
+                <h3 class='font-bold'>" . __('instructions.image_guideline_7_header') . "</h3>
+                <p>" . __('instructions.image_guideline_7_content') . "</p>
+            </div>
+        </div>";
+    }
+
     public static function transcriptionSource()
     {
-        return "Define the source of the transcription. Currently, only Youtube videos are supported.";
+        return __('instructions.transcription_source');
     }
 
     public static function transcriptionLanguage()
     {
-        return "<p>You need to inform the language of the video since I'm currently not able to auto-discover its main language.</p>";
+        return "<p>" . __('instructions.transcription_language') . "</p>";
+    }
+
+    public static function transcriptionTranslate()
+    {
+        return "<p>" . __('instructions.transcription_translation') . "</p>";
+    }
+
+    public static function transcriptionDiarization()
+    {
+        return "<p>" . __('instructions.transcription_diarization') . "</p>";
     }
 
     public static function socialMediaPlatforms()
@@ -29,14 +104,19 @@ class InstructionsHelper
         return "<p>" . __('blog.define_language') . "</p><p class='mt-2 text-sm'>" . __('blog.selected_language_info') . "</p>";
     }
 
+    public static function blogKeyword()
+    {
+        return __('instructions.provide_keyword');
+    }
+
     public static function socialMediaKeyword()
     {
         return __('social_media.define_keyword');
     }
 
-    public static function blogKeyword()
+    public static function summarizerLanguages()
     {
-        return __('instructions.provide_keyword');
+        return "<p>" . __('summarizer.define_language') . "</p>";
     }
 
     public static function maxSubtopics()
@@ -78,13 +158,36 @@ class InstructionsHelper
 
     public static function sources()
     {
-        return "<p>" . __('instructions.define_base_context') . "</p>
-        <h3 class='mt-4 font-bold'>Youtube</h3>
+        return "
+        <h3 class='mt-4 font-bold'>Youtube videos</h3>
         <p>" . __('instructions.new_text_enter_youtube_link') . "</p>
         <h3 class='mt-4 font-bold'>" . __('instructions.website_url') . "</h3>
         <p>" . __('instructions.new_text_enter_external_url') . "</p>
+        <h3 class='mt-4 font-bold'>" . __('instructions.pdf_files') . "</h3>
+        <p>" . __('instructions.new_text_pdf_files') . "</p>
+        <h3 class='mt-4 font-bold'>" . __('instructions.docx_files') . "</h3>
+        <p>" . __('instructions.new_text_docx_files') . "</p>
+        <h3 class='mt-4 font-bold'>" . __('instructions.csv_files') . "</h3>
+        <p>" . __('instructions.new_text_csv_files') . "</p>
         <h3 class='mt-4 font-bold'>" . __('instructions.free_text') . "</h3>
         <p>" . __('instructions.new_text_enter_text') . "</p>";
+    }
+
+    public static function inquiryHubSources($maxChars = 30000)
+    {
+        return "
+        <h3 class='mt-4 font-bold'>" . __('instructions.free_text') . "</h3>
+        <p>" . __('instructions.inquiry_hub_free_text', ['maxChars' => $maxChars]) . "</p>
+        <h3 class='mt-4 font-bold'>Youtube videos</h3>
+        <p>" . __('instructions.inquiry_hub_youtube_link') . "</p>
+        <h3 class='mt-4 font-bold'>" . __('instructions.website_url') . "</h3>
+        <p>" . __('instructions.inquiry_hub_website_url') . "</p>
+        <h3 class='mt-4 font-bold'>" . __('instructions.pdf_files') . "</h3>
+        <p>" . __('instructions.inquiry_hub_pdf_files') . "</p>
+        <h3 class='mt-4 font-bold'>" . __('instructions.docx_files') . "</h3>
+        <p>" . __('instructions.inquiry_hub_docx_files') . "</p>
+        <h3 class='mt-4 font-bold'>" . __('instructions.csv_files') . "</h3>
+        <p>" . __('instructions.inquiry_hub_csv_files') . "</p>";
     }
 
     public static function paraphraserSources()
@@ -102,6 +205,11 @@ class InstructionsHelper
                 <li>" . __('instructions.telling_story') . "</li>
                 <li>" . __('instructions.expected_reaction') . "</li>
             </ul>";
+    }
+
+    public static function wordsCount()
+    {
+        return "<p>" . __('instructions.words_count') . "</p>";
     }
 
     public static function writingStyles()

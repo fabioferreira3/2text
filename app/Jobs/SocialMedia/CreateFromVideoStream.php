@@ -4,7 +4,7 @@ namespace App\Jobs\SocialMedia;
 
 use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
-use App\Jobs\TextTranscription\RegisterTranscriptionTasks;
+use App\Jobs\AudioTranscription\RegisterTranscriptionTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Illuminate\Bus\Queueable;
@@ -40,9 +40,8 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         RegisterTranscriptionTasks::dispatchSync($this->document, $this->params);
-
-        $repo = new DocumentRepository($this->document);
-        $repo->createTask(
+        DocumentRepository::createTask(
+            $this->document->id,
             DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST,
             [
                 'process_id' => $this->params['process_id'],

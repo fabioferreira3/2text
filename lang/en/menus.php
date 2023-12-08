@@ -1,15 +1,30 @@
 <?php
 
 return [
+    'ask_to' => 'Ask to...',
     'api_tokens' => 'API Tokens',
+    'audio_transcription' => 'Transcription',
     'blog_post' => 'Blog post',
+    'char_count' => 'Char count',
+    'copy' => 'Copy',
     'dashboard' => 'Dashboard',
+    'delete' => 'Delete',
+    'expand' => 'Expand',
+    'increase_complexity' => 'Increase complexity',
+    'inquiry_hub' => 'Inquiry Hub',
     'logout' => 'Log out',
     'manage_account' => 'Manage account',
+    'more' => 'More',
     'paraphraser' => 'Paraphraser',
+    'paraphrase' => 'Paraphrase',
     'profile' => 'Profile',
+    'redo' => 'Redo',
+    'reduce_complexity' => 'Reduce complexity',
     'social_media_post' => 'Social media',
-    'templates' => 'Templates',
-    'text_transcription' => 'Transcription',
+    'shorten' => 'Shorten',
+    'summarizer' => 'Summarizer',
+    'tools' => 'Tools',
     'text_to_audio' => 'Text to Audio',
+    'undo' => 'Undo',
+    'word_count' => 'Word count'
 ];

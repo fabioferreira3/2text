@@ -70,7 +70,7 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
                 ]
             ]);
 
-            WebsiteCrawled::dispatchIf($this->document->meta['user_id'] ?? false, $this->document->meta['user_id']);
+            WebsiteCrawled::dispatchIf($this->document->getMeta('user_id') ?? false, $this->document->getMeta('user_id'));
 
             $this->jobSucceded();
         } catch (BlockedCrawlerException $bce) {

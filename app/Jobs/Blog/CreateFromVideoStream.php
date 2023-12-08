@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
 class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
 {
@@ -19,6 +20,7 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
 
     public Document $document;
     public array $params;
+    public string $processId;
 
     /**
      * Create a new job instance.
@@ -28,6 +30,7 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
     public function __construct(Document $document, array $params)
     {
         $this->document = $document;
+        $this->processId = $params['process_id'] ?? Str::uuid();
         $this->params = $params;
     }
 
@@ -38,24 +41,31 @@ class CreateFromVideoStream implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        $repo = new DocumentRepository($this->document);
-        $repo->createTask(
-            DocumentTaskEnum::DOWNLOAD_AUDIO,
-            [
-                'process_id' => $this->params['process_id'],
-                'meta' => [
-                    'source_url' => $this->document->meta['source_url']
-                ],
-                'order' => 1
-            ]
-        );
-        $repo->createTask(DocumentTaskEnum::PROCESS_AUDIO, [
-            'process_id' => $this->params['process_id'],
-            'order' => 2
-        ]);
+        $queryEmbedding = true;
+        $nextOrder = 2;
+
+        foreach ($this->document->getMeta('source_urls') as $key => $sourceUrl) {
+            DocumentRepository::createTask(
+                $this->document->id,
+                DocumentTaskEnum::EXTRACT_AND_EMBED_AUDIO,
+                [
+                    'process_id' => $this->processId,
+                    'meta' => [
+                        'source_url' => $sourceUrl,
+                        'collection_name' => $this->document->id
+                    ],
+                    'order' => $nextOrder
+                ]
+            );
+            $nextOrder += 1;
+        }
+
         RegisterCreationTasks::dispatchSync($this->document, [
             ...$this->params,
-            'next_order' => 3
+            'next_order' => $nextOrder,
+            'process_id' => $this->processId,
+            'query_embedding' => $queryEmbedding,
+            'collection_name' => $this->document->id
         ]);
 
         DispatchDocumentTasks::dispatch($this->document);

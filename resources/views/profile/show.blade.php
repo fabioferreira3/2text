@@ -19,6 +19,9 @@
             @livewire('profile.languages')
 
             <x-jet-section-border />
+            @livewire('profile.timezone')
+
+            <x-jet-section-border />
             @livewire('profile.update-profile-information-form')
 
             <x-jet-section-border />

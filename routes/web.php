@@ -1,21 +1,36 @@
 <?php
 
+use App\Enums\AIModel;
 use App\Http\Controllers\DocumentViewController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Blog\BlogPost;
 use App\Http\Livewire\Blog\NewPost;
+use App\Http\Livewire\Blog\ProcessingBlogPost;
 use App\Http\Livewire\Paraphraser\NewParaphraser;
 use App\Http\Livewire\Paraphraser\Paraphraser;
 use App\Http\Livewire\SocialMediaPost\NewSocialMediaPost;
-use App\Http\Livewire\SocialMediaPost\PostsList;
+use App\Http\Livewire\SocialMediaPost\SocialMediaPostsManager;
 use App\Http\Livewire\Templates;
-use App\Http\Livewire\TextToSpeech\TextToAudio;
-use App\Http\Livewire\TextTranscription\NewTranscription;
-use App\Http\Livewire\TextTranscription\TextTranscription;
+use App\Http\Livewire\TextToAudio\AudioHistory;
+use App\Http\Livewire\TextToAudio\TextToAudio;
+use App\Http\Livewire\AudioTranscription\NewTranscription;
+use App\Http\Livewire\AudioTranscription\AudioTranscription;
+use App\Http\Livewire\AudioTranscription\Dashboard as AudioTranscriptionDashboard;
+use App\Http\Livewire\Blog\Dashboard as BlogDashboard;
+use App\Http\Livewire\InquiryHub\Dashboard as InquiryHubDashboard;
+use App\Http\Livewire\InquiryHub\InquiryView;
+use App\Http\Livewire\Paraphraser\Dashboard as ParaphraserDashboard;
+use App\Http\Livewire\SocialMediaPost\Dashboard as SocialMediaPostDashboard;
+use App\Http\Livewire\Summarizer\Dashboard as SummarizerDashboard;
+use App\Http\Livewire\Summarizer\NewSummarizer;
+use App\Http\Livewire\Summarizer\SummaryView;
 use App\Http\Livewire\Trash;
+use App\Models\ShortLink;
+use App\Models\Voice as ModelsVoice;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
+use Talendor\ElevenLabsClient\Voice\Voice;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,32 +51,55 @@ Route::middleware([
     'maintenance'
 ])->group(function () {
     Route::get('/', function () {
-        return redirect('/templates');
+        return redirect('/tools');
     });
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/dashboard/trash', Trash::class)->name('trash');
-    Route::get('/templates', Templates::class)->name('templates');
+    Route::get('/tools', Templates::class)->name('tools');
 
     /* Blog routes */
+    Route::get('/blog', BlogDashboard::class)->name('blog-dashboard');
     Route::get('/blog/new', NewPost::class)->name('new-post');
+    Route::get('/documents/blog-post/{document}/processing', ProcessingBlogPost::class)
+        ->name('blog-post-processing-view');
     Route::get('/documents/blog-post/{document}', BlogPost::class)->name('blog-post-view');
 
-    /* Text Transcription routes */
-    Route::get('/transcription/new', NewTranscription::class)->name('new-text-transcription');
-    Route::get('/documents/transcription/{document}', TextTranscription::class)->name('transcription-view');
+    /* Audio Transcription routes */
+    Route::get('/transcription', AudioTranscriptionDashboard::class)->name('transcription-dashboard');
+    Route::get('/transcription/new', NewTranscription::class)->name('new-audio-transcription');
+    Route::get('/documents/transcription/{document}', AudioTranscription::class)->name('transcription-view');
 
     /* Social media posts routes */
+    Route::get('/social-media-post', SocialMediaPostDashboard::class)->name('social-media-dashboard');
     Route::get('/social-media-post/new', NewSocialMediaPost::class)->name('new-social-media-post');
-    Route::get('/documents/social-media-post/{document}', PostsList::class)->name('social-media-post-view');
+    Route::get('/documents/social-media/{document}', SocialMediaPostsManager::class)->name('social-media-view');
 
     /* Paraphraser routes */
+    Route::get('/paraphraser', ParaphraserDashboard::class)->name('paraphraser-dashboard');
     Route::get('/paraphraser/new', NewParaphraser::class)->name('new-paraphraser');
     Route::get('/documents/paraphraser/{document}', Paraphraser::class)->name('paraphrase-view');
 
     /* Text to Speech routes */
-    Route::get('/text-to-speech/new', TextToAudio::class)->name('new-text-to-speech');
-    Route::get('/documents/text-to-speech/{document}', TextToAudio::class)->name('text-to-speech-view');
+    Route::get('/text-to-audio/new', TextToAudio::class)->name('new-text-to-audio');
+    Route::get('/text-to-audio/history', AudioHistory::class)->name('text-to-audio-history');
+    Route::get('/documents/text-to-audio/{document}', TextToAudio::class)->name('text-to-audio-view');
 
+    /* Inquiry Hub */
+    Route::get('/inquiry-hub', InquiryHubDashboard::class)->name('inquiry-dashboard');
+    Route::get('/documents/inquiry-hub/{document}', InquiryView::class)->name('inquiry-view');
+
+    /* Summarizer */
+    Route::get('/summarizer', SummarizerDashboard::class)->name('summarizer-dashboard');
+    Route::get('/summarizer/new', NewSummarizer::class)->name('new-summarizer');
+    Route::get('/documents/summarizer/{document}', SummaryView::class)->name('summary-view');
+
+    /* Short links */
+    Route::get('/link/{shortLink}', function (string $shortLink) {
+        $shortLink = ShortLink::valid()->where('link', $shortLink)->firstOrFail();
+        return redirect($shortLink->target_url);
+    })->name('short-link');
+
+    /* Document routes */
     Route::get('/documents/{document}', [DocumentViewController::class, 'index'])->name('document-view');
 });
 
@@ -71,7 +109,27 @@ Route::get('/google/auth/redirect', function () {
     return Socialite::driver('google')->redirect();
 })->name('login.google');
 
-Route::get('/google/auth/callback', [GoogleAuthController::class, 'handleProviderCallback'])->name('login.google.callback');
+Route::get('/google/auth/callback', [GoogleAuthController::class, 'handleProviderCallback'])
+    ->name('login.google.callback');
 
 /* Stripe Webhook */
-Route::post('/stripe/payment', [GoogleAuthController::class, 'handleProviderCallback'])->name('payment.webhook');
+Route::post('/stripe/payment', [GoogleAuthController::class, 'handleProviderCallback'])
+    ->name('payment.webhook');
+
+Route::get('/voices', function () {
+    // $faker = app(Faker\Generator::class);
+    // $client = app(Voice::class);
+    // $voices = $client->getAll();
+    // return $voices;
+    // foreach ($voices as $voice) {
+    //     ModelsVoice::create([
+    //         'external_id' => $voice['voice_id'],
+    //         'name' => $faker->firstName($voice['labels']['gender'] ?? 'male'),
+    //         'provider' => 'ElevenLabs',
+    //         'model' => AIModel::ELEVEN_LABS->value,
+    //         'preview_url' => $voice['preview_url'],
+    //         'meta' => [...$voice['labels']]
+    //     ]);
+    // }
+    //return true;
+});

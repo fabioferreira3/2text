@@ -3,10 +3,13 @@
 namespace App\Jobs\Blog;
 
 use App\Helpers\DocumentHelper;
-use App\Helpers\PromptHelper;
+use App\Helpers\PromptHelperFactory;
+use App\Interfaces\ChatGPTFactoryInterface;
+use App\Interfaces\OraculumFactoryInterface;
+use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
-use App\Packages\ChatGPT\ChatGPT;
+use App\Models\User;
 use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -20,22 +23,28 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected Document $document;
-    protected array $meta;
-    protected PromptHelper $promptHelper;
-    protected DocumentRepository $repo;
+    public Document $document;
+    public array $meta;
+    public $promptHelper;
+    public DocumentRepository $repo;
+    public OraculumFactoryInterface $oraculumFactory;
+    public ChatGPTFactoryInterface $chatGptFactory;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Document $document, array $meta = [])
-    {
+    public function __construct(
+        Document $document,
+        array $meta = []
+    ) {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->promptHelper = new PromptHelper($document->language->value);
+        $this->promptHelper = PromptHelperFactory::create($document->language->value);
         $this->repo = new DocumentRepository($this->document);
+        $this->oraculumFactory = app(OraculumFactoryInterface::class);
+        $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
     }
 
     /**
@@ -46,34 +55,57 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $chatGpt = new ChatGPT();
-            $response = $chatGpt->request([
-                [
-                    'role' => 'user',
-                    'content' =>   $this->promptHelper->writeOutline(
-                        $this->document->context,
-                        [
-                            'tone' => $this->document->meta['tone'],
-                            'keyword' => $this->document->meta['keyword'],
-                            'style' => $this->document->meta['style'] ?? null,
-                            'maxsubtopics' => $this->document->meta['target_headers_count'] ?? 2
-                        ]
-                    )
-                ]
-            ]);
+            if ($this->meta['query_embedding'] ?? false) {
+                $response = $this->queryEmbedding();
+            } else {
+                $response = $this->queryGpt();
+            }
+
             $this->repo->updateMeta('outline', $response['content']);
             $this->repo->updateMeta('raw_structure', DocumentHelper::parseOutlineToRawStructure($response['content']));
-            $this->repo->addHistory(
-                [
-                    'field' => 'outline',
-                    'content' => $response['content']
-                ],
-                $response['token_usage']
-            );
+
+            RegisterProductUsage::dispatch($this->document->account, [
+                ...$response['token_usage'],
+                'meta' => ['document_id' => $this->document->id]
+            ]);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to generate outline: ' . $e->getMessage());
         }
+    }
+
+    protected function queryEmbedding()
+    {
+        $user = User::findOrFail($this->document->getMeta('user_id'));
+        $oraculum = $this->oraculumFactory->make($user, $this->meta['collection_name']);
+        return $oraculum->query($this->promptHelper->writeEmbeddedOutline(
+            [
+                'tone' => $this->document->getMeta('tone'),
+                'keyword' => $this->document->getMeta('keyword'),
+                'style' => $this->document->getMeta('style') ?? null,
+                'maxsubtopics' => $this->document->getMeta('target_headers_count') ?? 2,
+                'context' => $this->document->getMeta('context')
+            ]
+        ));
+    }
+
+    protected function queryGpt()
+    {
+        $chatGpt = $this->chatGptFactory->make();
+        return $chatGpt->request([
+            [
+                'role' => 'user',
+                'content' =>   $this->promptHelper->writeOutline(
+                    $this->document->getContext(),
+                    [
+                        'tone' => $this->document->getMeta('tone'),
+                        'keyword' => $this->document->getMeta('keyword'),
+                        'style' => $this->document->getMeta('style') ?? null,
+                        'maxsubtopics' => $this->document->getMeta('target_headers_count') ?? 2
+                    ]
+                )
+            ]
+        ]);
     }
 
     /**

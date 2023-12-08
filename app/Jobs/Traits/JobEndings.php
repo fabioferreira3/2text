@@ -2,32 +2,64 @@
 
 namespace App\Jobs\Traits;
 
-use App\Events\DocumentTaskAborted;
-use App\Events\DocumentTaskFailed;
 use App\Events\DocumentTaskFinished;
-use App\Jobs\SkipDocumentTask;
+use App\Models\DocumentTask;
+use App\Repositories\DocumentRepository;
 use Exception;
 
 trait JobEndings
 {
-    protected function jobSucceded()
+    protected function jobSucceded($skipFinishedEvent = false)
     {
         if (isset($this->meta['task_id'])) {
-            DocumentTaskFinished::dispatch($this->meta['task_id']);
+            $task = DocumentTask::findOrFail($this->meta['task_id']);
+            $task->update(['status' => 'finished']);
+            if ($this->document && !$skipFinishedEvent) {
+                $repo = new DocumentRepository($this->document);
+                $completedTasksCount = $repo->increaseCompletedTasksCount();
+                event(new DocumentTaskFinished($this->meta['task_id'], $completedTasksCount));
+            }
+        }
+    }
+
+    protected function jobPending()
+    {
+        if (isset($this->meta['task_id'])) {
+            $task = DocumentTask::findOrFail($this->meta['task_id']);
+            $task->update(['status' => 'pending']);
         }
     }
 
     protected function jobSkipped()
     {
         if (isset($this->meta['task_id'])) {
-            SkipDocumentTask::dispatch($this->meta['task_id']);
+            $task = DocumentTask::findOrFail($this->meta['task_id']);
+            $task->update(['status' => 'skipped']);
         }
+    }
+
+    protected function jobFailedButSkipped($errorMsg = '')
+    {
+        if (isset($this->meta['task_id'])) {
+            $task = DocumentTask::findOrFail($this->meta['task_id']);
+            $task->update(['status' => 'skipped']);
+        }
+
+        //throw new Exception($errorMsg);
     }
 
     protected function jobFailed($errorMsg = '')
     {
         if (isset($this->meta['task_id'])) {
-            DocumentTaskFailed::dispatch($this->meta['task_id']);
+            $task = DocumentTask::findOrFail($this->meta['task_id']);
+            $tasksByProcess = DocumentTask::ofProcess($task->process_id)->inProgress()->except([$task->id])->get();
+            $task->update(['status' => 'failed']);
+
+            if (!$tasksByProcess->isEmpty()) {
+                $tasksByProcess->each(function (DocumentTask $taskProcess) {
+                    $taskProcess->update(['status' => 'on_hold']);
+                });
+            }
         }
 
         throw new Exception($errorMsg);
@@ -36,7 +68,15 @@ trait JobEndings
     protected function jobAborted($errorMsg = '')
     {
         if (isset($this->meta['task_id'])) {
-            DocumentTaskAborted::dispatch($this->meta['task_id']);
+            $task = DocumentTask::findOrFail($this->meta['task_id']);
+            $tasksByProcess = DocumentTask::ofProcess($task->process_id)->inProgress()->except([$task->id])->get();
+            $task->update(['status' => 'aborted']);
+
+            if (!$tasksByProcess->isEmpty()) {
+                $tasksByProcess->each(function (DocumentTask $taskProcess) {
+                    $taskProcess->update(['status' => 'aborted']);
+                });
+            }
         }
 
         throw new Exception($errorMsg);

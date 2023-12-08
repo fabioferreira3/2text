@@ -6,6 +6,7 @@ use App\Events\ProcessFinished;
 use App\Jobs\Contact\NotifyFinished;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
+use App\Models\DocumentTask;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -18,6 +19,7 @@ class RegisterFinishedProcess implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
     protected Document $document;
+    protected DocumentTask $documentTask;
     protected array $meta;
 
     /**
@@ -28,6 +30,7 @@ class RegisterFinishedProcess implements ShouldQueue
     public function __construct(Document $document, array $meta = [])
     {
         $this->document = $document->fresh();
+        $this->documentTask = DocumentTask::ofProcess($meta['process_id'])->first();
         $this->meta = $meta;
     }
     /**
@@ -38,13 +41,9 @@ class RegisterFinishedProcess implements ShouldQueue
     public function handle()
     {
         try {
-            ProcessFinished::dispatch([
-                'document_id' => $this->document->id,
-                'process_id' => $this->meta['process_id'],
-                'user_id' => $this->document->meta['user_id']
-            ]);
+            event(new ProcessFinished($this->meta['process_id']));
             if (!isset($this->meta['silently'])) {
-                NotifyFinished::dispatch($this->document, $this->document->meta['user_id']);
+                NotifyFinished::dispatch($this->document, $this->document->getMeta('user_id'));
             }
             $this->jobSucceded();
         } catch (Exception $e) {

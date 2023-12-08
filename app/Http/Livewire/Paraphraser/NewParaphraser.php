@@ -40,7 +40,7 @@ class NewParaphraser extends Component
 
     public function render()
     {
-        return view('livewire.paraphraser.new');
+        return view('livewire.paraphraser.new')->layout('layouts.app', ['title' => __('paraphraser.paraphraser')]);;
     }
 
     public function ready()
@@ -50,8 +50,7 @@ class NewParaphraser extends Component
 
     public function start()
     {
-        $repo = new DocumentRepository();
-        $document = $repo->createGeneric([
+        $document = DocumentRepository::createGeneric([
             'type' => DocumentType::PARAPHRASED_TEXT->value,
             'source' => $this->source,
             'language' => $this->language,
@@ -68,7 +67,7 @@ class NewParaphraser extends Component
             $this->validate();
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'info',
-                'message' => "Got it! Working on your request. Please wait..."
+                'message' => __('alerts.working_request')
             ]);
             $this->isProcessing = true;
             $processId = Str::uuid();

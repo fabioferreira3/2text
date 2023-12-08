@@ -35,14 +35,14 @@ class ProcessAudioInternally implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->document->meta['context']) {
+        if ($this->document->getMeta('context')) {
             return;
         }
 
         $fileName = Str::uuid() . '.mp3';
         $processer = $this->defineProcesser();
         $response = Http::timeout(900)
-            ->attach('audio_file', file_get_contents($this->document->meta['audio_file_path']), $fileName)
+            ->attach('audio_file', file_get_contents($this->document->getMeta('audio_file_path')), $fileName)
             ->post($processer);
 
         if ($response->failed()) {

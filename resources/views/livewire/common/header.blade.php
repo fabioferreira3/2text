@@ -1,4 +1,16 @@
-<div class="flex items-center gap-4 text-zinc-700 border-b border-zinc-200 pb-4">
-    <x-icon name="{{$icon}}" class="w-10 h-10 text-secondary" />
-    <h1 class="text-2xl md:text-4xl font-bold">{{$label}}</h1>
+<div class="fixed sticky top-0 flex items-center justify-between bg-white">
+    <div class="w-full">
+        <div class="flex items-center gap-4 text-zinc-700">
+            <x-icon name="{{$icon}}" class="w-14 h-14 text-secondary" />
+            <div class="flex flex-col w-full">
+                @if($editable ?? false) <input class="text-2xl md:text-4xl font-bold border-0 p-0"
+                    wire:model.lazy="title" />
+                @else
+                <h1 class="text-2xl md:text-4xl font-bold">
+                    {{$title}}
+                </h1>@endif
+                @isset($suffix)<h2 class="text-xl md:text-2xl font-bold">{{$suffix ?? ''}}</h2>@endisset
+            </div>
+        </div>
+    </div>
 </div>

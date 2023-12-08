@@ -21,4 +21,15 @@ return [
     'write_outline' => "Crie um esboço de post de blog detalhado e abrangente, com um máximo de dois níveis, usando algarismos romanos para indicar os tópicos principais e letras do alfabeto para indicar os subtópicos. O esboço deve ter apenas :maxsubtopics tópicos. O esboço deve ter um tom :tone. O esboço deve ter um tópico de conclusão no final. Não aninhe um terceiro nível de tópicos. Não adicione tópicos internos dentro dos subtópicos indicados por letras do alfabeto, por exemplo: \n\nBoa saída:\nI. Tópico Principal \n A. Subtópico 1 \n B. Subtópico 2 \n C. Subtópico 3 \n\nSaída ruim:\nI. Tópico Principal \nA. Subtópico 1 \nB. Subtópico 2\n   1. Tópico interno 1\n   2. Tópico interno 2\nC. Subtópico 3\n\n\n O esboço deve ser baseado no seguinte texto: \n\n:context",
     'write_social_media_post' => "Escreva um post para as redes sociais para :platform. Use as seguintes instruções para guiar sua escrita:\n\n",
     'write_title' => "Escreva um título, com um máximo de 7 palavras, para o seguinte texto: \n\n:context\n\n\nExemplos de saídas boas e ruins:\n\nSaída ruim:\nTítulo: Este é o título\n\nBoa saída:\nEste é o título\n\nInstruções adicionais:\n\n- O título deve ter um tom :tone.\n",
+    'write_embedded_title' => "Com base no contexto fornecido, escreva um título com no máximo 7 palavras. Alguns exemplos de resultados bons e ruins:
+
+        Resultado ruim:
+        Título: Este é o título
+
+        Resultado bom:
+        Este é o título
+
+        Instruções adicionais:
+
+        O título deve ter um tom :tone."
 ];

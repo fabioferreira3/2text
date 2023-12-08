@@ -6,9 +6,12 @@ use App\Enums\DocumentTaskEnum;
 use App\Enums\DocumentType;
 use App\Enums\SourceProvider;
 use App\Enums\Tone;
+use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelper;
 use App\Models\Document;
+use App\Models\DocumentContentBlock;
 use App\Models\DocumentTask;
+use App\Models\ProductUsage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -36,22 +39,26 @@ class DocumentRepository
             'type' => DocumentType::BLOG_POST->value,
             'meta' => [
                 'context' => $params['context'] ?? null,
-                'raw_structure' => [],
-                'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,
-                'style' => $params['meta']['style'] ?? null,
-                'source' => $params['source'],
-                'source_url' => $params['meta']['source_url'] ?? null,
-                'target_headers_count' => $params['meta']['target_headers_count'] ?? null,
+                'img_prompt' => $params['meta']['img_prompt'] ?? null,
                 'keyword' => $params['meta']['keyword'] ?? null,
+                'generate_image' => $params['meta']['generate_image'] ?? false,
+                'raw_structure' => [],
+                'style' => $params['meta']['style'] ?? null,
+                'source_file_path' => $params['meta']['source_file_path'] ?? null,
+                'source' => $params['source'],
+                'source_urls' => $params['meta']['source_urls'] ?? [],
+                'target_headers_count' => $params['meta']['target_headers_count'] ?? null,
+                'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,
                 'user_id' => Auth::check() ? Auth::id() : null,
             ]
         ]);
     }
 
-    public function createSocialMediaPost(array $params): Document
+    public function createSocialMediaDoc(array $params, DocumentType $type): Document
     {
         return Document::create([
-            ...$params,
+            'type' => $type->value,
+            'language' => $params['language'],
             'meta' => [
                 'context' => $params['context'] ?? null,
                 'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,
@@ -59,55 +66,38 @@ class DocumentRepository
                 'source' => $params['source'],
                 'source_url' => $params['meta']['source_url'] ?? null,
                 'keyword' => $params['meta']['keyword'] ?? null,
-                'platforms' => $params['meta']['platforms'],
                 'more_instructions' => $params['meta']['more_instructions'] ?? null,
                 'user_id' => Auth::check() ? Auth::id() : null,
             ]
         ]);
     }
 
-    public function createTextToSpeech(array $params): Document
+    public static function createTextToAudio(array $params = []): Document
     {
         return Document::create([
             ...$params,
             'title' => '',
+            'language' => 'en',
             'type' => DocumentType::TEXT_TO_SPEECH->value,
-            'content' => $params['text'],
-            'language' => $params['language'],
+            'content' => $params['input_text'] ?? '',
             'meta' => [
                 'source' => SourceProvider::FREE_TEXT->value,
-                'voice' => $params['voice'],
+                'voice_id' => $params['voice_id'],
                 'user_id' => Auth::check() ? Auth::id() : null,
             ]
         ]);
     }
 
-    public function createGeneric(array $params): Document
+    public static function createGeneric(array $params): Document
     {
         return Document::create([
             ...$params,
             'meta' => [
                 ...$params['meta'] ?? [],
                 'context' => $params['context'] ?? null,
-                'source' => $params['source'],
+                'source' => $params['source'] ?? null,
                 'user_id' => Auth::check() ? Auth::id() : null,
             ]
-        ]);
-    }
-
-    public function addHistory(array $payload, array $tokenUsage = [])
-    {
-        $content = is_array($payload['content']) ? json_encode($payload['content']) : $payload['content'];
-        $this->document->history()->create([
-            'description' => $payload['field'],
-            'content' => $content,
-            'word_count' => $payload['word_count'] ?? Str::wordCount($content),
-            'char_count' => $payload['char_count'] ?? Str::wordCount($content),
-            'prompt_token_usage' => $tokenUsage['prompt'] ?? 0,
-            'completion_token_usage' => $tokenUsage['completion'] ?? 0,
-            'total_token_usage' => $tokenUsage['total'] ?? 0,
-            'audio_length' => $tokenUsage['length'] ?? 0,
-            'model' => $tokenUsage['model'] ?? ''
         ]);
     }
 
@@ -118,6 +108,12 @@ class DocumentRepository
         $meta[$attribute] = $value;
 
         return $this->document->update(['meta' => $meta]);
+    }
+
+    public static function updateTask(string $taskId, $status)
+    {
+        $documentTask = DocumentTask::findOrFail($taskId);
+        return $documentTask->update(['status' => $status]);
     }
 
     public function delete($documentId)
@@ -132,25 +128,78 @@ class DocumentRepository
         return $document->restore();
     }
 
-    public function publishText()
+    public function publishContentBlocks()
     {
         $content = str_replace(["\r", "\n"], '', $this->document->normalized_structure);
+        $blocks = DocumentHelper::parseHtmlToArray($content);
+        if (count($blocks)) {
+            foreach ($blocks as $key => $block) {
+                $this->document->contentBlocks()->create([
+                    'type' => $block['tag'],
+                    'content' => $block['content'],
+                    'order' => $key + 1,
+                    'meta' => []
+                ]);
+            }
+        }
         $this->document->update([
-            'content' => $content,
             'word_count' => Str::wordCount($content)
         ]);
     }
 
-    public function createTask(DocumentTaskEnum $task, array $params)
+    public function increaseCompletedTasksCount()
+    {
+        $this->document->refresh();
+        $completedTasksCount = $this->document->getMeta('completed_tasks_count') ?? 0;
+        $completedTasksCount += 1;
+        $meta = $this->document->meta;
+        $meta['completed_tasks_count'] = $completedTasksCount;
+        $this->document->update(['meta' => $meta]);
+
+        return $completedTasksCount;
+    }
+
+    public static function createTask(string $documentId, DocumentTaskEnum $task, array $params)
     {
         DocumentTask::create([
             'name' => $task->value,
-            'document_id' => $this->document->id,
+            'document_id' => $documentId,
+            'process_group_id' => $params['process_group_id'] ?? null,
             'process_id' => $params['process_id'] ?? Str::uuid(),
             'job' => $task->getJob(),
             'status' => $params['status'] ?? 'ready',
             'meta' => $params['meta'] ?? [],
             'order' => $params['order'] ?? 1,
         ]);
+    }
+
+    public static function getContentBlock(string $documentContentBlockId)
+    {
+        return DocumentContentBlock::findOrFail($documentContentBlockId);
+    }
+
+    public static function updateContentBlock(string $documentContentBlockId, array $params)
+    {
+        $contentBlock = self::getContentBlock($documentContentBlockId);
+        $contentBlock->update($params);
+    }
+
+    public static function clearContentBlocks(Document $document)
+    {
+        return $document->contentBlocks()->delete();
+    }
+
+    public static function getProductUsage(Document $document)
+    {
+        return ProductUsage::where('account_id', $document->account_id)
+            ->where('meta->document_id', $document->id)->get();
+    }
+
+    public static function getProductUsageCosts(Document $document)
+    {
+        $productUsage = self::getProductUsage($document);
+        return $productUsage->reduce(function ($carry, $usage) {
+            return $carry + $usage->cost;
+        }, 0);
     }
 }

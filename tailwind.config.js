@@ -34,6 +34,15 @@ module.exports = {
                 main: "#080B53",
                 secondary: "#EA1F88",
             },
+            fontSize: {
+                xxs: ".40rem",
+            },
+            maxHeight: {
+                '128': '32rem',
+            },
+            zIndex: {
+                '100': '100',
+            }
         },
         fontFamily: {
             sans: ["Avenir Regular", ...defaultTheme.fontFamily.sans],
@@ -42,10 +51,7 @@ module.exports = {
         },
     },
 
-    plugins: [
-        require("@tailwindcss/forms"),
-        require("@tailwindcss/typography"),
-    ],
+    plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography")],
 
     presets: [presets],
 };

@@ -4,9 +4,11 @@ namespace App\Jobs\Paraphraser;
 
 use App\Events\Paraphraser\TextParaphrased;
 use App\Helpers\PromptHelper;
+use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
-use App\Packages\ChatGPT\ChatGPT;
+use App\Models\DocumentContentBlock;
+use App\Packages\OpenAI\ChatGPT;
 use App\Repositories\DocumentRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,7 +24,6 @@ class ParaphraseText implements ShouldQueue
     protected $document;
     protected $repo;
     protected array $meta;
-    protected array $paraphrasedSentences;
 
     public function __construct(Document $document, array $params)
     {
@@ -34,47 +35,36 @@ class ParaphraseText implements ShouldQueue
     {
         try {
             $this->document = $this->document->fresh();
-            $this->paraphrasedSentences = $this->document->meta['paraphrased_sentences'] ?? [];
             $this->repo = new DocumentRepository($this->document);
-            $index = null;
             $promptHelper = new PromptHelper($this->document->language->value);
             $chatGpt = new ChatGPT();
             $response = $chatGpt->request([
                 [
                     'role' => 'user',
-                    'content' =>   $promptHelper->paraphrase(
+                    'content' => $promptHelper->paraphrase(
                         $this->meta['text'],
-                        $this->meta['tone'] ?? $this->document->meta['tone']
+                        $this->meta['tone']
                     )
                 ]
             ]);
 
-            $paraphrasedSentence = [
-                'sentence_order' => $this->meta['sentence_order'],
-                'text' => $response['content']
-            ];
-
-            foreach ($this->paraphrasedSentences as $key => $item) {
-                if ($item['sentence_order'] === $paraphrasedSentence['sentence_order']) {
-                    $index = $key;
-                    break;
-                }
+            if ($this->meta['add_content_block'] ?? false) {
+                $this->document->contentBlocks()->save(new DocumentContentBlock([
+                    'type' => 'text',
+                    'content' => $response['content'],
+                    'prompt' => null,
+                    'order' => $this->meta['sentence_order']
+                ]));
             }
 
-            if (is_null($index)) {
-                $this->paraphrasedSentences[] = $paraphrasedSentence;
-            } else {
-                $this->paraphrasedSentences[$index] = $paraphrasedSentence;
-            }
-            $this->repo->addHistory(
-                [
-                    'field' => 'paraphrased_text',
-                    'content' => $response['content']
-                ],
-                $response['token_usage']
-            );
-            $this->repo->updateMeta('paraphrased_sentences', $this->paraphrasedSentences);
-            TextParaphrased::dispatch($this->document->meta['user_id']);
+            RegisterProductUsage::dispatch($this->document->account, [
+                ...$response['token_usage'],
+                'meta' => ['document_id' => $this->document->id]
+            ]);
+            TextParaphrased::dispatch($this->document, [
+                'user_id' => $this->document->meta['user_id'],
+                'process_id' => $this->meta['process_id']
+            ]);
 
             $this->jobSucceded();
         } catch (\Exception $e) {

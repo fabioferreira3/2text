@@ -30,14 +30,13 @@ class FinishedProcessEmail extends Mailable
 
         return $this->view('emails.finished-process')
             ->from($address, $name)
-            // ->cc($address, $name)
-            // ->bcc($address, $name)
             ->replyTo($address, $name)
             ->subject($subject)
             ->with([
                 'name' => $this->data['name'],
                 'link' => $this->data['link'],
                 'jobName' => $this->data['jobName'],
+                'content' => $this->data['content'] ?? null
             ]);
     }
 }

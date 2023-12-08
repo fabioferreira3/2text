@@ -9,17 +9,20 @@ use App\Enums\SourceProvider;
 use App\Enums\Style;
 use App\Enums\Tone;
 use App\Models\Scopes\SameAccountScope;
+use App\Models\Traits\TimezoneHandler;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class Document extends Model
 {
-    use HasFactory, HasUuids, SoftDeletes;
+    use HasFactory, HasUuids, SoftDeletes, TimezoneHandler;
 
     protected $guarded = ['id'];
     protected $casts = [
@@ -27,12 +30,7 @@ class Document extends Model
         'language' => Language::class,
         'meta' => 'array'
     ];
-    protected $appends = ['normalized_structure', 'content', 'context', 'status', 'source', 'tone', 'style'];
-
-    public function history(): HasMany
-    {
-        return $this->hasMany(DocumentHistory::class)->latest();
-    }
+    protected $appends = ['normalized_structure', 'is_finished', 'status', 'source', 'tone', 'style'];
 
     public function tasks(): HasMany
     {
@@ -42,6 +40,81 @@ class Document extends Model
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function chatThread(): HasOne
+    {
+        return $this->hasOne(ChatThread::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Document::class, 'parent_document_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Document::class, 'parent_document_id');
+    }
+
+    public function contentBlocks(): HasMany
+    {
+        return $this->hasMany(DocumentContentBlock::class);
+    }
+
+    public function getRawStructureDescription()
+    {
+        $details = "";
+
+        if (!isset($this->meta['raw_structure'])) {
+            return $details;
+        }
+
+        foreach ($this->meta['raw_structure'] as $topic) {
+            $details .= "Topic: " . $topic['subheader'] . "\n" .
+                "Context: " . $topic['content'] . "\n\n";
+        }
+
+        return $details;
+    }
+
+    public function getMeta($attribute)
+    {
+        return $this->meta[$attribute] ?? $this->parent->meta[$attribute] ?? null;
+    }
+
+    public function getContext()
+    {
+        return $this->getMeta('summary') ?? $this->getMeta('context') ?? null;
+    }
+
+    public function getLatestImages($amount)
+    {
+        return MediaFile::where('meta->document_id', $this->id)->take($amount)->latest()->get();
+    }
+
+    public function getLatestAudios()
+    {
+        return MediaFile::where('meta->document_id', $this->id)->where('type', 'audio')->latest()->get();
+    }
+
+    public function getTextContentBlocksAsText()
+    {
+        return $this->contentBlocks()->ofTextType()->get()->reduce(function ($carry, $block) {
+            return $carry . $block->content;
+        }, '');
+    }
+
+    public function getHtmlContentBlocksAsText()
+    {
+        return $this->contentBlocks->reduce(function ($carry, $block) {
+            return $carry . "<" . $block->type . ">" . $block->content . "</" . $block->type . ">";
+        }, '');
+    }
+
+    public function getContentBlockOfType($type)
+    {
+        return $this->contentBlocks()->where('type', $type)->first();
     }
 
     public function getNormalizedStructureAttribute()
@@ -72,16 +145,9 @@ class Document extends Model
         return null;
     }
 
-    public function getContentAttribute()
+    public function getIsFinishedAttribute()
     {
-        switch ($this->type) {
-            case DocumentType::PARAPHRASED_TEXT:
-                return ($this->meta['paraphrased_sentences'] ?? false) ? collect($this->meta['paraphrased_sentences'])->sortBy('sentence_order')->map(function ($sentence) {
-                    return $sentence['text'];
-                })->implode(' ') : null;
-            default:
-                return $this->attributes['content'];
-        }
+        return $this->status === DocumentStatus::FINISHED;
     }
 
     public function getStatusAttribute()
@@ -96,8 +162,12 @@ class Document extends Model
             return DocumentStatus::FAILED;
         }
 
-        $inProgressCount = $this->tasks->whereIn('status', ['in_progress'])->count();
-        if ($inProgressCount > 0) {
+        $mainTasksinProgressCount = $this->tasks->whereIn('status', ['in_progress', 'pending', 'on_hold'])->count();
+        $childTasksInProgressCount = $this->children->reduce(function ($carry, $child) {
+            return $carry + $child->tasks->whereIn('status', ['in_progress', 'pending', 'on_hold'])->count();
+        }, 0);
+
+        if (($mainTasksinProgressCount + $childTasksInProgressCount) > 0) {
             return DocumentStatus::IN_PROGRESS;
         }
 
@@ -107,7 +177,11 @@ class Document extends Model
             return DocumentStatus::FINISHED;
         }
 
-        return DocumentStatus::ON_HOLD;
+        if ($this->tasks->count()) {
+            return DocumentStatus::ON_HOLD;
+        }
+
+        return DocumentStatus::DRAFT;
     }
 
     public function getSourceAttribute()
@@ -140,9 +214,60 @@ class Document extends Model
         return $style->label();
     }
 
-    public function getContextAttribute()
+    public function flushWordCount()
     {
-        return $this->meta['summary'] ?? $this->meta['context'] ?? null;
+        $wordCount = Str::wordCount($this->getTextContentBlocksAsText());
+        $this->update(['word_count' => $wordCount]);
+    }
+
+    public function getYoutubeVideoId()
+    {
+        if (($this->getMeta('source_url') && $this->type === DocumentType::AUDIO_TRANSCRIPTION) || $this->getMeta('source') === SourceProvider::YOUTUBE->value) {
+            preg_match('/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $this->getMeta('source_url'), $matches);
+            return $matches[1] ?? null;
+        }
+
+        return null;
+    }
+
+    public function scopeOfMediaPosts($query)
+    {
+        return $query->where('type', DocumentType::SOCIAL_MEDIA_POST);
+    }
+
+    public function scopeOfTextToAudio($query)
+    {
+        return $query->where('type', DocumentType::TEXT_TO_SPEECH);
+    }
+
+    public function recalculateWordCount()
+    {
+        $wordCount = 0;
+        if ($this->contentBlocks()->ofTextType()->get()->count()) {
+            $wordCount = $this->contentBlocks()->ofTextType()->get()->reduce(function ($carry, $block) {
+                return $carry + Str::wordCount($block->latest_content);
+            }, 0);
+        }
+
+        $this->update(['word_count' => $wordCount]);
+    }
+
+    public function getCurrentCosts()
+    {
+        return ProductUsage::where('account_id', $this->account_id)
+            ->where('meta->document_id', $this->id)
+            ->get()
+            ->reduce(function ($carry, $usage) {
+                return $usage->cost + $carry;
+            }, 0);
+    }
+
+    public function updateMeta($attribute, $value)
+    {
+        $meta = $this->meta;
+        $meta[$attribute] = $value;
+
+        return $this->update(['meta' => $meta]);
     }
 
     protected static function booted(): void

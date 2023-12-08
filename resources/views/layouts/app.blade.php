@@ -27,33 +27,50 @@
 
 </head>
 
-<body class="font-sans antialiased w-full bg-main">
+<body class="font-sans antialiased bg-main overflow-hidden">
     <x-notifications />
     <x-jet-banner />
     @livewire('common.notifications')
 
-    <main class="flex w-full md:grid md:grid-cols-7 xl:grid-cols-6 min-h-screen">
-        <div class="hidden sm:block md:col-span-2 xl:col-span-1 h-full p-6 bg-main">
+    <main class="flex w-full h-screen">
+        <!-- Sidebar -->
+        <div class="hidden fixed top-0 left-0 w-full md:w-[250px] sm:block h-screen p-6 bg-main overflow-y-hidden">
             @livewire('common.sidebar')
         </div>
-        <!-- Page Content -->
-        <div class="w-full md:col-span-5 xl:col-span-5 h-full px-0 mb-8 pb-6">
-            @livewire('navigation-menu')
-            <div class='h-0.5 sm:px-8'>
-                <div class='h-full bg-secondary rounded-lg'></div>
-            </div>
-            <div class="p-8 md:p-6 md:rounded-l-lg h-full bg-white">
+        <!-- End: Sidebar -->
+
+        <div class="flex flex-col w-full md:ml-[250px] h-screen px-0 overflow-hidden bg-white pb-8">
+            <!-- Header -->
+            <header class="sticky top-0">
+                <div class="z-50">
+                    @livewire('navigation-menu')
+                </div>
+                <div class='h-[1px]'>
+                    <div class='h-full bg-gray-200 rounded-lg'></div>
+                </div>
+                @hasSection('header')
+                <div class="p-6 border-b border-zinc-200">
+                    @yield('header')
+                </div>
+                @endif
+            </header>
+            <!-- End: Header -->
+
+            <div class="flex-1 p-6 overflow-auto bg-white">
                 {{ $slot }}
             </div>
         </div>
 
-        <footer class="w-full fixed bottom-0 left-0 text-start h-8 py-2 px-4 border-t border-zinc-100 bg-main text-xs text-white">experior.ai (beta)</footer>
+        @livewire('chat')
+        @include('components.footer')
     </main>
 
     @livewireScripts
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    @vite(['resources/js/typewriter.js'])
+    @stack('scripts')
     <script>
         const Toast = Swal.mixin({
             toast: true,
@@ -89,43 +106,15 @@
             window.location.reload();
         });
 
-        let currentAudio = null;
-
-        window.addEventListener('play-audio', ({
-            detail: {
-                id
-            }
-        }) => {
-            if (currentAudio) {
-                // Remove existing listener to avoid duplicate event triggers.
-                currentAudio.removeEventListener('ended', audioEndedHandler);
-
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-            }
-
-            currentAudio = document.getElementById(id);
-
-            // Add the 'ended' event listener to the current audio clip.
-            currentAudio.addEventListener('ended', audioEndedHandler);
-
-            currentAudio.play();
-        });
-
-        window.addEventListener('stop-audio', () => {
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-            }
-        });
-
         document.addEventListener('livewire:load', function() {
             window.livewire.on('addToClipboard', function(message) {
                 navigator.clipboard.writeText(message);
             });
         });
 
-        // window.Echo.connector.pusher.connection.bind('connected', function() {});
+        window.livewire.on('openLinkInNewTab', link => {
+            window.open(link, '_blank');
+        });
     </script>
 </body>
 

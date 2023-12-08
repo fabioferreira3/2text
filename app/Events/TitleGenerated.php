@@ -29,7 +29,7 @@ class TitleGenerated implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new PrivateChannel('User.' . $this->document->meta['user_id']);
+        return new PrivateChannel('User.' . $this->document->getMeta('user_id'));
     }
 
     /**

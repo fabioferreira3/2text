@@ -13,7 +13,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Str;
 use Exception;
 
 class ExpandText implements ShouldQueue, ShouldBeUnique
@@ -46,36 +45,35 @@ class ExpandText implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $rawStructure = $this->document->meta['raw_structure'];
-            $normalizedStructure = $this->document->normalized_structure;
-
-            $prompt = $this->promptHelper->givenFollowingText($normalizedStructure);
-
-            if (Str::wordCount($normalizedStructure) <= 1000) {
-                $prompt .= $this->promptHelper->andGivenFollowingContext($this->document->context);
-            }
+            $rawStructure = $this->document->getMeta('raw_structure');
             $order = $this->meta['order'];
             foreach ($rawStructure as $key => $section) {
-                $this->repo->createTask(DocumentTaskEnum::EXPAND_TEXT_SECTION, [
+                DocumentRepository::createTask($this->document->id, DocumentTaskEnum::EXPAND_TEXT_SECTION, [
                     'process_id' => $this->meta['process_id'],
                     'order' => $order,
                     'meta' => [
                         'text_section' => $section['content'],
                         'section_key' => $key,
+                        'keyword' => $this->meta['keyword'],
+                        'query_embedding' => $this->meta['query_embedding'] ?? false,
+                        'collection_name' => $this->meta['collection_name'] ?? '',
                     ]
                 ]);
                 $order++;
             }
-            $this->repo->createTask(DocumentTaskEnum::REGISTER_CONTENT_HISTORY, [
+
+            DocumentRepository::createTask($this->document->id, DocumentTaskEnum::PUBLISH_TEXT_BLOCKS, [
                 'process_id' => $this->meta['process_id'],
                 'order' => $order,
                 'meta' => []
             ]);
-            $this->repo->createTask(DocumentTaskEnum::REGISTER_FINISHED_PROCESS, [
+
+            DocumentRepository::createTask($this->document->id, DocumentTaskEnum::REGISTER_FINISHED_PROCESS, [
                 'order' => 1000,
                 'process_id' => $this->meta['process_id'],
                 'meta' => []
             ]);
+
             DispatchDocumentTasks::dispatch($this->document);
             $this->jobSucceded();
         } catch (Exception $e) {

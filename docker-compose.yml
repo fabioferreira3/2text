@@ -54,12 +54,12 @@ services:
             - "8006:5432"
         environment:
             PGPASSWORD: postgres
-            POSTGRES_DB: postgres
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
+            POSTGRES_MULTIPLE_DATABASES: postgres,postgres_testing
         volumes:
             - "sail-pgsql:/var/lib/postgresql/data"
-            - "./vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql"
+            - "./docker/postgres/create-databases.sql:/docker-entrypoint-initdb.d/10-create-databases.sql"
         networks:
             - twotext
     redis:
@@ -75,6 +75,15 @@ services:
             test: ["CMD", "redis-cli", "ping"]
             retries: 3
             timeout: 5s
+    # chromadb:
+    #     container_name: experior-chromadb
+    #     image: "chromadb/chroma"
+    #     ports:
+    #         - "8000:8000"
+    #     environment:
+    #         ALLOW_RESET: true
+    #     networks:
+    #         - twotext
 networks:
     twotext:
         driver: bridge

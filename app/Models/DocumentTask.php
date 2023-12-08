@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DocumentTask extends Model
 {
@@ -13,14 +14,25 @@ class DocumentTask extends Model
     protected $guarded = ['id'];
     protected $casts = ['meta' => 'array'];
 
-    public function document()
+    public function document(): BelongsTo
     {
         return $this->belongsTo(Document::class);
+    }
+
+    public function siblings()
+    {
+        return DocumentTask::ofProcessGroup($this->process_group_id)
+            ->where('id', '!=', $this->id);
     }
 
     public function scopeOfProcess($query, $processId)
     {
         return $query->where('process_id', $processId);
+    }
+
+    public function scopeOfProcessGroup($query, $processGroupId)
+    {
+        return $query->where('process_group_id', $processGroupId);
     }
 
     public function scopePriorityFirst($query)
@@ -46,6 +58,15 @@ class DocumentTask extends Model
     public function scopeFailed($query)
     {
         return $query->where('status', 'failed');
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->whereIn('status', [
+            'finished',
+            'skipped',
+            'aborted'
+        ]);
     }
 
     public function scopeExcept($query, $taskIds)

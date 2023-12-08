@@ -180,7 +180,7 @@ return [
     */
 
     'defaults' => [
-        'supervisor-1' => [
+        'default' => [
             'connection' => 'redis',
             'queue' => ['default'],
             'balance' => 'auto',
@@ -192,14 +192,56 @@ return [
             'timeout' => 900,
             'nice' => 0,
         ],
+        'image-generation' => [
+            'connection' => 'redis',
+            'queue' => ['image_generation'],
+            'balance' => 'auto',
+            'autoScalingStrategy' => 'time',
+        ],
+        'voice-generation' => [
+            'connection' => 'redis',
+            'queue' => ['voice_generation'],
+            'balance' => 'auto',
+            'autoScalingStrategy' => 'time',
+        ],
     ],
 
     'environments' => [
         'production' => [
-            'supervisor-1' => [
+            'default' => [
                 'balance' => 'auto',
                 'autoScalingStrategy' => 'time',
-                'maxProcesses' => 10,
+                'maxProcesses' => 20,
+                'balanceMaxShift' => 1,
+                'balanceCooldown' => 3,
+                'tries' => 3,
+            ],
+            'image-generation' => [
+                'connection' => 'redis',
+                'queue' => ['image_generation'],
+                'maxTime' => 0,
+                'maxJobs' => 0,
+                'memory' => 128,
+                'timeout' => 900,
+                'nice' => 0,
+                'balance' => 'auto',
+                'autoScalingStrategy' => 'time',
+                'maxProcesses' => 20,
+                'balanceMaxShift' => 1,
+                'balanceCooldown' => 3,
+                'tries' => 3,
+            ],
+            'voice-generation' => [
+                'connection' => 'redis',
+                'queue' => ['voice_generation'],
+                'maxTime' => 0,
+                'maxJobs' => 0,
+                'memory' => 128,
+                'timeout' => 900,
+                'nice' => 0,
+                'balance' => 'auto',
+                'autoScalingStrategy' => 'time',
+                'maxProcesses' => 20,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
                 'tries' => 3,
@@ -207,8 +249,20 @@ return [
         ],
 
         'local' => [
-            'supervisor-1' => [
+            'default' => [
                 'maxProcesses' => 3,
+                'timeout' => 900,
+                'memory' => 512,
+                'tries' => 3,
+            ],
+            'image-generation' => [
+                'maxProcesses' => 3,
+                'timeout' => 900,
+                'memory' => 512,
+                'tries' => 3,
+            ],
+            'voice-generation' => [
+                'maxProcesses' => 1,
                 'timeout' => 900,
                 'memory' => 512,
                 'tries' => 3,

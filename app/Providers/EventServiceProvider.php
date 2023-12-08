@@ -2,17 +2,10 @@
 
 namespace App\Providers;
 
-use App\Events\DocumentTaskAborted;
-use App\Events\DocumentTaskFailed;
 use App\Events\DocumentTaskFinished;
 use App\Events\UserCreated;
-use App\Listeners\HandleAbortedDocumentTask;
-use App\Listeners\HandleFailedDocumentTask;
-use App\Listeners\HandleFinishedDocumentTask;
-use App\Listeners\HandleFinishedProcess;
+use App\Listeners\HandleDocumentTasksCompletedUpdate;
 use App\Listeners\HandleNewUserNotification;
-use App\Models\DocumentHistory;
-use App\Observers\DocumentHistoryObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -26,18 +19,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
+        DocumentTaskFinished::class => [
+            HandleDocumentTasksCompletedUpdate::class
+        ],
         Registered::class => [
             SendEmailVerificationNotification::class,
-        ],
-        DocumentTaskFinished::class => [
-            HandleFinishedDocumentTask::class,
-            HandleFinishedProcess::class
-        ],
-        DocumentTaskFailed::class => [
-            HandleFailedDocumentTask::class
-        ],
-        DocumentTaskAborted::class => [
-            HandleAbortedDocumentTask::class
         ],
         UserCreated::class => [
             HandleNewUserNotification::class
@@ -57,7 +43,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        DocumentHistory::observe(DocumentHistoryObserver::class);
     }
 
     /**

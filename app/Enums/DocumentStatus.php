@@ -5,6 +5,7 @@ namespace App\Enums;
 enum DocumentStatus: string
 {
     case ABORTED = 'aborted';
+    case DRAFT = 'draft';
     case FAILED = 'failed';
     case FINISHED = 'finished';
     case IN_PROGRESS = 'in_progress';
@@ -14,6 +15,7 @@ enum DocumentStatus: string
     {
         return match ($this) {
             self::ABORTED => __('common.document.aborted'),
+            self::DRAFT => __('common.document.draft'),
             self::FAILED => __('common.document.failed'),
             self::FINISHED => __('common.document.finished'),
             self::IN_PROGRESS => __('common.document.in_progress'),

@@ -14,7 +14,7 @@ class CreateDocument extends Component
 
     public function templates()
     {
-        return redirect()->to('/templates');
+        return redirect()->to('/tools');
     }
 
     public function render()

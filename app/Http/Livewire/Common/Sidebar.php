@@ -18,7 +18,7 @@ class Sidebar extends Component
             case 'dashboard':
                 return redirect()->route('dashboard');
             case 'templates':
-                return redirect()->route('templates');
+                return redirect()->route('tools');
         }
     }
 
