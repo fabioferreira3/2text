@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\AIModel;
 use App\Http\Controllers\DocumentViewController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Livewire\Dashboard;
@@ -115,19 +116,20 @@ Route::get('/google/auth/callback', [GoogleAuthController::class, 'handleProvide
 Route::post('/stripe/payment', [GoogleAuthController::class, 'handleProviderCallback'])
     ->name('payment.webhook');
 
-// Route::post('voices', function () {
-//     $faker = app(Faker\Generator::class);
-//     $client = app(Voice::class);
-//     $voices = $client->getAll();
-//     foreach ($voices as $voice) {
-//         ModelsVoice::create([
-//             'external_id' => $voice['voice_id'],
-//             'name' => $faker->firstName($voice['labels']['gender'] ?? 'male'),
-//             'provider' => 'ElevenLabs',
-//             'model' => AIModel::ELEVEN_LABS->value,
-//             'preview_url' => $voice['preview_url'],
-//             'meta' => [...$voice['labels']]
-//         ]);
-//     }
-//     return true;
-// });
+Route::get('/voices', function () {
+    // $faker = app(Faker\Generator::class);
+    // $client = app(Voice::class);
+    // $voices = $client->getAll();
+    // return $voices;
+    // foreach ($voices as $voice) {
+    //     ModelsVoice::create([
+    //         'external_id' => $voice['voice_id'],
+    //         'name' => $faker->firstName($voice['labels']['gender'] ?? 'male'),
+    //         'provider' => 'ElevenLabs',
+    //         'model' => AIModel::ELEVEN_LABS->value,
+    //         'preview_url' => $voice['preview_url'],
+    //         'meta' => [...$voice['labels']]
+    //     ]);
+    // }
+    //return true;
+});
