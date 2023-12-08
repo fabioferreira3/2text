@@ -16,7 +16,6 @@ class MaintenanceMode
      */
     public function handle(Request $request, Closure $next)
     {
-        abort(503);
         return $next($request);
     }
 }
