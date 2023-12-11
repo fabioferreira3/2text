@@ -6,6 +6,7 @@ use App\Jobs\SummarizeContent;
 use App\Jobs\Translation\TranslateTextBlock;
 use App\Models\Document;
 use App\Models\DocumentTask;
+use App\Models\User;
 use Illuminate\Support\Facades\Bus;
 
 beforeEach(function () {
@@ -14,8 +15,10 @@ beforeEach(function () {
 
 function createDocument($queryEmbedding, $maxWordsCount, $targetLanguage)
 {
+    $user = User::factory()->create();
     return Document::factory()->create([
         'meta' => [
+            'user_id' => $user->id,
             'query_embedding' => $queryEmbedding,
             'max_words_count' => $maxWordsCount,
             'target_language' => $targetLanguage
@@ -57,7 +60,7 @@ describe('Summarize Content job', function () {
             'content' => 'Content to be summarized',
             'query_embedding' => false,
             'max_words_count' => 250
-        ], $this->generator);
+        ]);
         $job->handle();
 
         $contentBlock = $document->fresh()->contentBlocks()->first();
@@ -81,7 +84,7 @@ describe('Summarize Content job', function () {
             'query_embedding' => true,
             'collection_name' => $document->id,
             'max_words_count' => 250
-        ], $this->generator);
+        ]);
         $job->handle();
 
         $chatGptResponse = $this->aiModelResponseResponse;
@@ -97,14 +100,13 @@ describe('Summarize Content job', function () {
             'query_embedding' => true,
             'collection_name' => $document->id,
             'max_words_count' => 250
-        ], $this->generator);
+        ]);
         $job->handle();
 
         Bus::assertNotDispatchedSync(TranslateTextBlock::class);
     });
 
     it('finishes the task', function () {
-
         $document = createDocument(false, 250, null);
         $task = DocumentTask::factory()->create([
             'document_id' => $document->id
@@ -117,10 +119,9 @@ describe('Summarize Content job', function () {
             'query_embedding' => true,
             'collection_name' => $document->id,
             'max_words_count' => 250
-        ], $this->generator);
+        ]);
         $job->handle();
 
-        $task->refresh();
-        expect($task->status)->toEqual('finished');
+        expect($task->fresh()->status)->toEqual('finished');
     });
 });

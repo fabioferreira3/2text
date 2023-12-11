@@ -24,7 +24,6 @@ describe('Audio Transcription - TranscribeAudioWithDiarization job', function ()
         $job = new TranscribeAudioWithDiarization($this->document, [
             'task_id' => $task->id
         ]);
-        $job->mediaRepo = $this->mediaRepo;
         $job->handle();
 
         expect($task->fresh()->status)->toBe('pending');

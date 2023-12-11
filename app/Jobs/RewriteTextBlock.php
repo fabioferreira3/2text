@@ -19,9 +19,10 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected $document;
-    protected $contentBlock;
-    protected array $meta;
+    public $document;
+    public $contentBlock;
+    public array $meta;
+    public $genRepo;
 
     /**
      * Create a new job instance.
@@ -33,6 +34,7 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
         $this->document = $document->fresh();
         $this->contentBlock = DocumentContentBlock::findOrFail($meta['document_content_block_id']);
         $this->meta = $meta;
+        $this->genRepo = app(GenRepository::class);
     }
 
     /**
@@ -43,7 +45,7 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            GenRepository::rewriteTextBlock($this->contentBlock, $this->meta);
+            $this->genRepo->rewriteTextBlock($this->contentBlock, $this->meta);
             event(new ContentBlockUpdated($this->contentBlock, $this->meta['process_id']));
             $this->jobSucceded();
         } catch (Exception $e) {

@@ -24,6 +24,7 @@ class PostProcessAudio implements ShouldQueue, ShouldBeUnique
 
     protected Document $document;
     public array $meta;
+    public $mediaRepo;
 
     /**
      * Create a new job instance.
@@ -34,6 +35,7 @@ class PostProcessAudio implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
+        $this->mediaRepo = app(MediaRepository::class);
     }
 
     /**
@@ -45,8 +47,8 @@ class PostProcessAudio implements ShouldQueue, ShouldBeUnique
     {
         try {
             DocumentRepository::updateTask($this->meta['pending_task_id'], 'finished');
-            $transcription = MediaRepository::getTranscription($this->meta['transcript_id']);
-            $subtitles = MediaRepository::getTranscriptionSubtitles($this->meta['transcript_id']);
+            $transcription = $this->mediaRepo->getTranscription($this->meta['transcript_id']);
+            $subtitles = $this->mediaRepo->getTranscriptionSubtitles($this->meta['transcript_id']);
             $this->document->update([
                 'meta' => [
                     ...$this->document->meta,

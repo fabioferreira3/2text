@@ -12,19 +12,24 @@
 */
 
 use App\Enums\AIModel;
+use App\Interfaces\AssemblyAIFactoryInterface;
+use App\Interfaces\ChatGPTFactoryInterface;
+use App\Interfaces\OraculumFactoryInterface;
+use App\Interfaces\WhisperFactoryInterface;
 use App\Models\User;
+use App\Packages\AssemblyAI\AssemblyAI;
 use App\Packages\OpenAI\ChatGPT;
 use App\Packages\OpenAI\DallE;
 use App\Packages\Oraculum\Oraculum;
-use App\Repositories\GenRepository;
-use App\Repositories\MediaRepository;
+use App\Packages\Whisper\Whisper;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 
 uses()->beforeEach(function () {
-
+    $this->withoutVite();
     Bus::fake();
     Storage::fake('s3');
+    Storage::fake('local');
     Storage::fake('tmp-for-tests');
     $this->authUser = User::factory()->create();
 
@@ -38,6 +43,8 @@ uses()->beforeEach(function () {
             'total' => 350
         ]
     ];
+
+    // ChatGPT Mock
     $this->chatGpt = Mockery::mock(ChatGPT::class);
     $this->chatGpt->shouldReceive('countTokens')->andReturn(500);
 
@@ -58,7 +65,17 @@ uses()->beforeEach(function () {
         'fileName' => 'file_name', 'imageData' => 'binary data'
     ]);
 
-    // Oraculum
+    // Whisper Mock
+    $this->whisper = Mockery::mock(Whisper::class);
+    $this->whisper->shouldReceive('request')->andReturn([
+        'text' => 'Transcribed text'
+    ]);
+
+    // Assembly AI Mock
+    $this->assemblyAI = Mockery::mock(AssemblyAI::class);
+    $this->assemblyAI->shouldReceive('transcribe')->andReturn('Transcribed text');
+
+    // Oraculum Mock
     $this->oraculum = Mockery::mock(new Oraculum($this->authUser, '12345'));
     $this->oraculum->shouldReceive('createBot')->andReturn([]);
     $this->oraculum->shouldReceive('add')->andReturn([]);
@@ -67,20 +84,29 @@ uses()->beforeEach(function () {
     $this->oraculum->shouldReceive('deleteCollection')->andReturn([]);
     $this->oraculum->shouldReceive('countTokens')->andReturn([]);
 
-    // Generator
-    $this->generator = Mockery::mock(GenRepository::class);
+    // Factories
+    $this->mockOraculumFactory = Mockery::mock(OraculumFactoryInterface::class);
+    $this->mockOraculumFactory->shouldReceive('make')->andReturn($this->oraculum);
 
-    $this->generator->shouldReceive('generateSummary')->andReturn($this->chatGpt->request(['message']));
-    $this->generator->shouldReceive('generateEmbeddedSummary')->andReturn($this->chatGpt->request(['message']));
+    $this->mockChatGPTFactory = Mockery::mock(ChatGPTFactoryInterface::class);
+    $this->mockChatGPTFactory->shouldReceive('make')->andReturn($this->chatGpt);
 
-    $this->generator->shouldReceive('generateSocialMediaPost')->andReturn($this->chatGpt->request(['message']));
-    $this->generator->shouldReceive('generateEmbeddedSocialMediaPost')->andReturn($this->chatGpt->request(['message']));
-    $this->generator->shouldReceive('generateMetaDescription')->andReturn($this->chatGpt->request(['message']));
+    $this->mockWhisperFactory = Mockery::mock(WhisperFactoryInterface::class);
+    $this->mockWhisperFactory->shouldReceive('make')->andReturn($this->whisper);
 
-    // Media Repository
-    $this->mediaRepo = Mockery::mock(MediaRepository::class);
-    $this->mediaRepo->shouldReceive('transcribeAudio')->andReturn("Transcribed text");
-    $this->mediaRepo->shouldReceive('transcribeAudioWithDiarization');
+    $this->mockAssemblyAIFactory = Mockery::mock(AssemblyAIFactoryInterface::class);
+    $this->mockAssemblyAIFactory->shouldReceive('make')->andReturn($this->assemblyAI);
+
+    $this->app->instance(OraculumFactoryInterface::class, $this->mockOraculumFactory);
+    $this->app->instance(ChatGPTFactoryInterface::class, $this->mockChatGPTFactory);
+    $this->app->instance(WhisperFactoryInterface::class, $this->mockWhisperFactory);
+    $this->app->instance(AssemblyAIFactoryInterface::class, $this->mockAssemblyAIFactory);
+})->in(__DIR__);
+
+uses()->afterAll(function () {
+    Storage::fake('s3');
+    Storage::fake('local');
+    Storage::fake('tmp-for-tests');
 })->in(__DIR__);
 
 uses(

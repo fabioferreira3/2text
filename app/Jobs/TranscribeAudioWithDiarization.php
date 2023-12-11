@@ -30,7 +30,7 @@ class TranscribeAudioWithDiarization implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->mediaRepo = new MediaRepository();
+        $this->mediaRepo = app(MediaRepository::class);
     }
 
     /**

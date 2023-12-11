@@ -2,8 +2,6 @@
 
 use App\Enums\DocumentType;
 use App\Enums\Language;
-use App\Interfaces\ChatGPTFactoryInterface;
-use App\Interfaces\OraculumFactoryInterface;
 use App\Jobs\Blog\CreateOutline;
 use App\Jobs\RegisterProductUsage;
 use App\Models\Document;
@@ -27,15 +25,6 @@ describe(
         it('generates the outline and parses the raw structure', function ($queryEmbedding) {
             Bus::fake(RegisterProductUsage::class);
 
-            $mockOraculumFactory = Mockery::mock(OraculumFactoryInterface::class);
-            $mockOraculumFactory->shouldReceive('make')->andReturn($this->oraculum);
-
-            $mockChatGPTFactory = Mockery::mock(ChatGPTFactoryInterface::class);
-            $mockChatGPTFactory->shouldReceive('make')->andReturn($this->chatGpt);
-
-            $this->app->instance(OraculumFactoryInterface::class, $mockOraculumFactory);
-            $this->app->instance(ChatGPTFactoryInterface::class, $mockChatGPTFactory);
-
             $processId = Str::uuid();
             $job = new CreateOutline(
                 $this->document,
@@ -45,8 +34,8 @@ describe(
                     'collection_name' => $this->document->id,
                 ]
             );
-            $job->oraculumFactory = $mockOraculumFactory;
-            $job->chatGptFactory = $mockChatGPTFactory;
+            $job->oraculumFactory = $this->mockOraculumFactory;
+            $job->chatGptFactory = $this->mockChatGPTFactory;
             $job->handle();
 
             $this->document->refresh();

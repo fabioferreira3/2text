@@ -7,13 +7,15 @@ use App\Jobs\TranscribeAudio;
 use App\Models\Document;
 use App\Models\DocumentTask;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
+    $this->filePath = fake()->filePath();
     $this->document = Document::factory()->create([
         'type' => DocumentType::AUDIO_TRANSCRIPTION->value,
         'language' => Language::ENGLISH->value,
         'meta' => [
-            'audio_file_path' => [fake()->filePath()]
+            'audio_file_path' => [$this->filePath]
         ]
     ]);
 });
@@ -21,10 +23,10 @@ beforeEach(function () {
 describe('Audio Transcription - TranscribeAudio job', function () {
     it('transcribes audio into text', function ($embedSource) {
         Bus::fake(EmbedSource::class);
+        Storage::disk('s3')->put($this->filePath, 'some content');
         $job = new TranscribeAudio($this->document, [
             'embed_source' => $embedSource
         ]);
-        $job->mediaRepo = $this->mediaRepo;
         $job->handle();
 
         if ($embedSource) {
@@ -49,7 +51,6 @@ describe('Audio Transcription - TranscribeAudio job', function () {
             'task_id' => $task->id,
             'abort_when_context_present' => true
         ]);
-        $job->mediaRepo = $this->mediaRepo;
         $job->handle();
 
         expect($task->fresh()->status)->toBe('skipped');

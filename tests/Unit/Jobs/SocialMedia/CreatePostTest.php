@@ -1,9 +1,12 @@
 <?php
 
+use App\Enums\DocumentStatus;
+use App\Enums\DocumentTaskEnum;
 use App\Enums\SourceProvider;
 use App\Jobs\RegisterProductUsage;
 use App\Jobs\SocialMedia\CreatePost;
 use App\Models\Document;
+use App\Models\DocumentTask;
 use App\Models\User;
 use Illuminate\Support\Facades\Bus;
 
@@ -11,7 +14,7 @@ beforeEach(function () {
     Bus::fake([RegisterProductUsage::class]);
 });
 
-function commonCreateSocialPostAssertions($document, $chatGptResponse)
+function commonCreateSocialPostAssertions($document, $chatGptResponse, $documentTask = null)
 {
     $contentBlock = $document->fresh()->contentBlocks()->first();
     expect($contentBlock)->toMatchArray([
@@ -29,10 +32,15 @@ function commonCreateSocialPostAssertions($document, $chatGptResponse)
             $job->params['total'] === $chatGptResponse['token_usage']['total'] &&
             $job->params['meta']['document_id'] === $document->id;
     });
+
+    if ($documentTask) {
+        expect($documentTask->fresh()->status)->toBe(DocumentStatus::FINISHED->value);
+    }
 }
 
 describe('Social Media - CreatePost job', function () {
-    it('calls the embeding function', function () {
+    it('calls the embeding function', function ($withTask) {
+
         $user = User::factory()->create();
         $document = Document::factory()->create([
             'meta' => [
@@ -42,19 +50,30 @@ describe('Social Media - CreatePost job', function () {
                 'user_id' => $user->id
             ]
         ]);
+        $documentTask = null;
+
+        if ($withTask) {
+            $documentTask = DocumentTask::factory()->create([
+                'document_id' => $document->id,
+                'name' => DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST->value,
+                'job' => DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST->getJob(),
+                'order' => 1
+            ]);
+        }
 
         $job = new CreatePost($document, [
             'query_embedding' => true,
             'platform' => 'Facebook',
-            'collection_name' => $document->id
-        ], $this->generator);
+            'collection_name' => $document->id,
+            'task_id' => $documentTask ? $documentTask->id : null
+        ]);
         $job->handle();
 
         $chatGptResponse = $this->aiModelResponseResponse;
-        commonCreateSocialPostAssertions($document, $chatGptResponse);
-    });
+        commonCreateSocialPostAssertions($document, $chatGptResponse, $documentTask);
+    })->with([true, false]);
 
-    it('calls the non-embeding function', function () {
+    it('calls the non-embeding function', function ($withTask) {
         $user = User::factory()->create();
         $document = Document::factory()->create([
             'meta' => [
@@ -68,10 +87,10 @@ describe('Social Media - CreatePost job', function () {
         $job = new CreatePost($document, [
             'query_embedding' => false,
             'platform' => 'Facebook'
-        ], $this->generator);
+        ]);
         $job->handle();
 
         $chatGptResponse = $this->aiModelResponseResponse;
         commonCreateSocialPostAssertions($document, $chatGptResponse);
-    });
+    })->with([true, false]);
 })->group('socialmedia');

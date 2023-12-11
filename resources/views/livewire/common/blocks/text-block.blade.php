@@ -63,7 +63,7 @@
     @endif
 </div>
 
-@push('scripts')
+@pushonce('scripts')
 <script>
     function adjustTextArea() {
         let textareas = document.querySelectorAll('.autoExpandTextarea');
@@ -90,4 +90,4 @@
         adjustTextArea();
     });
 </script>
-@endpush
+@endpushonce

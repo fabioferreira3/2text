@@ -85,7 +85,6 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
             } else {
                 $response = $this->queryGpt($basePrompt);
             }
-            Log::debug($response);
 
             $rawStructure[$this->meta['section_key']]['content'] = $response['content'];
             $this->repo->updateMeta('raw_structure', $rawStructure);

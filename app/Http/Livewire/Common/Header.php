@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Common;
 
 use Livewire\Component;
 
-
 class Header extends Component
 {
     public $document = null;
@@ -12,6 +11,7 @@ class Header extends Component
     public $icon;
     public $title = '';
     public $suffix = null;
+
 
     /**
      * Get the view / contents that represent the component.

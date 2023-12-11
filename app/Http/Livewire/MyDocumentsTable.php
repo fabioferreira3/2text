@@ -96,10 +96,12 @@ class MyDocumentsTable extends DataTableComponent
                 ->searchable()
                 ->sortable(),
             Column::make(__('dashboard.title'), "title")
-                ->format(function ($value, $row) {
-                    return Str::limit($value ?? $row['content'], 30, '...');
+                ->format(function ($value) {
+                    return Str::limit($value, 30, '...');
                 })
-                ->searchable()
+                ->searchable(function (Builder $query, $searchTerm) {
+                    $query->orWhereRaw("LOWER(title) LIKE ? ", ['%' . strtolower($searchTerm) . '%']);
+                })
                 ->sortable()
                 ->collapseOnMobile(),
             Column::make(__('dashboard.status'))

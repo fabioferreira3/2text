@@ -4,10 +4,10 @@ namespace App\Repositories;
 
 use App\Enums\MediaType;
 use App\Helpers\MediaHelper;
+use App\Interfaces\AssemblyAIFactoryInterface;
+use App\Interfaces\WhisperFactoryInterface;
 use App\Models\Account;
 use App\Models\MediaFile;
-use App\Packages\AssemblyAI\AssemblyAI;
-use App\Packages\Whisper\Whisper;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -19,6 +19,15 @@ use YoutubeDl\Options;
 
 class MediaRepository
 {
+    public WhisperFactoryInterface $whisperFactory;
+    public AssemblyAIFactoryInterface $assemblyAIFactory;
+
+    public function __construct()
+    {
+        $this->whisperFactory = app(WhisperFactoryInterface::class);
+        $this->assemblyAIFactory = app(AssemblyAIFactoryInterface::class);
+    }
+
     public static function newImage(Account $account, array $fileParams): MediaFile
     {
         $mediaFile = new MediaFile([
@@ -211,9 +220,12 @@ class MediaRepository
 
                 // Check the file size and compress it if necessary
                 $localFilePath = Storage::disk('local')->path($audioFilePath);
-                $neededToCompress = self::compressAndStoreMp3(new \Illuminate\Http\File($localFilePath), $audioFilePath);
+                $neededToCompress = self::compressAndStoreMp3(
+                    new \Illuminate\Http\File($localFilePath),
+                    $audioFilePath
+                );
 
-                $whisper = new Whisper($localFilePath);
+                $whisper = $this->whisperFactory->make($localFilePath);
                 $response = $whisper->request();
 
                 // Clean up the local files
@@ -231,14 +243,14 @@ class MediaRepository
 
     public function transcribeAudioWithDiarization(array $audioFilePaths, array $params = [])
     {
-        $assembly = new AssemblyAI();
+        $assembly = $this->assemblyAIFactory->make();
         $tempUrl = Storage::temporaryUrl($audioFilePaths[0], now()->addMinutes(15));
         $assembly->transcribe($tempUrl, $params);
     }
 
-    public static function getTranscriptionSubtitles(string $transcriptionId)
+    public function getTranscriptionSubtitles(string $transcriptionId)
     {
-        $assembly = new AssemblyAI();
+        $assembly = $this->assemblyAIFactory->make();
         $subtitles = $assembly->getTranscriptionSubtitles($transcriptionId);
         $vttPath = 'subtitles/' . Str::uuid() . '.vtt';
         $srtPath = 'subtitles/' . Str::uuid() . '.srt';
@@ -251,9 +263,9 @@ class MediaRepository
         ];
     }
 
-    public static function getTranscription(string $transcriptionId)
+    public function getTranscription(string $transcriptionId)
     {
-        $assembly = new AssemblyAI();
+        $assembly = $this->assemblyAIFactory->make();
         return $assembly->getTranscription($transcriptionId);
     }
 

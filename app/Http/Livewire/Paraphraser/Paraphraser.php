@@ -83,6 +83,9 @@ class Paraphraser extends Component
     public function paraphrase()
     {
         $this->validate();
+        if ($this->isSaving) {
+            return;
+        }
         DocumentRepository::clearContentBlocks($this->document);
         $this->outputBlocks = [];
         $this->isSaving = true;

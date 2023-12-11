@@ -13,7 +13,7 @@
                     </div>
                     <select name="provider" wire:model="source" class="p-3 rounded-lg border border-zinc-200">
                         {{-- @include('livewire.common.source-providers-options') --}}
-                        <option value="free_text">Free Text</option>
+                        <option value="free_text">{{__('paraphraser.free_text')}}</option>
                         <option value="website_url">Website URL</option>
                     </select>
                     @if ($displaySourceUrl)
@@ -25,7 +25,7 @@
                         @endif
                     </div>
                     <div class="flex items-center">
-                        <div class="mr-4 font-bold">Language:</div>
+                        <div class="mr-4 font-bold">{{__('paraphraser.language')}}:</div>
                         <select name="language" wire:model="language"
                             class="p-3 rounded-lg border border-zinc-200 w-64">
                             @include('livewire.common.languages-options')

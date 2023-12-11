@@ -29,7 +29,6 @@ describe(
             $job = new CreateMetaDescription($this->document, [
                 'process_id' => $processId
             ]);
-            $job->genRepo = $this->generator;
             $job->handle();
 
             $this->assertDatabaseHas('document_content_blocks', [

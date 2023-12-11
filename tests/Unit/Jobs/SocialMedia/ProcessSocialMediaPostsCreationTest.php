@@ -31,7 +31,7 @@ describe('Social Media - ProcessSocialMediaPostsCreationTest job', function () {
         $job = new ProcessSocialMediaPostsCreation($document, [
             'query_embedding' => true,
             'platforms' => $document->getMeta('platforms')
-        ], $this->generator);
+        ]);
         $job->handle();
 
         foreach ($platforms as $platform => $value) {
