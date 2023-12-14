@@ -37,6 +37,11 @@ enum Tone: string
         };
     }
 
+    public static function getValues(): array
+    {
+        return collect(self::cases())->flatMap(fn ($language) => [$language->value])->toArray();
+    }
+
     public static function fromLanguage($tone, $language = 'en')
     {
         $enumTone = self::tryFrom($tone);

@@ -24,6 +24,11 @@ enum Style: string
         };
     }
 
+    public static function getValues(): array
+    {
+        return collect(self::cases())->flatMap(fn ($language) => [$language->value])->toArray();
+    }
+
     public static function fromLanguage($style, $language = 'en')
     {
         $enumStyle = self::tryFrom($style);

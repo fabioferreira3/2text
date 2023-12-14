@@ -152,6 +152,9 @@
                         <textarea placeholder="{{__('blog.placeholder_example')}}"
                             class="border border-zinc-200 rounded-lg w-full" rows="3" maxlength="2000"
                             wire:model="imgPrompt"></textarea>
+                        @if($errors->has('imgPrompt'))
+                        <span class="text-red-500 text-sm">{{ $errors->first('imgPrompt') }}</span>
+                        @endif
                         <!-- Image guidelines -->
                         <div class="relative hidden md:block place-self-end" x-data="{ open: false }"
                             @click.away="open = false">

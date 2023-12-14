@@ -25,6 +25,11 @@ enum SourceProvider: string
         };
     }
 
+    public static function getValues(): array
+    {
+        return collect(self::cases())->flatMap(fn ($provider) => [$provider->value])->toArray();
+    }
+
     public static function getKeyValues(): array
     {
         return collect(self::cases())->flatMap(fn ($provider) => [$provider->value => $provider->label()])->toArray();

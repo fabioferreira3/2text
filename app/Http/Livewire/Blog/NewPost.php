@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Blog;
 
 use App\Enums\Language;
 use App\Enums\SourceProvider;
+use App\Enums\Style;
+use App\Enums\Tone;
 use App\Exceptions\CreatingBlogPostException;
 use App\Jobs\Blog\PrepareCreationTasks;
 use App\Repositories\DocumentRepository;
@@ -27,6 +29,7 @@ class NewPost extends Component
     public array $sourceUrls;
     public string $source;
     public $fileInput = null;
+    public $filePath = null;
     public string $tempSourceUrl;
     public bool $maxSourceUrlsReached;
     public string $language;
@@ -70,10 +73,11 @@ class NewPost extends Component
                 'required_if:source,youtube,website_url',
                 'array',
                 function ($attribute, $value, $fail) {
-                    if (request()->input('source') === 'youtube' && count($value) > 3) {
+                    if ($this->source === SourceProvider::YOUTUBE->value && count($value) > 3) {
                         return $fail('The maximum number of Youtube sources is 3.');
                     }
-                    if (request()->input('source') === 'website_url' && count($value) > 5) {
+
+                    if ($this->source === SourceProvider::WEBSITE_URL->value && count($value) > 5) {
                         return $fail('The maximum number of source URLs is 5.');
                     }
                 },
@@ -86,15 +90,16 @@ class NewPost extends Component
             'keyword' => 'required',
             'language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
             'targetHeadersCount' => 'required|numeric|min:2|max:10',
-            'tone' => 'nullable',
-            'style' => 'nullable',
+            'tone' => ['nullable', Rule::in(Tone::getValues())],
+            'style' => ['nullable', Rule::in(Style::getValues())],
             'fileInput' => [
-                'required_if:source,docx,pdf',
+                'required_if:source,docx,pdf,csv',
                 'max:51200', // in kilobytes, 50mb = 50 * 1024 = 51200kb
                 new DocxFile($this->source),
                 new PdfFile($this->source),
                 new CsvFile($this->source),
-            ]
+            ],
+            'imgPrompt' => ['required_if:generateImage,true']
         ];
     }
 
@@ -110,6 +115,7 @@ class NewPost extends Component
                 'targetHeadersCount.min' => __('validation.min_subtopics', ['min' => 2]),
                 'targetHeadersCount.max' => __('validation.max_subtopics', ['max' => 10]),
                 'targetHeadersCount.required' => __('validation.subtopics_count'),
+                'imgPrompt.required_if' => __('validation.img_prompt_required'),
             ];
     }
 
@@ -117,10 +123,8 @@ class NewPost extends Component
     {
         $accountId = Auth::check() ? Auth::user()->account_id : 'guest';
         $filename = Str::uuid() . '.' . $this->fileInput->getClientOriginalExtension();
-        $filePath = "documents/$accountId/" . $filename;
+        $this->filePath = "documents/$accountId/" . $filename;
         $this->fileInput->storeAs("documents/$accountId", $filename, 's3');
-
-        return $filePath;
     }
 
     public function validateSourceUrls()
@@ -140,9 +144,8 @@ class NewPost extends Component
         $this->validate();
 
         try {
-            $filePath = null;
             if ($this->fileInput) {
-                $filePath = $this->storeFile();
+                $this->storeFile();
             }
 
             $params = [
@@ -151,7 +154,7 @@ class NewPost extends Component
                 'language' => $this->language,
                 'meta' => [
                     'source_urls' => $this->sourceUrls ?? [],
-                    'source_file_path' => $filePath ?? null,
+                    'source_file_path' => $this->filePath ?? null,
                     'target_headers_count' => $this->targetHeadersCount,
                     'tone' => $this->tone,
                     'style' => $this->style,

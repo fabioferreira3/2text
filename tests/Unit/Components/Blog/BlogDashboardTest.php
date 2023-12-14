@@ -19,4 +19,4 @@ describe(
             $this->component->call('new')->assertRedirect('/blog/new');
         });
     }
-);
+)->group('blog');

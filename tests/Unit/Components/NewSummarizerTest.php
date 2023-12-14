@@ -109,41 +109,23 @@ describe(
                 }
             });
 
-            test('fileInput must be a valid docx file', function () {
+            test('fileInput must be a valid file', function ($source, $file) {
                 $this->component
                     ->set('document', $this->document)
-                    ->set('source', 'docx')
-                    ->set('fileInput', UploadedFile::fake()->create('avatar.txt'))
+                    ->set('source', $source)
+                    ->set('fileInput', UploadedFile::fake()->create('avatar.mp3'))
                     ->call('process')
                     ->assertHasErrors('fileInput')
                     ->assertHasNoErrors(['fileInput' => 'max'])
                     ->assertHasNoErrors(['fileInput' => 'required_if'])
-                    ->set('fileInput', UploadedFile::fake()->create('avatar.docx'))
+                    ->set('fileInput', UploadedFile::fake()->create($file))
                     ->call('process')
                     ->assertHasNoErrors('fileInput');
-            });
-
-            test('fileInput must be a valid pdf file', function () {
-                $this->component
-                    ->set('document', $this->document)
-                    ->set('source', 'pdf_file')
-                    ->set('fileInput', UploadedFile::fake()->create('avatar.txt'))
-                    ->call('process')
-                    ->assertHasErrors('fileInput')
-                    ->assertHasNoErrors(['fileInput' => 'max'])
-                    ->assertHasNoErrors(['fileInput' => 'required_if']);
-            });
-
-            test('fileInput must be a valid csv file', function () {
-                $this->component
-                    ->set('document', $this->document)
-                    ->set('source', 'csv')
-                    ->set('fileInput', UploadedFile::fake()->create('avatar.pdf'))
-                    ->call('process')
-                    ->assertHasErrors('fileInput')
-                    ->assertHasNoErrors(['fileInput' => 'max'])
-                    ->assertHasNoErrors(['fileInput' => 'required_if']);
-            });
+            })->with([
+                [SourceProvider::PDF->value, 'avatar.pdf'],
+                [SourceProvider::DOCX->value, 'avatar.docx'],
+                [SourceProvider::CSV->value, 'avatar.csv']
+            ]);
 
             test('target language', function () {
                 $this->component
@@ -168,7 +150,7 @@ describe(
             });
         });
 
-        test('store file', function () {
+        test('333store file', function () {
             $response = $this->component
                 ->set('document', $this->document)
                 ->set('fileInput', UploadedFile::fake()->create('avatar.pdf'))

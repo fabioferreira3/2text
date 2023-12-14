@@ -132,7 +132,6 @@ describe(
                     ->set('fileInput', UploadedFile::fake()->create('avatar.docx'))
                     ->call('process')
                     ->assertHasNoErrors('fileInput');
-                //$errors = $this->component->viewData('errors')->getBag('default')->getMessages();
             });
 
             test('fileInput must be a valid pdf file', function () {
