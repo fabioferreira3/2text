@@ -46,4 +46,4 @@ describe(
             });
         });
     }
-);
+)->group('blog');

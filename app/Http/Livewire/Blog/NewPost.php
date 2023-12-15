@@ -68,7 +68,7 @@ class NewPost extends Component
     public function rules()
     {
         return [
-            'context' => ['required', 'string'],
+            'context' => ['required', 'string', 'max:30000'],
             'sourceUrls' => [
                 'required_if:source,youtube,website_url',
                 'array',

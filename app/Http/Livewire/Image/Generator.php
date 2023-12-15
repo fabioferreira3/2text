@@ -61,7 +61,8 @@ class Generator extends Component
             'language' => 'en'
         ]);
 
-        $imageSize = MediaHelper::getPossibleImageSize($document);
+        $mediaHelper = new MediaHelper();
+        $imageSize = $mediaHelper->getImageSizeByDocumentType($document);
 
         for ($i = 1; $i <= $this->samples; $i++) {
             $processId = Str::uuid();

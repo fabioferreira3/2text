@@ -1,11 +1,17 @@
 <?php
 
+use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Enums\SourceProvider;
 use App\Enums\Style;
 use App\Enums\Tone;
 use App\Http\Livewire\Blog\NewPost;
+use App\Jobs\Blog\PrepareCreationTasks;
+use App\Models\Document;
+use App\Repositories\DocumentRepository;
+use Cloudinary\Transformation\Source;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Bus;
 
 use function Pest\Laravel\{actingAs};
 
@@ -18,7 +24,7 @@ describe(
     function () {
         test('renders the dashboard view', function () {
             $this->component->assertStatus(200)->assertViewIs('livewire.blog.new');
-        });
+        })->group('blog');
 
         describe(
             'component validation',
@@ -31,7 +37,10 @@ describe(
                         ->assertSee(__('validation.blog_post_context_required'))
                         ->set('context', 'some context')
                         ->call('process')
-                        ->assertHasNoErrors(['context' => 'required']);
+                        ->assertHasNoErrors(['context' => 'required'])
+                        ->set('context', fake()->text(30500))
+                        ->call('process')
+                        ->assertHasErrors(['context' => 'max']);
                 });
 
                 test('source urls', function ($source) {
@@ -65,8 +74,7 @@ describe(
                             fake()->url(),
                             fake()->url(),
                             fake()->url()
-                        ])->call('process')
-                            ->assertHasErrors(['sourceUrls']);
+                        ])->call('process')->assertHasErrors(['sourceUrls']);
                     }
                 })->with([
                     SourceProvider::YOUTUBE->value,
@@ -181,5 +189,42 @@ describe(
                 });
             }
         )->group('blog');
+
+        it('processes a new post', function () {
+            Bus::fake(PrepareCreationTasks::class);
+            $this->component
+                ->set('source', SourceProvider::FREE_TEXT->value)
+                ->set('sourceUrls', ['https://experior.ai', 'https://sub.experior.ai'])
+                ->set('context', 'some context')
+                ->set('keyword', 'some keyword')
+                ->set('fileInput', UploadedFile::fake()->create('avatar.pdf'))
+                ->set('generateImage', true)
+                ->set('imgPrompt', 'some img prompt')
+                ->set('targetHeadersCount', 5)
+                ->set('language', Language::PORTUGUESE->value)
+                ->call('process')
+                ->assertHasNoErrors();
+
+            $document = Document::latest()->first();
+            $this->component->assertRedirect(route('blog-post-processing-view', ['document' => $document]));
+
+            expect($document->getMeta('source_file_path'))->toBeTruthy();
+
+            $this->assertDatabaseHas('documents', [
+                'type' => DocumentType::BLOG_POST->value,
+                'language' => Language::PORTUGUESE->value,
+                'meta->source' => SourceProvider::FREE_TEXT->value,
+                'meta->source_urls' => json_encode(['https://experior.ai', 'https://sub.experior.ai']),
+                'meta->target_headers_count' => 5,
+                'meta->context' => 'some context',
+                'meta->tone' => 'default',
+                'meta->style' => 'default',
+                'meta->keyword' => 'some keyword',
+                'meta->img_prompt' => 'some img prompt',
+                'meta->generate_image' => true
+            ]);
+
+            Bus::assertDispatched(PrepareCreationTasks::class);
+        })->group('blog');
     }
-)->group('blog');
+);

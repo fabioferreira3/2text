@@ -59,4 +59,4 @@ describe(
             });
         });
     }
-);
+)->group('blog');

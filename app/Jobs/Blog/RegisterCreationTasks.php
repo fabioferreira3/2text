@@ -18,18 +18,20 @@ class RegisterCreationTasks
     public Document $document;
     public $repo;
     public array $params;
+    public $mediaHelper;
 
     public function __construct(Document $document, array $params)
     {
         $this->document = $document;
         $this->params = $params;
         $this->repo = new DocumentRepository($document);
+        $this->mediaHelper = new MediaHelper();
     }
 
     public function handle()
     {
         if ($this->params['meta']['generate_image'] ?? false) {
-            $imageSize = MediaHelper::getPossibleImageSize($this->document);
+            $imageSize = $this->mediaHelper->getImageSizeByDocumentType($this->document);
             DocumentRepository::createTask(
                 $this->document->id,
                 DocumentTaskEnum::GENERATE_IMAGE,
@@ -49,7 +51,6 @@ class RegisterCreationTasks
                 ]
             );
         }
-
         DocumentRepository::createTask(
             $this->document->id,
             DocumentTaskEnum::CREATE_OUTLINE,

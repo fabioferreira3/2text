@@ -2,10 +2,10 @@
 
 namespace App\Jobs;
 
+use App\Interfaces\OraculumFactoryInterface;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
-use App\Packages\Oraculum\Oraculum;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,6 +20,7 @@ class RemoveEmbeddings implements ShouldQueue
     protected Document $document;
     protected string $collectionName;
     protected array $meta;
+    public OraculumFactoryInterface $oraculumFactory;
 
     /**
      * The number of times the job may be attempted.
@@ -70,6 +71,7 @@ class RemoveEmbeddings implements ShouldQueue
         $this->document = $document->fresh();
         $this->collectionName = $meta['collection_name'];
         $this->meta = $meta;
+        $this->oraculumFactory = app(OraculumFactoryInterface::class);
     }
 
     /**
@@ -81,7 +83,7 @@ class RemoveEmbeddings implements ShouldQueue
     {
         try {
             $user = User::findOrFail($this->document->getMeta('user_id'));
-            $oraculum = new Oraculum($user, $this->collectionName);
+            $oraculum = $this->oraculumFactory->make($user, $this->collectionName);
             $oraculum->deleteCollection();
             $this->jobSucceded();
         } catch (Exception $e) {

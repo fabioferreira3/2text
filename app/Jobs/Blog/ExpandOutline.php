@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Blog;
 
 use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelper;
 use App\Interfaces\ChatGPTFactoryInterface;
 use App\Interfaces\OraculumFactoryInterface;
+use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;

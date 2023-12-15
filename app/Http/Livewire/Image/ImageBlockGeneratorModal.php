@@ -24,11 +24,13 @@ class ImageBlockGeneratorModal extends Component
     public array $previewImgs;
     public int $samples;
     public mixed $action = '';
+    public $mediaHelper;
     private $documentRepo;
 
     public function __construct()
     {
         $this->documentRepo = app(DocumentRepository::class);
+        $this->mediaHelper = new MediaHelper();
     }
 
     public function getListeners()
@@ -80,7 +82,7 @@ class ImageBlockGeneratorModal extends Component
         $this->documentRepo->setDocument($this->contentBlock->document);
         $this->documentRepo->updateMeta('img_prompt', $this->prompt);
 
-        $imageSize = MediaHelper::getPossibleImageSize($this->contentBlock->document);
+        $imageSize = $this->mediaHelper->getImageSizeByDocumentType($this->contentBlock->document);
 
         for ($i = 1; $i <= $this->samples; $i++) {
             $processId = Str::uuid();

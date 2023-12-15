@@ -142,6 +142,7 @@ class DocumentRepository
                 ]);
             }
         }
+
         $this->document->update([
             'word_count' => Str::wordCount($content)
         ]);

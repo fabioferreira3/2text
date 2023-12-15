@@ -46,4 +46,4 @@ describe(
             Bus::assertDispatched(RegisterProductUsage::class);
         })->with([true, false]);
     }
-);
+)->group('blog');

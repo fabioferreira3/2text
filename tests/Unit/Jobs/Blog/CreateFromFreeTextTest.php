@@ -39,4 +39,4 @@ describe(
             });
         });
     }
-);
+)->group('blog');

@@ -48,7 +48,7 @@ enum DocumentTaskEnum: string
             self::CREATE_METADESCRIPTION => "App\Jobs\Blog\CreateMetaDescription",
             self::DOWNLOAD_AUDIO => "App\Jobs\DownloadAudio",
             self::DOWNLOAD_SUBTITLES => "App\Jobs\DownloadSubtitles",
-            self::EXPAND_OUTLINE => "App\Jobs\ExpandOutline",
+            self::EXPAND_OUTLINE => "App\Jobs\Blog\ExpandOutline",
             self::EXPAND_TEXT => "App\Jobs\ExpandText",
             self::EXPAND_TEXT_SECTION => "App\Jobs\ExpandTextSection",
             self::EXTRACT_AND_EMBED_AUDIO => "App\Jobs\ExtractAndEmbedAudio",

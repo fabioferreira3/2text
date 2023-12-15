@@ -7,7 +7,7 @@ use App\Models\Document;
 
 class MediaHelper
 {
-    public static function getSocialMediaImageSize(string $platform)
+    public function getSocialMediaImageSize(string $platform)
     {
         $size = null;
         switch ($platform) {
@@ -30,7 +30,7 @@ class MediaHelper
         return $size;
     }
 
-    public static function getPossibleImageSize(Document $document)
+    public function getImageSizeByDocumentType(Document $document)
     {
         if ($document->type === DocumentType::SOCIAL_MEDIA_POST) {
             return self::getSocialMediaImageSize($document->getMeta('platform'));
@@ -43,10 +43,14 @@ class MediaHelper
         return ['height' => 1024, 'width' => 1024];
     }
 
-    public static function convertWebVttToPlainText($webVttContent)
+    public function convertWebVttToPlainText($webVttContent)
     {
         // Remove the WebVTT file header
-        $webVttContent = preg_replace('/^WEBVTT.*\n(?:\d{2}:\d{2}:\d{2}.\d{3} --> \d{2}:\d{2}:\d{2}.\d{3}.*\n)?/m', '', $webVttContent);
+        $webVttContent = preg_replace(
+            '/^WEBVTT.*\n(?:\d{2}:\d{2}:\d{2}.\d{3} --> \d{2}:\d{2}:\d{2}.\d{3}.*\n)?/m',
+            '',
+            $webVttContent
+        );
 
         // Remove timestamps and cue settings
         $webVttContent = preg_replace('/\d{2}:\d{2}:\d{2}.\d{3} --> \d{2}:\d{2}:\d{2}.\d{3}.*\n/', '', $webVttContent);

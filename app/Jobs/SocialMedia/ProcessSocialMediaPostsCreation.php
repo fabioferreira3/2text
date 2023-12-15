@@ -25,6 +25,7 @@ class ProcessSocialMediaPostsCreation implements ShouldQueue
     public $meta;
     public $textProcessId;
     public $imageProcessId;
+    public $mediaHelper;
 
     public function __construct($document, array $meta = [])
     {
@@ -32,6 +33,7 @@ class ProcessSocialMediaPostsCreation implements ShouldQueue
         $this->meta = $meta;
         $this->textProcessId = Str::uuid();
         $this->imageProcessId = Str::uuid();
+        $this->mediaHelper = new MediaHelper();
     }
 
     public function handle()
@@ -65,7 +67,7 @@ class ProcessSocialMediaPostsCreation implements ShouldQueue
                 );
 
                 if ($post->getMeta('generate_img')) {
-                    $imageSize = MediaHelper::getSocialMediaImageSize($platformName);
+                    $imageSize = $this->mediaHelper->getSocialMediaImageSize($platformName);
 
                     DocumentRepository::createTask(
                         $post->id,

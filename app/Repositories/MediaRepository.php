@@ -21,11 +21,13 @@ class MediaRepository
 {
     public WhisperFactoryInterface $whisperFactory;
     public AssemblyAIFactoryInterface $assemblyAIFactory;
+    public $mediaHelper;
 
     public function __construct()
     {
         $this->whisperFactory = app(WhisperFactoryInterface::class);
         $this->assemblyAIFactory = app(AssemblyAIFactoryInterface::class);
+        $this->mediaHelper = new MediaHelper();
     }
 
     public static function newImage(Account $account, array $fileParams): MediaFile
@@ -110,7 +112,7 @@ class MediaRepository
                 $duration = ceil($video->getDuration() / 60);
                 $videoTitle = $video->getTitle();
                 $transcription = $file ?
-                    MediaHelper::convertWebVttToPlainText(file_get_contents($file->getPathname())) : null;
+                    $this->mediaHelper->convertWebVttToPlainText(file_get_contents($file->getPathname())) : null;
                 $subtitleFilePaths[] = $file ? $file->getBasename() : null;
             }
         }

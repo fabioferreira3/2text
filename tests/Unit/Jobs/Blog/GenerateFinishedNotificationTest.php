@@ -45,4 +45,4 @@ describe(
             expect($this->document->getMeta('finished_email_content'))->toBe($this->aiModelResponseResponse['content']);
         });
     }
-);
+)->group('blog');

@@ -62,7 +62,7 @@ class DocumentHelper
         $sentences = self::splitIntoSentences($text);
         $sentencesArray = self::splitSentencesIntoArray($sentences);
         $originalSentencesArray = collect($sentencesArray)->map(function ($sentenceStructure, $idx) {
-            return ['sentence_order' => $idx + 1, 'text' => $sentenceStructure[0] . $sentenceStructure[1]];
+            return ['sentence_order' => $idx + 1, 'text' => trim($sentenceStructure[0] . $sentenceStructure[1])];
         });
         return $originalSentencesArray;
     }
@@ -84,16 +84,6 @@ class DocumentHelper
             $array[] = [$sentences[$i], $sentences[$i + 1] ?? '.'];
         }
         return $array;
-    }
-
-    public static function chunkTextSentences($text, $amount = 80)
-    {
-        $sentences = preg_split('/(?<=[.!?])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
-        $sentenceChunks = array_chunk($sentences, $amount);
-
-        return array_map(function ($chunk) {
-            return implode(' ', $chunk);
-        }, $sentenceChunks);
     }
 
     public static function parseHtmlToArray($html)

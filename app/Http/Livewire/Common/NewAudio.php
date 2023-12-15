@@ -41,12 +41,7 @@ class NewAudio extends Component
             AudioHelper::getAudioUrl($this->document->getMeta('audio_file')) : null;
         $this->isPlaying = false;
         $this->menuOpen = false;
-        $this->setOptions($this->language ?? $document->language->value);
-    }
-
-    public function updated()
-    {
-        $this->setOptions($this->language);
+        $this->setOptions();
     }
 
     public function ready($params)
@@ -104,10 +99,9 @@ class NewAudio extends Component
         $this->emitSelf('refresh');
     }
 
-    public function setOptions($language)
+    public function setOptions()
     {
-        $language = Language::tryFrom($language);
-        $this->voices = AudioHelper::getVoicesByLanguage($language);
+        $this->voices = AudioHelper::getVoices();
     }
 
     public function render()
