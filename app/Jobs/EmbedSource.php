@@ -26,6 +26,7 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
     public string $collectionName;
     public array $meta;
     public OraculumFactoryInterface $oraculumFactory;
+    public $bitly;
 
 
     /**
@@ -76,10 +77,10 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->dataType = DataType::tryFrom($meta['data_type']);
-        $this->source = $meta['source'];
         $this->collectionName = $meta['collection_name'] ?? $document->id;
         $this->meta = $meta;
         $this->oraculumFactory = app(OraculumFactoryInterface::class);
+        $this->bitly = app('bitly');
     }
 
     /**
@@ -93,22 +94,19 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
             if (in_array($this->dataType, [
                 DataType::PDF,
                 DataType::DOCX,
-                DataType::CSV,
-                //    DataType::JSON
+                DataType::CSV
             ], true)) {
                 $expirationDate = now()->addMinutes(15);
-                $tempUrl = Storage::temporaryUrl($this->source, $expirationDate);
-                // $shortLink = SupportHelper::shortenLink($tempUrl, [
-                //     'account_id' => $this->document->account_id,
-                //     'expires_at' => $expirationDate
-                // ]);
-                $shortLink = app('bitly')->getUrl($tempUrl);
-                $this->source = $shortLink;
+                $tempUrl = Storage::temporaryUrl($this->meta['source'], $expirationDate);
+                $shortLink = $this->bitly->getUrl($tempUrl);
+                $this->meta['source'] = $shortLink;
             }
             $user = User::findOrFail($this->document->getMeta('user_id'));
             $oraculum = $this->oraculumFactory->make($user, $this->collectionName);
-            $oraculum->add($this->dataType, $this->source);
+            $response = $oraculum->add($this->dataType, $this->meta['source']);
             $this->jobSucceded();
+
+            return $response;
         } catch (Exception $e) {
             $this->jobFailed($e->getMessage());
         }

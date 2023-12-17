@@ -33,6 +33,11 @@ enum DataType: string
         };
     }
 
+    public static function getValues(): array
+    {
+        return collect(self::cases())->flatMap(fn ($type) => [$type->value])->toArray();
+    }
+
     public static function getKeyValues(): array
     {
         return collect(self::cases())->flatMap(fn ($type) => [$type->value => $type->label()])->toArray();

@@ -15,6 +15,7 @@ use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Talendor\StabilityAI\Enums\StabilityAIEngine;
 
@@ -23,11 +24,13 @@ class GenRepository
 
     public ChatGPTFactoryInterface $chatGptFactory;
     public OraculumFactoryInterface $oraculumFactory;
+    public $response;
 
     public function __construct()
     {
         $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
         $this->oraculumFactory = app(OraculumFactoryInterface::class);
+        $this->response = null;
     }
 
     public function generateTitle(Document $document, $context)
@@ -35,18 +38,21 @@ class GenRepository
         $promptHelper = PromptHelperFactory::create($document->language->value);
         $chatGpt = $this->chatGptFactory->make(AIModel::GPT_3_TURBO1106->value);
 
-        $response = $chatGpt->request([[
+        $this->response = $chatGpt->request([[
             'role' => 'user',
             'content' => $promptHelper->writeTitle($context, [
                 'tone' => $document->getMeta('tone'),
                 'keyword' => $document->getMeta('keyword')
             ])
         ]]);
-        $document->update(['title' => Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"')]);
+        $generatedTitle = Str::of(str_replace(["\r", "\n"], '', $this->response['content']))->trim()->trim('"');
+        $document->update(['title' => $generatedTitle]);
         RegisterProductUsage::dispatch($document->account, [
-            ...$response['token_usage'],
+            ...$this->response['token_usage'],
             'meta' => ['document_id' => $document->id]
         ]);
+
+        return $generatedTitle->value;
     }
 
     public function generateEmbeddedTitle(Document $document, string $collectionName)
@@ -54,16 +60,18 @@ class GenRepository
         $user = User::findOrFail($document->getMeta('user_id'));
         $oraculum = $this->oraculumFactory->make($user, $collectionName);
         $promptHelper = PromptHelperFactory::create($document->language->value);
-        $response = $oraculum->query($promptHelper->writeEmbeddedTitle([
+        $this->response = $oraculum->query($promptHelper->writeEmbeddedTitle([
             'tone' => $document->getMeta('tone'),
             'keyword' => $document->getMeta('keyword')
         ]));
 
-        $document->update(['title' => $response['content']]);
+        $document->update(['title' => $this->response['content']]);
         RegisterProductUsage::dispatch($document->account, [
-            ...$response['token_usage'],
+            ...$this->response['token_usage'],
             'meta' => ['document_id' => $document->id]
         ]);
+
+        return $this->response['content'];
     }
 
     public function generateMetaDescription(Document $document)
@@ -138,6 +146,11 @@ class GenRepository
 
     public function generateSocialMediaPost(Document $document, string $platform)
     {
+        Validator::make(
+            ['platform' => $platform],
+            ['platform' => 'in:linkedin,instagram,facebook,twitter']
+        )->validate();
+
         $promptHelper = PromptHelperFactory::create($document->language->value);
         $chatGpt = $this->chatGptFactory->make();
 
@@ -158,6 +171,11 @@ class GenRepository
 
     public function generateEmbeddedSocialMediaPost(Document $document, string $platform, string $collectionName)
     {
+        Validator::make(
+            ['platform' => $platform],
+            ['platform' => 'in:linkedin,instagram,facebook,twitter']
+        )->validate();
+
         $user = User::findOrFail($document->getMeta('user_id'));
         $oraculum = $this->oraculumFactory->make($user, $collectionName);
         $promptHelper = PromptHelperFactory::create($document->language->value);
@@ -177,15 +195,17 @@ class GenRepository
     {
         $promptHelper = PromptHelperFactory::create($contentBlock->document->language->value);
         $chatGpt = $this->chatGptFactory->make();
-        $response = $chatGpt->request([[
+        $this->response = $chatGpt->request([[
             'role' => 'user',
             'content' => $promptHelper->generic($params['prompt'])
         ]]);
-        $contentBlock->update(['content' => $response['content']]);
+        $contentBlock->update(['content' => $this->response['content']]);
         RegisterProductUsage::dispatch($contentBlock->document->account, [
-            ...$response['token_usage'],
+            ...$this->response['token_usage'],
             'meta' => ['document_id' => $contentBlock->document->id]
         ]);
+
+        return $this->response['content'];
     }
 
     public function translateText($text, $targetLanguage)

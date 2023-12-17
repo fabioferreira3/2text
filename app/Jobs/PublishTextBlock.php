@@ -42,7 +42,7 @@ class PublishTextBlock implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            if ($this->meta['text'] || $this->document->getMeta('context')) {
+            if ($this->meta['text'] ?? $this->document->getMeta('context')) {
                 $contentBlock = $this->document->contentBlocks()->save(new DocumentContentBlock([
                     'type' => 'text',
                     'content' => $this->meta['text'] ?? $this->document->getMeta('context'),
@@ -50,7 +50,7 @@ class PublishTextBlock implements ShouldQueue, ShouldBeUnique
                     'order' => 1
                 ]));
 
-                if ($this->meta['target_language']) {
+                if ($this->meta['target_language'] ?? false) {
                     DocumentRepository::createTask(
                         $this->document->id,
                         DocumentTaskEnum::TRANSLATE_TEXT_BLOCK,

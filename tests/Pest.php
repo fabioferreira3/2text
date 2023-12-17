@@ -78,7 +78,7 @@ uses()->beforeEach(function () {
     // Oraculum Mock
     $this->oraculum = Mockery::mock(new Oraculum($this->authUser, '12345'));
     $this->oraculum->shouldReceive('createBot')->andReturn([]);
-    $this->oraculum->shouldReceive('add')->andReturn([]);
+    $this->oraculum->shouldReceive('add')->andReturn('source embedded!');
     $this->oraculum->shouldReceive('query')->andReturn($this->aiModelResponseResponse);
     $this->oraculum->shouldReceive('chat')->andReturn([]);
     $this->oraculum->shouldReceive('deleteCollection')->andReturn([]);
@@ -97,10 +97,14 @@ uses()->beforeEach(function () {
     $this->mockAssemblyAIFactory = Mockery::mock(AssemblyAIFactoryInterface::class);
     $this->mockAssemblyAIFactory->shouldReceive('make')->andReturn($this->assemblyAI);
 
+    $this->mockBitly = Mockery::mock('bitly');
+    $this->mockBitly->shouldReceive('getUrl')->andReturn('http://bit.ly/123456');
+
     $this->app->instance(OraculumFactoryInterface::class, $this->mockOraculumFactory);
     $this->app->instance(ChatGPTFactoryInterface::class, $this->mockChatGPTFactory);
     $this->app->instance(WhisperFactoryInterface::class, $this->mockWhisperFactory);
     $this->app->instance(AssemblyAIFactoryInterface::class, $this->mockAssemblyAIFactory);
+    $this->app->instance('bitly', $this->mockBitly);
 })->in(__DIR__);
 
 uses()->afterAll(function () {
