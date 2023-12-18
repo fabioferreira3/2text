@@ -19,4 +19,4 @@ describe(
             $this->component->call('new')->assertRedirect('/social-media-post/new');
         });
     }
-);
+)->group('social-media');

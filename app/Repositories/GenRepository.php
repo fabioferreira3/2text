@@ -147,7 +147,7 @@ class GenRepository
     public function generateSocialMediaPost(Document $document, string $platform)
     {
         Validator::make(
-            ['platform' => $platform],
+            ['platform' => Str::lower($platform)],
             ['platform' => 'in:linkedin,instagram,facebook,twitter']
         )->validate();
 
@@ -172,7 +172,7 @@ class GenRepository
     public function generateEmbeddedSocialMediaPost(Document $document, string $platform, string $collectionName)
     {
         Validator::make(
-            ['platform' => $platform],
+            ['platform' => Str::lower($platform)],
             ['platform' => 'in:linkedin,instagram,facebook,twitter']
         )->validate();
 

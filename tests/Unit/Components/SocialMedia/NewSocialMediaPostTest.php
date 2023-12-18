@@ -31,4 +31,4 @@ describe(
             $this->component->assertRedirect('/documents/social-media/' . $this->component->document->id);
         });
     }
-);
+)->group('social-media');

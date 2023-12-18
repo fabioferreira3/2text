@@ -10,20 +10,28 @@ use App\Repositories\DocumentRepository;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class NewParaphraser extends Component
 {
     public $document;
-    public $source = SourceProvider::FREE_TEXT->value;
-    public $source_url = null;
+    public $sourceType = SourceProvider::FREE_TEXT->value;
+    public $sourceUrl = null;
     public $tone = null;
     public $displaySourceUrl = null;
     public $language = Language::ENGLISH->value;
     public $isProcessing;
 
-    protected $rules = [
-        'source_url' => 'nullable|url|required_if:source,website',
-    ];
+    public function rules()
+    {
+        return [
+            'sourceType' => ['required', Rule::in([
+                SourceProvider::WEBSITE_URL->value,
+                SourceProvider::FREE_TEXT->value
+            ])],
+            'sourceUrl' => 'nullable|url|required_if:sourceType,website_url,youtube',
+        ];
+    }
 
     public function getListeners()
     {
@@ -50,28 +58,28 @@ class NewParaphraser extends Component
 
     public function start()
     {
+        $this->validate();
         $document = DocumentRepository::createGeneric([
             'type' => DocumentType::PARAPHRASED_TEXT->value,
-            'source' => $this->source,
+            'source' => $this->sourceType,
             'language' => $this->language,
             'meta' => [
                 'tone' => $this->tone,
-                'source_url' => $this->source_url
+                'source_url' => $this->sourceUrl
             ]
         ]);
         $this->document = $document;
 
-        if ($this->source === SourceProvider::FREE_TEXT->value) {
+        if ($this->sourceType === SourceProvider::FREE_TEXT->value) {
             $this->redirectToDocument();
         } else {
-            $this->validate();
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'info',
                 'message' => __('alerts.working_request')
             ]);
             $this->isProcessing = true;
             $processId = Str::uuid();
-            CreateFromWebsite::dispatchIf($this->source === SourceProvider::WEBSITE_URL->value, $document, [
+            CreateFromWebsite::dispatchIf($this->sourceType === SourceProvider::WEBSITE_URL->value, $document, [
                 'process_id' => $processId
             ]);
         }
@@ -89,9 +97,8 @@ class NewParaphraser extends Component
 
     public function updated()
     {
-        $this->displaySourceUrl = in_array($this->source, [
-            SourceProvider::WEBSITE_URL->value,
-            SourceProvider::YOUTUBE->value
+        $this->displaySourceUrl = in_array($this->sourceType, [
+            SourceProvider::WEBSITE_URL->value
         ]);
     }
 }

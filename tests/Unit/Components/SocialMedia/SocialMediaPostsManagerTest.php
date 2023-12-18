@@ -264,4 +264,4 @@ describe(
             Bus::assertDispatched(ProcessSocialMediaPosts::class);
         });
     }
-);
+)->group('social-media');
