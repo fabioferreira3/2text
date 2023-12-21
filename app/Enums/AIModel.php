@@ -35,4 +35,9 @@ enum AIModel: string
     case SD_DEPTH_V2 = 'stable-diffusion-depth-v2-0';
     case SD_X4_UPSCALER = 'stable-diffusion-x4-latent-upscaler';
     case WHISPER = 'whisper';
+
+    public static function getValues(): array
+    {
+        return collect(self::cases())->flatMap(fn ($type) => [$type->value])->toArray();
+    }
 }

@@ -38,6 +38,11 @@ class MediaFile extends Model
         return Storage::disk('s3')->get($this->file_path);
     }
 
+    public static function newFactory()
+    {
+        return \Database\Factories\MediaFileFactory::new();
+    }
+
     protected static function booted(): void
     {
         static::addGlobalScope(new SameAccountScope());

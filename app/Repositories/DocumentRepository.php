@@ -174,14 +174,14 @@ class DocumentRepository
         ]);
     }
 
-    public static function getContentBlock(string $documentContentBlockId)
+    public function getContentBlock(string $documentContentBlockId)
     {
         return DocumentContentBlock::findOrFail($documentContentBlockId);
     }
 
-    public static function updateContentBlock(string $documentContentBlockId, array $params)
+    public function updateContentBlock(string $documentContentBlockId, array $params)
     {
-        $contentBlock = self::getContentBlock($documentContentBlockId);
+        $contentBlock = $this->getContentBlock($documentContentBlockId);
         $contentBlock->update($params);
     }
 

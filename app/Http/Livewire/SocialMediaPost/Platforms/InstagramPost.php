@@ -4,6 +4,7 @@ namespace App\Http\Livewire\SocialMediaPost\Platforms;
 
 use App\Models\Document;
 use App\Models\Traits\SocialMediaTrait;
+use App\Repositories\DocumentRepository;
 use Livewire\Component;
 
 class InstagramPost extends Component
@@ -12,7 +13,13 @@ class InstagramPost extends Component
 
     public Document $document;
     public string $userId;
-    private string $platform;
+    public string $platform;
+    protected $repo;
+
+    public function __construct()
+    {
+        $this->repo = app(DocumentRepository::class);
+    }
 
     public function render()
     {

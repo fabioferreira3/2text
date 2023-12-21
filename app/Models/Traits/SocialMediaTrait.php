@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 trait SocialMediaTrait
 {
     public $text;
-    public $textBlockId;
+    public string | null $textBlockId;
     public $image;
     public $imageBlockId;
     public $imagePrompt;
@@ -51,7 +51,7 @@ trait SocialMediaTrait
     public function save()
     {
         $this->saving = true;
-        DocumentRepository::updateContentBlock($this->textBlockId, [
+        $this->repo->updateContentBlock($this->textBlockId, [
             'content' => $this->text
         ]);
         $this->saving = false;
@@ -114,7 +114,8 @@ trait SocialMediaTrait
 
     public function refreshImage()
     {
-        $imageBlock = $this->imageBlock ?? optional($this->document->contentBlocks)->firstWhere('type', 'media_file_image');
+        $imageBlock = $this->imageBlock ?? optional($this->document->contentBlocks)
+            ->firstWhere('type', 'media_file_image');
         $this->image = $imageBlock ? $imageBlock->getUrl() : null;
         $this->imageBlock = $imageBlock ?? null;
         $this->imageBlockId = $imageBlock ? $imageBlock->id : null;

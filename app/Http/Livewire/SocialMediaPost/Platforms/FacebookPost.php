@@ -4,6 +4,7 @@ namespace App\Http\Livewire\SocialMediaPost\Platforms;
 
 use App\Models\Document;
 use App\Models\Traits\SocialMediaTrait;
+use App\Repositories\DocumentRepository;
 use Livewire\Component;
 
 class FacebookPost extends Component
@@ -12,7 +13,13 @@ class FacebookPost extends Component
 
     public Document $document;
     public string $userId;
-    private string $platform;
+    protected $repo;
+    public string $platform;
+
+    public function __construct()
+    {
+        $this->repo = app(DocumentRepository::class);
+    }
 
     public function render()
     {
