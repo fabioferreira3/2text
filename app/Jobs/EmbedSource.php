@@ -22,7 +22,6 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
 
     public Document $document;
     public DataType $dataType;
-    public string $source;
     public string $collectionName;
     public array $meta;
     public OraculumFactoryInterface $oraculumFactory;

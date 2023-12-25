@@ -9,6 +9,7 @@ use App\Interfaces\WhisperFactoryInterface;
 use App\Models\Account;
 use App\Models\MediaFile;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;

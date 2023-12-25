@@ -19,4 +19,4 @@ describe(
             $this->component->call('new')->assertRedirect('/transcription/new');
         });
     }
-);
+)->group('audio-transcription');

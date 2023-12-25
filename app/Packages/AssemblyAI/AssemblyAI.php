@@ -7,7 +7,6 @@ use App\Packages\AssemblyAI\Exceptions\GetTranscriptionSubtitlesRequestException
 use App\Packages\AssemblyAI\Exceptions\TranscribeRequestException;
 use Exception;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class AssemblyAI
 {

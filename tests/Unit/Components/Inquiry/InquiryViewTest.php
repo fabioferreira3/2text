@@ -203,4 +203,4 @@ describe(
             Bus::assertDispatched(PrepareTasks::class);
         });
     }
-);
+)->group('inquiry');

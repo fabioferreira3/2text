@@ -2,10 +2,14 @@
 
 namespace App\Providers;
 
+use App\Factories\AssemblyAIFactory;
 use App\Factories\ChatGPTFactory;
 use App\Factories\OraculumFactory;
+use App\Factories\WhisperFactory;
+use App\Interfaces\AssemblyAIFactoryInterface;
 use App\Interfaces\ChatGPTFactoryInterface;
 use App\Interfaces\OraculumFactoryInterface;
+use App\Interfaces\WhisperFactoryInterface;
 use App\Jobs\DownloadAudio;
 use App\Models\Account;
 use App\View\Components\Custom\Dropdown;
@@ -27,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->bind(OraculumFactoryInterface::class, OraculumFactory::class);
         $this->app->bind(ChatGPTFactoryInterface::class, ChatGPTFactory::class);
+        $this->app->bind(WhisperFactoryInterface::class, WhisperFactory::class);
+        $this->app->bind(AssemblyAIFactoryInterface::class, AssemblyAIFactory::class);
     }
 
     /**

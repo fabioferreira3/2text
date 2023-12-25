@@ -177,4 +177,4 @@ describe(
             Bus::assertDispatched(PrepareCreationTasks::class);
         });
     }
-);
+)->group('summarizer');

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('document_tasks', function (Blueprint $table) {
-            $table->uuid('id')->primary;
+            $table->uuid('id')->primary();
             $table->string('name')->index();
             $table->foreignUuid('document_id')->constrained('documents');
             $table->uuid('process_id')->index()->nullable();
