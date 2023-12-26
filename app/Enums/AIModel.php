@@ -4,6 +4,7 @@ namespace App\Enums;
 
 enum AIModel: string
 {
+    case ASSEMBLY_AI = 'assembly-ai';
     case DALL_E_3 = 'dall-e-3';
     case DALL_E_2 = 'dall-e-2';
     case ELEVEN_LABS = 'elevenlabs';

@@ -9,7 +9,7 @@
             </div>
             <div class="flex flex-col gap-2">
                 @foreach ($contentBlocks as $contentBlock)
-                @livewire('common.blocks.text-block', [$contentBlock], key($contentBlock->id))
+                @livewire('common.blocks.text-block', [$contentBlock, 'hide' => ['delete']], key($contentBlock->id))
                 @endforeach
             </div>
         </div>

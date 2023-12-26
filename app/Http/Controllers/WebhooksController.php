@@ -29,7 +29,7 @@ class WebhooksController extends Controller
             $document = Document::findOrFail($params['document_id']);
             DocumentRepository::createTask(
                 $document->id,
-                DocumentTaskEnum::POST_PROCESS_AUDIO,
+                DocumentTaskEnum::PROCESS_TRANSCRIPTION_RESULTS,
                 [
                     'order' => 1,
                     'process_id' => Str::uuid(),

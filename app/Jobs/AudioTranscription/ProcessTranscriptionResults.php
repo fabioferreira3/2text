@@ -2,8 +2,10 @@
 
 namespace App\Jobs\AudioTranscription;
 
+use App\Enums\AIModel;
 use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
+use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
@@ -18,7 +20,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
-class PostProcessAudio implements ShouldQueue, ShouldBeUnique
+class ProcessTranscriptionResults implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
@@ -87,6 +89,14 @@ class PostProcessAudio implements ShouldQueue, ShouldBeUnique
                 }
                 $order++;
             }
+            RegisterProductUsage::dispatch($this->document->account, [
+                'model' => AIModel::ASSEMBLY_AI->value,
+                'length' => $this->document->getMeta('duration'),
+                'meta' => [
+                    'document_id' => $this->document->id,
+                    'length' => $this->document->getMeta('duration')
+                ]
+            ]);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed($e);
