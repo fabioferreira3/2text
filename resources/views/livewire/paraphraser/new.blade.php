@@ -13,7 +13,7 @@
                     </div>
                     <select name="sourceType" wire:model="sourceType" class="p-3 rounded-lg border border-zinc-200">
                         <option value="free_text">{{__('paraphraser.free_text')}}</option>
-                        <option value="website_url">Website URL</option>
+                        {{-- <option value="website_url">Website URL</option> --}}
                     </select>
                     @if ($displaySourceUrl)
                     <div class="flex flex-col gap-3">

@@ -58,6 +58,7 @@ class Paraphraser extends Component
         $this->tone = $this->document->getMeta('tone') ?? 'default';
         $this->inputText = $this->document->content ?? '';
         $this->outputBlocks = $this->document->contentBlocks()->ofTextType()->get();
+        $this->dispatchBrowserEvent('adjustTextArea');
     }
 
     public function ready($params)

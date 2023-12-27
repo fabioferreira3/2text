@@ -98,7 +98,7 @@ return [
         - The outline must not have more than :maxsubtopics main topics, which are represented by numbers.\n
         - Do not nest a third level of topics.\n
         - Do not add inner topics inside the subtopics indicated by alphabet letters, for example: \n\nGood output:\n1. Main Topic \n A. Subtopic 1 \n B. Subtopic 2 \n C. Subtopic 3 \n\nBad output:\n1. Main Topic \nA. Subtopic 1 \nB. Subtopic 2\n   B1. Inner topic 1\n   B2. Inner topic 2\nC. Subtopic 3\n\n\n",
-    'paraphrase_text' => "Paraphrase the following text, while using a :tone tone, keeping the same number of words and keeping its original language. Just provide the result, without making any additional comments. This is the text:\n\n\n:text\n\n",
+    'paraphrase_text' => "Paraphrase the following text in its language, while using a :tone tone and keeping the same number of words. Just provide the result, without making any additional comments. Remember: maintain the language of the text. For example, if the text is in Portuguese, paraphrase it in Portuguese, or if the text is in German, paraphrase it in German, and so on. This is the text to be paraphrased:\n\n\n:text\n\n",
     'pessimistic_tone' => "Use a writing tone that makes the reader feel like they are reading a book that highlights the negative aspects of the topic\n",
     'prepend_inst' => "- Additional instructions: Provide a response with increased burstiness and perplexity and at a slightly higher temperature than your default writing style.\n- Do not make any comments before or after the response. Just provide the response directly.\n\n",
     'reduce_complexity' => "Rewrite the following text reducing its reading complexity so a 13 year old kid would understand:\n\n :text",
