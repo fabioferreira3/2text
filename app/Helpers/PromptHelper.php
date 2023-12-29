@@ -236,6 +236,7 @@ class PromptHelper
         if (!$params['target_language']) {
             $prompt .= Lang::get(
                 'prompt.summary_keep_language',
+                [],
                 $this->language
             );
         }

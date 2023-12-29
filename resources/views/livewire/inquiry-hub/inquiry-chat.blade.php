@@ -11,7 +11,7 @@
         @endif
     </div>
     <!-- Typing Indicator -->
-    <div class="my-2 bg-white flex items-center justify-end italic @if(!$isProcessing) invisible @endif">
+    <div class="my-2 flex items-center justify-end italic @if(!$isProcessing) invisible @endif">
         <div>{{__('chat.is_typing')}}</div>
         <div class="w-[20px]" id="typewriter">...</div>
     </div>
@@ -29,8 +29,11 @@
         @if($errors->has('inputMsg'))
         <span class="text-red-500 text-sm mb-2">{{ $errors->first('inputMsg') }}</span>
         @endif
-        <textarea wire:model="inputMsg" x-on:keydown.enter="handleEnter($event)" placeholder="{{__('chat.type_message_here')}}" rows="2" class="w-full rounded-t-lg border-gray-200"></textarea>
-        <button @if($isProcessing) disabled @endif wire:click='submitMsg' class="bg-secondary text-white py-1 rounded-b-lg font-bold text-lg">
+        <textarea wire:model="inputMsg" x-on:keydown.enter="handleEnter($event)"
+            placeholder="{{__('chat.type_message_here')}}" rows="2"
+            class="w-full rounded-t-lg border-gray-200"></textarea>
+        <button @if($isProcessing) disabled @endif wire:click='submitMsg'
+            class="bg-secondary text-white py-1 rounded-b-lg font-bold text-lg">
             {{__('inquiry-hub.send')}}
         </button>
     </div>

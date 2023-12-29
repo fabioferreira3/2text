@@ -31,7 +31,7 @@ describe('Summarizer - CreateFromFreeText job', function () {
             'meta->query_embedding' => false,
             'meta->max_words_count' => 250,
             'meta->content' => 'content here',
-            'order' => 1
+            'order' => 2
         ]);
 
         $this->assertDatabaseHas('document_tasks', [
@@ -40,7 +40,7 @@ describe('Summarizer - CreateFromFreeText job', function () {
             'document_id' => $document->id,
             'process_id' => $processId,
             'meta->event_name' => 'SummaryCompleted',
-            'order' => 2
+            'order' => 3
         ]);
 
         Bus::assertDispatched(DispatchDocumentTasks::class, function ($job) use ($document) {

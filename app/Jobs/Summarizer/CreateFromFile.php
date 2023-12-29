@@ -43,7 +43,7 @@ class CreateFromFile implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        $dataType = DataType::tryFrom($this->document->meta['source']);
+        $dataType = DataType::tryFrom($this->document->getMeta('source'));
 
         if (!in_array($dataType, [DataType::DOCX, DataType::PDF, DataType::CSV])) {
             throw new InvalidEmbeddingSummaryDataTypeException('Create summary from file:

@@ -76,10 +76,9 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->dataType = DataType::tryFrom($meta['data_type']);
+        $this->oraculumFactory = app(OraculumFactoryInterface::class);
         $this->collectionName = $meta['collection_name'] ?? $document->id;
         $this->meta = $meta;
-        $this->oraculumFactory = app(OraculumFactoryInterface::class);
-        $this->bitly = app('bitly');
     }
 
     /**
@@ -89,6 +88,7 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
+        $this->bitly = app('bitly');
         try {
             if (in_array($this->dataType, [
                 DataType::PDF,

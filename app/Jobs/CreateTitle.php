@@ -18,8 +18,9 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected Document $document;
-    protected array $meta;
+    public Document $document;
+    public array $meta;
+    public $genRepo;
 
     /**
      * Create a new job instance.
@@ -30,6 +31,7 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
+        $this->genRepo = app(GenRepository::class);
     }
 
     /**
@@ -41,9 +43,12 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
     {
         try {
             if ($this->meta['query_embedding'] ?? false) {
-                GenRepository::generateEmbeddedTitle($this->document, $this->meta['collection_name']);
+                $this->genRepo->generateEmbeddedTitle($this->document, $this->meta['collection_name']);
             } else {
-                GenRepository::generateTitle($this->document, $this->meta['text'] ?? $this->document->normalized_structure);
+                $this->genRepo->generateTitle(
+                    $this->document,
+                    $this->meta['text'] ?? $this->document->normalized_structure
+                );
             }
 
             event(new TitleGenerated($this->document, $this->meta['process_id']));

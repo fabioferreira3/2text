@@ -5,6 +5,7 @@ namespace App\Http\Livewire\InquiryHub;
 use App\Jobs\Oraculum\Ask;
 use App\Models\Document;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class InquiryChat extends Component

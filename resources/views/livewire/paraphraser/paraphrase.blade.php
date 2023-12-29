@@ -78,32 +78,3 @@
         </div>
     </div>
 </div>
-
-@push('scripts')
-<script>
-    function adjustTextArea() {
-        let textareas = document.querySelectorAll('.autoExpandTextarea');
-
-        function adjustHeight(el) {
-            el.style.height = 'auto';
-            el.style.height = el.scrollHeight + 'px';
-        }
-
-        textareas.forEach(textarea => {
-            textarea.addEventListener('input', function() {
-                adjustHeight(this);
-            });
-
-            // Initial adjustment
-            adjustHeight(textarea);
-        });
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-        adjustTextArea();
-    });
-
-    document.addEventListener('adjustTextArea', function() {
-        adjustTextArea();
-    });
-</script>
-@endpush

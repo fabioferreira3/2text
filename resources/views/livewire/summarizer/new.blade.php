@@ -15,7 +15,9 @@
                     ])
                 </div>
                 <select name="provider" wire:model="source" class="p-3 rounded-lg border border-zinc-200">
-                    @include('livewire.common.source-providers-options')
+                    @foreach([App\Enums\SourceProvider::FREE_TEXT, App\Enums\SourceProvider::YOUTUBE] as $provider)
+                    <option value="{{$provider->value}}">{{$provider->label()}}</option>
+                    @endforeach
                 </select>
             </div>
             <!-- END: Source -->
@@ -58,7 +60,7 @@
         </div>
         <div class="w-full flex flex-col md:grid md:grid-cols-3 md:items-center gap-6">
             <!-- File input -->
-            @if (in_array($source, ['docx', 'pdf_file', 'csv', 'json']))
+            {{-- @if (in_array($source, ['docx', 'pdf_file', 'csv', 'json']))
             <div class="flex flex-col gap-3 col-span-2">
                 <label class="font-bold text-xl text-zinc-700">{{ __('blog.file_option') }}</label>
                 <input type="file" name="fileInput" wire:model="fileInput"
@@ -67,7 +69,7 @@
                 <span class="text-red-500 text-sm">{{ $errors->first('fileInput') }}</span>
                 @endif
             </div>
-            @endif
+            @endif --}}
             <!-- END: File input -->
 
             <!-- Free Text -->
