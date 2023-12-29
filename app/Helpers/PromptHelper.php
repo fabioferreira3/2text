@@ -224,11 +224,23 @@ class PromptHelper
 
     public function writeSummary(array $params)
     {
-        return Lang::get(
+        $prompt = Lang::get(
             'prompt.write_summary',
-            ['text' => $params['content'], 'maxWords' => $params['max_words_count']],
+            [
+                'text' => $params['content'],
+                'maxWords' => $params['max_words_count']
+            ],
             $this->language
         );
+
+        if (!$params['target_language']) {
+            $prompt .= Lang::get(
+                'prompt.summary_keep_language',
+                $this->language
+            );
+        }
+
+        return $prompt;
     }
 
     public function writeMetaDescription($text, array $params)

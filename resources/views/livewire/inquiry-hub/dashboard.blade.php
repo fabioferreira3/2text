@@ -12,8 +12,5 @@
         </button>
     </div>
     @endsection
-
-    <div class="bg-zinc-100 rounded-lg px-4 pb-4 pt-4 border border-zinc-200">
-        @livewire('my-documents-table', ['documentTypes' => [\App\Enums\DocumentType::INQUIRY]])
-    </div>
+    @livewire('my-documents-table', ['documentTypes' => [\App\Enums\DocumentType::INQUIRY]])
 </div>

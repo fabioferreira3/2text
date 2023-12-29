@@ -11,9 +11,9 @@ use Exception;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\MultiSelectFilter;
-use WireUi\Traits\Actions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
+use WireUi\Traits\Actions;
 
 class MyDocumentsTable extends DataTableComponent
 {

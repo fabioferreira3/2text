@@ -13,7 +13,7 @@ $customAttributes = [
 
 @if ($theme === 'tailwind')
 <div {{ $attributes->merge($customAttributes['wrapper'])
-    ->class(['shadow xl:h-[300px] overflow-auto border-b border-gray-200 dark:border-gray-700 sm:rounded-lg' =>
+    ->class(['shadow overflow-auto border-b border-gray-200 dark:border-gray-700 sm:rounded-lg' =>
     $customAttributes['wrapper']['default'] ?? true])
     ->except('default')
     }}>

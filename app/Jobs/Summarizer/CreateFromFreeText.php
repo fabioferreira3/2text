@@ -51,7 +51,7 @@ class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
                     'query_embedding' => false,
                     'max_words_count' => $this->document->getMeta('max_words_count')
                 ],
-                'order' => 1
+                'order' => 2
             ]
         );
 
@@ -63,7 +63,7 @@ class CreateFromFreeText implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     'event_name' => 'SummaryCompleted'
                 ],
-                'order' => 2
+                'order' => 3
             ]
         );
 

@@ -60,7 +60,7 @@
             </header>
             <!-- End: Header -->
 
-            <div class="flex-1 p-6 overflow-auto bg-white">
+            <div class="p-6 bg-white grow overflow-auto">
                 {{ $slot }}
             </div>
         </div>

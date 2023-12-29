@@ -15,6 +15,7 @@ use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Talendor\StabilityAI\Enums\StabilityAIEngine;
@@ -94,6 +95,9 @@ class GenRepository
     {
         $promptHelper = PromptHelperFactory::create($document->language->value);
         $chatGpt = $this->chatGptFactory->make(AIModel::GPT_4_TURBO->value);
+        $params['target_language'] = $document->getMeta('target_language') ?? null;
+
+        Log::debug($promptHelper->writeSummary($params));
 
         return $chatGpt->request([[
             'role' => 'user',
@@ -103,6 +107,7 @@ class GenRepository
 
     public function generateEmbeddedSummary(Document $document, array $params)
     {
+        Log::debug('porque???');
         $user = User::findOrFail($document->getMeta('user_id'));
         $promptHelper = PromptHelperFactory::create($document->language->value);
         $oraculum = $this->oraculumFactory->make($user, $document->id);

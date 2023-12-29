@@ -108,6 +108,7 @@ return [
     'simplify_text' => "Simplify the following text while keeping the same tone:\n\n:text",
     'simplistic_tone' => "The reading complexity of the text must be low, as if a teenager would be able to read and understand it\n",
     'summarize_text' => "Summarize the following text:\n\n :text",
+    'summary_keep_language' => "\n\n- The summary must be in the same language as the provided text.",
     'tone_instructions' => "- Use a :tone tone.\n",
     'translate_text' => "Translate the following text to :target_language :\n\n:text\n\n",
     'write_meta_description' => "Write a meta description using a maximum of 20 words.\n Follow these instructions to guide your writing:\n\n",
