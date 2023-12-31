@@ -3,6 +3,7 @@
 return [
     'audio' => 'Audio',
     'audio_transcription' => 'Transcription',
+    'ask_to' => 'Ask to...',
     'back' => 'Back',
     'blog_post' => 'Blog Post',
     'copy' => 'Copy',

@@ -35,7 +35,7 @@
     <x-experior::modal>
         <div class="py-4 text-left px-6">
             <div role='button' class="flex justify-between items-center pb-3">
-                <p class="text-2xl font-bold">{{ __('menus.ask_to') }}</p>
+                <p class="text-2xl font-bold">{{ __('common.ask_to') }}</p>
                 <div role="button" class="cursor-pointer z-50" id="close" wire:click="toggleCustomPrompt">
                     <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 18 18">
@@ -45,7 +45,7 @@
                     </svg>
                 </div>
             </div>
-            <input placeholder="ie: Rewrite this text but with a funnier tone"
+            <input placeholder='ie: Rewrite this text but with a funnier tone'
                 class="w-full text-base border-0 bg-gray-100 p-0 rounded-xl py-3 px-4" name="text"
                 wire:model="customPrompt" />
             @if ($errors->has('customPrompt'))

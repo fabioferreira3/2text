@@ -21,7 +21,7 @@ return [
     'redo' => 'Refazer',
     'reduce_complexity' => 'Simplificar',
     'social_media_post' => 'Rede Social',
-    'shorten' => 'Diminuir',
+    'shorten' => 'Simplificar',
     'summarizer' => 'Sumarizador',
     'tools' => 'Ferramentas',
     'text_to_audio' => 'Texto para Áudio',

@@ -64,18 +64,27 @@ class DocumentHelper
         $originalSentencesArray = collect($sentencesArray)->map(function ($sentenceStructure, $idx) {
             return ['sentence_order' => $idx + 1, 'text' => trim($sentenceStructure[0] . $sentenceStructure[1])];
         });
-        return $originalSentencesArray;
+
+        $filteredSentencesArray = $originalSentencesArray->filter(function ($item) {
+            return !(strlen($item['text']) === 1 && ctype_punct($item['text']));
+        });
+
+        return $filteredSentencesArray->values();
     }
 
     public static function splitIntoSentences($text)
     {
         $whitespaceChars = ["\n", "\r", "\t", "\v", "\f"];
+        $cleanedText = $text;
         foreach ($whitespaceChars as $char) {
-            $cleanedText = str_replace($char, "", $text);
+            $cleanedText = str_replace($char, " ", $cleanedText);
         }
+
         $sanitizedText = strip_tags($cleanedText);
-        return preg_split('/(\\.|\?|!)/', $sanitizedText, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+
+        return preg_split('/([^!.?]+)([.!?]+|\.{3,})/', $sanitizedText, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
     }
+
 
     public static function splitSentencesIntoArray(array $sentences)
     {
