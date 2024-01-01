@@ -34,7 +34,8 @@ class AssemblyAI
             'webhook_auth_header_value' => 'Bearer ' . config('assemblyai.token'),
             'speaker_labels' => true,
             'filter_profanity' => false,
-            'content_safety' => false
+            'content_safety' => false,
+            'language_code' => $meta['language'] ?? 'en'
         ];
 
         if ($meta['speakers_expected'] ?? false) {

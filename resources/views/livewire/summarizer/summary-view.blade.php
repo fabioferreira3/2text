@@ -5,7 +5,8 @@
     @endsection
 
     <div class="flex items-center justify-end gap-2">
-        <button wire:click="new()" class="flex items-center gap-1 bg-main text-white font-bold px-5 py-1 rounded-lg">
+        <button wire:click="new()"
+            class="flex items-center gap-1 bg-main hover:bg-secondary transition ease-in duration-300 text-white font-bold px-5 py-1 rounded-lg">
             <x-icon name="plus" width="24" height="24" />
             <span class="text-lg">{{__('summarizer.new')}}</span>
         </button>

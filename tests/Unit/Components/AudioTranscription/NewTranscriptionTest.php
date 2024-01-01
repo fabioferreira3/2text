@@ -79,6 +79,17 @@ describe(
                     ->call('process')
                     ->assertHasNoErrors('target_language');
             })->with([Language::getValues()]);
+
+            test('speakers expected', function ($language) {
+                $this->component
+                    ->set('sourceType', SourceProvider::YOUTUBE->value)
+                    ->set('source_url', $this->youtubeUrl)
+                    ->set('target_language', $language)
+                    ->set('identify_speakers', true)
+                    ->set('speakers_expected', null)
+                    ->call('process')
+                    ->assertHasErrors('speakers_expected');
+            })->with([Language::getValues()]);
         });
 
         it('creates the document and dispatches the job', function () {

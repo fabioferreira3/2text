@@ -72,5 +72,11 @@
             @endforeach
         </tbody>
     </table>
+    @else
+    <div class="w-full h-full flex items-center justify-center mt-24">
+        <div class="bg-white rounded-lg px-8 py-4">
+            <div class="text-2xl font-bold text-gray-700">{{__('audio.no_audio')}}</div>
+        </div>
+    </div>
     @endif
 </div>

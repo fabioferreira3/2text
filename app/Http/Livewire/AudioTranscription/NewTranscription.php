@@ -46,7 +46,8 @@ class NewTranscription extends Component
             'sourceType' => 'required|in:youtube',
             'source_url' => ['required', 'url', $this->sourceType === 'youtube' ? new \App\Rules\YouTubeUrl() : ''],
             'origin_language' => 'required|in:en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
-            'target_language' => 'required|in:same,en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr'
+            'target_language' => 'required|in:same,en,pt,es,fr,de,it,ru,ja,ko,ch,pl,el,ar,tr',
+            'speakers_expected' => 'required_if:identify_speakers,true|nullable|integer|min:2|max:10'
         ];
     }
 
@@ -57,6 +58,7 @@ class NewTranscription extends Component
             'sourceType.required' => __('validation.source_required'),
             'origin_language.required' => __('validation.source_language_required'),
             'target_language.required' => __('validation.target_language_required'),
+            'speakers_expected.required_if' => __('validation.speakers_expected_required_if'),
         ];
     }
 
@@ -81,7 +83,7 @@ class NewTranscription extends Component
 
         CreateTranscription::dispatch($document, []);
 
-        return redirect()->to('/dashboard');
+        return redirect()->route('transcription-dashboard');
     }
 
     public function updated()

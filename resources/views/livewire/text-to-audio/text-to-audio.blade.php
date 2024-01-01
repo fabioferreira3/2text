@@ -72,8 +72,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div wire:click="playAudio('{{$voice['id']}}')">
-                            <x-icon solid name="play" width="30" height="30" class="cursor-pointer text-zinc-500" />
+                        <div wire:click="playAudio('{{$voice['id']}}')"
+                            class="flex items-center gap-1 border border-gray-200 bg-gray-100 px-3 py-1 rounded-lg cursor-pointer">
+                            <x-icon solid name="play" width="40" height="40" class="text-zinc-500" />
+                            <div class="text-sm text-gray-600 font-bold">Sample</div>
                         </div>
                         <audio id="{{ $voice['id'] }}" src="{{ $voice['url'] }}" preload="auto"></audio>
 

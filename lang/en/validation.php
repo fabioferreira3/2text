@@ -147,6 +147,7 @@ return [
         'numeric' => 'The :attribute must be :size.',
         'string' => 'The :attribute must be :size characters.',
     ],
+    'speakers_expected_required_if' => 'You need to specify the amount of speakers expected in the video',
     'social_media_sourceurl_required' => 'You need to provide a link to be used as context for your social media post.',
     'source_required' => 'Source is a required field.',
     'source_language_required' => 'Source language is a required field.',

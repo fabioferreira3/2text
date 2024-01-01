@@ -43,6 +43,7 @@ class TranscribeAudioWithDiarization implements ShouldQueue, ShouldBeUnique
         try {
             $params = [
                 'document_id' => $this->document->id,
+                'language' => $this->document->language,
                 'task_id' => $this->meta['task_id']
             ];
             if ($this->document->getMeta('speakers_expected')) {
