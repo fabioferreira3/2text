@@ -6,4 +6,5 @@ return [
     'generate_audio' => 'Gerar áudio com IA',
     'no_audio' => "Você ainda não gerou nenhum audio",
     'processing' => 'Processando',
+    'sample' => 'Amostra'
 ];

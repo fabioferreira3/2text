@@ -19,7 +19,7 @@
         <div class="flex flex-col lg:grid lg:grid-cols-2 items-start gap-8 mt-4">
             @if ($previewImgs['original'])
             <div class="flex flex-col gap-2 h-full w-full">
-                <div class="text-2xl font-bold mb-8 md:mb-0">{{__('modals.original')}}:</div>
+                <div class="text-2xl font-bold mb-8 md:mb-0">{{__('modals.primary')}}:</div>
                 <div class="relative group rounded-lg h-full flex justify-center items-center">
                     <img class="rounded-lg object-cover border border-gray-200 h-96" src={{
                         $previewImgs['original']['file_url'] }} />
@@ -136,7 +136,7 @@
 
         <div class="flex flex-col gap-6 mt-4">
             <div class="flex flex-col gap-2 w-full">
-                <div class="text-xl font-bold">{{ __('social_media.write_image_description') }}:</div>
+                <div class="text-xl font-bold">{{ __('images.write_image_description_changes') }}:</div>
                 <textarea placeholder="{{__('images.placeholder_example')}}"
                     class="w-full text-base border-1 border-gray-200 bg-gray-100 p-0 rounded-xl p-4" rows="3"
                     wire:model="prompt"></textarea>

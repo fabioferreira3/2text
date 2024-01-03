@@ -2,6 +2,6 @@
 
 return [
     'generate_new_images' => 'Gerar novas imagens',
-    'new_images' => 'Novas imagens',
-    'original' => 'Original'
+    'other_images' => 'Outras imagens',
+    'primary' => 'Principal'
 ];

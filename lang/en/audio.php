@@ -5,5 +5,6 @@ return [
     'generate' => 'Generate',
     'generate_audio' => 'Generate AI audio',
     'no_audio' => "You still haven't generated any audio",
-    'processing' => 'Processing'
+    'processing' => 'Processing',
+    'sample' => 'Sample'
 ];

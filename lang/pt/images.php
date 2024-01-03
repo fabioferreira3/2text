@@ -19,5 +19,6 @@ return [
     'regenerate_image' => 'Regenerar imagem',
     'samples' => 'Amostras',
     'use_primary' => 'Usar como principal',
-    'variants' => 'Variantes'
+    'variants' => 'Variantes',
+    'write_image_description_changes' => 'Descreva as alterações que você deseja aplicar à imagem principal',
 ];

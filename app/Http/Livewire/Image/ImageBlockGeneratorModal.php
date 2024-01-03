@@ -24,13 +24,13 @@ class ImageBlockGeneratorModal extends Component
     public array $previewImgs;
     public int $samples;
     public mixed $action = '';
-    public $mediaHelper;
+    private $mediaHelper;
     private $documentRepo;
 
     public function __construct()
     {
         $this->documentRepo = app(DocumentRepository::class);
-        $this->mediaHelper = new MediaHelper();
+        $this->mediaHelper = app(MediaHelper::class);
     }
 
     public function getListeners()
@@ -44,7 +44,7 @@ class ImageBlockGeneratorModal extends Component
 
     public function mount(DocumentContentBlock $contentBlock = null)
     {
-        $this->action = __('modals.new_images');
+        $this->action = __('modals.other_images');
         $this->contentBlock = $contentBlock;
         $this->prompt = $this->contentBlock->document->getMeta('img_prompt');
         $this->imgStyle = $this->contentBlock->document->getMeta('img_style') ?? null;

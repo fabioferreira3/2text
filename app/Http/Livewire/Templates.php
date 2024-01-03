@@ -7,15 +7,8 @@ use Livewire\Component;
 
 class Templates extends Component
 {
-    public $title;
-
-    public function mount()
-    {
-        $this->title = 'Templates';
-    }
-
     public function render()
     {
-        return view('livewire.templates')->layout('layouts.app', ['title' => $this->title]);
+        return view('livewire.templates')->layout('layouts.app', ['title' => __('common.tools')]);
     }
 }

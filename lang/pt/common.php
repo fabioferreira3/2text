@@ -35,6 +35,7 @@ return [
     'summarizer' => 'Resumo',
     'text_to_speech' => 'Texto para Áudio',
     'title_updated' => 'Título atualizado com sucesso',
+    'tools' => 'Ferramentas',
     'undo' => 'Desfazer',
     'unselect' => 'Desmarcar',
     'view_history' => 'Ver Histórico',

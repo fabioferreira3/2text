@@ -13,5 +13,6 @@ return [
     'start' => 'Iniciar',
     'summary_completed' => 'Resumo concluído!',
     'target_language' => 'Idioma alvo',
+    'title' => 'Sumarizador',
     'word_count' => 'Contagem de palavras',
 ];

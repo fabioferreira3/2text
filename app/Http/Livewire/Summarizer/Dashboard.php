@@ -13,7 +13,7 @@ class Dashboard extends Component
 
     public function render()
     {
-        return view('livewire.summarizer.dashboard')->layout('layouts.app', ['title' => __('summarizer.blog_posts')]);
+        return view('livewire.summarizer.dashboard')->layout('layouts.app', ['title' => __('summarizer.title')]);
     }
 
     public function new()

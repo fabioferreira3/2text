@@ -5,7 +5,7 @@ namespace App\Http\Livewire;
 use App\Enums\DocumentStatus;
 use App\Enums\DocumentType;
 use App\Enums\Language;
-use App\Helpers\DocumentStatusHelper;
+use App\Handlers\DocumentStatusHandler;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use Exception;
@@ -120,7 +120,7 @@ class MyDocumentsTable extends DataTableComponent
                         return view('livewire.tables.my-documents.view-action', [
                             'rowId' => $row->id,
                             'status' => $row->status,
-                            'canView' => DocumentStatusHelper::canView($row->type, $row->status),
+                            'canView' => DocumentStatusHandler::canView($row->type, $row->status),
                             'canDelete' => in_array($row->status->value, ['finished', 'aborted', 'failed', 'draft'])
                         ]);
                     }

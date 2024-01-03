@@ -35,6 +35,7 @@ return [
     'summarizer' => 'Summary',
     'text_to_speech' => 'Text to Speech',
     'title_updated' => 'Title updated sucessfully',
+    'tools' => 'Tools',
     'undo' => 'Undo',
     'unselect' => 'Unselect',
     'view_history' => 'View History',

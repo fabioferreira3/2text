@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Handlers;
 
 use App\Enums\DocumentStatus;
 use App\Enums\DocumentType;
 use Illuminate\Support\Str;
 
-class DocumentStatusHelper
+class DocumentStatusHandler
 {
     public static function canView(DocumentType $type, DocumentStatus $status)
     {
@@ -19,19 +19,19 @@ class DocumentStatusHelper
 
     public static function blogPostCanView(DocumentStatus $status)
     {
-        return !in_array($status, [DocumentStatus::FINISHED, DocumentStatus::DRAFT, DocumentStatus::IN_PROGRESS]);
+        return in_array($status, [DocumentStatus::FINISHED, DocumentStatus::DRAFT, DocumentStatus::IN_PROGRESS]);
     }
 
     public static function socialMediaGroupCanView(DocumentStatus $status)
     {
-        return !in_array($status, [
+        return in_array($status, [
             DocumentStatus::FINISHED, DocumentStatus::DRAFT, DocumentStatus::IN_PROGRESS
         ]);
     }
 
     public static function summarizerCanView(DocumentStatus $status)
     {
-        return !in_array($status, [
+        return in_array($status, [
             DocumentStatus::FINISHED, DocumentStatus::DRAFT, DocumentStatus::IN_PROGRESS
         ]);
     }

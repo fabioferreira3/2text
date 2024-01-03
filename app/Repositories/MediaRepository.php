@@ -17,6 +17,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use TypeError;
 use YoutubeDl\YoutubeDl;
 use YoutubeDl\Options;
+use Aws\S3\S3Client;
 
 class MediaRepository
 {
@@ -244,10 +245,47 @@ class MediaRepository
         return json_decode('"' . $transcription->implode(' ') . '"');
     }
 
+    public function mergeAudioFiles($audioFilePaths)
+    {
+        $localTempDir = storage_path('app/temp_audio_merge_' . uniqid());
+        mkdir($localTempDir, 0777, true);
+
+        // Temporary local file for the merged audio
+        $localMergedFilePath = $localTempDir . '/merged_audio.mp3';
+
+        // Build the ffmpeg command to merge files
+        $ffmpegCommand = 'ffmpeg -y';
+        foreach ($audioFilePaths as $filePath) {
+            // Download each file from S3 to the local temporary directory
+            $localFilePath = $localTempDir . '/' . basename($filePath);
+            Storage::disk('s3')->getDriver()->readStream($filePath, 'r+');
+            file_put_contents($localFilePath, Storage::disk('s3')->get($filePath));
+
+            $ffmpegCommand .= ' -i ' . escapeshellarg($localFilePath);
+        }
+        $ffmpegCommand .= ' -filter_complex \'concat=n=' . count($audioFilePaths) . ':v=0:a=1\' ' . escapeshellarg($localMergedFilePath);
+
+        // Execute the ffmpeg command
+        exec($ffmpegCommand);
+
+        // Upload the merged file to S3
+        $mergedFilePath = 'ai-audio/' . Str::uuid() . '.mp3';
+        Storage::disk('s3')->put($mergedFilePath, file_get_contents($localMergedFilePath));
+
+        array_map('unlink', glob("$localTempDir/*.*"));
+        rmdir($localTempDir);
+
+        // Generate a temporary URL for the merged file on S3
+        return Storage::temporaryUrl($mergedFilePath, now()->addMinutes(15));
+    }
+
     public function transcribeAudioWithDiarization(array $audioFilePaths, array $params = [])
     {
+        $tempUrl = count($audioFilePaths) > 1 ?
+            $this->mergeAudioFiles($audioFilePaths) :
+            Storage::temporaryUrl($audioFilePaths[0], now()->addMinutes(15));
+
         $assembly = $this->assemblyAIFactory->make();
-        $tempUrl = Storage::temporaryUrl($audioFilePaths[0], now()->addMinutes(15));
         $assembly->transcribe($tempUrl, $params);
     }
 
