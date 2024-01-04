@@ -29,7 +29,7 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
      *
      * @var int
      */
-    public $tries = 3;
+    public $tries = 5;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -58,7 +58,8 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $response = GenRepository::translateText(
+            $repo = new GenRepository();
+            $response = $repo->translateText(
                 $this->contentBlock->content,
                 $this->params['target_language']
             );
