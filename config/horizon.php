@@ -166,7 +166,7 @@ return [
     |
     */
 
-    'memory_limit' => 128,
+    'memory_limit' => 512,
 
     /*
     |--------------------------------------------------------------------------
@@ -211,7 +211,7 @@ return [
             'default' => [
                 'balance' => 'auto',
                 'autoScalingStrategy' => 'time',
-                'maxProcesses' => 20,
+                'maxProcesses' => 5,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
                 'tries' => 3,
@@ -221,12 +221,12 @@ return [
                 'queue' => ['image_generation'],
                 'maxTime' => 0,
                 'maxJobs' => 0,
-                'memory' => 128,
+                'memory' => 512,
                 'timeout' => 900,
                 'nice' => 0,
                 'balance' => 'auto',
                 'autoScalingStrategy' => 'time',
-                'maxProcesses' => 20,
+                'maxProcesses' => 5,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
                 'tries' => 3,
@@ -236,12 +236,12 @@ return [
                 'queue' => ['voice_generation'],
                 'maxTime' => 0,
                 'maxJobs' => 0,
-                'memory' => 128,
+                'memory' => 512,
                 'timeout' => 900,
                 'nice' => 0,
                 'balance' => 'auto',
                 'autoScalingStrategy' => 'time',
-                'maxProcesses' => 20,
+                'maxProcesses' => 5,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
                 'tries' => 3,
