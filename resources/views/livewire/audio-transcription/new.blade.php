@@ -85,7 +85,8 @@
                             'content' => App\Helpers\InstructionsHelper::expectedSpeakers()])
                         </div>
                         <div>
-                            <input type="number" min="1" max="10" class="w-1/3 p-3 border border-zinc-200 rounded-lg"
+                            <input type="number" min="2" max="10"
+                                class="w-1/3 xl:w-1/4 p-3 border border-zinc-200 rounded-lg text-center"
                                 wire:model="speakers_expected" />
                         </div>
                         @if($errors->has('speakers_expected'))

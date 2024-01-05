@@ -95,8 +95,6 @@ class NewTranscription extends Component
 
     public function updatedIdentifySpeakers($value)
     {
-        if (!$value) {
-            $this->speakers_expected = null;
-        }
+        $this->speakers_expected = $value ? ($this->speakers_expected ?? 2) : null;
     }
 }
