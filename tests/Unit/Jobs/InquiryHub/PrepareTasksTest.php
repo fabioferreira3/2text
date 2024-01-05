@@ -4,11 +4,11 @@ use App\Enums\DocumentTaskEnum;
 use App\Enums\Language;
 use App\Enums\SourceProvider;
 use App\Jobs\DispatchDocumentTasks;
-use App\Jobs\InquiryHub\PrepareTasks;
-use App\Jobs\InquiryHub\RegisterEmbedFile;
-use App\Jobs\InquiryHub\RegisterEmbedFreeText;
-use App\Jobs\InquiryHub\RegisterEmbedVideoStream;
-use App\Jobs\InquiryHub\RegisterEmbedWebsite;
+use App\Jobs\InsightHub\PrepareTasks;
+use App\Jobs\InsightHub\RegisterEmbedFile;
+use App\Jobs\InsightHub\RegisterEmbedFreeText;
+use App\Jobs\InsightHub\RegisterEmbedVideoStream;
+use App\Jobs\InsightHub\RegisterEmbedWebsite;
 use App\Models\Document;
 use Illuminate\Support\Facades\Bus;
 
@@ -29,7 +29,7 @@ afterEach(function () {
     ]);
 });
 
-describe('Inquiry Hub - PrepareTasks job', function () {
+describe('Insight Hub - PrepareTasks job', function () {
     it('dispatches an embed free text job', function () {
         $document = $this->document;
         $document->updateMeta('source', SourceProvider::FREE_TEXT->value);

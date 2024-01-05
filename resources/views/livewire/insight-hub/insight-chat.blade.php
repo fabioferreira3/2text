@@ -34,7 +34,7 @@
             class="w-full rounded-t-lg border-gray-200"></textarea>
         <button @if($isProcessing) disabled @endif wire:click='submitMsg'
             class="bg-secondary text-white py-1 rounded-b-lg font-bold text-lg">
-            {{__('inquiry-hub.send')}}
+            {{__('insight-hub.send')}}
         </button>
     </div>
 </div>

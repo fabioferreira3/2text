@@ -3,13 +3,13 @@
 use App\Enums\DocumentTaskEnum;
 use App\Enums\Language;
 use App\Jobs\DispatchDocumentTasks;
-use App\Jobs\InquiryHub\RegisterEmbedVideoStream;
+use App\Jobs\InsightHub\RegisterEmbedVideoStream;
 use App\Models\Document;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
 
 
-describe('Inquiry Hub - RegisterEmbedVideoStream job', function () {
+describe('Insight Hub - RegisterEmbedVideoStream job', function () {
     it('registers the embed task', function ($language) {
         $url = fake()->url();
         Bus::fake([DispatchDocumentTasks::class]);
@@ -43,4 +43,4 @@ describe('Inquiry Hub - RegisterEmbedVideoStream job', function () {
             'order' => 2
         ]);
     })->with(Language::getValues());
-})->group('inquiry-hub');
+})->group('insight-hub');

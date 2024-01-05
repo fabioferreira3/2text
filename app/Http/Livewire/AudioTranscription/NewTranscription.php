@@ -66,9 +66,11 @@ class NewTranscription extends Component
     {
         $this->validate();
         $targetLanguage = null;
+
         if ($this->targetLanguage !== 'same') {
             $targetLanguage = Language::tryFrom($this->targetLanguage)->label();
         }
+
         $document = DocumentRepository::createGeneric([
             'type' => DocumentType::AUDIO_TRANSCRIPTION->value,
             'source' => $this->sourceType,

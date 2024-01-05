@@ -3,13 +3,13 @@
 use App\Enums\DataType;
 use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
-use App\Jobs\InquiryHub\RegisterEmbedWebsite;
+use App\Jobs\InsightHub\RegisterEmbedWebsite;
 use App\Models\Document;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
 
 
-describe('Inquiry Hub - RegisterEmbedWebsite job', function () {
+describe('Insight Hub - RegisterEmbedWebsite job', function () {
     it('registers the embed task', function () {
         $url = fake()->url();
         Bus::fake([DispatchDocumentTasks::class]);
@@ -32,4 +32,4 @@ describe('Inquiry Hub - RegisterEmbedWebsite job', function () {
             'order' => 1
         ]);
     });
-})->group('inquiry-hub');
+})->group('insight-hub');

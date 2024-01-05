@@ -3,8 +3,8 @@
 use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Enums\SourceProvider;
-use App\Http\Livewire\InquiryHub\InquiryView;
-use App\Jobs\InquiryHub\PrepareTasks;
+use App\Http\Livewire\InsightHub\InsightView;
+use App\Jobs\InsightHub\PrepareTasks;
 use App\Models\ChatThread;
 use App\Models\Document;
 use Illuminate\Http\UploadedFile;
@@ -22,15 +22,15 @@ beforeEach(function () {
         'document_id' => $this->document->id,
         'user_id' => $this->authUser->id
     ]);
-    $this->component = actingAs($this->authUser)->livewire(InquiryView::class);
+    $this->component = actingAs($this->authUser)->livewire(InsightView::class);
 });
 
 describe(
-    'InquiryView component',
+    'InsightView component',
     function () {
         test('renders the new correct view', function () {
             $this->component->assertStatus(200)
-                ->assertViewIs('livewire.inquiry-hub.inquiry-view');
+                ->assertViewIs('livewire.insight-hub.insight-view');
         });
 
         test('confirms embedding', function () {
@@ -50,7 +50,7 @@ describe(
             $this->assertTrue($this->document->getMeta('has_embeddings'));
         });
 
-        describe('InquiryView component validation', function () {
+        describe('InsightView component validation', function () {
             test('context', function () {
                 $this->component
                     ->set('document', $this->document)
@@ -203,4 +203,4 @@ describe(
             Bus::assertDispatched(PrepareTasks::class);
         });
     }
-)->group('inquiry');
+)->group('insight');

@@ -1,8 +1,8 @@
 <div class="flex flex-col gap-6 h-full overflow-auto">
     @section('header')
     @livewire('common.header', [ 'icon'=> 'search-circle',
-    'title' => $document->title ?? __('inquiry-hub.new_inquiry'),
-    'suffix' => $document->title ? __('inquiry-hub.inquiry_hub') : "",
+    'title' => $document->title ?? __('insight-hub.new_inquiry'),
+    'suffix' => $document->title ? __('insight-hub.insight_hub') : "",
     'document' => $document,
     'editable' => true
     ])
@@ -12,17 +12,17 @@
         <div class="w-full md:w-2/5 h-full">
             <div class="flex items-start justify-between gap-2">
                 <div class="flex items-center gap-2">
-                    <h2 class="font-bold text-3xl text-zinc-700">{{ __('inquiry-hub.sources') }}:</h2>
+                    <h2 class="font-bold text-3xl text-zinc-700">{{ __('insight-hub.sources') }}:</h2>
                     @include('livewire.common.help-item', [
-                    'header' => __('inquiry-hub.sources'),
-                    'content' => App\Helpers\InstructionsHelper::inquiryHubSources(30000)
+                    'header' => __('insight-hub.sources'),
+                    'content' => App\Helpers\InstructionsHelper::insightHubSources(30000)
                     ])
                 </div>
                 <div class="flex items-center justify-end gap-2">
-                    <button wire:click="createNewInquiry()"
+                    <button wire:click="createNewInsight()"
                         class="flex items-center gap-1 bg-main text-white font-bold px-2 py-1 rounded-lg">
                         <x-icon name="plus" width="18" height="18" />
-                        <span class="text-xs">{{__('inquiry-hub.new')}}</span>
+                        <span class="text-xs">{{__('insight-hub.new')}}</span>
                     </button>
                 </div>
             </div>
@@ -59,9 +59,9 @@
                     @if($sourceType === App\Enums\SourceProvider::YOUTUBE->value)
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
-                            <label class="text-xl font-bold text-gray-700">{{__('inquiry-hub.language')}}:</label>
+                            <label class="text-xl font-bold text-gray-700">{{__('insight-hub.language')}}:</label>
                             @include('livewire.common.help-item', [
-                            'header' => __('inquiry-hub.language'),
+                            'header' => __('insight-hub.language'),
                             'content' => App\Helpers\InstructionsHelper::blogLanguages()
                             ])
                         </div>
@@ -95,7 +95,7 @@
                     @if ($sourceType === 'free_text')
                     <div class="flex flex-col gap-3 col-span-2">
                         <label class="font-bold text-xl text-zinc-700 flex items-center">
-                            {{__('inquiry-hub.text')}}:
+                            {{__('insight-hub.text')}}:
                         </label>
                         <textarea @if ($isProcessing) disabled @endif class="border border-zinc-200 rounded-lg" rows="7"
                             maxlength="30000" wire:model="context"></textarea>
@@ -111,11 +111,11 @@
                     <div class="flex mt-4">
                         <button wire:click="embed" wire:loading.remove wire:target="fileInput"
                             class="bg-secondary text-white rounded-lg py-2 px-4 font-bold text-xl">
-                            {{__('inquiry-hub.submit')}}
+                            {{__('insight-hub.submit')}}
                         </button>
                         <button disabled wire:loading wire:target="fileInput"
                             class="bg-secondary text-white rounded-lg py-2 px-4 font-bold text-xl">
-                            {{__('inquiry-hub.please_wait')}}
+                            {{__('insight-hub.please_wait')}}
                         </button>
                     </div>
                     @endif
@@ -128,7 +128,7 @@
                             <div class="flex items-center gap-2">
                                 <x-loader height="10" width="10" />
                                 <label class="font-bold text-zinc-700 text-2xl cursor-pointer">
-                                    {{ __('inquiry-hub.embedding') }}<span id="typewriter"></span>
+                                    {{ __('insight-hub.embedding') }}<span id="typewriter"></span>
                                 </label>
                             </div>
                         </div>
@@ -142,12 +142,12 @@
         <div class="w-full md:w-3/5 border h-full rounded-lg p-4 bg-gray-100">
             <div class="flex flex-col justify-end gap-2 h-full">
                 @if ($hasEmbeddings)
-                @livewire('inquiry-hub.inquiry-chat', ['document' => $document])
+                @livewire('insight-hub.insight-chat', ['document' => $document])
                 @endif
 
                 @if(!$hasEmbeddings)
                 <div class="flex items-center justify-center h-full">
-                    {{__('inquiry-hub.no_inquiries')}}
+                    {{__('insight-hub.no_inquiries')}}
                 </div>
                 @endif
             </div>

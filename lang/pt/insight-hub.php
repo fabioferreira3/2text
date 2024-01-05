@@ -5,7 +5,7 @@ return [
     'embedding' => 'Processando...',
     'embed_success' => 'Documento processado com sucesso',
     'inquiry' => 'Consulta',
-    'inquiry_hub' => 'Centro de Consultas',
+    'insight_hub' => 'Centro de Consultas',
     'language' => 'Idioma do vídeo',
     'new_inquiry' => 'Nova consulta',
     'new' => 'Novo',

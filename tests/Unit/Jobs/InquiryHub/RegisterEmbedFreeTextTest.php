@@ -3,13 +3,13 @@
 use App\Enums\DataType;
 use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
-use App\Jobs\InquiryHub\RegisterEmbedFreeText;
+use App\Jobs\InsightHub\RegisterEmbedFreeText;
 use App\Models\Document;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
 
 
-describe('Inquiry Hub - RegisterEmbedText job', function () {
+describe('Insight Hub - RegisterEmbedText job', function () {
     it('registers the embed task', function () {
         Bus::fake([DispatchDocumentTasks::class]);
         $document = Document::factory()->create();
@@ -31,4 +31,4 @@ describe('Inquiry Hub - RegisterEmbedText job', function () {
             'order' => 1
         ]);
     });
-})->group('inquiry-hub');
+})->group('insight-hub');

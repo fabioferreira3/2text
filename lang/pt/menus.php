@@ -11,7 +11,7 @@ return [
     'delete' => 'Remover',
     'expand' => 'Expandir',
     'increase_complexity' => 'Aumentar complexidade',
-    'inquiry_hub' => 'Centro de Consulta',
+    'insight_hub' => 'Centro de Consulta',
     'logout' => 'Sair',
     'manage_account' => 'Gerenciar conta',
     'more' => 'Mais',

@@ -11,7 +11,7 @@ return [
     'delete' => 'Delete',
     'expand' => 'Expand',
     'increase_complexity' => 'Increase complexity',
-    'inquiry_hub' => 'Inquiry Hub',
+    'insight_hub' => 'Insight Hub',
     'logout' => 'Log out',
     'manage_account' => 'Manage account',
     'more' => 'More',

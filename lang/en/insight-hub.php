@@ -5,7 +5,7 @@ return [
     'embedding' => 'Processing...',
     'embed_success' => 'Document processed succesfully',
     'inquiry' => 'Inquiry',
-    'inquiry_hub' => 'Inquiry Hub',
+    'insight_hub' => 'Insight Hub',
     'language' => 'Language of the video',
     'new_inquiry' => 'New inquiry',
     'new' => 'New',

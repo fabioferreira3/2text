@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\AIModel;
 use App\Http\Controllers\DocumentViewController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Livewire\Dashboard;
@@ -18,8 +17,8 @@ use App\Http\Livewire\AudioTranscription\NewTranscription;
 use App\Http\Livewire\AudioTranscription\AudioTranscription;
 use App\Http\Livewire\AudioTranscription\Dashboard as AudioTranscriptionDashboard;
 use App\Http\Livewire\Blog\Dashboard as BlogDashboard;
-use App\Http\Livewire\InquiryHub\Dashboard as InquiryHubDashboard;
-use App\Http\Livewire\InquiryHub\InquiryView;
+use App\Http\Livewire\InsightHub\Dashboard as InsightHubDashboard;
+use App\Http\Livewire\InsightHub\InsightView;
 use App\Http\Livewire\Paraphraser\Dashboard as ParaphraserDashboard;
 use App\Http\Livewire\SocialMediaPost\Dashboard as SocialMediaPostDashboard;
 use App\Http\Livewire\Summarizer\Dashboard as SummarizerDashboard;
@@ -27,10 +26,8 @@ use App\Http\Livewire\Summarizer\NewSummarizer;
 use App\Http\Livewire\Summarizer\SummaryView;
 use App\Http\Livewire\Trash;
 use App\Models\ShortLink;
-use App\Models\Voice as ModelsVoice;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
-use Talendor\ElevenLabsClient\Voice\Voice;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,9 +81,9 @@ Route::middleware([
     Route::get('/text-to-audio/history', AudioHistory::class)->name('text-to-audio-history');
     Route::get('/documents/text-to-audio/{document}', TextToAudio::class)->name('text-to-audio-view');
 
-    /* Inquiry Hub */
-    Route::get('/inquiry-hub', InquiryHubDashboard::class)->name('inquiry-dashboard');
-    Route::get('/documents/inquiry-hub/{document}', InquiryView::class)->name('inquiry-view');
+    /* Insight Hub */
+    Route::get('/insight-hub', InsightHubDashboard::class)->name('insight-dashboard');
+    Route::get('/documents/insight-hub/{document}', InsightView::class)->name('insight-view');
 
     /* Summarizer */
     Route::get('/summarizer', SummarizerDashboard::class)->name('summarizer-dashboard');

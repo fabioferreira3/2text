@@ -65,10 +65,10 @@
             'icon' => 'sort-ascending',
             ])
             @include('livewire.common.navlink', [
-            'activeRoutes' => ['inquiry-dashboard', 'inquiry-view'],
-            'route' => 'inquiry-dashboard',
+            'activeRoutes' => ['insight-dashboard', 'insight-view'],
+            'route' => 'insight-dashboard',
             'submenu' => true,
-            'name' => __('menus.inquiry_hub'),
+            'name' => __('menus.insight_hub'),
             'icon' => 'search-circle',
             ])
         </div>

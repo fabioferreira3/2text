@@ -13,6 +13,6 @@
         @livewire('paraphraser.template')
         @livewire('text-to-audio.template')
         @livewire('summarizer.template')
-        @livewire('inquiry-hub.template')
+        @livewire('insight-hub.template')
     </div>
 </div>

@@ -31,7 +31,7 @@ describe('Routes', function () {
         $this->request->get('/paraphraser')->assertSeeLivewire('paraphraser.dashboard');
     });
 
-    test('it renders the inquiry hub dashboard component', function () {
-        $this->request->get('/inquiry-hub')->assertSeeLivewire('inquiry-hub.dashboard');
+    test('it renders the insight hub dashboard component', function () {
+        $this->request->get('/insight-hub')->assertSeeLivewire('insight-hub.dashboard');
     });
 });

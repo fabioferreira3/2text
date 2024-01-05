@@ -173,21 +173,21 @@ class InstructionsHelper
         <p>" . __('instructions.new_text_enter_text') . "</p>";
     }
 
-    public static function inquiryHubSources($maxChars = 30000)
+    public static function insightHubSources($maxChars = 30000)
     {
         return "
         <h3 class='mt-4 font-bold'>" . __('instructions.free_text') . "</h3>
-        <p>" . __('instructions.inquiry_hub_free_text', ['maxChars' => $maxChars]) . "</p>
+        <p>" . __('instructions.insight_hub_free_text', ['maxChars' => $maxChars]) . "</p>
         <h3 class='mt-4 font-bold'>Youtube videos</h3>
-        <p>" . __('instructions.inquiry_hub_youtube_link') . "</p>
+        <p>" . __('instructions.insight_hub_youtube_link') . "</p>
         <h3 class='mt-4 font-bold'>" . __('instructions.website_url') . "</h3>
-        <p>" . __('instructions.inquiry_hub_website_url') . "</p>
+        <p>" . __('instructions.insight_hub_website_url') . "</p>
         <h3 class='mt-4 font-bold'>" . __('instructions.pdf_files') . "</h3>
-        <p>" . __('instructions.inquiry_hub_pdf_files') . "</p>
+        <p>" . __('instructions.insight_hub_pdf_files') . "</p>
         <h3 class='mt-4 font-bold'>" . __('instructions.docx_files') . "</h3>
-        <p>" . __('instructions.inquiry_hub_docx_files') . "</p>
+        <p>" . __('instructions.insight_hub_docx_files') . "</p>
         <h3 class='mt-4 font-bold'>" . __('instructions.csv_files') . "</h3>
-        <p>" . __('instructions.inquiry_hub_csv_files') . "</p>";
+        <p>" . __('instructions.insight_hub_csv_files') . "</p>";
     }
 
     public static function paraphraserSources()
