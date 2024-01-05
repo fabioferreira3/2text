@@ -20,9 +20,9 @@
                 @if ($sourceType === 'youtube')
                 <div class="flex flex-col gap-3">
                     <label class="font-bold text-lg text-zinc-700">Youtube url:</label>
-                    <input name="url" wire:model="source_url" class="p-3 border border-zinc-200 rounded-lg" />
-                    @if($errors->has('source_url'))
-                    <span class="text-red-500 text-sm">{{ $errors->first('source_url') }}</span>
+                    <input name="url" wire:model="sourceUrl" class="p-3 border border-zinc-200 rounded-lg" />
+                    @if($errors->has('sourceUrl'))
+                    <span class="text-red-500 text-sm">{{ $errors->first('sourceUrl') }}</span>
                     @endif
                 </div>
                 @endif
@@ -34,14 +34,14 @@
                             @include('livewire.common.help-item', ['header' => __('transcription.origin_language'),
                             'content' => App\Helpers\InstructionsHelper::transcriptionLanguage()])
                         </div>
-                        <select name="origin_language" wire:model="origin_language"
+                        <select name="originLanguage" wire:model="originLanguage"
                             class="p-3 rounded-lg border border-zinc-200">
                             @foreach ($languages as $option)
                             <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
                             @endforeach
                         </select>
-                        @if($errors->has('language'))
-                        <span class="text-red-500 text-sm">{{ $errors->first('origin_language') }}</span>
+                        @if($errors->has('originLanguage'))
+                        <span class="text-red-500 text-sm">{{ $errors->first('originLanguage') }}</span>
                         @endif
                     </div>
                     <div class="flex flex-col gap-3">
@@ -51,7 +51,7 @@
                             @include('livewire.common.help-item', ['header' => __('transcription.target_language'),
                             'content' => App\Helpers\InstructionsHelper::transcriptionTranslate()])
                         </div>
-                        <select name="target_language" wire:model="target_language"
+                        <select name="targetLanguage" wire:model="targetLanguage"
                             class="p-3 rounded-lg border border-zinc-200">
                             <option value="same">{{__('transcription.no')}}</option>
                             @foreach ($languages as $option)
@@ -59,7 +59,7 @@
                             @endforeach
                         </select>
                         @if($errors->has('language'))
-                        <span class="text-red-500 text-sm">{{ $errors->first('target_language') }}</span>
+                        <span class="text-red-500 text-sm">{{ $errors->first('targetLanguage') }}</span>
                         @endif
                     </div>
                 </div>
@@ -72,11 +72,11 @@
                             'content' => App\Helpers\InstructionsHelper::transcriptionDiarization()])
                         </div>
                         <div>
-                            <x-checkbox md id="identify_speakers" name="identify_speakers" label="{{__('common.yes')}}"
-                                wire:model="identify_speakers" />
+                            <x-checkbox md id="identifySpeakers" name="identifySpeakers" label="{{__('common.yes')}}"
+                                wire:model="identifySpeakers" />
                         </div>
                     </div>
-                    @if($identify_speakers)
+                    @if($identifySpeakers)
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
                             <label
@@ -87,10 +87,10 @@
                         <div>
                             <input type="number" min="2" max="10"
                                 class="w-1/3 xl:w-1/4 p-3 border border-zinc-200 rounded-lg text-center"
-                                wire:model="speakers_expected" />
+                                wire:model="speakersExpected" />
                         </div>
-                        @if($errors->has('speakers_expected'))
-                        <span class="text-red-500 text-sm">{{ $errors->first('speakers_expected') }}</span>
+                        @if($errors->has('speakersExpected'))
+                        <span class="text-red-500 text-sm">{{ $errors->first('speakersExpected') }}</span>
                         @endif
                     </div>
                     @endif

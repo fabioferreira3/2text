@@ -39,56 +39,56 @@ describe(
                 $this->component
                     ->set('sourceType', SourceProvider::YOUTUBE->value)
                     ->call('process')
-                    ->assertHasErrors(['source_url' => 'required'])
-                    ->set('source_url', fake()->url())
+                    ->assertHasErrors(['sourceUrl' => 'required'])
+                    ->set('sourceUrl', fake()->url())
                     ->call('process')
-                    ->assertHasNoErrors(['source_url' => 'required'])
-                    ->assertHasNoErrors(['source_url' => 'url'])
-                    ->assertHasErrors(['source_url'])
-                    ->set('source_url', $this->youtubeUrl)
+                    ->assertHasNoErrors(['sourceUrl' => 'required'])
+                    ->assertHasNoErrors(['sourceUrl' => 'url'])
+                    ->assertHasErrors(['sourceUrl'])
+                    ->set('sourceUrl', $this->youtubeUrl)
                     ->call('process')
-                    ->assertHasNoErrors('source_url');
+                    ->assertHasNoErrors('sourceUrl');
             });
 
             test('origin language', function ($language) {
                 $this->component
                     ->set('sourceType', SourceProvider::YOUTUBE->value)
-                    ->set('source_url', $this->youtubeUrl)
-                    ->set('origin_language', '123')
+                    ->set('sourceUrl', $this->youtubeUrl)
+                    ->set('originLanguage', '123')
                     ->call('process')
-                    ->assertHasErrors(['origin_language' => 'in'])
-                    ->set('origin_language', '')
+                    ->assertHasErrors(['originLanguage' => 'in'])
+                    ->set('originLanguage', '')
                     ->call('process')
-                    ->assertHasErrors(['origin_language' => 'required'])
-                    ->set('origin_language', $language)
+                    ->assertHasErrors(['originLanguage' => 'required'])
+                    ->set('originLanguage', $language)
                     ->call('process')
-                    ->assertHasNoErrors('origin_language');
+                    ->assertHasNoErrors('originLanguage');
             })->with([Language::getValues()]);
 
             test('target language', function ($language) {
                 $this->component
                     ->set('sourceType', SourceProvider::YOUTUBE->value)
-                    ->set('source_url', $this->youtubeUrl)
-                    ->set('target_language', '123')
+                    ->set('sourceUrl', $this->youtubeUrl)
+                    ->set('targetLanguage', '123')
                     ->call('process')
-                    ->assertHasErrors(['target_language' => 'in'])
-                    ->set('target_language', '')
+                    ->assertHasErrors(['targetLanguage' => 'in'])
+                    ->set('targetLanguage', '')
                     ->call('process')
-                    ->assertHasErrors(['target_language' => 'required'])
-                    ->set('target_language', $language)
+                    ->assertHasErrors(['targetLanguage' => 'required'])
+                    ->set('targetLanguage', $language)
                     ->call('process')
-                    ->assertHasNoErrors('target_language');
+                    ->assertHasNoErrors('targetLanguage');
             })->with([Language::getValues()]);
 
             test('speakers expected', function ($language) {
                 $this->component
                     ->set('sourceType', SourceProvider::YOUTUBE->value)
-                    ->set('source_url', $this->youtubeUrl)
-                    ->set('target_language', $language)
-                    ->set('identify_speakers', true)
-                    ->set('speakers_expected', null)
+                    ->set('sourceUrl', $this->youtubeUrl)
+                    ->set('targetLanguage', $language)
+                    ->set('identifySpeakers', true)
+                    ->set('speakersExpected', null)
                     ->call('process')
-                    ->assertHasErrors('speakers_expected');
+                    ->assertHasErrors('speakersExpected');
             })->with([Language::getValues()]);
         });
 
@@ -96,11 +96,11 @@ describe(
             Bus::fake(CreateTranscription::class);
             $this->component
                 ->set('sourceType', SourceProvider::YOUTUBE->value)
-                ->set('source_url', $this->youtubeUrl)
-                ->set('origin_language', Language::ITALIAN->value)
-                ->set('target_language', Language::PORTUGUESE->value)
-                ->set('identify_speakers', true)
-                ->set('speakers_expected', 4)
+                ->set('sourceUrl', $this->youtubeUrl)
+                ->set('originLanguage', Language::ITALIAN->value)
+                ->set('targetLanguage', Language::PORTUGUESE->value)
+                ->set('identifySpeakers', true)
+                ->set('speakersExpected', 4)
                 ->call('process')
                 ->assertHasNoErrors();
 
