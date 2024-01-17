@@ -1,12 +1,17 @@
 <div class="p-4">
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center justify-center mb-4 mt-2">
         <button wire:click="$toggle('showNewGenerator')"
             class="flex items-center gap-2 bg-secondary px-4 py-2 rounded-lg text-white font-bold text-lg">
             <x-icon name="plus-sm" width="28" height="28" color="white" />
             <div>{{__('images.new')}}</div>
         </button>
-        @if(count($images))<div class="text-lg">Results: {{count($images)}}</div>@endif
     </div>
+
+    @if(count($images))
+    <div class="flex items-center justify-between my-4">
+        <div class="text-2xl font-bold text-gray-700">Results: {{count($images)}}</div>
+    </div>
+    @endif
 
     @if(count($images))
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\DocumentContentBlock;
 use Illuminate\Console\Command;
 
 class DoIt extends Command
@@ -28,16 +27,5 @@ class DoIt extends Command
      */
     public function handle()
     {
-        $contentBlocks = DocumentContentBlock::all();
-
-        $contentBlocks->each(function ($contentBlock) {
-            if (!$contentBlock->versions->count()) {
-                $contentBlock->versions()->create([
-                    'content' => $contentBlock->content,
-                    'version' => 1,
-                    'active' => true
-                ]);
-            }
-        });
     }
 }

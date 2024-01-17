@@ -1,4 +1,4 @@
-<div class="w-full mt-8">
+<div class="w-full">
     @if(count($history))
     <table class="w-full table-auto">
         <thead>
@@ -73,7 +73,7 @@
         </tbody>
     </table>
     @else
-    <div class="w-full h-full flex items-center justify-center mt-24">
+    <div class="w-full h-full flex items-center justify-center">
         <div class="bg-white rounded-lg px-8 py-4">
             <div class="text-2xl font-bold text-gray-700">{{__('audio.no_audio')}}</div>
         </div>

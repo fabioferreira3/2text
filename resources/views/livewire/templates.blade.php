@@ -9,6 +9,7 @@
     <div class="grid md:grid-cols-3 xl:grid-cols-4 gap-6">
         @livewire('social-media-post.template')
         @livewire('blog.template')
+        @livewire('image.template')
         @livewire('audio-transcription.template')
         @livewire('paraphraser.template')
         @livewire('text-to-audio.template')

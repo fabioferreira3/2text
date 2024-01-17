@@ -98,7 +98,7 @@
                     </button>
                 </div>
                 @endif
-                <button :disabled="$isProcessing" wire:click="generate" class="w-2/3 xl:w-1/2 place-self-center
+                <button @if($isProcessing) disabled @endif wire:click="generate" class="w-2/3 xl:w-1/2 place-self-center
                                                 bg-secondary transition-colors ease-in-out
                                                 duration-500 delay-150 hover:bg-main text-xl font-bold px-4 py-2 rounded-lg
                                                 text-sm text-zinc-200">

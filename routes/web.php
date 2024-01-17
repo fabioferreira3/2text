@@ -51,6 +51,7 @@ Route::middleware([
         return redirect('/tools');
     });
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/dashboard?tab=images', Dashboard::class)->name('my-images');
     Route::get('/dashboard/trash', Trash::class)->name('trash');
     Route::get('/tools', Templates::class)->name('tools');
 

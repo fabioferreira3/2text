@@ -7,7 +7,7 @@ return [
     'download' => 'Download',
     'example' => 'Example: A majestic red castle, instead of a golden one',
     'images' => 'Images',
-    'new' => 'New',
+    'new' => 'Generate Image with AI',
     'original' => 'Original',
     'generate' => 'Generate',
     'generating' => 'Generating',

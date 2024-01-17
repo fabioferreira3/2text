@@ -9,7 +9,7 @@
 
         @if ($copyAction)
         <x-dropdown.item icon="clipboard-copy" separator>
-            <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" :disabled='$copied ? true : false'
+            <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" @if($copied) disabled @endif
                 wire:click='copy' :label='$copied ? __("common.copied") : __("common.copy")'
                 class='hover:bg-transparent hover:shadow-none border-0 px-0 text-zinc-700' />
         </x-dropdown.item>
@@ -26,7 +26,7 @@
     <x-button neutral sm spinner="isProcessing" wire:loading.attr="disabled" wire:click='regenerate' icon="refresh"
         label="{{__('common.regenerate')}}" class='rounded-lg bg-secondary hover:bg-main text-white border-0' />@endif
     @if($copyAction)
-    <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" :disabled='$copied ? true : false'
+    <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" @if($copied) disabled @endif
         wire:click='copy' icon="clipboard-copy" :label='$copied ? __("common.copied") : __("common.copy")'
         class='bg-zinc-100 hover:bg-zinc-400 hover:text-white text-zinc-700 rounded-lg border-primary border-opacity-20' />
     @endif

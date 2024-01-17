@@ -9,7 +9,6 @@ use Livewire\Component;
 
 class InsightChat extends Component
 {
-
     public $document;
     public bool $isProcessing;
     public $activeThread;

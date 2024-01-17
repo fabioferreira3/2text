@@ -10,6 +10,8 @@ return [
     'create_paraphrase' => 'Paraphrase any text using AI',
     'create_summary' => 'Summarize web pages, articles, youtube videos or any text using AI',
     'create_text_to_speech' => 'Convert any text to realistic audio using AI',
+    'create_ai_image' => 'Create images using AI',
+    'image' => 'Image Generator',
     'insight_hub' => 'Insight Hub',
     'paraphraser' => 'Paraphraser',
     'social_media_post' => 'Social Media Post',

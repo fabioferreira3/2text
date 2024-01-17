@@ -38,6 +38,13 @@
             'icon' => 'newspaper',
             ])
             @include('livewire.common.navlink', [
+            'activeRoutes' => ['my-images'],
+            'route' => 'my-images',
+            'submenu' => true,
+            'name' => __('menus.ai_images'),
+            'icon' => 'photograph',
+            ])
+            @include('livewire.common.navlink', [
             'activeRoutes' => ['paraphraser-dashboard', 'new-paraphraser', 'paraphrase-view'],
             'route' => 'paraphraser-dashboard',
             'submenu' => true,

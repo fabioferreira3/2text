@@ -9,9 +9,9 @@
                         class='hover:bg-transparent hover:shadow-none border-0 px-0 text-zinc-700' />
                 </x-dropdown.item>
                 <x-dropdown.item icon="clipboard-copy" separator>
-                    <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save"
-                        :disabled='$copied ? true : false' wire:click='copy' :label='$copied ? __(' common.copied') :
-                        __('common.copy')' class='hover:bg-transparent hover:shadow-none border-0 px-0 text-zinc-700' />
+                    <x-button sm wire:loading.attr="disabled" wire:target="regenerate,save" @if($copied) disabled @endif
+                        wire:click='copy' :label='$copied ? __(' common.copied') : __('common.copy')'
+                        class='hover:bg-transparent hover:shadow-none border-0 px-0 text-zinc-700' />
                 </x-dropdown.item>
                 <x-dropdown.item icon="save" separator>
                     <x-button sm spinner="save" wire:loading.attr="disabled" wire:target="regenerate,save"

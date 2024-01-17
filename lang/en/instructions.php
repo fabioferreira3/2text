@@ -42,14 +42,14 @@ return [
     'image_guideline_7_header' => 'Sensitive Subjects',
     'image_guideline_7_content' => 'Prompts that could be considered insensitive or could perpetuate bias based on race,
         gender, or other personal characteristics.',
-    'inquiry_hub_free_text' => 'Enter any text that you want to be indexed up to :maxChars characters.',
-    'inquiry_hub_youtube_link' => 'Provide a Youtube link and Oraculum will extract the audio, transcribe and
+    'insight_hub_free_text' => 'Enter any text that you want to be indexed up to :maxChars characters.',
+    'insight_hub_youtube_link' => 'Provide a Youtube link and Oraculum will extract the audio, transcribe and
         index it to be inquired.',
-    'inquiry_hub_website_url' => 'Provide a website url and Oraculum will extract its content and index
+    'insight_hub_website_url' => 'Provide a website url and Oraculum will extract its content and index
         it to be inquired.',
-    'inquiry_hub_pdf_files' => 'Provide a PDF file and Oraculum will read it and and index its content',
-    'inquiry_hub_docx_files' => 'Provide a Docx file and Oraculum will read it and index its content',
-    'inquiry_hub_csv_files' => 'Provide a CSV file and Oraculum will read it and index its content.',
+    'insight_hub_pdf_files' => 'Provide a PDF file and Oraculum will read it and and index its content',
+    'insight_hub_docx_files' => 'Provide a Docx file and Oraculum will read it and index its content',
+    'insight_hub_csv_files' => 'Provide a CSV file and Oraculum will read it and index its content.',
     'new_text_enter_external_url' => 'Enter an external website url to be used as context, like
         another blog post or page. Oraculum will do its best to extract as much information as possible
         from this page and use it as context for the creation of your text.',

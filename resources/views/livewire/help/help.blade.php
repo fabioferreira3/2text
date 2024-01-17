@@ -2,11 +2,11 @@
     <div class="flex justify-start items-center gap-4">
         <x-icon name="question-mark-circle" class="w-12 h-12 text-secondary" />
         <div class="flex flex-col text-start">
-            <h3 class="font-bold text-gray-700"><span class="text-4xl">Help</h3>
+            <h3 class="font-bold text-gray-700"><span class="text-4xl">{{__('help.help')}}</h3>
             <h4 class="font-medium text-2xl">{{$title}}</h4>
         </div>
     </div>
     <div class="mt-12">
-        eita!
+        {{$content}}
     </div>
 </div>

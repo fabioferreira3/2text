@@ -54,7 +54,7 @@
                 </div>
                 @endforeach
             </div>
-            <x-button wire:click="generate" :disabled='$selectedVoice === null || $isProcessing' neutral
+            <x-button wire:click="generate" @if($selectedVoice===null || $isProcessing) disabled @endif neutral
                 class="bg-secondary hover:bg-main"
                 :label="$isProcessing ? {{__('audio.processing')}} : {{__('audio.generate')}}" />
         </div>

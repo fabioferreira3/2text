@@ -12,6 +12,7 @@ class Header extends Component
     public $title = '';
     public $suffix = null;
 
+    protected $listeners = ['titleUpdated' => 'updateTitle'];
 
     /**
      * Get the view / contents that represent the component.
@@ -21,6 +22,11 @@ class Header extends Component
     public function render()
     {
         return view('livewire.common.header');
+    }
+
+    public function updateTitle($title)
+    {
+        $this->title = $title;
     }
 
     public function updatedTitle($newTitle)
