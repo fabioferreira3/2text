@@ -34,7 +34,7 @@ enum DocumentType: string
         return [
             self::AUDIO_TRANSCRIPTION->value => 'transcription-view',
             self::BLOG_POST->value => 'blog-post-view',
-            self::INQUIRY->value => 'inquiry-view',
+            self::INQUIRY->value => 'insight-view',
             self::PARAPHRASED_TEXT->value => 'paraphrase-view',
             self::SOCIAL_MEDIA_GROUP->value => 'social-media-view',
             self::SUMMARIZER->value => 'summary-view',

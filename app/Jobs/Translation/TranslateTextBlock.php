@@ -22,7 +22,7 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
 
     public Document $document;
     public DocumentContentBlock $contentBlock;
-    public array $params;
+    public array $meta;
 
     /**
      * The number of times the job may be attempted.
@@ -73,11 +73,11 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
      *
      * @return void
      */
-    public function __construct(Document $document, array $params = [])
+    public function __construct(Document $document, array $meta = [])
     {
         $this->document = $document;
-        $this->contentBlock = DocumentContentBlock::findOrFail($params['content_block_id']);
-        $this->params = $params;
+        $this->contentBlock = DocumentContentBlock::findOrFail($meta['content_block_id']);
+        $this->meta = $meta;
     }
 
     /**
@@ -91,7 +91,7 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
             $repo = new GenRepository();
             $response = $repo->translateText(
                 $this->contentBlock->content,
-                $this->params['target_language']
+                $this->meta['target_language']
             );
             $this->contentBlock->update([
                 'content' => $response['content']

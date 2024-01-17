@@ -16,7 +16,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Exception;
-use Illuminate\Support\Facades\Log;
 
 class ExpandTextSection implements ShouldQueue, ShouldBeUnique
 {
