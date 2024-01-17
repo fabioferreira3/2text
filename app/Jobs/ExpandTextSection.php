@@ -54,6 +54,16 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
     }
 
     /**
+     * Calculate the number of seconds to wait before retrying the job.
+     *
+     * @return array<int, int>
+     */
+    public function backoff(): array
+    {
+        return [5, 10, 15];
+    }
+
+    /**
      * Create a new job instance.
      *
      * @return void
