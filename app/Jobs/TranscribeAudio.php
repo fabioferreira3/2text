@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class TranscribeAudio implements ShouldQueue, ShouldBeUnique
 {
@@ -101,7 +102,7 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
             ]);
 
             $this->jobSucceded();
-        } catch (Exception $e) {
+        } catch (HttpException $e) {
             $this->handleError($e, 'Transcribing audio error');
         }
     }

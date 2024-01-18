@@ -15,6 +15,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class EmbedSource implements ShouldQueue, ShouldBeUnique
 {
@@ -106,7 +107,7 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
             $this->jobSucceded();
 
             return $response;
-        } catch (Exception $e) {
+        } catch (HttpException $e) {
             $this->jobFailed($e->getMessage());
         }
     }

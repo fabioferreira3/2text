@@ -15,6 +15,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
 {
@@ -83,7 +84,7 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
             $this->genRepo->rewriteTextBlock($this->contentBlock, $this->meta);
             event(new ContentBlockUpdated($this->contentBlock, $this->meta['process_id']));
             $this->jobSucceded();
-        } catch (Exception $e) {
+        } catch (HttpException $e) {
             $this->handleError($e, 'Failed to rewrite text block');
         }
     }

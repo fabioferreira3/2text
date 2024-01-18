@@ -15,6 +15,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
 {
@@ -97,7 +98,7 @@ class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
                 'collection_name' => $this->meta['collection_name']
             ]);
             $this->jobSucceded();
-        } catch (Exception $e) {
+        } catch (HttpException $e) {
             $this->handleError($e, 'Audio extraction and embedding error');
         }
     }

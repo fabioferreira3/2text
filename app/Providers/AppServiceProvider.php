@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
         Cashier::useCustomerModel(Account::class);
 
         Queue::failing(function (JobFailed $event) {
-            $event->job->jobFailed($event->exception->getMessage());
+            //    $event->job->jobFailed($event->exception->getMessage());
         });
     }
 }

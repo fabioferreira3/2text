@@ -18,6 +18,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 class CreateOutline implements ShouldQueue, ShouldBeUnique
 {
@@ -103,7 +105,7 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
                 'meta' => ['document_id' => $this->document->id]
             ]);
             $this->jobSucceded();
-        } catch (Exception $e) {
+        } catch (HttpException $e) {
             $this->handleError($e, 'Failed to generate outline');
         }
     }

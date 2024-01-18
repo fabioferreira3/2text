@@ -16,7 +16,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Exception;
-use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ExpandTextSection implements ShouldQueue, ShouldBeUnique
 {
@@ -103,7 +103,7 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
                 'meta' => ['document_id' => $this->document->id]
             ]);
             $this->jobSucceded();
-        } catch (Exception $e) {
+        } catch (HttpException $e) {
             $this->handleError($e, 'Failed to expand text');
         }
     }

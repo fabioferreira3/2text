@@ -14,6 +14,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Exception;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ExpandText implements ShouldQueue, ShouldBeUnique
 {
@@ -76,7 +77,7 @@ class ExpandText implements ShouldQueue, ShouldBeUnique
 
             DispatchDocumentTasks::dispatch($this->document);
             $this->jobSucceded();
-        } catch (Exception $e) {
+        } catch (HttpException $e) {
             $this->handleError($e, 'Failed to expand text');
         }
     }

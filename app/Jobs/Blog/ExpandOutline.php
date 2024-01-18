@@ -18,6 +18,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ExpandOutline implements ShouldQueue, ShouldBeUnique
 {
@@ -100,7 +101,7 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
                 'meta' => ['document_id' => $this->document->id]
             ]);
             $this->jobSucceded();
-        } catch (Exception $e) {
+        } catch (HttpException $e) {
             $this->handleError($e, 'Failed to expand outline');
         }
     }

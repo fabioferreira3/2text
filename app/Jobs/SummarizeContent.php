@@ -15,6 +15,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SummarizeContent implements ShouldQueue, ShouldBeUnique
 {
@@ -105,7 +106,7 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
             }
 
             $this->jobSucceded();
-        } catch (Exception $e) {
+        } catch (HttpException $e) {
             $this->handleError($e, 'Failed to summarize content');
         }
     }

@@ -7,6 +7,8 @@ use App\Models\DocumentTask;
 use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 trait JobEndings
 {
@@ -83,17 +85,12 @@ trait JobEndings
         throw new Exception($errorMsg);
     }
 
-    protected function handleError(Exception $e, $customErrorMsg)
+    protected function handleError(HttpException $e, $customErrorMsg)
     {
-        if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
-            if ($e->getStatusCode() == 504) {
-                Log::error('Timeout (504): ' . $e->getMessage());
-            } else {
-                $this->jobFailed("{$customErrorMsg}: " . $e->getMessage());
-            }
+        if ($e->getStatusCode() == 504) {
+            Log::error('Timeout (504): ' . $e->getMessage());
         } else {
-            Log::error($e->getMessage());
-            $this->jobAborted();
+            $this->jobFailed("{$customErrorMsg}: " . $e->getMessage());
         }
     }
 }

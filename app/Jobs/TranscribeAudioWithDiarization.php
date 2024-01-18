@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class TranscribeAudioWithDiarization implements ShouldQueue, ShouldBeUnique
 {
@@ -88,7 +89,7 @@ class TranscribeAudioWithDiarization implements ShouldQueue, ShouldBeUnique
                 $params
             );
             $this->jobPending();
-        } catch (Exception $e) {
+        } catch (HttpException $e) {
             $this->handleError($e, 'Transcribing audio with diarization error');
         }
     }

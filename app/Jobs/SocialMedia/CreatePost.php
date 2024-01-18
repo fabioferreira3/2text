@@ -17,6 +17,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Livewire\WithFileUploads;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CreatePost implements ShouldQueue, ShouldBeUnique
 {
@@ -83,7 +84,7 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
             ]);
 
             $this->jobSucceded();
-        } catch (Exception $e) {
+        } catch (HttpException $e) {
             $this->handleError($e, 'Failed to generate ' . $this->meta['platform'] . ' post');
         }
     }
