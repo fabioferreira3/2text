@@ -84,7 +84,7 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
             event(new ContentBlockUpdated($this->contentBlock, $this->meta['process_id']));
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to rewrite text block: ' . $e->getMessage());
+            $this->handleError($e, 'Failed to rewrite text block');
         }
     }
 

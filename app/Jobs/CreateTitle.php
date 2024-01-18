@@ -88,7 +88,7 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
             event(new TitleGenerated($this->document, $this->meta['process_id']));
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to create title: ' . $e->getMessage());
+            $this->handleError($e, 'Failed to create title');
         }
     }
 

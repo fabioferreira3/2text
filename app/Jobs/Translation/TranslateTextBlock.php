@@ -103,7 +103,7 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
             ]);
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to translate text block: ' . $e->getMessage());
+            $this->handleError($e, 'Failed to translate text block');
         }
     }
 

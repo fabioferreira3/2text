@@ -99,8 +99,7 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
 
             $this->jobSucceded();
         } catch (Exception $e) {
-            Log::error($e->getMessage());
-            $this->jobFailed('Audio download error: ' . $e->getMessage());
+            $this->handleError($e, 'Audio download error');
         }
     }
 

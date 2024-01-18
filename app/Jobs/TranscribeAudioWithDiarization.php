@@ -89,7 +89,7 @@ class TranscribeAudioWithDiarization implements ShouldQueue, ShouldBeUnique
             );
             $this->jobPending();
         } catch (Exception $e) {
-            $this->jobFailed('Transcribing audio with diarization error: ' . $e->getMessage());
+            $this->handleError($e, 'Transcribing audio with diarization error');
         }
     }
 

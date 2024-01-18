@@ -104,7 +104,7 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
             ]);
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to generate outline: ' . $e->getMessage());
+            $this->handleError($e, 'Failed to generate outline');
         }
     }
 

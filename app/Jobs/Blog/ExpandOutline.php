@@ -101,7 +101,7 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
             ]);
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to expand outline: ' . $e->getMessage());
+            $this->handleError($e, 'Failed to expand outline');
         }
     }
 

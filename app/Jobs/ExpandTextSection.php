@@ -16,6 +16,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class ExpandTextSection implements ShouldQueue, ShouldBeUnique
 {
@@ -103,7 +104,7 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
             ]);
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to expand text section: ' . $e->getMessage());
+            $this->handleError($e, 'Failed to expand text');
         }
     }
 

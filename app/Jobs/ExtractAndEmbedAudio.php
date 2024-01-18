@@ -98,8 +98,7 @@ class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
             ]);
             $this->jobSucceded();
         } catch (Exception $e) {
-            Log::error($e->getMessage());
-            $this->jobFailed('Audio extraction and embedding error: ' . $e->getMessage());
+            $this->handleError($e, 'Audio extraction and embedding error');
         }
     }
 

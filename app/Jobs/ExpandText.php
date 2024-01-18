@@ -77,7 +77,7 @@ class ExpandText implements ShouldQueue, ShouldBeUnique
             DispatchDocumentTasks::dispatch($this->document);
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to expand text: ' . $e->getMessage());
+            $this->handleError($e, 'Failed to expand text');
         }
     }
 

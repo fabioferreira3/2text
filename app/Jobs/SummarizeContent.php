@@ -106,7 +106,7 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
 
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to summarize content: ' . $e->getMessage());
+            $this->handleError($e, 'Failed to summarize content');
         }
     }
 

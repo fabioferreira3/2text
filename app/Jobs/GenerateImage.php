@@ -77,7 +77,7 @@ class GenerateImage implements ShouldQueue, ShouldBeUnique
             GenRepository::generateImage($this->document, $this->meta);
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to generate image: ' . $e->getMessage());
+            $this->handleError($e, 'Failed to generate image');
         }
     }
 

@@ -86,7 +86,7 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
 
             $this->jobSucceded(true);
         } catch (Exception $e) {
-            $this->jobFailed('Failed to generating audio: ' . $e->getMessage());
+            $this->handleError($e, 'Failed to generating audio');
         }
     }
 

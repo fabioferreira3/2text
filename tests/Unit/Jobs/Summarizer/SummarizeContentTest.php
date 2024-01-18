@@ -48,7 +48,7 @@ function commonAssertions($document, $chatGptResponse)
     Bus::assertDispatchedSync(TranslateTextBlock::class, function ($job) use ($document) {
         return $job->document->id === $document->id &&
             $job->contentBlock->id === $document->contentBlocks()->first()->id &&
-            $job->params['target_language'] === Language::PORTUGUESE->value;
+            $job->meta['target_language'] === Language::PORTUGUESE->value;
     });
 }
 

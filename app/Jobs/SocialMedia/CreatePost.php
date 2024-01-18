@@ -84,7 +84,7 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
 
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to generate ' . $this->meta['platform'] . ' post: ' . $e->getMessage());
+            $this->handleError($e, 'Failed to generate ' . $this->meta['platform'] . ' post');
         }
     }
 

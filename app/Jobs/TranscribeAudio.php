@@ -102,7 +102,7 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
 
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Transcribing audio error: ' . $e->getMessage());
+            $this->handleError($e, 'Transcribing audio error');
         }
     }
 

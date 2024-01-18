@@ -93,7 +93,7 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
             event(new MetaDescriptionGenerated($this->document, $this->meta['process_id']));
             $this->jobSucceded();
         } catch (Exception $e) {
-            $this->jobFailed('Failed to create meta description: ' . $e->getMessage());
+            $this->handleError($e, 'Failed to create meta description');
         }
     }
 }

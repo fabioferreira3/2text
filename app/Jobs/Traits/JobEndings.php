@@ -6,6 +6,7 @@ use App\Events\DocumentTaskFinished;
 use App\Models\DocumentTask;
 use App\Repositories\DocumentRepository;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 trait JobEndings
 {
@@ -80,5 +81,19 @@ trait JobEndings
         }
 
         throw new Exception($errorMsg);
+    }
+
+    protected function handleError(Exception $e, $customErrorMsg)
+    {
+        if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
+            if ($e->getStatusCode() == 504) {
+                Log::error('Timeout (504): ' . $e->getMessage());
+            } else {
+                $this->jobFailed("{$customErrorMsg}: " . $e->getMessage());
+            }
+        } else {
+            Log::error($e->getMessage());
+            $this->jobAborted();
+        }
     }
 }
