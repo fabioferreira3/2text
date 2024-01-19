@@ -11,7 +11,6 @@ use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
 use App\Repositories\DocumentRepository;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,7 +18,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Throwable;
 
 class CreateOutline implements ShouldQueue, ShouldBeUnique
 {

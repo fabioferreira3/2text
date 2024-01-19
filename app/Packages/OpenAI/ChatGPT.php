@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Factory as OpenAI;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ChatGPT
 {
@@ -62,6 +63,9 @@ class ChatGPT
                     ];
                 }
             }
+        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
+            Log::error("HTTP request failed: " . $e->getMessage());
+            throw new HttpException($e->getCode(), $e->getMessage());
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }

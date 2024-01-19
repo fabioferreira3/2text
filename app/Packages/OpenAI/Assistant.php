@@ -3,9 +3,10 @@
 namespace App\Packages\OpenAI;
 
 use Exception;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use OpenAI\Factory as OpenAI;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Assistant
 {
@@ -45,6 +46,9 @@ class Assistant
             ]);
 
             return $response->toArray();
+        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
+            Log::error("HTTP request failed: " . $e->getMessage());
+            throw new HttpException($e->getCode(), $e->getMessage());
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
