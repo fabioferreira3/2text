@@ -80,7 +80,11 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
 
             RegisterProductUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
-                'meta' => ['document_id' => $this->document->id]
+                'meta' => [
+                    'document_id' => $this->document->id,
+                    'document_task_id' => $this->meta['task_id'] ?? null,
+                    'name' => 'create_social_media_post'
+                ]
             ]);
 
             $this->jobSucceded();

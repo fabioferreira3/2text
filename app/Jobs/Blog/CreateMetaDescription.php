@@ -89,7 +89,11 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
             ]));
             RegisterProductUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
-                'meta' => ['document_id' => $this->document->id]
+                'meta' => [
+                    'document_id' => $this->document->id,
+                    'document_task_id' => $this->meta['task_id'] ?? null,
+                    'name' => 'create_meta_description'
+                ]
             ]);
             event(new MetaDescriptionGenerated($this->document, $this->meta['process_id']));
             $this->jobSucceded();

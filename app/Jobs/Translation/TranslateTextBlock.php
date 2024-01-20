@@ -100,7 +100,11 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
 
             RegisterProductUsage::dispatch($this->contentBlock->document->account, [
                 ...$response['token_usage'],
-                'meta' => ['document_id' => $this->contentBlock->document->id]
+                'meta' => [
+                    'document_id' => $this->contentBlock->document->id,
+                    'document_task_id' => $this->meta['task_id'] ?? null,
+                    'name' => 'translate_text_block'
+                ]
             ]);
             $this->jobSucceded();
         } catch (HttpException $e) {

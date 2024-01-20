@@ -78,13 +78,22 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
     {
         try {
             if ($this->meta['query_embedding'] ?? false) {
-                $this->genRepo->generateEmbeddedTitle($this->document, $this->meta['collection_name']);
+                $response = $this->genRepo->generateEmbeddedTitle($this->document, $this->meta['collection_name']);
             } else {
-                $this->genRepo->generateTitle(
+                $response = $this->genRepo->generateTitle(
                     $this->document,
                     $this->meta['text'] ?? $this->document->normalized_structure
                 );
             }
+
+            RegisterProductUsage::dispatch($this->document->account_id, [
+                ...$response['token_usage'],
+                'meta' => [
+                    'document_id' => $this->document->id,
+                    'document_task_id' => $this->meta['task_id'] ?? null,
+                    'name' => 'create_title'
+                ]
+            ]);
 
             event(new TitleGenerated($this->document, $this->meta['process_id']));
             $this->jobSucceded();

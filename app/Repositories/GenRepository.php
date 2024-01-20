@@ -15,7 +15,6 @@ use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Talendor\StabilityAI\Enums\StabilityAIEngine;
@@ -48,12 +47,11 @@ class GenRepository
         ]]);
         $generatedTitle = Str::of(str_replace(["\r", "\n"], '', $this->response['content']))->trim()->trim('"');
         $document->update(['title' => $generatedTitle]);
-        RegisterProductUsage::dispatch($document->account, [
-            ...$this->response['token_usage'],
-            'meta' => ['document_id' => $document->id]
-        ]);
 
-        return $generatedTitle->value;
+        return [
+            'content' => $generatedTitle->value,
+            'token_usage' => $this->response['token_usage']
+        ];
     }
 
     public function generateEmbeddedTitle(Document $document, string $collectionName)
@@ -67,12 +65,8 @@ class GenRepository
         ]));
 
         $document->update(['title' => $this->response['content']]);
-        RegisterProductUsage::dispatch($document->account, [
-            ...$this->response['token_usage'],
-            'meta' => ['document_id' => $document->id]
-        ]);
 
-        return $this->response['content'];
+        return $this->response;
     }
 
     public function generateMetaDescription(Document $document)
@@ -202,12 +196,8 @@ class GenRepository
             'content' => $promptHelper->generic($params['prompt'])
         ]]);
         $contentBlock->update(['content' => $this->response['content']]);
-        RegisterProductUsage::dispatch($contentBlock->document->account, [
-            ...$this->response['token_usage'],
-            'meta' => ['document_id' => $contentBlock->document->id]
-        ]);
 
-        return $this->response['content'];
+        return $this->response;
     }
 
     public function translateText($text, $targetLanguage)

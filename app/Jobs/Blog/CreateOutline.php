@@ -100,7 +100,11 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
 
             RegisterProductUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
-                'meta' => ['document_id' => $this->document->id]
+                'meta' => [
+                    'document_id' => $this->document->id,
+                    'document_task_id' => $this->meta['task_id'] ?? null,
+                    'name' => 'create_outline'
+                ]
             ]);
             $this->jobSucceded();
         } catch (HttpException $e) {

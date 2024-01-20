@@ -81,7 +81,15 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $this->genRepo->rewriteTextBlock($this->contentBlock, $this->meta);
+            $response = $this->genRepo->rewriteTextBlock($this->contentBlock, $this->meta);
+            RegisterProductUsage::dispatch($this->document->account, [
+                ...$response['token_usage'],
+                'meta' => [
+                    'document_id' => $this->document->id,
+                    'document_task_id' => $this->meta['task_id'] ?? null,
+                    'name' => 'rewrite_text_block'
+                ]
+            ]);
             event(new ContentBlockUpdated($this->contentBlock, $this->meta['process_id']));
             $this->jobSucceded();
         } catch (HttpException $e) {

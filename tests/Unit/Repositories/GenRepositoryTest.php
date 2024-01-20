@@ -1,36 +1,28 @@
 <?php
 
-use App\Jobs\RegisterProductUsage;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Repositories\GenRepository;
-use Illuminate\Support\Facades\Bus;
 
 describe('GenRepository', function () {
     it('generates a title', function () {
-        Bus::fake(RegisterProductUsage::class);
         $document = Document::factory()->create();
         $repo = new GenRepository();
-        $title = $repo->generateTitle($document, 'some context here');
+        $response = $repo->generateTitle($document, 'some context here');
         $expectedTitle = 'AI content generated';
-        expect($title)->toBe($expectedTitle);
+        expect($response['content'])->toBe($expectedTitle);
         expect($document->fresh()->title)->toBe($expectedTitle);
         expect($repo->response)->toBe($this->aiModelResponseResponse);
-
-        Bus::assertDispatched(RegisterProductUsage::class);
     });
 
     it('generates an embedded title', function () {
-        Bus::fake(RegisterProductUsage::class);
         $document = Document::factory()->create();
         $repo = new GenRepository();
-        $title = $repo->generateEmbeddedTitle($document, 'collection name');
+        $response = $repo->generateEmbeddedTitle($document, 'collection name');
         $expectedTitle = 'AI content generated';
-        expect($title)->toBe($expectedTitle);
+        expect($response['content'])->toBe($expectedTitle);
         expect($document->fresh()->title)->toBe($expectedTitle);
         expect($repo->response)->toBe($this->aiModelResponseResponse);
-
-        Bus::assertDispatched(RegisterProductUsage::class);
     });
 
     it('generates meta description', function () {
@@ -75,12 +67,10 @@ describe('GenRepository', function () {
     })->with(['facebook', 'linkedin', 'instagram', 'twitter']);
 
     it('rewrites a text block and updates it', function () {
-        Bus::fake(RegisterProductUsage::class);
         $documentContentBlock = DocumentContentBlock::factory()->create();
         $repo = new GenRepository();
         $response = $repo->rewriteTextBlock($documentContentBlock, ['prompt' => 'some prompt']);
-        expect($response)->toBe('AI content generated');
+        expect($response['content'])->toBe('AI content generated');
         expect($documentContentBlock->fresh()->content)->toBe('AI content generated');
-        Bus::assertDispatched(RegisterProductUsage::class);
     });
 })->group('repositories');

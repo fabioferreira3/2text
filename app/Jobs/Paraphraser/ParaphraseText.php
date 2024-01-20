@@ -59,7 +59,11 @@ class ParaphraseText implements ShouldQueue
 
             RegisterProductUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
-                'meta' => ['document_id' => $this->document->id]
+                'meta' => [
+                    'document_id' => $this->document->id,
+                    'document_task_id' => $this->meta['task_id'] ?? null,
+                    'name' => 'paraphrase_text'
+                ]
             ]);
             TextParaphrased::dispatch($this->document, [
                 'user_id' => $this->document->meta['user_id'],
