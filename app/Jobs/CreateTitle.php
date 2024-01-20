@@ -87,7 +87,7 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
                 );
             }
 
-            RegisterProductUsage::dispatch($this->document->account_id, [
+            RegisterProductUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => [
                     'document_id' => $this->document->id,

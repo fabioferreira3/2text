@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Enums\AIModel;
+use App\Enums\DocumentTaskEnum;
 use App\Helpers\PromptHelperFactory;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
@@ -61,7 +62,18 @@ class GenerateAIThoughts implements ShouldQueue, ShouldBeUnique
                     ])
                 ]
             ]);
+
+            RegisterProductUsage::dispatch($this->document->account, [
+                ...$response['token_usage'],
+                'meta' => [
+                    'document_id' => $this->document->id,
+                    'document_task_id' => $this->meta['task_id'] ?? null,
+                    'name' => DocumentTaskEnum::GENERATE_AI_THOUGHTS->value
+                ]
+            ]);
+
             $array = json_decode($response['content']);
+
             if ($array === null && json_last_error() !== JSON_ERROR_NONE) {
                 throw new Exception("Error decoding AI thoughts generation: " . json_last_error_msg());
             } else {
