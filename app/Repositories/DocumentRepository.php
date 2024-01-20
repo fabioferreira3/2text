@@ -48,7 +48,7 @@ class DocumentRepository
                 'source' => $params['source'],
                 'source_urls' => $params['meta']['source_urls'] ?? [],
                 'target_headers_count' => $params['meta']['target_headers_count'] ?? null,
-                'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,
+                'tone' => $params['meta']['tone'] ?? Tone::DEFAULT->value,
                 'user_id' => Auth::check() ? Auth::id() : null,
             ]
         ]);
@@ -61,7 +61,7 @@ class DocumentRepository
             'language' => $params['language'],
             'meta' => [
                 'context' => $params['context'] ?? null,
-                'tone' => $params['meta']['tone'] ?? Tone::CASUAL->value,
+                'tone' => $params['meta']['tone'] ?? Tone::DEFAULT->value,
                 'style' => $params['meta']['style'] ?? null,
                 'source' => $params['source'],
                 'source_url' => $params['meta']['source_url'] ?? null,

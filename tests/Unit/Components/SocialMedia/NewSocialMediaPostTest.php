@@ -23,7 +23,7 @@ describe(
             $this->assertEquals($this->component->document->getMeta('context'), null);
             $this->assertEquals($this->component->document->language, Language::ENGLISH);
             $this->assertEquals($this->component->document->getMeta('source_url'), null);
-            $this->assertEquals($this->component->document->getMeta('tone'), Tone::CASUAL->value);
+            $this->assertEquals($this->component->document->getMeta('tone'), Tone::DEFAULT->value);
             $this->assertEquals($this->component->document->getMeta('style'), null);
             $this->assertEquals($this->component->document->getMeta('keyword'), null);
             $this->assertEquals($this->component->document->getMeta('more_instructions'), null);

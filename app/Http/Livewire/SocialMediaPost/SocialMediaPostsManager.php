@@ -147,7 +147,7 @@ class SocialMediaPostsManager extends Component
         $this->keyword = $document->getMeta('keyword') ?? '';
         $this->tone = $document->getMeta('tone') ?? 'default';
         $this->style = $document->getMeta('style') ?? 'default';
-        $this->title = 'caralho';
+        $this->title = '';
         $this->moreInstructions = $document->getMeta('more_instructions') ?? null;
         $this->platforms = [
             'Linkedin' => false,
@@ -286,7 +286,7 @@ class SocialMediaPostsManager extends Component
                 'language' => $this->language ?? $this->document->language->value,
                 'meta' => [
                     'context' => $this->context ?? null,
-                    'tone' => $this->tone ?? Tone::CASUAL->value,
+                    'tone' => $this->tone ?? Tone::DEFAULT->value,
                     'style' => $this->style ?? null,
                     'source_file_path' => $this->filePath ?? null,
                     'source' => $this->sourceType,

@@ -104,7 +104,7 @@ class PromptHelper
 
     public function writeTitle($context, array $params)
     {
-        $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
+        $tone = Tone::fromLanguage($params['tone'] ?? 'default', $this->language);
         $prompt = Lang::get('prompt.write_title', ['context' => $context, 'tone' => $tone], $this->language);
         if ($params['keyword'] ?? false) {
             $prompt .= Lang::get('prompt.keyword_instructions', ['keyword' => $params['keyword']], $this->language);
@@ -115,7 +115,7 @@ class PromptHelper
 
     public function writeEmbeddedTitle(array $params)
     {
-        $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
+        $tone = Tone::fromLanguage($params['tone'] ?? 'default', $this->language);
         $prompt = Lang::get('prompt.write_embedded_title', ['tone' => $tone], $this->language);
         if ($params['keyword'] ?? false) {
             $prompt .= Lang::get('prompt.keyword_instructions', ['keyword' => $params['keyword']], $this->language);
@@ -126,7 +126,7 @@ class PromptHelper
 
     public function writeOutline($context, array $params)
     {
-        $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
+        $tone = Tone::fromLanguage($params['tone'] ?? 'default', $this->language);
         return Lang::get('prompt.write_outline', [
             'outline_base' => __('prompt.outline_base', [
                 'tone' => $tone,
@@ -140,7 +140,7 @@ class PromptHelper
 
     public function writeEmbeddedOutline(array $params)
     {
-        $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
+        $tone = Tone::fromLanguage($params['tone'] ?? 'default', $this->language);
         return Lang::get('prompt.write_embbeded_outline', [
             'outline_base' => __('prompt.outline_base', [
                 'tone' => $tone,
@@ -168,7 +168,7 @@ class PromptHelper
 
     public function expandEmbeddedOn($text, array $params)
     {
-        $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
+        $tone = Tone::fromLanguage($params['tone'] ?? 'default', $this->language);
         $prompt = Lang::get('prompt.expand_embedded_text', [
             'expand_text' => Lang::get('prompt.expand_text', [
                 'tone' => $tone,
@@ -183,7 +183,7 @@ class PromptHelper
 
     public function expandOn($text, array $params)
     {
-        $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
+        $tone = Tone::fromLanguage($params['tone'] ?? 'default', $this->language);
         return Lang::get('prompt.expand_text', [
             'tone' => $tone,
             'context' => $text,
@@ -246,7 +246,7 @@ class PromptHelper
 
     public function writeMetaDescription($text, array $params)
     {
-        $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
+        $tone = Tone::fromLanguage($params['tone'] ?? 'default', $this->language);
         $prompt = Lang::get('prompt.write_meta_description', [], $this->language);
         if ($params['keyword'] ?? false) {
             $prompt .= Lang::get('prompt.keyword_instructions', ['keyword' => $params['keyword']], $this->language);
@@ -259,7 +259,7 @@ class PromptHelper
 
     public function writeEmbeddedSocialMediaPost(array $params)
     {
-        $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
+        $tone = Tone::fromLanguage($params['tone'] ?? 'default', $this->language);
         $prompt = Lang::get('social_media_prompt.write_social_media_post_embedded', [
             'platform' => $params['platform']
         ], $this->language);
@@ -300,7 +300,7 @@ class PromptHelper
 
     public function writeSocialMediaPost($context, array $params)
     {
-        $tone = Tone::fromLanguage($params['tone'] ?? 'casual', $this->language);
+        $tone = Tone::fromLanguage($params['tone'] ?? 'default', $this->language);
         $prompt = Lang::get('social_media_prompt.write_social_media_post', [
             'platform' => $params['platform']
         ], $this->language);
