@@ -16,6 +16,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 use Exception;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
 {
@@ -92,7 +93,7 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
             ]);
             event(new MetaDescriptionGenerated($this->document, $this->meta['process_id']));
             $this->jobSucceded();
-        } catch (Exception $e) {
+        } catch (HttpException $e) {
             $this->handleError($e, 'Failed to create meta description');
         }
     }

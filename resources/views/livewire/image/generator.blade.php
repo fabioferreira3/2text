@@ -81,6 +81,16 @@
     @endif
 </div>
 
+@if($errorGenerating)
+<div class="w-1/2">
+    <div class="flex items-center justify-center border border-gray-200 rounded-lg h-48">
+        It was not possible to generate this image.
+        Please use a different prompt.
+    </div>
+</div>
+
+@endif
+
 <div class="flex flex-col md:items-center md:justify-between gap-6 mt-4">
     <div class="flex flex-col gap-2 w-full">
         <div class="flex flex-col gap-2 md:flex-row items-center justify-between">

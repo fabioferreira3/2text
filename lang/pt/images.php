@@ -7,6 +7,7 @@ return [
     'download' => 'Download',
     'example' => 'Exemplo: Um castelo vermelho majestoso, em vez de um dourado',
     'images' => 'Imagens',
+    'image_not_generated_warning' => 'Não foi possível gerar essa imagem. Por favor, tente com uma descrição diferente.',
     'new' => 'Novo',
     'original' => 'Original',
     'generate' => 'Gerar',

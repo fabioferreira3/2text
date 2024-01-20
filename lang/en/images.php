@@ -7,6 +7,7 @@ return [
     'download' => 'Download',
     'example' => 'Example: A majestic red castle, instead of a golden one',
     'images' => 'Images',
+    'image_not_generated_warning' => 'It was not possible to generate this image. Please use a different prompt.',
     'new' => 'Generate Image with AI',
     'original' => 'Original',
     'generate' => 'Generate',

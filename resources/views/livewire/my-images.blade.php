@@ -94,7 +94,7 @@
 
     @if ($showNewGenerator)
     <x-experior::modal>
-        @livewire('image.generator')
+        @livewire('image.image-generator')
     </x-experior::modal>
     @endif
 </div>

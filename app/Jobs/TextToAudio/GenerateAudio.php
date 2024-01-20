@@ -5,6 +5,8 @@ namespace App\Jobs\TextToAudio;
 use App\Enums\AIModel;
 use App\Enums\MediaType;
 use App\Events\AudioGenerated;
+use App\Exceptions\AudioGenerationException;
+use App\Exceptions\AudioGenerationTimeoutException;
 use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
@@ -32,6 +34,40 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
     protected array $meta;
 
     /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public $tries = 10;
+
+    /**
+     * The maximum number of unhandled exceptions to allow before failing.
+     *
+     * @var int
+     */
+    public $maxExceptions = 10;
+
+    /**
+     * Determine the time at which the job should timeout.
+     *
+     * @return \DateTime
+     */
+    public function retryUntil()
+    {
+        return now()->addMinutes(5);
+    }
+
+    /**
+     * Calculate the number of seconds to wait before retrying the job.
+     *
+     * @return array<int, int>
+     */
+    public function backoff(): array
+    {
+        return [5, 10, 15];
+    }
+
+    /**
      * Create a new job instance.
      *
      * @return void
@@ -56,6 +92,15 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
             $voice = Voice::findOrFail($this->meta['voice_id']);
             $client = app(TextToSpeech::class);
             $response = $client->generate($this->meta['input_text'], $voice->external_id, 0, 'eleven_multilingual_v2');
+
+            if ($response['status'] === 504) {
+                throw new AudioGenerationTimeoutException("Timeout when generating audio: " . $response['message']);
+            }
+
+            if ($response['status'] !== 200) {
+                throw new AudioGenerationException("Failed to generate audio: " . $response['message']);
+            }
+
             $audioContent = $response['response_body'];
 
             $filePath = 'ai-audio/' . Str::uuid() . '.mp3';
@@ -85,8 +130,12 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
             );
 
             $this->jobSucceded(true);
+        } catch (AudioGenerationTimeoutException $e) {
+            $this->jobFailed($e->getMessage());
+        } catch (AudioGenerationException $e) {
+            $this->jobAborted($e->getMessage());
         } catch (Exception $e) {
-            $this->handleError($e, 'Failed to generating audio');
+            $this->jobFailed("Failed to generate audio: " . $e->getMessage());
         }
     }
 

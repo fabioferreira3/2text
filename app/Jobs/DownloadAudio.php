@@ -14,6 +14,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class DownloadAudio implements ShouldQueue, ShouldBeUnique
 {
@@ -98,7 +99,7 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
             ]]);
 
             $this->jobSucceded();
-        } catch (Exception $e) {
+        } catch (HttpException $e) {
             $this->handleError($e, 'Audio download error');
         }
     }

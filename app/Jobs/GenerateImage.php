@@ -2,10 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Events\ImageNotGenerated;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
+use App\Packages\OpenAI\Exceptions\ImageGenerationException;
 use App\Repositories\GenRepository;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -79,6 +80,9 @@ class GenerateImage implements ShouldQueue, ShouldBeUnique
             $this->jobSucceded();
         } catch (HttpException $e) {
             $this->handleError($e, 'Failed to generate image');
+        } catch (ImageGenerationException $e) {
+            $this->jobSkipped();
+            event(new ImageNotGenerated($this->meta['process_id']));
         }
     }
 

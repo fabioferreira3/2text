@@ -2,6 +2,7 @@
 
 namespace App\Packages\OpenAI;
 
+use App\Packages\OpenAI\Exceptions\ImageGenerationException;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Factory as OpenAI;
@@ -52,7 +53,8 @@ class DallE
             Log::error("HTTP request failed: " . $e->getMessage());
             throw new HttpException($e->getCode(), $e->getMessage());
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+            Log::error("Image generation refused: " . $e->getMessage());
+            throw new ImageGenerationException($e->getMessage());
         }
     }
 }

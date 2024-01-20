@@ -13,16 +13,17 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
-class Generator extends Component
+class ImageGenerator extends Component
 {
-    public $prompt;
-    public $imgStyle;
+    public string $prompt = '';
+    public $imgStyle = null;
+    public bool $errorGenerating = false;
     public bool $processing = false;
     public bool $shouldPreviewImage = false;
-    public string $processGroupId;
-    public $previewImgs;
+    public string $processGroupId = '';
+    public array $previewImgs = [];
     public $selectedImage;
-    public $samples;
+    public int $samples = 1;
     public $main;
 
     public function getListeners()
@@ -30,17 +31,8 @@ class Generator extends Component
         $userId = Auth::user()->id;
         return [
             "echo-private:User.$userId,.ProcessFinished" => 'onProcessFinished',
+            "echo-private:User.$userId,.ImageNotGenerated" => 'onImageNotGenerated',
         ];
-    }
-
-    public function mount()
-    {
-        $this->prompt = '';
-        $this->imgStyle = null;
-        $this->processing = false;
-        $this->processGroupId = '';
-        $this->previewImgs = [];
-        $this->samples = 1;
     }
 
     public function render()
@@ -54,6 +46,7 @@ class Generator extends Component
             return;
         }
 
+        $this->errorGenerating = false;
         $this->setProcessingState();
 
         $document = DocumentRepository::createGeneric([
@@ -132,6 +125,14 @@ class Generator extends Component
                 'type' => 'success',
                 'message' => __('alerts.image_generated')
             ]);
+        }
+    }
+
+    public function onImageNotGenerated(array $params)
+    {
+        if ($params['process_group_id'] === $this->processGroupId) {
+            $this->processing = false;
+            $this->errorGenerating = true;
         }
     }
 
