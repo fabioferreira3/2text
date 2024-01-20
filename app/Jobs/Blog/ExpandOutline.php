@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Blog;
 
+use App\Enums\DocumentTaskEnum;
 use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelper;
 use App\Interfaces\ChatGPTFactoryInterface;
@@ -101,7 +102,7 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     'document_id' => $this->document->id,
                     'document_task_id' => $this->meta['task_id'] ?? null,
-                    'name' => 'expand_outline'
+                    'name' => DocumentTaskEnum::EXPAND_OUTLINE->value
                 ]
             ]);
             $this->jobSucceded();

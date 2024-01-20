@@ -2,6 +2,7 @@
 
 namespace App\Jobs\SocialMedia;
 
+use App\Enums\DocumentTaskEnum;
 use App\Helpers\PromptHelper;
 use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
@@ -83,7 +84,7 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     'document_id' => $this->document->id,
                     'document_task_id' => $this->meta['task_id'] ?? null,
-                    'name' => 'create_social_media_post'
+                    'name' => DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST->value
                 ]
             ]);
 

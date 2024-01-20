@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Paraphraser;
 
+use App\Enums\DocumentTaskEnum;
 use App\Events\Paraphraser\TextParaphrased;
 use App\Helpers\PromptHelper;
 use App\Jobs\RegisterProductUsage;
@@ -62,7 +63,7 @@ class ParaphraseText implements ShouldQueue
                 'meta' => [
                     'document_id' => $this->document->id,
                     'document_task_id' => $this->meta['task_id'] ?? null,
-                    'name' => 'paraphrase_text'
+                    'name' => DocumentTaskEnum::PARAPHRASE_TEXT->value
                 ]
             ]);
             TextParaphrased::dispatch($this->document, [

@@ -95,7 +95,7 @@ class ProcessTranscriptionResults implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     'document_id' => $this->document->id,
                     'document_task_id' => $this->meta['task_id'] ?? null,
-                    'name' => 'process_transcription_results',
+                    'name' => DocumentTaskEnum::PROCESS_TRANSCRIPTION_RESULTS->value,
                     'length' => $this->document->getMeta('duration')
                 ]
             ]);

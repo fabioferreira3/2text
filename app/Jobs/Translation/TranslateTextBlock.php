@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Translation;
 
+use App\Enums\DocumentTaskEnum;
 use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
@@ -103,7 +104,7 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     'document_id' => $this->contentBlock->document->id,
                     'document_task_id' => $this->meta['task_id'] ?? null,
-                    'name' => 'translate_text_block'
+                    'name' => DocumentTaskEnum::TRANSLATE_TEXT_BLOCK->value
                 ]
             ]);
             $this->jobSucceded();

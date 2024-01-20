@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\DocumentTaskEnum;
 use App\Events\ContentBlockUpdated;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
@@ -87,7 +88,7 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     'document_id' => $this->document->id,
                     'document_task_id' => $this->meta['task_id'] ?? null,
-                    'name' => 'rewrite_text_block'
+                    'name' => DocumentTaskEnum::REWRITE_TEXT_BLOCK->value
                 ]
             ]);
             event(new ContentBlockUpdated($this->contentBlock, $this->meta['process_id']));

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\DocumentTaskEnum;
 use App\Jobs\Traits\JobEndings;
 use App\Jobs\Translation\TranslateTextBlock;
 use App\Models\Document;
@@ -95,7 +96,11 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
 
             RegisterProductUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
-                'meta' => ['document_id' => $this->document->id]
+                'meta' => [
+                    'document_id' => $this->document->id,
+                    'document_task_id' => $this->meta['task_id'] ?? null,
+                    'name' => DocumentTaskEnum::SUMMARIZE_CONTENT->value
+                ]
             ]);
 
             if ($this->document->getMeta('target_language')) {

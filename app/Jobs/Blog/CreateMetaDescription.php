@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Blog;
 
+use App\Enums\DocumentTaskEnum;
 use App\Events\MetaDescriptionGenerated;
 use App\Jobs\RegisterProductUsage;
 use App\Jobs\Traits\JobEndings;
@@ -92,7 +93,7 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     'document_id' => $this->document->id,
                     'document_task_id' => $this->meta['task_id'] ?? null,
-                    'name' => 'create_meta_description'
+                    'name' => DocumentTaskEnum::CREATE_METADESCRIPTION->value
                 ]
             ]);
             event(new MetaDescriptionGenerated($this->document, $this->meta['process_id']));

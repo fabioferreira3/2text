@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\DocumentTaskEnum;
 use App\Helpers\PromptHelper;
 use App\Interfaces\ChatGPTFactoryInterface;
 use App\Interfaces\OraculumFactoryInterface;
@@ -103,7 +104,7 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     'document_id' => $this->document->id,
                     'document_task_id' => $this->meta['task_id'] ?? null,
-                    'name' => 'expand_text_section'
+                    'name' => DocumentTaskEnum::EXPAND_TEXT_SECTION->value
                 ]
             ]);
             $this->jobSucceded();

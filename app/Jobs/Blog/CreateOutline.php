@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Blog;
 
+use App\Enums\DocumentTaskEnum;
 use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelperFactory;
 use App\Interfaces\ChatGPTFactoryInterface;
@@ -103,7 +104,7 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     'document_id' => $this->document->id,
                     'document_task_id' => $this->meta['task_id'] ?? null,
-                    'name' => 'create_outline'
+                    'name' => DocumentTaskEnum::CREATE_OUTLINE->value
                 ]
             ]);
             $this->jobSucceded();

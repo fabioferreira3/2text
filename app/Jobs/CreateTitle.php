@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\DocumentTaskEnum;
 use App\Events\TitleGenerated;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
@@ -91,7 +92,7 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     'document_id' => $this->document->id,
                     'document_task_id' => $this->meta['task_id'] ?? null,
-                    'name' => 'create_title'
+                    'name' => DocumentTaskEnum::CREATE_TITLE->value
                 ]
             ]);
 

@@ -3,6 +3,7 @@
 namespace App\Jobs\TextToAudio;
 
 use App\Enums\AIModel;
+use App\Enums\DocumentTaskEnum;
 use App\Enums\MediaType;
 use App\Events\AudioGenerated;
 use App\Exceptions\AudioGenerationException;
@@ -120,7 +121,7 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     'document_id' => $this->document->id,
                     'document_task_id' => $this->meta['task_id'] ?? null,
-                    'name' => 'text_to_audio'
+                    'name' => DocumentTaskEnum::TEXT_TO_AUDIO->value
                 ]
             ]);
 
