@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'ai_images' => 'AI Images',
+    'ai_images' => 'AI Image',
     'blog_posts' => 'Blog posts',
     'briefly_describe' => 'Describe the subject of the post. What is this blog post about? What are the main ideas you want to convey?',
     'context' => 'Describe the post',
