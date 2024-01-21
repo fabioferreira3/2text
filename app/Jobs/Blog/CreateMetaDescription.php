@@ -16,7 +16,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
-use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CreateMetaDescription implements ShouldQueue, ShouldBeUnique

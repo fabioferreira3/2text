@@ -7,12 +7,13 @@
             'title' => __('social_media.social_media'),
             'suffix' => '',
             ])
-            <button onclick="livewire.emit('invokeNew')" class="flex items-center gap-2 bg-secondary text-white px-4 py-1 rounded-lg">
+            <button onclick="livewire.emit('invokeNew')"
+                class="flex items-center gap-2 bg-secondary text-white px-4 py-1 rounded-lg">
                 <span class="font-bold text-lg">{{__('social_media.new')}}</span>
             </button>
         </div>
         <div class="w-1/2">
-            <div class="text-right text-gray-600">{{__('social_media.page_info')}}</div>
+            @include('livewire.common.page-info', ['content' => __('social_media.page_info')])
         </div>
     </div>
     @endsection

@@ -39,6 +39,15 @@ enum Language: string
         };
     }
 
+    public static function systemEnabled()
+    {
+        return [
+            self::ENGLISH,
+            self::PORTUGUESE,
+            self::SPANISH
+        ];
+    }
+
     public static function getLabels(): array
     {
         return collect(self::cases())->map(fn ($language) => ['value' => $language->value, 'name' => $language->label()])->toArray();
