@@ -6,6 +6,7 @@ return [
     'generating' => 'Summarizing with AI',
     'new' => 'New',
     'new_summary' => 'New Summary',
+    'page_info' => 'Generate summaries of any text using AI. You can use this tool to summarize articles, books, or any other text.',
     'source' => 'Source',
     'source_language' => 'Source language',
     'summary' => 'Summary',

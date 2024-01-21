@@ -18,6 +18,7 @@ return [
     'listen' => 'Reproduzir',
     'my_audios' => 'Meus áudios',
     'new_text_to_audio' => 'Novo Texto para Áudio',
+    'page_info' => 'Crie áudios perfeitos a partir de textos usando várias vozes e idiomas.',
     'play' => 'Play',
     'text_to_audio' => 'Texto para Áudio',
     'select_voice' => 'Selecione uma voz',

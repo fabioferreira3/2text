@@ -32,14 +32,14 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
      *
      * @var int
      */
-    public $tries = 10;
+    public $tries = 3;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
      *
      * @var int
      */
-    public $maxExceptions = 10;
+    public $maxExceptions = 3;
 
     /**
      * Determine the time at which the job should timeout.
@@ -48,7 +48,7 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
      */
     public function retryUntil()
     {
-        return now()->addMinutes(5);
+        return now()->addMinutes(2);
     }
 
     /**

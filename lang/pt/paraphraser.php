@@ -9,6 +9,7 @@ return [
     'new' => 'Novo',
     'new_paraphrase' => 'Novo Parafraseador',
     'original_text' => 'Texto original',
+    'page_info' => 'Deixe a IA reescrever seu texto de maneira diferente. Você pode usar esta ferramenta para reescrever seu texto em um estilo diferente ou para evitar plágio.',
     'paraphrase' => 'Parafrasear',
     'paraphraser' => 'Parafraseador',
     'paraphrasing' => 'Parafraseando...',

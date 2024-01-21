@@ -4,7 +4,7 @@ return [
     'create' => 'Create new insight',
     'embedding' => 'Processing...',
     'embed_success' => 'Document processed succesfully',
-    'page_info' => 'Upload documents like PDFs, CSVs, webpages or even Youtube videos and let AI answer questions based on their content',
+    'page_info' => 'Upload documents like PDFs, CSVs, webpages or even Youtube videos and let AI answer questions based on their content.',
     'inquiry' => 'Inquiry',
     'insight_hub' => 'Insight Hub',
     'language' => 'Language of the video',

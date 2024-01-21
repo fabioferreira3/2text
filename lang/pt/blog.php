@@ -25,6 +25,7 @@ return [
     'new_blog_post' => 'Novo post',
     'new' => 'Novo',
     'no_changes' => 'Nenhuma alteração precisou ser salva',
+    'page_info' => 'Crie postagens de blog com IA usando vários tipos de contextos, como páginas da web, vídeos do YouTube, arquivos PDF e muito mais.',
     'paste_content' => 'Você também pode copiar e colar um texto maior para ser usado como contexto. (máx. :maxChars caracteres)',
     'placeholder_example' => 'Exemplo: Ilustração de anime de um personagem se unindo com um dragão majestoso em um santuário de montanha isolado.',
     'preparing' => 'Preparando...',

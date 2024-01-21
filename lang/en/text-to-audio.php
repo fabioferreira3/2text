@@ -18,6 +18,7 @@ return [
     'listen' => 'Listen',
     'my_audios' => 'My audios',
     'new_text_to_audio' => 'New Text to Audio',
+    'page_info' => 'Create perfect conversational audios from text using multiple voices and languages.',
     'play' => 'Play',
     'text_to_audio' => 'Text to Audio',
     'select_voice' => 'Select a voice',

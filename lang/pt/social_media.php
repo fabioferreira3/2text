@@ -34,6 +34,7 @@ return [
     'max_permitted_urls' => 'até :max links',
     'max_permitted_youtube_links' => 'até :max links do YouTube',
     'new' => 'Novo',
+    'page_info' => 'Crie postagens para redes sociais com IA usando vários tipos de contextos, como páginas da web, vídeos do YouTube, arquivos PDF e muito mais.',
     'placeholder_example' => 'Exemplo: Ilustração de anime de um personagem se unindo a um dragão majestoso em um santuário isolado na montanha.',
     'please_wait' => 'Por favor, aguarde...',
     'provide_guidelines' => 'Fique a vontade para fornecer quaisquer outras instruções para que nossa IA possa escrever uma postagem que atenda às suas expectativas.',

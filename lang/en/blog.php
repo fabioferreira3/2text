@@ -25,6 +25,7 @@ return [
     'new_blog_post' => 'New Blog post',
     'new' => 'New',
     'no_changes' => 'No changes needed to be saved',
+    'page_info' => 'Create blog posts with AI using multiple types of contexts like web pages, youtube videos, pdf files and much more.',
     'paste_content' => 'You may also copy and paste a larger text to be used as context. (max. :maxChars chars)',
     'placeholder_example' => 'Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary.',
     'preparing' => 'Preparing...',

@@ -6,6 +6,7 @@ return [
     'generating' => 'Resumindo com IA',
     'new' => 'Novo',
     'new_summary' => 'Novo Resumo',
+    'page_info' => 'Gere resumos de qualquer texto usando IA. Você pode usar esta ferramenta para resumir artigos, livros ou qualquer outro texto.',
     'source' => 'Source',
     'source_language' => 'Idioma de origem',
     'summary' => 'Resumo',
