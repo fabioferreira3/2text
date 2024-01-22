@@ -74,7 +74,9 @@ class TextToAudio extends Component
 
     public function playAudio($id)
     {
-        $this->selectedVoice = $id;
+        if ($id !== 'listen_current_audio') {
+            $this->selectedVoice = $id;
+        }
         $this->isPlaying = true;
         $this->dispatchBrowserEvent('play-audio', [
             'id' => $id
