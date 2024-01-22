@@ -12,7 +12,6 @@ use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use App\Rules\CsvFile;
 use App\Rules\DocxFile;
-use App\Rules\JsonFile;
 use App\Rules\PdfFile;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -95,7 +94,6 @@ class SocialMediaPostsManager extends Component
                 new DocxFile($this->sourceType),
                 new PdfFile($this->sourceType),
                 new CsvFile($this->sourceType),
-                //    new JsonFile($this->source)
             ]
         ];
     }

@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'ai_images' => 'Imagem IA',
     'actions' => 'Ações',
     'back_dashboard' => 'Voltar a home',
     'created_at' => 'Criado em',

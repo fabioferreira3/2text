@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'ai_images' => 'Imagem IA',
     'ask_to' => 'Pedir para...',
     'api_tokens' => 'API Tokens',
     'audio_transcription' => 'Áudio para Texto',

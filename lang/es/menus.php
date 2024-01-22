@@ -1,0 +1,31 @@
+<?php
+
+return [
+    'ai_images' => 'Imagen IA',
+    'ask_to' => 'Preguntar a...',
+    'api_tokens' => 'Tokens API',
+    'audio_transcription' => 'Transcripción',
+    'blog_post' => 'Publicación de blog',
+    'char_count' => 'Conteo de caracteres',
+    'copy' => 'Copiar',
+    'dashboard' => 'Panel de control',
+    'delete' => 'Eliminar',
+    'expand' => 'Expandir',
+    'increase_complexity' => 'Aumentar complejidad',
+    'insight_hub' => 'Centro de Perspectivas',
+    'logout' => 'Cerrar sesión',
+    'manage_account' => 'Gestionar cuenta',
+    'more' => 'Más',
+    'paraphraser' => 'Paráfrasis',
+    'paraphrase' => 'Parafrasear',
+    'profile' => 'Perfil',
+    'redo' => 'Rehacer',
+    'reduce_complexity' => 'Reducir complejidad',
+    'social_media_post' => 'Publicación en redes sociales',
+    'shorten' => 'Acortar',
+    'summarizer' => 'Resumidor',
+    'tools' => 'Herramientas',
+    'text_to_audio' => 'Texto a Audio',
+    'undo' => 'Deshacer',
+    'word_count' => 'Conteo de palabras'
+];

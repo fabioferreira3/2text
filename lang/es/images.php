@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'delete' => 'Eliminar',
+    'describe_changes' => 'Describe los cambios que te gustaría aplicar en la imagen',
+    'describe_new_image' => 'Describe la imagen que quieres que se genere',
+    'download' => 'Descargar',
+    'example' => 'Ejemplo: Un majestuoso castillo rojo, en lugar de uno dorado',
+    'images' => 'Imágenes',
+    'image_not_generated_warning' => 'No fue posible generar esta imagen. Por favor, usa un mensaje diferente.',
+    'new' => 'Generar Imagen con IA',
+    'original' => 'Original',
+    'generate' => 'Generar',
+    'generating' => 'Generando',
+    'generate_variants' => 'Generar Variantes',
+    'generate_image' => 'Generar una nueva imagen',
+    'generate_image_variants' => 'Generar variantes de imagen',
+    'placeholder_example' => 'Ejemplo: Ilustración anime de un personaje vinculándose con un majestuoso dragón en un santuario montañoso aislado.',
+    'preview' => 'Vista previa',
+    'regenerate_image' => 'Regenerar imagen',
+    'samples' => 'Muestras',
+    'use_primary' => 'Usar como principal',
+    'variants' => 'Variantes',
+    'write_image_description_changes' => 'Describe los cambios que quieres aplicar a la imagen principal',
+];

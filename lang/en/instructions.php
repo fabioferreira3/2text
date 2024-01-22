@@ -2,14 +2,14 @@
 
 return [
     'check_img_guidelines' => 'Check these important guidelines first!',
-    'choose_platforms' => 'Choose for which platforms you would like Oraculum to write a post. For each selected platform I will create a different post.',
+    'choose_platforms' => 'Choose for which platforms you would like our AI to write a post. For each selected platform I will create a different post.',
     'consider_readers' => 'Take into account your readers.',
     'convince_reader' => 'Aims to convince the reader of the validity of a certain position or argument.',
     'csv_files' => 'CSV Files',
     'define_base_context_new_text' => 'Define what would be the base context of your text. Choose between a youtube link, a website url, or just from free text.',
     'define_base_context_new_paraphraser' => 'Set the origin of the text to be transcripted. Choose between a youtube link, a website url, or just free text.',
     'define_tone' => 'Define the tone of writing',
-    'define_tone_info' => 'Define the tone of your post. You may pick from casual, funny, sarcastic, dramatic, academic, and other tones. This will help Oraculum to write a post that is in line with your preference and your audience\'s.',
+    'define_tone_info' => 'Define the tone of your post. You may pick from casual, funny, sarcastic, dramatic, academic, and other tones. This will help our AI to write a post that is in line with your preference and your audience\'s.',
     'define_style' => 'Define the writing style.',
     'define_subtopics' => 'Define the number of subtopics of your text. The more subtopics, more content will be generated.',
     'depict_imagery' => 'Used to depict imagery to create a clear picture in the mind of the reader.',
@@ -43,33 +43,33 @@ return [
     'image_guideline_7_content' => 'Prompts that could be considered insensitive or could perpetuate bias based on race,
         gender, or other personal characteristics.',
     'insight_hub_free_text' => 'Enter any text that you want to be indexed up to :maxChars characters.',
-    'insight_hub_youtube_link' => 'Provide a Youtube link and Oraculum will extract the audio, transcribe and
+    'insight_hub_youtube_link' => 'Provide a Youtube link and our AI will extract the audio, transcribe and
         index it to be inquired.',
-    'insight_hub_website_url' => 'Provide a website url and Oraculum will extract its content and index
+    'insight_hub_website_url' => 'Provide a website url and our AI will extract its content and index
         it to be inquired.',
-    'insight_hub_pdf_files' => 'Provide a PDF file and Oraculum will read it and and index its content',
-    'insight_hub_docx_files' => 'Provide a Docx file and Oraculum will read it and index its content',
-    'insight_hub_csv_files' => 'Provide a CSV file and Oraculum will read it and index its content.',
+    'insight_hub_pdf_files' => 'Provide a PDF file and our AI will read it and and index its content',
+    'insight_hub_docx_files' => 'Provide a Docx file and our AI will read it and index its content',
+    'insight_hub_csv_files' => 'Provide a CSV file and our AI will read it and index its content.',
     'new_text_enter_external_url' => 'Enter an external website url to be used as context, like
-        another blog post or page. Oraculum will do its best to extract as much information as possible
+        another blog post or page. Our AI will do its best to extract as much information as possible
         from this page and use it as context for the creation of your text.',
-    'new_text_enter_text' => 'Just enter any text that you want as context and Oraculum will write a text based
+    'new_text_enter_text' => 'Just enter any text that you want as context and our AI will write a text based
         on the information you provide.',
-    'new_text_enter_youtube_link' => 'Enter a youtube link and Oraculum will write text based on the
+    'new_text_enter_youtube_link' => 'Enter a youtube link and our AI will write text based on the
         content of the video.',
-    'new_text_csv_files' => 'Upload a CSV file. Oraculum will do its best to extract this data and use as context.',
-    'new_text_docx_files' => 'Upload a Docx file. Oraculum will do its best to read everything and use
+    'new_text_csv_files' => 'Upload a CSV file. Our AI will do its best to extract this data and use as context.',
+    'new_text_docx_files' => 'Upload a Docx file. Our AI will do its best to read everything and use
         this data as context.',
-    'new_text_pdf_files' => 'Upload a PDF file. It can contain multiple pages. Oraculum will do its best to
+    'new_text_pdf_files' => 'Upload a PDF file. It can contain multiple pages. Our AI will do its best to
         extract data from all pages and use them as context.',
-    'new_paraphraser_enter_external_url' => 'Enter an external website url. Oraculum will do its best to extract as much text as possible from this page.',
+    'new_paraphraser_enter_external_url' => 'Enter an external website url. Our AI will do its best to extract as much text as possible from this page.',
     'new_paraphraser_enter_text' => 'You provide the text you want to be paraphrased.',
-    'new_paraphraser_enter_youtube_link' => 'Enter a youtube link and Oraculum will transcript the entire video in plain text.',
+    'new_paraphraser_enter_youtube_link' => 'Enter a youtube link and our AI will transcript the entire video in plain text.',
     'expected_reaction' => 'What is the reaction you expect from your readers?',
     'explain_concept' => 'Used to explain a concept and share information to a broader audience.',
-    'expected_speakers' => 'If you know in advance how many speakers are in the audio, please inform here. It will help Oraculum to identify the different speakers better.',
+    'expected_speakers' => 'If you know in advance how many speakers are in the audio, please inform here. It will help our AI to identify the different speakers better.',
     'express_opinions' => 'This type is not meant to express opinions.',
-    'indicate_topics_number' => 'Indicate the number of topics you would like Oraculum to cover in your blog post. You may define a minimum of one and a maximum of fifteen topics.',
+    'indicate_topics_number' => 'Indicate the number of topics you would like our AI to cover in your blog post. You may define a minimum of one and a maximum of fifteen topics.',
     'fill_information' => 'Please fill out the following information so I can understand your requirements and write you an unique and high-quality post.',
     'free_text' => 'Free text',
     'language' => 'Language',
@@ -79,8 +79,8 @@ return [
     'keyword' => 'Keyword',
     'pdf_files' => 'PDF Files',
     'poetry' => 'Poetry; fictional novels or plays; memoirs or first-hand accounts of events',
-    'provide_keyword' => 'Provide a keyword that you would like Oraculum to use throughout your post. This keyword will help
-        Oraculum to generate a relevant and focused article.',
+    'provide_keyword' => 'Provide a keyword that you would like our AI to use throughout your post. This keyword will help
+        our AI to generate a relevant and focused article.',
     'provide_source' => 'Provide a source of the context that your post should be based on. It could be a YouTube link, an external
         web page or just free text.',
     'rejected_requests' => 'The following requests will be rejected',
@@ -90,9 +90,9 @@ return [
     'share_information' => 'Share information in the context of a story.',
     'short_stories' => 'Short stories; novels; poetry; historical accounts.',
     'source' => 'Source',
-    'subtopics_estimate' => 'As an estimate, 1 subtopic covers around 400 ~ 500 words.',
+    'subtopics_estimate' => 'As an estimate, 1 subtopic covers around 300 ~ 450 words.',
     'target_platforms' => 'Target Platforms',
-    'transcription_diarization' => 'Oraculum will try to identify different speakers in the audio and format
+    'transcription_diarization' => 'Our AI will try to identify different speakers in the audio and format
         the transcription text by separating the speakers as independent text blocks. Take into account that this slows
         down the transcription process.',
     'transcription_language' => 'You need to inform the language of the video since I\'m currently not able
@@ -104,5 +104,5 @@ return [
     'tone' => 'Tone',
     'useful_guidelines' => 'Useful guidelines',
     'website_url' => 'Website URLs',
-    'words_count' => 'Define the number of words you would like Oraculum to generate. You may define a minimum of 100 and a maximum of 600 words.',
+    'words_count' => 'Define the number of words you would like our AI to generate. You may define a minimum of 100 and a maximum of 600 words.',
 ];

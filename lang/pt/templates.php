@@ -10,6 +10,8 @@ return [
     'create_paraphrase' => 'Parafraseie qualquer texto usando IA',
     'create_summary' => 'Resuma páginas da web, artigos, vídeos do youtube ou qualquer texto usando IA',
     'create_text_to_speech' => 'Converta qualquer texto em áudio realista usando IA',
+    'create_ai_image' => 'Crie imagens usando IA',
+    'image' => 'Gerador de Imagens',
     'insight_hub' => 'Centro de Consulta',
     'paraphraser' => 'Parafraseador',
     'social_media_post' => 'Post para Rede Social',
