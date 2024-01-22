@@ -10,7 +10,7 @@ return [
     'new_inquiry' => 'Nova consulta',
     'new' => 'Novo',
     'no_inquiries' => 'Você precisa adicionar pelo menos 1 fonte para poder iniciar uma consulta',
-    'page_info' => 'Carregue documentos como PDFs, CSVs, páginas da web ou até mesmo vídeos do YouTube e deixe a IA responder perguntas com base em seu conteúdo.',
+    'page_info' => 'Faça upload de documentos como PDFs, CSVs, páginas da web ou até mesmo vídeos do YouTube e deixe a IA responder perguntas com base nos conteúdos fornecidos.',
     'please_wait' => 'Por favor, aguarde...',
     'send' => 'Enviar',
     'sources' => 'Fontes',
