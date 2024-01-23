@@ -10,7 +10,7 @@ return [
     'italian' => 'Italiano',
     'japanese' => 'Japonés',
     'korean' => 'Coreano',
-    'polnish' => 'Polaco',  // Note: Corrected the spelling from "Polnish" to "Polish"
+    'polnish' => 'Polaco',
     'portuguese' => 'Portugués',
     'russian' => 'Ruso',
     'spanish' => 'Español',

@@ -10,7 +10,7 @@ return [
     'italian' => "Italian",
     'japanese' => "Japanese",
     'korean' => "Korean",
-    'polnish' => "Polnish",
+    'polnish' => "Polish",
     'portuguese' => "Portuguese",
     'russian' => "Russian",
     'spanish' => "Spanish",
