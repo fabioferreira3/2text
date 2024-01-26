@@ -46,7 +46,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Blade::componentNamespace('App\\Http\\Livewire\\Common', 'experior');
         Blade::component('custom.dropdown', Dropdown::class);
-        Cashier::useCustomerModel(Account::class);
 
         Queue::failing(function (JobFailed $event) {
             //    $event->job->jobFailed($event->exception->getMessage());

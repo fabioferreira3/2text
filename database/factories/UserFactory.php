@@ -72,4 +72,31 @@ class UserFactory extends Factory
             'ownedTeams'
         );
     }
+
+    /**
+     * Indicate that the user should have a subscription plan.
+     *
+     * @return $this
+     */
+    public function withSubscription(string|int $planId = null): static
+    {
+        return $this->afterCreating(function (User $user) use ($planId) {
+            $subscription = $user->subscriptions()->create([
+                'name' => 'default',
+                'stripe_id' => Str::random(10),
+                'stripe_status' => 'active',
+                'stripe_price' => $planId,
+                'quantity' => 1,
+                'trial_ends_at' => null,
+                'ends_at' => null,
+            ]);
+
+            $subscription->items()->create([
+                'stripe_id' => Str::random(10),
+                'stripe_product' => Str::random(10),
+                'stripe_price' => $planId,
+                'quantity' => 1,
+            ]);
+        });
+    }
 }

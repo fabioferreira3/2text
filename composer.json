@@ -21,7 +21,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/socialite": "5.10.0",
         "laravel/tinker": "^2.7",
-        "laravel/spark-paddle": "^5.0",
+        "laravel/spark-stripe": "^5.0",
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^2.11",
         "norkunas/youtube-dl-php": "dev-master",

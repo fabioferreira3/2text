@@ -13,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Spark\Billable;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -27,6 +28,7 @@ class User extends Authenticatable implements JWTSubject
     use TwoFactorAuthenticatable;
     use HasUuids;
     use SoftDeletes;
+    use Billable;
 
     /**
      * The attributes that are mass assignable.
