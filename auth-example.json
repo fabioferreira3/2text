@@ -1,0 +1,8 @@
+{
+    "http-basic": {
+        "spark.laravel.com": {
+            "username": "",
+            "password": ""
+        }
+    }
+}

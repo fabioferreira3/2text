@@ -14,13 +14,14 @@
         "doctrine/dbal": "^3.6",
         "google/apiclient": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
-        "laravel/cashier": "^14.12",
+        "laravel/cashier": "^15",
         "laravel/framework": "^10.0",
         "laravel/horizon": "^5.14",
         "laravel/jetstream": "^2.16",
         "laravel/sanctum": "^3.2",
         "laravel/socialite": "5.10.0",
         "laravel/tinker": "^2.7",
+        "laravel/spark-paddle": "^5.0",
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^2.11",
         "norkunas/youtube-dl-php": "dev-master",
@@ -98,5 +99,11 @@
         }
     },
     "minimum-stability": "beta",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://spark.laravel.com"
+        }
+    ]
 }
