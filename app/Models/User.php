@@ -17,6 +17,7 @@ use Spark\Billable;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use function Illuminate\Events\queueable;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -103,5 +104,17 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTToken()
     {
         return JWTAuth::fromUser($this);
+    }
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::updated(queueable(function (User $user) {
+            if ($user->hasStripeId()) {
+                $user->syncStripeCustomerDetails();
+            }
+        }));
     }
 }

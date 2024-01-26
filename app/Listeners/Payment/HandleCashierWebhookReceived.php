@@ -15,6 +15,8 @@ class HandleCashierWebhookReceived
      */
     public function handle(CashierWebhookReceived $event)
     {
-        Log::debug($event->payload);
+        if ($event->payload['type'] === 'invoice.payment_succeeded') {
+            Log::debug($event->payload);
+        }
     }
 }

@@ -15,6 +15,7 @@ class HandlePaymentSucceeded
      */
     public function handle(PaymentSucceeded $event)
     {
+        Log::debug('eitaaaaa');
         Log::debug($event->billable->id);
     }
 }
