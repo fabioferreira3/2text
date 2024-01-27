@@ -26,6 +26,7 @@ use App\Http\Livewire\Summarizer\NewSummarizer;
 use App\Http\Livewire\Summarizer\SummaryView;
 use App\Http\Livewire\Trash;
 use App\Models\ShortLink;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -50,7 +51,7 @@ Route::middleware([
     Route::get('/', function () {
         return redirect('/tools');
     });
-    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/dashboard', Dashboard::class)->name('home');
     Route::get('/dashboard?tab=images', Dashboard::class)->name('my-images');
     Route::get('/dashboard/trash', Trash::class)->name('trash');
     Route::get('/tools', Templates::class)->name('tools');
@@ -99,6 +100,11 @@ Route::middleware([
 
     /* Document routes */
     Route::get('/documents/{document}', [DocumentViewController::class, 'index'])->name('document-view');
+
+    /* Billing portal */
+    Route::get('/billing-portal', function (Request $request) {
+        return $request->user()->redirectToBillingPortal();
+    });
 });
 
 /* Google Auth */
