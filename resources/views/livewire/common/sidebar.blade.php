@@ -1,7 +1,7 @@
 <nav class="flex flex-col h-full">
     <div class="relative mb-4 h-24">
         <div class="flex w-full items-center justify-center">
-            <a href="{{ route('dashboard') }}">
+            <a href="{{ route('home') }}">
                 <img src="/logo.png" class="w-full" />
             </a>
         </div>
@@ -9,8 +9,8 @@
     <div class="flex flex-col gap-5 mt-12">
         <div class="hidden sm:flex">
             @include('livewire.common.navlink', [
-            'route' => 'dashboard',
-            'activeRoutes' => ['dashboard', 'trash'],
+            'route' => 'home',
+            'activeRoutes' => ['home', 'trash'],
             'name' => __('menus.dashboard'),
             'icon' => 'home',
             ])

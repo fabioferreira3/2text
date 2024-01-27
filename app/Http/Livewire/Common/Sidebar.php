@@ -16,7 +16,7 @@ class Sidebar extends Component
 
         switch ($page) {
             case 'dashboard':
-                return redirect()->route('dashboard');
+                return redirect()->route('home');
             case 'templates':
                 return redirect()->route('tools');
         }
