@@ -6,18 +6,8 @@ use App\Events\UserCreated;
 use App\Mail\NewUserEmail;
 use Illuminate\Support\Facades\Mail;
 
-class HandleNewUserNotification
+class HandleNewUserAdminNotification
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /**
      * Handle the event.
      *

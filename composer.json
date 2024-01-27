@@ -29,6 +29,7 @@
         "pusher/pusher-php-server": "^7.2",
         "rappasoft/laravel-livewire-tables": "^2.12",
         "sentry/sentry-laravel": "^4.0",
+        "sendgrid/sendgrid": "~7",
         "shivella/laravel-bitly": "^1.1",
         "socialiteproviders/apple": "^5.4",
         "socialiteproviders/facebook": "^4.1",
@@ -84,8 +85,12 @@
             "@php artisan key:generate --ansi"
         ]
     },
+
     "extra": {
         "laravel": {
+            "providers": [
+                "app\\Packages\\SendGrid\\SendGridServiceProvider"
+            ],
             "dont-discover": []
         }
     },

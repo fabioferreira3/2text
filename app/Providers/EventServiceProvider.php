@@ -5,7 +5,8 @@ namespace App\Providers;
 use App\Events\DocumentTaskFinished;
 use App\Events\UserCreated;
 use App\Listeners\HandleDocumentTasksCompletedUpdate;
-use App\Listeners\HandleNewUserNotification;
+use App\Listeners\HandleNewUserAdminNotification;
+use App\Listeners\HandleWelcomeNotification;
 use App\Listeners\Payment\HandleCashierWebhookReceived;
 use App\Listeners\Payment\HandlePaymentSucceeded;
 use Laravel\Cashier\Events\WebhookReceived as CashierWebhookReceived;
@@ -29,7 +30,8 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         UserCreated::class => [
-            HandleNewUserNotification::class
+            HandleNewUserAdminNotification::class,
+            HandleWelcomeNotification::class,
         ],
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
             \SocialiteProviders\Google\GoogleExtendSocialite::class . '@handle',
