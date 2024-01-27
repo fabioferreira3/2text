@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Events\UserCreated;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Laravel\Fortify\Features;
 use Laravel\Jetstream\Jetstream;
 use Tests\TestCase;
@@ -33,6 +35,7 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register(): void
     {
+        Event::fake(UserCreated::class);
         if (!Features::enabled(Features::registration())) {
             $this->markTestSkipped('Registration support is not enabled.');
 

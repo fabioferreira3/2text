@@ -6,6 +6,7 @@ use App\Events\DocumentTaskFinished;
 use App\Events\UserCreated;
 use App\Listeners\HandleDocumentTasksCompletedUpdate;
 use App\Listeners\HandleNewUserAdminNotification;
+use App\Listeners\HandleStripeUserCreation;
 use App\Listeners\HandleWelcomeNotification;
 use App\Listeners\Payment\HandleCashierWebhookReceived;
 use App\Listeners\Payment\HandlePaymentSucceeded;
@@ -32,6 +33,7 @@ class EventServiceProvider extends ServiceProvider
         UserCreated::class => [
             HandleNewUserAdminNotification::class,
             HandleWelcomeNotification::class,
+            HandleStripeUserCreation::class
         ],
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
             \SocialiteProviders\Google\GoogleExtendSocialite::class . '@handle',
