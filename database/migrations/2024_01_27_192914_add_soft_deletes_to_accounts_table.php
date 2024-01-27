@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tax_rates', function (Blueprint $table) {
-            $table->id();
-            $table->string('stripe_id')->index();
-            $table->double('percentage')->index();
-            $table->timestamps();
+        Schema::table('accounts', function (Blueprint $table) {
+            $table->softDeletes();
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tax_rates');
+        Schema::table('accounts', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

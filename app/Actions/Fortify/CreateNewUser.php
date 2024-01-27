@@ -26,6 +26,8 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
-        return UserRepository::registerNewUser($input);
+        $userRepository = new UserRepository();
+
+        return $userRepository->registerNewUser($input);
     }
 }

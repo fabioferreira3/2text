@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -15,7 +16,7 @@ class Account extends Model implements JWTSubject
     protected $appends = ['language'];
     protected $casts = ['settings' => 'array'];
 
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, SoftDeletes;
 
     public function users()
     {
@@ -30,6 +31,11 @@ class Account extends Model implements JWTSubject
     public function productUsage(): HasMany
     {
         return $this->hasMany(ProductUsage::class);
+    }
+
+    public function unitTransactions(): HasMany
+    {
+        return $this->hasMany(UnitTransaction::class);
     }
 
     public function getLanguageAttribute()
@@ -50,6 +56,14 @@ class Account extends Model implements JWTSubject
     public function getJWTToken()
     {
         return JWTAuth::fromUser($this);
+    }
+
+    public function registerUnits(int $amount, array $meta = []): UnitTransaction
+    {
+        return $this->unitTransactions()->create([
+            'amount' => $amount,
+            'meta' => $meta
+        ]);
     }
 
     public static function newFactory()

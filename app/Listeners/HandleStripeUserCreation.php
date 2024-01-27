@@ -3,9 +3,15 @@
 namespace App\Listeners;
 
 use App\Events\UserCreated;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
-class HandleStripeUserCreation
+class HandleStripeUserCreation implements ShouldQueue
 {
+    use InteractsWithQueue, Queueable, SerializesModels;
+
     /**
      * Handle the event.
      *

@@ -9,16 +9,23 @@ use Illuminate\Support\Facades\Hash;
 
 class UserRepository
 {
-    public static function getUserByEmail($email)
+    public function getUserByEmail($email)
     {
         return User::where('email', $email)->first();
     }
 
-    public static function registerNewUser(array $input): User
+    public function createAccount(array $params)
     {
-        $account = Account::create([
-            'name' => $input['name']
+        return Account::create([
+            'name' => $params['name'],
+            'status' => 'active',
+            'settings' => ['language' => 'en']
         ]);
+    }
+
+    public function registerNewUser(array $input): User
+    {
+        $account = $this->createAccount($input);
 
         $user = User::create([
             'name' => $input['name'],
@@ -32,12 +39,9 @@ class UserRepository
         return $user;
     }
 
-    public static function registerNewUserFromProvider(array $input): User
+    public function registerNewUserFromProvider(array $input): User
     {
-        $account = Account::create([
-            'name' => $input['name'],
-            'settings' => ['language' => 'en']
-        ]);
+        $account = $this->createAccount($input);
 
         $user = User::create([
             'account_id' => $account->id,
