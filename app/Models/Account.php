@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\Account\RegisterUnitTransaction;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -58,12 +59,22 @@ class Account extends Model implements JWTSubject
         return JWTAuth::fromUser($this);
     }
 
-    public function registerUnits(int $amount, array $meta = []): UnitTransaction
+    public function addUnits(int $amount, array $meta = [])
     {
-        return $this->unitTransactions()->create([
-            'amount' => $amount,
-            'meta' => $meta
-        ]);
+        if ($amount < 0) {
+            throw new \Exception('Unit amount must be positive');
+        }
+
+        RegisterUnitTransaction::dispatch($this, $amount, $meta);
+    }
+
+    public function subtractUnits(int $amount, array $meta = [])
+    {
+        if ($amount > 0) {
+            throw new \Exception('Unit amount must be negative');
+        }
+
+        RegisterUnitTransaction::dispatch($this, $amount, $meta);
     }
 
     public static function newFactory()

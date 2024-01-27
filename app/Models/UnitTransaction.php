@@ -18,16 +18,4 @@ class UnitTransaction extends Model
     {
         return $this->belongsTo(Account::class);
     }
-
-    /**
-     * The "booted" method of the model.
-     */
-    protected static function booted(): void
-    {
-        static::created(function (UnitTransaction $transaction) {
-            $transaction->account->update([
-                'units' => $transaction->account->units + $transaction->amount
-            ]);
-        });
-    }
 }
