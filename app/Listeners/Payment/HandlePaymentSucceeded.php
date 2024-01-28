@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Payment;
 
-use App\Exceptions\PaymentSucceededException;
+use App\Exceptions\Payment\PaymentFailedException;
 use App\Models\Product;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -19,20 +19,23 @@ class HandlePaymentSucceeded
     public function handle(PaymentSucceeded $event)
     {
         try {
-            Log::debug('eita');
+            Log::debug($event->invoice);
             $invoiceId = $event->invoice->id;
-            $productId = $event->invoice->lines['data'][0]['plan']['product'];
+            $productId = $event->invoice->lines['data'][0]['price']['product'];
 
             $product = Product::ofExternalId($productId)->firstOrFail();
+            $quantity = $event->invoice->lines['data'][0]['quantity'];
 
             if ($product->meta['unit_credits'] ?? false) {
-                $event->billable->account->addUnits($product->meta['unit_credits'], [
-                    'invoice_id' => $invoiceId,
-                ]);
+                $quantity = $product->meta['unit_credits'];
             }
+
+            $event->billable->account->addUnits($quantity, [
+                'invoice_id' => $invoiceId,
+            ]);
         } catch (Exception $e) {
             Log::error($event->invoice);
-            throw new PaymentSucceededException($e->getMessage());
+            throw new PaymentFailedException($e->getMessage());
         }
     }
 }

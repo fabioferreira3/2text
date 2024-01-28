@@ -111,13 +111,16 @@ Route::middleware([
     Route::get('/purchase', Purchase::class)->name('purchase');
 
     Route::get('/charge', function (Request $request) {
-        $stripeCharge = $request->user()->charge(
-            100,
-            $request->input('pmid'),
-            [
-                'return_url' => 'http://localhost'
-            ]
-        );
+        return $request->user()->checkout('price_1OdeFqEjLWGu0g9vVJeUQOso');
+        dd($request->user()->hasPaymentMethod());
+        $request->user()->invoicePrice('price_1OdeFqEjLWGu0g9vVJeUQOso', 100);
+        // $stripeCharge = $request->user()->charge(
+        //     100,
+        //     $request->input('pmid'),
+        //     [
+        //         'return_url' => 'http://localhost'
+        //     ]
+        // );
     });
 });
 
