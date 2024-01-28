@@ -2,6 +2,9 @@
 
 namespace App\Listeners\Payment;
 
+use App\Exceptions\PaymentSucceededException;
+use App\Models\Product;
+use Exception;
 use Illuminate\Support\Facades\Log;
 use Spark\Events\PaymentSucceeded;
 
@@ -15,7 +18,20 @@ class HandlePaymentSucceeded
      */
     public function handle(PaymentSucceeded $event)
     {
-        Log::debug('eitaaaaa');
-        Log::debug($event->billable->id);
+        try {
+            $invoiceId = $event->invoice->id;
+            $productId = $event->invoice->lines['data'][0]['plan']['product'];
+
+            $product = Product::ofExternalId($productId)->firstOrFail();
+
+            if ($product->meta['unit_credits'] ?? false) {
+                $event->billable->account->addUnits($product->meta['unit_credits'], [
+                    'invoice_id' => $invoiceId,
+                ]);
+            }
+        } catch (Exception $e) {
+            Log::error($event->invoice);
+            throw new PaymentSucceededException($e->getMessage());
+        }
     }
 }

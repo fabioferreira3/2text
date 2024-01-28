@@ -81,9 +81,14 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return $this->belongsTo(AccessToken::class);
     }
 
-    public function productUsage(): HasMany
+    public function appUsage(): HasMany
     {
-        return $this->hasMany(ProductUsage::class);
+        return $this->hasMany(AppUsage::class);
+    }
+
+    public function scopeOfStripeId($query, $stripeId)
+    {
+        return $query->where('stripe_id', $stripeId);
     }
 
     public function getTokenNameAttribute()

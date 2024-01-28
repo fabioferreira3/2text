@@ -5,7 +5,7 @@ namespace App\Jobs;
 use App\Helpers\SupportHelper;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Account;
-use App\Models\ProductUsage;
+use App\Models\AppUsage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -13,7 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Exception;
 
-class RegisterProductUsage implements ShouldQueue
+class RegisterAppUsage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
@@ -49,8 +49,8 @@ class RegisterProductUsage implements ShouldQueue
                 ]);
             }
 
-            $this->account->productUsage()->save(
-                new ProductUsage([
+            $this->account->appUsage()->save(
+                new AppUsage([
                     'model' => $this->params['model'] ?? null,
                     'prompt_token_usage' => $this->params['prompt'] ?? 0,
                     'completion_token_usage' => $this->params['completion'] ?? 0,

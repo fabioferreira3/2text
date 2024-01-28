@@ -4,7 +4,7 @@ namespace App\Jobs\Blog;
 
 use App\Enums\DocumentTaskEnum;
 use App\Events\MetaDescriptionGenerated;
-use App\Jobs\RegisterProductUsage;
+use App\Jobs\RegisterAppUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
@@ -87,7 +87,7 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
                 'prompt' => '',
                 'order' => 1
             ]));
-            RegisterProductUsage::dispatch($this->document->account, [
+            RegisterAppUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => [
                     'document_id' => $this->document->id,

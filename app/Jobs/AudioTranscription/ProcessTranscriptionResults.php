@@ -5,7 +5,7 @@ namespace App\Jobs\AudioTranscription;
 use App\Enums\AIModel;
 use App\Enums\DocumentTaskEnum;
 use App\Jobs\DispatchDocumentTasks;
-use App\Jobs\RegisterProductUsage;
+use App\Jobs\RegisterAppUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
@@ -89,7 +89,7 @@ class ProcessTranscriptionResults implements ShouldQueue, ShouldBeUnique
                 }
                 $order++;
             }
-            RegisterProductUsage::dispatch($this->document->account, [
+            RegisterAppUsage::dispatch($this->document->account, [
                 'model' => AIModel::ASSEMBLY_AI->value,
                 'length' => $this->document->getMeta('duration'),
                 'meta' => [

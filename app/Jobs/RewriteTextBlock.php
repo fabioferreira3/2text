@@ -8,13 +8,11 @@ use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Repositories\GenRepository;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -83,7 +81,7 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
     {
         try {
             $response = $this->genRepo->rewriteTextBlock($this->contentBlock, $this->meta);
-            RegisterProductUsage::dispatch($this->document->account, [
+            RegisterAppUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => [
                     'document_id' => $this->document->id,

@@ -7,7 +7,7 @@ use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelperFactory;
 use App\Interfaces\ChatGPTFactoryInterface;
 use App\Interfaces\OraculumFactoryInterface;
-use App\Jobs\RegisterProductUsage;
+use App\Jobs\RegisterAppUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
@@ -99,7 +99,7 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
             $this->repo->updateMeta('outline', $response['content']);
             $this->repo->updateMeta('raw_structure', DocumentHelper::parseOutlineToRawStructure($response['content']));
 
-            RegisterProductUsage::dispatch($this->document->account, [
+            RegisterAppUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => [
                     'document_id' => $this->document->id,

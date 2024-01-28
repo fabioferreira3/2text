@@ -21,6 +21,7 @@ use App\Packages\AssemblyAI\AssemblyAI;
 use App\Packages\OpenAI\ChatGPT;
 use App\Packages\OpenAI\DallE;
 use App\Packages\Oraculum\Oraculum;
+use App\Packages\SendGrid\SendGrid;
 use App\Packages\Whisper\Whisper;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
@@ -100,11 +101,17 @@ uses()->beforeEach(function () {
     $this->mockBitly = Mockery::mock('bitly');
     $this->mockBitly->shouldReceive('getUrl')->andReturn('http://bit.ly/123456');
 
+    // Sendgrid Mock
+    $this->mockSendGrid = Mockery::mock('sendgrid');
+    $this->mockSendGrid->shouldReceive('sendDynamicMessage')->andReturn('message');
+
+
     $this->app->instance(OraculumFactoryInterface::class, $this->mockOraculumFactory);
     $this->app->instance(ChatGPTFactoryInterface::class, $this->mockChatGPTFactory);
     $this->app->instance(WhisperFactoryInterface::class, $this->mockWhisperFactory);
     $this->app->instance(AssemblyAIFactoryInterface::class, $this->mockAssemblyAIFactory);
     $this->app->instance('bitly', $this->mockBitly);
+    $this->app->instance('sendgrid', $this->mockSendGrid);
 })->in(__DIR__);
 
 uses()->afterAll(function () {

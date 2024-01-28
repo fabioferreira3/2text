@@ -29,9 +29,9 @@ class Account extends Model implements JWTSubject
         return $this->hasMany(MediaFile::class);
     }
 
-    public function productUsage(): HasMany
+    public function appUsage(): HasMany
     {
-        return $this->hasMany(ProductUsage::class);
+        return $this->hasMany(AppUsage::class);
     }
 
     public function unitTransactions(): HasMany
@@ -68,7 +68,7 @@ class Account extends Model implements JWTSubject
         RegisterUnitTransaction::dispatch($this, $amount, $meta);
     }
 
-    public function subtractUnits(int $amount, array $meta = [])
+    public function subUnits(int $amount, array $meta = [])
     {
         if ($amount > 0) {
             throw new \Exception('Unit amount must be negative');

@@ -254,7 +254,7 @@ class Document extends Model
 
     public function getCurrentCosts()
     {
-        return ProductUsage::where('account_id', $this->account_id)
+        return AppUsage::where('account_id', $this->account_id)
             ->where('meta->document_id', $this->id)
             ->get()
             ->reduce(function ($carry, $usage) {

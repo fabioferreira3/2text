@@ -3,12 +3,11 @@
 namespace App\Jobs\Translation;
 
 use App\Enums\DocumentTaskEnum;
-use App\Jobs\RegisterProductUsage;
+use App\Jobs\RegisterAppUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Repositories\GenRepository;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -99,7 +98,7 @@ class TranslateTextBlock implements ShouldQueue, ShouldBeUnique
                 'content' => $response['content']
             ]);
 
-            RegisterProductUsage::dispatch($this->contentBlock->document->account, [
+            RegisterAppUsage::dispatch($this->contentBlock->document->account, [
                 ...$response['token_usage'],
                 'meta' => [
                     'document_id' => $this->contentBlock->document->id,

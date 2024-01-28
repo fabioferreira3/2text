@@ -5,7 +5,7 @@ namespace App\Jobs\Paraphraser;
 use App\Enums\DocumentTaskEnum;
 use App\Events\Paraphraser\TextParaphrased;
 use App\Helpers\PromptHelper;
-use App\Jobs\RegisterProductUsage;
+use App\Jobs\RegisterAppUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
@@ -58,7 +58,7 @@ class ParaphraseText implements ShouldQueue
                 ]));
             }
 
-            RegisterProductUsage::dispatch($this->document->account, [
+            RegisterAppUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => [
                     'document_id' => $this->document->id,

@@ -11,13 +11,11 @@ use App\Interfaces\ChatGPTFactoryInterface;
 use App\Interfaces\OraculumFactoryInterface;
 use App\Interfaces\WhisperFactoryInterface;
 use App\Jobs\DownloadAudio;
-use App\Models\Account;
 use App\View\Components\Custom\Dropdown;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Queue\Events\JobFailed;
-use Laravel\Cashier\Cashier;
 
 class AppServiceProvider extends ServiceProvider
 {

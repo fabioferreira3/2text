@@ -4,13 +4,12 @@ namespace App\Jobs\SocialMedia;
 
 use App\Enums\DocumentTaskEnum;
 use App\Helpers\PromptHelper;
-use App\Jobs\RegisterProductUsage;
+use App\Jobs\RegisterAppUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Repositories\DocumentRepository;
 use App\Repositories\GenRepository;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -79,7 +78,7 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
                 ])
             );
 
-            RegisterProductUsage::dispatch($this->document->account, [
+            RegisterAppUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => [
                     'document_id' => $this->document->id,

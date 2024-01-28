@@ -4,18 +4,18 @@ namespace Database\Factories;
 
 use App\Enums\AIModel;
 use App\Models\Account;
-use App\Models\ProductUsage;
+use App\Models\AppUsage;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ProductUsageFactory extends Factory
+class AppUsageFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = ProductUsage::class;
+    protected $model = AppUsage::class;
 
     /**
      * Define the model's default state.

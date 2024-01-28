@@ -3,7 +3,7 @@
 use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Jobs\Blog\CreateOutline;
-use App\Jobs\RegisterProductUsage;
+use App\Jobs\RegisterAppUsage;
 use App\Models\Document;
 use App\Models\User;
 use Illuminate\Support\Facades\Bus;
@@ -23,7 +23,7 @@ describe(
     'Blog - CreateOutline job',
     function () {
         it('generates the outline and parses the raw structure', function ($queryEmbedding) {
-            Bus::fake(RegisterProductUsage::class);
+            Bus::fake(RegisterAppUsage::class);
 
             $processId = Str::uuid();
             $job = new CreateOutline(
@@ -43,7 +43,7 @@ describe(
             expect($this->document->getMeta('outline'))->toBe($this->aiModelResponseResponse['content']);
             expect($this->document->getMeta('raw_structure'))->toBeArray();
 
-            Bus::assertDispatched(RegisterProductUsage::class);
+            Bus::assertDispatched(RegisterAppUsage::class);
         })->with([true, false]);
     }
 )->group('blog');

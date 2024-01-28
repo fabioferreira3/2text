@@ -8,7 +8,7 @@ use App\Enums\MediaType;
 use App\Events\AudioGenerated;
 use App\Exceptions\AudioGenerationException;
 use App\Exceptions\AudioGenerationTimeoutException;
-use App\Jobs\RegisterProductUsage;
+use App\Jobs\RegisterAppUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\MediaFile;
@@ -116,7 +116,7 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
                 ]
             ]);
 
-            RegisterProductUsage::dispatch($this->document->account, [
+            RegisterAppUsage::dispatch($this->document->account, [
                 'model' => AIModel::ELEVEN_LABS->value,
                 'meta' => [
                     'document_id' => $this->document->id,

@@ -7,7 +7,6 @@ use App\Events\TitleGenerated;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Repositories\GenRepository;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -87,7 +86,7 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
                 );
             }
 
-            RegisterProductUsage::dispatch($this->document->account, [
+            RegisterAppUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => [
                     'document_id' => $this->document->id,

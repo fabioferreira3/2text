@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\Language;
-use App\Jobs\RegisterProductUsage;
+use App\Jobs\RegisterAppUsage;
 use App\Jobs\SummarizeContent;
 use App\Jobs\Translation\TranslateTextBlock;
 use App\Models\Document;
@@ -10,7 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Bus;
 
 beforeEach(function () {
-    Bus::fake([RegisterProductUsage::class, TranslateTextBlock::class]);
+    Bus::fake([RegisterAppUsage::class, TranslateTextBlock::class]);
 });
 
 function createDocument($queryEmbedding, $maxWordsCount, $targetLanguage)
@@ -36,7 +36,7 @@ function commonAssertions($document, $chatGptResponse)
         'prompt' => null
     ]);
 
-    Bus::assertDispatched(RegisterProductUsage::class, function ($job) use ($document, $chatGptResponse) {
+    Bus::assertDispatched(RegisterAppUsage::class, function ($job) use ($document, $chatGptResponse) {
         return $job->account->id === $document->account_id &&
             $job->params['model'] === $chatGptResponse['token_usage']['model'] &&
             $job->params['prompt'] === $chatGptResponse['token_usage']['prompt'] &&

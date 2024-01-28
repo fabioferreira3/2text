@@ -3,7 +3,7 @@
 use App\Enums\DocumentStatus;
 use App\Enums\DocumentTaskEnum;
 use App\Enums\SourceProvider;
-use App\Jobs\RegisterProductUsage;
+use App\Jobs\RegisterAppUsage;
 use App\Jobs\SocialMedia\CreatePost;
 use App\Models\Document;
 use App\Models\DocumentTask;
@@ -11,7 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Bus;
 
 beforeEach(function () {
-    Bus::fake([RegisterProductUsage::class]);
+    Bus::fake([RegisterAppUsage::class]);
 });
 
 function commonCreateSocialPostAssertions($document, $chatGptResponse, $documentTask = null)
@@ -24,7 +24,7 @@ function commonCreateSocialPostAssertions($document, $chatGptResponse, $document
         'prompt' => null
     ]);
 
-    Bus::assertDispatched(RegisterProductUsage::class, function ($job) use ($document, $chatGptResponse) {
+    Bus::assertDispatched(RegisterAppUsage::class, function ($job) use ($document, $chatGptResponse) {
         return $job->account->id === $document->account_id &&
             $job->params['model'] === $chatGptResponse['token_usage']['model'] &&
             $job->params['prompt'] === $chatGptResponse['token_usage']['prompt'] &&

@@ -11,9 +11,9 @@ class RegisterUnitTransaction
 {
     use Dispatchable, SerializesModels;
 
-    protected Account $account;
-    protected int $amount;
-    protected array $meta;
+    public Account $account;
+    public int $amount;
+    public array $meta;
 
     public function __construct(Account $account, int $amount, array $meta = [])
     {

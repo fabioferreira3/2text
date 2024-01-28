@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ProductUsage extends Model
+class AppUsage extends Model
 {
     use HasFactory, HasUuids;
 
     protected $guarded = ['id'];
     protected $casts = ['meta' => 'array', 'model' => AIModel::class];
-    protected $table = 'product_usage';
+    protected $table = 'app_usage';
 
     public function account(): BelongsTo
     {

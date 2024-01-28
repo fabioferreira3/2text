@@ -94,7 +94,7 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
                 'order' => 1
             ])));
 
-            RegisterProductUsage::dispatch($this->document->account, [
+            RegisterAppUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => [
                     'document_id' => $this->document->id,

@@ -10,7 +10,7 @@ use App\Helpers\PromptHelperFactory;
 use App\Interfaces\ChatGPTFactoryInterface;
 use App\Interfaces\OraculumFactoryInterface;
 use App\Jobs\DispatchDocumentTasks;
-use App\Jobs\RegisterProductUsage;
+use App\Jobs\RegisterAppUsage;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
@@ -271,7 +271,7 @@ class GenRepository
                 'prompt' => $params['prompt'] ?? null
             ]
         ]);
-        RegisterProductUsage::dispatch($document->account, [
+        RegisterAppUsage::dispatch($document->account, [
             //'model' => StabilityAIEngine::SD_XL_V_1->value,
             'model' => AIModel::DALL_E_3->value,
             'size' => $params['size'] ?? '1024x1024',
