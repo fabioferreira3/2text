@@ -19,6 +19,7 @@ class HandlePaymentSucceeded
     public function handle(PaymentSucceeded $event)
     {
         try {
+            Log::debug('eita');
             $invoiceId = $event->invoice->id;
             $productId = $event->invoice->lines['data'][0]['plan']['product'];
 

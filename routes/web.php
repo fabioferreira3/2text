@@ -20,6 +20,7 @@ use App\Http\Livewire\Blog\Dashboard as BlogDashboard;
 use App\Http\Livewire\InsightHub\Dashboard as InsightHubDashboard;
 use App\Http\Livewire\InsightHub\InsightView;
 use App\Http\Livewire\Paraphraser\Dashboard as ParaphraserDashboard;
+use App\Http\Livewire\Product\Purchase;
 use App\Http\Livewire\SocialMediaPost\Dashboard as SocialMediaPostDashboard;
 use App\Http\Livewire\Summarizer\Dashboard as SummarizerDashboard;
 use App\Http\Livewire\Summarizer\NewSummarizer;
@@ -29,6 +30,7 @@ use App\Models\ShortLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
+use Stripe\Stripe;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,6 +106,18 @@ Route::middleware([
     /* Billing portal */
     Route::get('/billing-portal', function (Request $request) {
         return $request->user()->redirectToBillingPortal();
+    });
+
+    Route::get('/purchase', Purchase::class)->name('purchase');
+
+    Route::get('/charge', function (Request $request) {
+        $stripeCharge = $request->user()->charge(
+            100,
+            $request->input('pmid'),
+            [
+                'return_url' => 'http://localhost'
+            ]
+        );
     });
 });
 

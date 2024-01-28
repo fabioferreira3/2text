@@ -42,10 +42,10 @@ return [
     |
     */
 
-    // 'brand' =>  [
-    //     'logo' => realpath(__DIR__.'/../public/svg/billing-logo.svg'),
-    //     'color' => 'bg-gray-800',
-    // ],
+    'brand' =>  [
+        'logo' => realpath(__DIR__ . '/../public/img/logo.png'),
+        'color' => 'bg-gray-800',
+    ],
 
     /*
     |--------------------------------------------------------------------------

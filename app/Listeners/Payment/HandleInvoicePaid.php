@@ -17,6 +17,7 @@ class HandleInvoicePaid
      */
     public function handle(CashierWebhookReceived $event)
     {
+        Log::debug($event->payload);
         if ($event->payload['type'] === 'invoice.payment_succeeded') {
             // $invoiceId = $event->payload['data']['object']['id'];
             // $stripeId = $event->payload['data']['object']['customer'];
