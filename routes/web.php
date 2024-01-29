@@ -106,9 +106,9 @@ Route::middleware([
     Route::get('/documents/{document}', [DocumentViewController::class, 'index'])->name('document-view');
 
     /* Billing portal */
-    Route::get('/billing-portal', function (Request $request) {
+    Route::get('/billing-management', function (Request $request) {
         return $request->user()->redirectToBillingPortal();
-    });
+    })->name('billing-management');
 
     Route::get('/purchase', Purchase::class)->name('purchase');
 
@@ -118,6 +118,9 @@ Route::middleware([
             ['price_1OdeFqEjLWGu0g9vVJeUQOso' => $quantity],
             [
                 'success_url' => route('checkout-success') . '?session_id={CHECKOUT_SESSION_ID}',
+                'invoice_creation' => [
+                    'enabled' => true
+                ],
                 'metadata' => [
                     'product_id' => 'ef2fd99f-55a6-4435-9128-c75df27fd13c',
                     'quantity' => $quantity

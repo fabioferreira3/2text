@@ -43,8 +43,8 @@ return [
     */
 
     'brand' =>  [
-        'logo' => realpath(__DIR__ . '/../public/img/logo.png'),
-        'color' => 'bg-gray-800',
+        'logo' => realpath(__DIR__ . '/../public/images/black-logo.svg'),
+        'color' => '#EA1F88',
     ],
 
     /*

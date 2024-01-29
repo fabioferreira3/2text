@@ -5,6 +5,7 @@ return [
     'ask_to' => 'Ask to...',
     'api_tokens' => 'API Tokens',
     'audio_transcription' => 'Transcription',
+    'billing' => 'Billing',
     'blog_post' => 'Blog post',
     'char_count' => 'Char count',
     'copy' => 'Copy',

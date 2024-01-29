@@ -25,7 +25,6 @@ class CheckoutSuccess extends Component
         $this->productId = $sessionData['metadata']['product_id'] ?? null;
         $this->quantity = $sessionData['metadata']['quantity'] ?? null;
         $this->totalAmount = SupportHelper::formatCentsToDollars($sessionData['amount_total']);
-        $request->user()->account->addUnits($this->quantity, ['product_id' => $this->productId]);
     }
 
     public function render()

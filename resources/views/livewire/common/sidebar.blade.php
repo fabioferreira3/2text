@@ -80,4 +80,20 @@
             ])
         </div>
     </div>
+    <div class="flex flex-col h-full w-full mt-40">
+        <div class="flex flex-col items-center gap-1 bg-gray-100 p-2 rounded-lg">
+            <div class="flex flex-col items-center">
+                <div class="text-sm">Current plan:</div>
+                <div class="font-bold text-lg">Starter</div>
+            </div>
+            <a class="flex items-center gap-2 bg-secondary px-4 py-2 rounded-lg text-white" href="/billing">
+                <x-icon name="sparkles" width="24" height="24" />
+                <div>Upgrade plan</div>
+            </a>
+            {{-- <button href="/billing" class="flex items-center gap-2 bg-secondary px-4 py-2 rounded-lg text-white">
+                <x-icon name="sparkles" width="24" height="24" />
+                <div>Upgrade plan</div>
+            </button> --}}
+        </div>
+    </div>
 </nav>

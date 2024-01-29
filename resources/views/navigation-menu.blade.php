@@ -58,6 +58,10 @@
                                 {{ __('menus.profile') }}
                             </x-jet-dropdown-link>
 
+                            <x-jet-dropdown-link href="{{ route('billing-management') }}">
+                                {{ __('menus.billing') }}
+                            </x-jet-dropdown-link>
+
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                             <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
                                 {{ __('menus.api_tokens') }}

@@ -11,7 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::rename('product_usage', 'app_usage');
+        Schema::table('products', function (Blueprint $table) {
+            $table->string('name')->index()->change();
+            $table->string('label')->nullable();
+        });
     }
 
     /**
@@ -19,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::rename('app_usage', 'product_usage');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropIndex(['name']);
+            $table->dropColumn(['label']);
+        });
     }
 };
