@@ -53,6 +53,12 @@ class SupportHelper
         }
     }
 
+    public static function formatCentsToDollars($cents)
+    {
+        $dollars = $cents / 100;
+        return number_format($dollars, 2, '.', ',');
+    }
+
     public static function shortenLink(string $targetUrl, array $params): string
     {
         Validator::make(['link' => $targetUrl], [

@@ -21,6 +21,7 @@ use App\Http\Livewire\InsightHub\Dashboard as InsightHubDashboard;
 use App\Http\Livewire\InsightHub\InsightView;
 use App\Http\Livewire\Paraphraser\Dashboard as ParaphraserDashboard;
 use App\Http\Livewire\Product\Purchase;
+use App\Http\Livewire\Purchase\CheckoutSuccess;
 use App\Http\Livewire\SocialMediaPost\Dashboard as SocialMediaPostDashboard;
 use App\Http\Livewire\Summarizer\Dashboard as SummarizerDashboard;
 use App\Http\Livewire\Summarizer\NewSummarizer;
@@ -29,6 +30,7 @@ use App\Http\Livewire\Trash;
 use App\Models\ShortLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Laravel\Cashier\Cashier;
 use Laravel\Socialite\Facades\Socialite;
 use Stripe\Stripe;
 
@@ -111,17 +113,20 @@ Route::middleware([
     Route::get('/purchase', Purchase::class)->name('purchase');
 
     Route::get('/charge', function (Request $request) {
-        return $request->user()->checkout('price_1OdeFqEjLWGu0g9vVJeUQOso');
-        dd($request->user()->hasPaymentMethod());
-        $request->user()->invoicePrice('price_1OdeFqEjLWGu0g9vVJeUQOso', 100);
-        // $stripeCharge = $request->user()->charge(
-        //     100,
-        //     $request->input('pmid'),
-        //     [
-        //         'return_url' => 'http://localhost'
-        //     ]
-        // );
+        $quantity = 400;
+        return $request->user()->checkout(
+            ['price_1OdeFqEjLWGu0g9vVJeUQOso' => $quantity],
+            [
+                'success_url' => route('checkout-success') . '?session_id={CHECKOUT_SESSION_ID}',
+                'metadata' => [
+                    'product_id' => 'ef2fd99f-55a6-4435-9128-c75df27fd13c',
+                    'quantity' => $quantity
+                ]
+            ]
+        );
     });
+
+    Route::get('/checkout/success', CheckoutSuccess::class)->name('checkout-success');
 });
 
 /* Google Auth */
