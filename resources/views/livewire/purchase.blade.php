@@ -37,27 +37,8 @@
         <div class="text-center text-xl font-thin">Or... save by subscribing to one of our monthly plans!</div>
         <div class="grid grid-cols-3 gap-4 mt-12">
             @foreach ($products as $product)
-            @include('livewire.common.pricing-tier', ['name' => 'Standard', 'price' => 14, 'features' => [
-            'Line 1',
-            'Line 2',
-            'Line 3'
-            ]])
+            @include('livewire.common.pricing-tier', ['product' => $product])
             @endforeach
-            @include('livewire.common.pricing-tier', ['name' => 'Standard', 'price' => 14, 'features' => [
-            'Line 1',
-            'Line 2',
-            'Line 3'
-            ]])
-            @include('livewire.common.pricing-tier', ['name' => 'Pro', 'price' => 39, 'features' => [
-            'Line 1',
-            'Line 2',
-            'Line 3'
-            ]])
-            @include('livewire.common.pricing-tier', ['name' => 'Enterprise', 'price' => 99, 'features' => [
-            'Line 1',
-            'Line 2',
-            'Line 3'
-            ]])
         </div>
     </div>
 </div>

@@ -16,7 +16,7 @@ class Purchase extends Component
 
     public function __construct()
     {
-        $this->products = Product::all();
+        $this->products = Product::where('name', '!=', 'unit')->get();
     }
 
 
