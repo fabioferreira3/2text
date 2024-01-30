@@ -44,6 +44,7 @@ class RegisterAppUsage implements ShouldQueue
                     'prompt' => $this->params['prompt'] ?? 0,
                     'completion' => $this->params['completion'] ?? 0,
                     'audio_length' => $this->params['length'] ?? 0,
+                    'char_count' => $this->params['char_count'] ?? 0,
                     'total' => $this->params['total'] ?? 0,
                     'size' => $this->params['size'] ?? '1024x1024'
                 ]);

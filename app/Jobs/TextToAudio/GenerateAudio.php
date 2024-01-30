@@ -118,10 +118,11 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
 
             RegisterAppUsage::dispatch($this->document->account, [
                 'model' => AIModel::ELEVEN_LABS->value,
+                'char_count' => strlen($this->document->content),
                 'meta' => [
                     'document_id' => $this->document->id,
                     'document_task_id' => $this->meta['task_id'] ?? null,
-                    'name' => DocumentTaskEnum::TEXT_TO_AUDIO->value
+                    'name' => DocumentTaskEnum::TEXT_TO_AUDIO->value,
                 ]
             ]);
 

@@ -110,6 +110,30 @@ return [
                     ],
                     'archived' => false,
                 ],
+                [
+                    'name' => 'Pro',
+                    'short_description' => 'This is a short, human friendly description of the plan.',
+                    'monthly_id' => 'price_1Obw79EjLWGu0g9vrEaHEpxm',
+                    //  'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'pri_1001'),
+                    'features' => [
+                        'Feature 1',
+                        'Feature 2',
+                        'Feature 3',
+                    ],
+                    'archived' => false,
+                ],
+                [
+                    'name' => 'Enterprise',
+                    'short_description' => 'This is a short, human friendly description of the plan.',
+                    'monthly_id' => 'price_1OePJYEjLWGu0g9vVkAQ0ZW6',
+                    //  'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'pri_1001'),
+                    'features' => [
+                        'Feature 1',
+                        'Feature 2',
+                        'Feature 3',
+                    ],
+                    'archived' => false,
+                ],
             ],
 
         ],

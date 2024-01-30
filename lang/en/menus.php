@@ -29,7 +29,7 @@ return [
     'tools' => 'Tools',
     'text_to_audio' => 'Text to Audio',
     'undo' => 'Undo',
-    'upgrade' => 'Upgrade',
+    'upgrade' => 'Upgrade now',
     'upgrade_plan' => 'Upgrade plan',
     'word_count' => 'Word count'
 ];

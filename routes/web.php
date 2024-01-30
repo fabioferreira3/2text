@@ -112,6 +112,14 @@ Route::middleware([
     })->name('billing-management');
 
     Route::get('/purchase', Purchase::class)->name('purchase');
+    Route::get('/subscription-checkout', function (Request $request) {
+        return $request->user()
+            ->newSubscription('default', 'price_1Obw79EjLWGu0g9vrEaHEpxm')
+            ->checkout([
+                'success_url' => route('checkout-success'),
+                'cancel_url' => route('subscription-checkout'),
+            ]);
+    })->name('subscription-checkout');
     Route::get('/checkout/success', CheckoutSuccess::class)->name('checkout-success');
 });
 

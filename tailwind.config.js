@@ -42,6 +42,9 @@ module.exports = {
             },
             zIndex: {
                 '100': '100',
+            },
+            screens: {
+                '3xl': '1800px',
             }
         },
         fontFamily: {

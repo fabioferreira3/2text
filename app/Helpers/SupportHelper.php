@@ -14,34 +14,29 @@ class SupportHelper
         if (in_array($model, [
             AIModel::GPT_3_TURBO->value,
             AIModel::GPT_3_TURBO1106->value,
-            AIModel::GPT_3_TURBO0301->value,
-            AIModel::GPT_3_TURBO0613->value
+            AIModel::GPT_3_TURBO_16->value
         ])) {
-            return (($params['prompt'] / 1000) * 0.0010) + (($params['completion'] / 1000) * 0.002);
+            return (($params['prompt'] / 1000) * 0.0010) + (($params['completion'] / 1000) * 0.0020);
         } elseif (in_array($model, [
-            AIModel::GPT_3_TURBO_16->value,
-            AIModel::GPT_3_TURBO_16_0613->value
-        ])) {
-            return (($params['prompt'] / 1000) * 0.003) + (($params['completion'] / 1000) * 0.004);
-        } elseif (in_array($model, [
-            AIModel::GPT_4->value,
-            AIModel::GPT_4_0613->value,
+            AIModel::GPT_4->value
         ])) {
             return (($params['prompt'] / 1000) * 0.03) + (($params['completion'] / 1000) * 0.06);
         } elseif (in_array($model, [
             AIModel::GPT_4_TURBO->value,
+            AIModel::GPT_4_1106->value,
             AIModel::GPT_4_VISION->value
         ])) {
             return (($params['prompt'] / 1000) * 0.01) + (($params['completion'] / 1000) * 0.03);
         } elseif (in_array($model, [
-            AIModel::GPT_4_32->value,
-            AIModel::GPT_4_32_0613->value
+            AIModel::GPT_4_32->value
         ])) {
             return (($params['prompt'] / 1000) * 0.06) + (($params['completion'] / 1000) * 0.12);
         } elseif (in_array($model, [AIModel::WHISPER->value])) {
             return $params['audio_length'] * 0.006;
         } elseif (in_array($model, [AIModel::POLLY->value])) {
             return $params['char_count'] * 0.000016;
+        } elseif (in_array($model, [AIModel::ELEVEN_LABS->value])) {
+            return $params['char_count'] * 0.00011;
         } elseif (in_array($model, [StabilityAIEngine::SD_XL_V_1->value])) {
             return 0.08;
         } elseif (in_array($model, [AIModel::DALL_E_3->value])) {

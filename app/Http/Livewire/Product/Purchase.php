@@ -11,8 +11,14 @@ class Purchase extends Component
     public $title;
     public $units = 100;
     public $totalPrice = 10.00;
+    public $selectedProduct = null;
+    public $products = [];
 
-    protected $listeners = ['carai' => 'carai'];
+    public function __construct()
+    {
+        $this->products = Product::all();
+    }
+
 
     public function rules()
     {
@@ -50,5 +56,15 @@ class Purchase extends Component
                 ]
             ]
         );
+    }
+
+    public function selectProduct()
+    {
+        return auth()->user()
+            ->newSubscription('default', 'price_1Obw79EjLWGu0g9vrEaHEpxm')
+            ->checkout([
+                'success_url' => route('checkout-success'),
+                'cancel_url' => route('purchase'),
+            ]);
     }
 }

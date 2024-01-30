@@ -5,19 +5,19 @@
                 viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
-            <h2 class="text-2xl font-semibold text-gray-800 mb-2">Payment Successful!</h2>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-2">{{__('checkout.payment_successfull')}}</h2>
             <div class="flex flex-col items-center justify-center text-gray-600">
-                <p>Thank you for your purchase.</p>
-                <p>Your unit balance will be updated shortly.</p>
+                <p>{{__('checkout.thank_you')}}</p>
+                <p>{{__('checkout.your_unit_balance')}}</p>
             </div>
 
             <div class="mt-4 p-4 border border-gray-200 rounded-xl">
-                <p><strong>Quantity:</strong> {{ $quantity }} units</p>
-                <p><strong>Total Amount:</strong> ${{$totalAmount}}</p>
+                <p><strong>{{__('checkout.quantity')}}:</strong> {{ $quantity }} {{__('checkout.units')}}</p>
+                <p><strong>{{__('checkout.total_amount')}}:</strong> ${{$totalAmount}}</p>
             </div>
 
-            <a href="{{ route('home') }}" class="mt-6 inline-block bg-secondary text-white py-2 px-4 rounded">
-                Back to dashboard
+            <a href="{{ route('home') }}" class="mt-6 inline-block bg-secondary text-white py-2 px-4 rounded-lg">
+                {{__('checkout.back_dashboard')}}
             </a>
         </div>
     </div>
