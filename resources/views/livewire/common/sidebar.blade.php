@@ -6,7 +6,7 @@
             </a>
         </div>
     </div>
-    <div class="flex flex-col gap-5 mt-12">
+    <div class="flex flex-col gap-5 mt-6">
         <div class="hidden sm:flex">
             @include('livewire.common.navlink', [
             'route' => 'home',
@@ -80,20 +80,18 @@
             ])
         </div>
     </div>
-    <div class="flex flex-col h-full w-full mt-40">
+    <div class="flex flex-col h-full w-full mt-4">
         <div class="flex flex-col items-center gap-1 bg-gray-100 p-2 rounded-lg">
+            @if(auth()->user()->sparkPlan())
             <div class="flex flex-col items-center">
-                <div class="text-sm">Current plan:</div>
-                <div class="font-bold text-lg">Starter</div>
+                <div class="text-sm">{{__('menus.current_plan')}}:</div>
+                <div class="font-bold text-lg">{{auth()->user()->sparkPlan()->name}}</div>
             </div>
+            @endif
             <a class="flex items-center gap-2 bg-secondary px-4 py-2 rounded-lg text-white" href="/billing">
                 <x-icon name="sparkles" width="24" height="24" />
-                <div>Upgrade plan</div>
+                <div>@if(auth()->user()->sparkPlan()) {{__('menus.upgrade')}} @else {{__('menus.upgrade_plan')}} @endif</div>
             </a>
-            {{-- <button href="/billing" class="flex items-center gap-2 bg-secondary px-4 py-2 rounded-lg text-white">
-                <x-icon name="sparkles" width="24" height="24" />
-                <div>Upgrade plan</div>
-            </button> --}}
         </div>
     </div>
 </nav>

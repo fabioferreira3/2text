@@ -8,6 +8,7 @@ return [
     'blog_post' => 'Post de Blog',
     'char_count' => 'Contagem de caracteres',
     'copy' => 'Copiar',
+    'current_plan' => 'Plano atual',
     'dashboard' => 'Home',
     'delete' => 'Remover',
     'expand' => 'Expandir',
@@ -27,5 +28,7 @@ return [
     'tools' => 'Ferramentas',
     'text_to_audio' => 'Texto para Áudio',
     'undo' => 'Desfazer',
+    'upgrade' => 'Upgrade',
+    'upgrade_plan' => 'Fazer upgrade',
     'word_count' => 'Contagem de palavras'
 ];

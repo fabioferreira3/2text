@@ -9,6 +9,7 @@ return [
     'blog_post' => 'Blog post',
     'char_count' => 'Char count',
     'copy' => 'Copy',
+    'current_plan' => 'Current plan',
     'dashboard' => 'Dashboard',
     'delete' => 'Delete',
     'expand' => 'Expand',
@@ -28,5 +29,7 @@ return [
     'tools' => 'Tools',
     'text_to_audio' => 'Text to Audio',
     'undo' => 'Undo',
+    'upgrade' => 'Upgrade',
+    'upgrade_plan' => 'Upgrade plan',
     'word_count' => 'Word count'
 ];

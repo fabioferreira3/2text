@@ -8,6 +8,7 @@ return [
     'blog_post' => 'Publicación de blog',
     'char_count' => 'Conteo de caracteres',
     'copy' => 'Copiar',
+    'current_plan' => 'Nivel actual',
     'dashboard' => 'Panel de control',
     'delete' => 'Eliminar',
     'expand' => 'Expandir',
@@ -16,6 +17,7 @@ return [
     'logout' => 'Cerrar sesión',
     'manage_account' => 'Gestionar cuenta',
     'more' => 'Más',
+    'my_units' => 'Mis unidades',
     'paraphraser' => 'Paráfrasis',
     'paraphrase' => 'Parafrasear',
     'profile' => 'Perfil',
@@ -27,5 +29,7 @@ return [
     'tools' => 'Herramientas',
     'text_to_audio' => 'Texto a Audio',
     'undo' => 'Deshacer',
+    'upgrade' => 'Upgrade',
+    'upgrade_plan' => 'Upgrade de nivel',
     'word_count' => 'Conteo de palabras'
 ];

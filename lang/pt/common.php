@@ -25,6 +25,7 @@ return [
     'inquiry' => 'Consulta',
     'listen' => 'Ouvir',
     'json_file' => 'Arquivo JSON',
+    'my_units' => 'Minhas unidades',
     'paraphrased_text' => 'Texto Parafraseado',
     'pdf_file' => 'Arquivo PDF',
     'regenerate' => 'Regenerar',
