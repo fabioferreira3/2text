@@ -11,11 +11,11 @@
             </div>
             @endforeach
         </div>
-        <div class="flex items-center justify-between gap-4 bg-secondary rounded-full pl-3 pr-1 py-1 mt-4 text-lg">
-            <div>Get {{$product->label}}</div>
+        <button wire:click="selectProduct('{{$product->id}}')" class="cursor-pointer flex items-center justify-between gap-4 bg-secondary rounded-full pl-3 pr-1 py-1 mt-4 text-lg">
+            <div class="font-bold">Get {{$product->label}}</div>
             <div class="bg-white rounded-full p-2">
                 <x-icon name="chevron-double-right" width="18" height="18" class="text-secondary" />
             </div>
-        </div>
+        </button>
     </div>
 </div>

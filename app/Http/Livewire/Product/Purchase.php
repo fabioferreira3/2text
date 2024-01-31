@@ -11,12 +11,11 @@ class Purchase extends Component
     public $title;
     public $units = 100;
     public $totalPrice = 10.00;
-    public $selectedProduct = null;
     public $products = [];
 
     public function __construct()
     {
-        $this->products = Product::where('name', '!=', 'unit')->get();
+        $this->products = Product::where('name', '!=', 'unit')->levelOrdered()->get();
     }
 
 
@@ -29,7 +28,7 @@ class Purchase extends Component
 
     public function render()
     {
-        return view('livewire.purchase')->layout('layouts.app', ['title' => 'eita']);
+        return view('livewire.purchase')->layout('layouts.app', ['title' => 'Purchase units']);
     }
 
     public function updatedUnits($value)
@@ -58,10 +57,15 @@ class Purchase extends Component
         );
     }
 
-    public function selectProduct()
+    public function selectProduct(string $productId)
     {
+        if (auth()->user()->sparkPlan()) {
+            return redirect()->to('/billing');
+        }
+
+        $product = $this->products->find($productId);
         return auth()->user()
-            ->newSubscription('default', 'price_1Obw79EjLWGu0g9vrEaHEpxm')
+            ->newSubscription('default', $product->meta['price_id'])
             ->checkout([
                 'success_url' => route('checkout-success'),
                 'cancel_url' => route('purchase'),

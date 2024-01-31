@@ -90,7 +90,12 @@
             @endif
             <a class="flex items-center gap-2 bg-secondary px-4 py-2 rounded-lg text-white" href="/billing">
                 <x-icon name="sparkles" width="24" height="24" />
-                <div>@if(auth()->user()->sparkPlan()) {{__('menus.upgrade')}} @else {{__('menus.upgrade_plan')}} @endif
+                <div>
+                    @if(auth()->user()->sparkPlan())
+                    {{__('menus.upgrade')}}
+                    @else
+                    {{__('menus.upgrade_plan')}}
+                    @endif
                 </div>
             </a>
         </div>

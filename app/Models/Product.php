@@ -13,6 +13,11 @@ class Product extends Model
     protected $guarded = ['id'];
     protected $casts = ['meta' => 'array'];
 
+    public function scopeLevelOrdered($query)
+    {
+        return $query->orderBy('level', 'asc');
+    }
+
     public function scopeOfExternalId($query, $externalId)
     {
         return $query->where('external_id', $externalId);

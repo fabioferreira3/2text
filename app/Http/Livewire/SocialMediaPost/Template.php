@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\SocialMediaPost;
 
 use App\Enums\DocumentType;
-use App\Jobs\SocialMedia\CreateSocialMediaPost;
 use App\Repositories\DocumentRepository;
 use Livewire\Component;
 

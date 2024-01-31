@@ -9,7 +9,7 @@ return [
     'blog_post' => 'Blog post',
     'char_count' => 'Char count',
     'copy' => 'Copy',
-    'current_plan' => 'Current plan',
+    'current_plan' => 'Your plan',
     'dashboard' => 'Dashboard',
     'delete' => 'Delete',
     'expand' => 'Expand',
