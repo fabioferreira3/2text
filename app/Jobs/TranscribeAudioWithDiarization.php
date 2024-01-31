@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Enums\AIModel;
+use App\Enums\DocumentTaskEnum;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Repositories\MediaRepository;
@@ -88,6 +90,18 @@ class TranscribeAudioWithDiarization implements ShouldQueue, ShouldBeUnique
                 $this->document->getMeta('audio_file_path'),
                 $params
             );
+
+            RegisterAppUsage::dispatch($this->document->account, [
+                'model' => AIModel::ASSEMBLY_AI->value,
+                'length' => $this->document->getMeta('duration'),
+                'meta' => [
+                    'document_id' => $this->document->id,
+                    'document_task_id' => $this->meta['task_id'] ?? null,
+                    'name' => DocumentTaskEnum::TRANSCRIBE_AUDIO_WITH_DIARIZATION->value,
+                    'length' => $this->document->getMeta('duration')
+                ]
+            ]);
+
             $this->jobPending();
         } catch (HttpException $e) {
             $this->handleError($e, 'Transcribing audio with diarization error');

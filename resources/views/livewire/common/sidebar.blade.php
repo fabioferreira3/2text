@@ -81,7 +81,8 @@
         </div>
     </div>
     <div class="flex flex-col h-full w-full mt-4 3xl:mt-40">
-        <div class="flex flex-col items-center gap-1 bg-gray-100 p-2 rounded-lg">
+        <div
+            class="flex flex-col items-center gap-1 @if(auth()->user()->sparkPlan()) bg-gray-100 p-2 rounded-lg @endif">
             @if(auth()->user()->sparkPlan())
             <div class="flex flex-col items-center">
                 <div class="text-sm">{{__('menus.current_plan')}}:</div>

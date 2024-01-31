@@ -2,11 +2,12 @@
 
 namespace App\Jobs;
 
+use App\Enums\AIModel;
 use App\Enums\DataType;
+use App\Enums\DocumentTaskEnum;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Repositories\MediaRepository;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -98,6 +99,17 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
                     ...$this->document->meta,
                     'context' => $transcribedText,
                     'original_text' => $transcribedText
+                ]
+            ]);
+
+            RegisterAppUsage::dispatch($this->document->account, [
+                'model' => AIModel::WHISPER->value,
+                'length' => $this->document->getMeta('duration'),
+                'meta' => [
+                    'document_id' => $this->document->id,
+                    'document_task_id' => $this->meta['task_id'] ?? null,
+                    'name' => DocumentTaskEnum::TRANSCRIBE_AUDIO->value,
+                    'length' => $this->document->getMeta('duration')
                 ]
             ]);
 

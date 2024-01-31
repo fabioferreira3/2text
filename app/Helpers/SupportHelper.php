@@ -40,9 +40,9 @@ class SupportHelper
         } elseif (in_array($model, [StabilityAIEngine::SD_XL_V_1->value])) {
             return 0.08;
         } elseif (in_array($model, [AIModel::DALL_E_3->value])) {
-            return $params['size'] === '1024x1024' ? 0.04 : 0.08;
+            return 0.08;
         } elseif (in_array($model, [AIModel::ASSEMBLY_AI->value])) {
-            return $params['audio_length'] * 0.0109;
+            return $params['audio_length'] * 0.0061;
         } else {
             return 0;
         }
