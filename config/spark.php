@@ -99,14 +99,14 @@ return [
 
             'plans' => [
                 [
-                    'name' => 'Standard',
-                    'short_description' => 'This is a short, human friendly description of the plan.',
+                    'name' => 'Starter',
+                    'short_description' => '',
                     'monthly_id' => 'price_1ObvxSEjLWGu0g9vIezEDGTW',
                     //  'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'pri_1001'),
                     'features' => [
-                        'Feature 1',
-                        'Feature 2',
-                        'Feature 3',
+                        '150 units',
+                        'Access to all tools',
+                        'Email support',
                     ],
                     'archived' => false,
                 ],

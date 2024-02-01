@@ -45,7 +45,10 @@ module.exports = {
             },
             screens: {
                 '3xl': '1800px',
-            }
+            },
+            clipPath: {
+                'triangle': 'polygon(100% 0, 0 100%, 100% 100%)',
+            },
         },
         fontFamily: {
             sans: ["Avenir Regular", ...defaultTheme.fontFamily.sans],
@@ -54,7 +57,15 @@ module.exports = {
         },
     },
 
-    plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography")],
+    plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography"),
+        function({ addUtilities }) {
+        addUtilities({
+            '.clip-triangle': {
+            clipPath: 'polygon(100% 0, 0 100%, 100% 100%)',
+            },
+        })
+        }
+    ],
 
     presets: [presets],
 };
