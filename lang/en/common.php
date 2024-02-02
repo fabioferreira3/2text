@@ -38,6 +38,8 @@ return [
     'title_updated' => 'Title updated sucessfully',
     'tools' => 'Tools',
     'undo' => 'Undo',
+    'unit' => 'unit',
+    'units' => 'units',
     'unselect' => 'Unselect',
     'view_history' => 'View History',
     'yes' => 'Yes',

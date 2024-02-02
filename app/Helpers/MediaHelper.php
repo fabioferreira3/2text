@@ -32,13 +32,13 @@ class MediaHelper
 
     public function getImageSizeByDocumentType(Document $document)
     {
-        if ($document->type === DocumentType::SOCIAL_MEDIA_POST) {
-            return self::getSocialMediaImageSize($document->getMeta('platform'));
-        }
+        // if ($document->type === DocumentType::SOCIAL_MEDIA_POST) {
+        //     return self::getSocialMediaImageSize($document->getMeta('platform'));
+        // }
 
-        if ($document->type === DocumentType::BLOG_POST) {
-            return ['height' => 1024, 'width' => 1792];
-        }
+        // if ($document->type === DocumentType::BLOG_POST) {
+        //     return ['height' => 1024, 'width' => 1792];
+        // }
 
         return ['height' => 1024, 'width' => 1024];
     }

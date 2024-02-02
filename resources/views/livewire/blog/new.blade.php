@@ -1,6 +1,14 @@
 <div class="flex flex-col gap-6">
     @section('header')
-    @include('livewire.common.header', ['icon' => 'newspaper', 'title' => __('blog.new_blog_post')])
+
+    <div class="flex items-center justify-between">
+        @include('livewire.common.header', ['icon' => 'newspaper', 'title' => __('blog.new_blog_post')])
+        <div class="bg-gray-200 px-3 py-1 rounded-lg text-gray-700 text-sm font-semibold">
+            1 unit = 480 words
+        </div>
+    </div>
+
+
     @endsection
     <div class="flex flex-col gap-6 p-4 border rounded-lg">
 
@@ -141,12 +149,18 @@
                 </div>
                 @if($generateImage)
                 <div class="flex flex-col gap-3">
-                    <div class="flex gap-2 items-center">
-                        <label class="text-lg font-medium text-gray-700">{{__('blog.hero_image_description')}}:</label>
-                        @include('livewire.common.help-item', [
-                        'header' => __('instructions.hero_image_tips'),
-                        'content' => App\Helpers\InstructionsHelper::heroImages()
-                        ])
+                    <div class="flex gap-8 items-center">
+                        <div class="flex gap-2 items-center">
+                            <label
+                                class="text-lg font-medium text-gray-700">{{__('blog.hero_image_description')}}:</label>
+                            @include('livewire.common.help-item', [
+                            'header' => __('instructions.hero_image_tips'),
+                            'content' => App\Helpers\InstructionsHelper::heroImages()
+                            ])
+                        </div>
+                        <div class="bg-gray-200 px-3 py-1 rounded-lg text-sm font-semibold text-gray-700">
+                            1 {{ strtolower(__('common.image'))}} = 1 {{__('common.unit')}}
+                        </div>
                     </div>
                     <div class="w-full relative flex flex-col gap-1">
                         <textarea placeholder="{{__('blog.placeholder_example')}}"

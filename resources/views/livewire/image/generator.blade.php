@@ -125,6 +125,9 @@
         <div class="text-xl font-bold">{{ __('images.samples') }}:</div>
         <input type="number" wire:model="samples" class="border border-gray-200 rounded-lg" min="1" max="8" />
     </div>
+    <div class="bg-gray-200 px-3 py-1 rounded-lg text-sm font-semibold text-gray-700">
+        1 {{ strtolower(__('common.image'))}} = 1 {{__('common.unit')}}
+    </div>
     <!-- <div class="flex flex-col gap-2 w-full">
             <div class="text-xl font-bold">{{ __('social_media.select_style') }}:</div>
             <x-custom.dropdown class="w-full z-100" direction="down">

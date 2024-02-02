@@ -56,6 +56,6 @@ class RegisterUnitsConsumption implements ShouldQueue
 
     protected function handleImageGeneration()
     {
-        return number_format($this->meta['img_count'] * 1.28, 2) * (-1);
+        return $this->meta['img_count'] * (-1);
     }
 }
