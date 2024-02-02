@@ -1,6 +1,11 @@
 <div class="flex flex-col gap-6">
     @section('header')
-    @include('livewire.common.header', ['icon' => 'switch-horizontal', 'title' => __('paraphraser.new_paraphrase')])
+    <div class="flex items-center justify-between">
+        @include('livewire.common.header', ['icon' => 'switch-horizontal', 'title' => __('paraphraser.new_paraphrase')])
+        <div class="bg-gray-200 px-3 py-1 rounded-lg text-gray-700 text-sm font-semibold">
+            1 {{__('common.unit')}} = 480 {{__('common.words')}}
+        </div>
+    </div>
     @endsection
     <div class="flex flex-col">
         <div class="flex flex-col gap-6 p-4 border rounded-lg">

@@ -91,6 +91,17 @@ class TranscribeAudioWithDiarization implements ShouldQueue, ShouldBeUnique
                 $params
             );
 
+            RegisterUnitsConsumption::dispatch(
+                $this->document->account,
+                'audio_transcription',
+                [
+                    'duration' => $this->document->getMeta('duration'),
+                    'document_id' => $this->document->id,
+                    'document_task_id' => $this->meta['task_id'] ?? null,
+                    'job' => DocumentTaskEnum::TRANSCRIBE_AUDIO_WITH_DIARIZATION->value
+                ]
+            );
+
             RegisterAppUsage::dispatch($this->document->account, [
                 'model' => AIModel::ASSEMBLY_AI->value,
                 'length' => $this->document->getMeta('duration'),

@@ -2,8 +2,11 @@
 
 namespace App\Jobs\Oraculum;
 
+use App\Enums\DocumentTaskEnum;
 use App\Events\ChatMessageReceived;
 use App\Interfaces\OraculumFactoryInterface;
+use App\Jobs\RegisterAppUsage;
+use App\Jobs\RegisterUnitsConsumption;
 use App\Jobs\Traits\JobEndings;
 use App\Models\ChatThreadIteration;
 use Exception;
@@ -12,7 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class Ask implements ShouldQueue
 {
@@ -43,6 +46,20 @@ class Ask implements ShouldQueue
                 'response' => $response['content'],
                 'origin' => 'sys'
             ]);
+
+            RegisterUnitsConsumption::dispatch($this->iteration->thread->user->account, 'words_generation', [
+                'word_count' => Str::wordCount($response['content']),
+                'document_id' => $this->iteration->thread->document_id,
+                'job' => DocumentTaskEnum::ASK_ORACULUM->value
+            ]);
+
+            RegisterAppUsage::dispatch($this->iteration->thread->user->account, [
+                ...$response['token_usage'],
+                'meta' => [
+                    'name' => DocumentTaskEnum::ASK_ORACULUM->value
+                ]
+            ]);
+
             event(new ChatMessageReceived($newIteration));
             $this->jobSucceded(true);
         } catch (Exception $e) {

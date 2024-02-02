@@ -33,6 +33,8 @@ class SupportHelper
             return (($params['prompt'] / 1000) * 0.06) + (($params['completion'] / 1000) * 0.12);
         } elseif (in_array($model, [AIModel::WHISPER->value])) {
             return $params['audio_length'] * 0.006;
+        } elseif (in_array($model, [AIModel::ASSEMBLY_AI->value])) {
+            return $params['audio_length'] * 0.0061;
         } elseif (in_array($model, [AIModel::POLLY->value])) {
             return $params['char_count'] * 0.000016;
         } elseif (in_array($model, [AIModel::ELEVEN_LABS->value])) {
@@ -41,8 +43,6 @@ class SupportHelper
             return 0.08;
         } elseif (in_array($model, [AIModel::DALL_E_3->value])) {
             return 0.04;
-        } elseif (in_array($model, [AIModel::ASSEMBLY_AI->value])) {
-            return $params['audio_length'] * 0.0061;
         } else {
             return 0;
         }

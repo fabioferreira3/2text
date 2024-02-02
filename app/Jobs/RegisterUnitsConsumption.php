@@ -4,12 +4,12 @@ namespace App\Jobs;
 
 use App\Jobs\Traits\JobEndings;
 use App\Models\Account;
+use App\Repositories\UnitRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Str;
 use Exception;
 
 class RegisterUnitsConsumption implements ShouldQueue
@@ -40,22 +40,13 @@ class RegisterUnitsConsumption implements ShouldQueue
     public function handle()
     {
         try {
-            $handler = 'handle' . Str::studly($this->type);
-            $unitsUsage = $this->$handler();
+            $unitRepo = new UnitRepository();
+            $unitsUsage = $unitRepo->estimateCost($this->type, $this->meta) * (-1);
+
             $this->account->subUnits($unitsUsage, $this->meta);
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to register units consumption: ' . $e->getMessage());
         }
-    }
-
-    protected function handleWordsGeneration()
-    {
-        return number_format($this->meta['word_count'] / 480, 2) * (-1);
-    }
-
-    protected function handleImageGeneration()
-    {
-        return $this->meta['img_count'] * (-1);
     }
 }

@@ -9,7 +9,7 @@
         'document' => $document
         ])
         <div class="bg-gray-200 px-3 py-1 rounded-lg">
-            1 unit = 480 words
+            1 {{__('common.unit')}} = 480 {{__('common.words')}}
         </div>
     </div>
 
@@ -40,7 +40,8 @@
         <div class="flex justify-between items-center cursor-pointer h-full" wire:click="toggleInstructions">
             @include('livewire.common.label', ['title' => __('social_media.instructions')])
             <div>
-                <x-icon :name="$showInstructions ? 'arrow-circle-up' : 'arrow-circle-down'" class="w-8 h-8 text-zinc-500" />
+                <x-icon :name="$showInstructions ? 'arrow-circle-up' : 'arrow-circle-down'"
+                    class="w-8 h-8 text-zinc-500" />
             </div>
         </div>
         @if ($showInstructions)
@@ -61,12 +62,16 @@
                             </div>
                             <div class='grid grid-cols-2 gap-8 mt-2'>
                                 <div class='flex flex-col gap-2'>
-                                    <x-checkbox md id="facebook" name="facebook" label="Facebook" wire:model.defer="platforms.Facebook" />
-                                    <x-checkbox md id="instagram" name="instagram" label="Instagram" wire:model.defer="platforms.Instagram" />
-                                    <x-checkbox md id="twitter" name="twitter" label="X (former Twitter)" wire:model.defer="platforms.Twitter" />
+                                    <x-checkbox md id="facebook" name="facebook" label="Facebook"
+                                        wire:model.defer="platforms.Facebook" />
+                                    <x-checkbox md id="instagram" name="instagram" label="Instagram"
+                                        wire:model.defer="platforms.Instagram" />
+                                    <x-checkbox md id="twitter" name="twitter" label="X (former Twitter)"
+                                        wire:model.defer="platforms.Twitter" />
                                 </div>
                                 <div class='flex flex-col gap-2'>
-                                    <x-checkbox md id="linkedin" name="linkedin" label="Linkedin" wire:model.defer="platforms.Linkedin" />
+                                    <x-checkbox md id="linkedin" name="linkedin" label="Linkedin"
+                                        wire:model.defer="platforms.Linkedin" />
                                 </div>
                             </div>
                             <div class="mt-2">
@@ -88,7 +93,8 @@
                                     'content' => App\Helpers\InstructionsHelper::sources(),
                                     ])
                                 </div>
-                                <select name="provider" wire:model="sourceType" class="p-3 rounded-lg border border-zinc-200 w-full">
+                                <select name="provider" wire:model="sourceType"
+                                    class="p-3 rounded-lg border border-zinc-200 w-full">
                                     @include('livewire.common.source-providers-options')
                                 </select>
                                 @if ($errors->has('sourceType'))
@@ -104,7 +110,8 @@
                                     'content' => App\Helpers\InstructionsHelper::sources(),
                                     ])
                                 </div>
-                                <input type="number" name="word_count_target" wire:model.defer="wordCountTarget" class="p-3 border border-zinc-200 rounded-lg w-full" />
+                                <input type="number" name="word_count_target" wire:model.defer="wordCountTarget"
+                                    class="p-3 border border-zinc-200 rounded-lg w-full" />
                                 @if ($errors->has('wordCountTarget'))
                                 <span class="text-red-500 text-sm">{{ $errors->first('wordCountTarget') }}</span>
                                 @endif
@@ -125,7 +132,8 @@
                                     <div class="text-sm">{{ __('social_media.provide_guidelines') }}
                                     </div>
                                 </div>
-                                <textarea class="border border-zinc-200 rounded-lg w-full mt-3" rows="6" maxlength="30000" wire:model.defer="context"></textarea>
+                                <textarea class="border border-zinc-200 rounded-lg w-full mt-3" rows="6"
+                                    maxlength="30000" wire:model.defer="context"></textarea>
                                 <div class="mt-2">
                                     @if ($errors->has('context'))
                                     <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
@@ -136,7 +144,8 @@
 
                             @if (in_array($sourceType, ['docx', 'pdf_file', 'csv', 'json']))
                             <label class="font-bold text-lg text-zinc-700">{{ __('social_media.file_option') }}</label>
-                            <input type="file" name="fileInput" wire:model="fileInput" class="p-3 border border-zinc-200 rounded-lg w-full" />
+                            <input type="file" name="fileInput" wire:model="fileInput"
+                                class="p-3 border border-zinc-200 rounded-lg w-full" />
                             @endif
                             @if ($errors->has('fileInput'))
                             <span class="text-red-500 text-sm">{{ $errors->first('fileInput') }}</span>
@@ -144,9 +153,11 @@
 
                             @if ($sourceType === 'website_url' || $sourceType === 'youtube')
                             <label class="font-bold text-lg text-zinc-700 flex items-center justify-between">
-                                @if($sourceType === 'youtube') {{ __('social_media.youtube_option') }} <span class="text-sm">{{__('social_media.max_permitted_youtube_links', ['max'
+                                @if($sourceType === 'youtube') {{ __('social_media.youtube_option') }} <span
+                                    class="text-sm">{{__('social_media.max_permitted_youtube_links', ['max'
                                     => 3])}}</span>
-                                @else {{ __('social_media.url_option') }} <span class="text-sm">{{__('social_media.max_permitted_urls', ['max'
+                                @else {{ __('social_media.url_option') }} <span
+                                    class="text-sm">{{__('social_media.max_permitted_urls', ['max'
                                     => 5])}}</span>
                                 @endif
                             </label>
@@ -154,7 +165,8 @@
                                 @foreach ($sourceUrls as $sourceUrl)
                                 <div class="flex items-center gap-2">
                                     <div class="bg-gray-100 px-3 py-1 rounded-lg">{{$sourceUrl}}</div>
-                                    <button class="outline-none focus:outline-none" wire:click="removeSourceUrl('{{$sourceUrl}}')">
+                                    <button class="outline-none focus:outline-none"
+                                        wire:click="removeSourceUrl('{{$sourceUrl}}')">
                                         <x-icon name="x-circle" width="24" height="24" class="text-gray-600" />
                                     </button>
                                 </div>
@@ -171,7 +183,9 @@
                                     }
                                 }
                             }">
-                                <input name="url" x-on:keydown.enter="handleEnter($event)" wire:model.defer="tempSourceUrl" class="p-3 border border-zinc-200 rounded-lg w-full" />
+                                <input name="url" x-on:keydown.enter="handleEnter($event)"
+                                    wire:model.defer="tempSourceUrl"
+                                    class="p-3 border border-zinc-200 rounded-lg w-full" />
                                 <button wire:click="addSourceUrl()" class="bg-secondary text-white p-1 rounded-full">
                                     <x-icon name="plus" width="24" height="24" />
                                 </button>
@@ -193,7 +207,8 @@
                                 <small>{{ __('social_media.provide_guidelines') }}</small>
                             </div>
 
-                            <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="5000" wire:model.defer="moreInstructions"></textarea>
+                            <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="5000"
+                                wire:model.defer="moreInstructions"></textarea>
                             @if ($errors->has('more_instructions'))
                             <span class="text-red-500 text-sm">{{ $errors->first('more_instructions') }}</span>
                             @endif
@@ -232,7 +247,9 @@
                                     'content' => App\Helpers\InstructionsHelper::socialMediaPlatforms(),
                                     ])
                                 </div>
-                                <textarea placeholder="{{__('social_media.placeholder_example')}}" class="border border-zinc-200 rounded-lg w-full mt-3" rows="3" maxlength="1000" wire:model.defer="imgPrompt"></textarea>
+                                <textarea placeholder="{{__('social_media.placeholder_example')}}"
+                                    class="border border-zinc-200 rounded-lg w-full mt-3" rows="3" maxlength="1000"
+                                    wire:model.defer="imgPrompt"></textarea>
                                 <div class="mt-2">
                                     @if ($errors->has('imgPrompt'))
                                     <span class="text-red-500 text-sm">{{ $errors->first('imgPrompt') }}</span>
@@ -249,7 +266,8 @@
                                 'content' => App\Helpers\InstructionsHelper::socialMediaKeyword(),
                                 ])
                             </div>
-                            <input name="keyword" wire:model.defer="keyword" class="p-3 w-full rounded-lg border border-zinc-200" />
+                            <input name="keyword" wire:model.defer="keyword"
+                                class="p-3 w-full rounded-lg border border-zinc-200" />
                             @if ($errors->has('keyword'))
                             <span class="text-red-500 text-sm">{{ $errors->first('keyword') }}</span>
                             @endif
@@ -282,7 +300,8 @@
                             'content' => App\Helpers\InstructionsHelper::writingStyles(),
                             ])
                         </div>
-                        <select name="style" wire:model="style" class="p-3 rounded-lg border border-zinc-200 focus:border focus:border-zinc-400">
+                        <select name="style" wire:model="style"
+                            class="p-3 rounded-lg border border-zinc-200 focus:border focus:border-zinc-400">
                             @include('livewire.common.styles-options')
                         </select>
                     </div>
@@ -294,14 +313,16 @@
                             'content' => App\Helpers\InstructionsHelper::writingTones(),
                             ])
                         </div>
-                        <select name="tone" wire:model="tone" class="p-3 rounded-lg border border-zinc-200 focus:border focus:border-zinc-400">
+                        <select name="tone" wire:model="tone"
+                            class="p-3 rounded-lg border border-zinc-200 focus:border focus:border-zinc-400">
                             @include('livewire.common.tones-options')
                         </select>
                     </div>
                 </div>
             </div>
             <div class="flex justify-center mt-8">
-                <button wire:click="process" class="flex items-center gap-4 bg-secondary text-xl hover:bg-main text-white font-bold px-4 py-2 rounded-lg">
+                <button wire:click="process"
+                    class="flex items-center gap-4 bg-secondary text-xl hover:bg-main text-white font-bold px-4 py-2 rounded-lg">
                     <div wire:loading.remove>
                         <x-icon name="play" class="w-8 h-8" />
                     </div>

@@ -1,6 +1,11 @@
 <div class="flex flex-col gap-6">
     @section('header')
-    @include('livewire.common.header', ['icon' => 'chat-alt', 'title' => __('transcription.new_transcription')])
+    <div class="flex items-center justify-between">
+        @include('livewire.common.header', ['icon' => 'chat-alt', 'title' => __('transcription.new_transcription')])
+        <div class="bg-gray-200 px-3 py-1 rounded-lg text-gray-700 text-sm font-semibold">
+            1 {{__('common.minute')}} = 0.1 {{__('common.unit')}}
+        </div>
+    </div>
     @endsection
     <div class="flex flex-col gap-6">
         <div class="col-span-3">

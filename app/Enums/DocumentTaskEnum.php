@@ -4,6 +4,7 @@ namespace App\Enums;
 
 enum DocumentTaskEnum: string
 {
+    case ASK_ORACULUM = 'ask_oraculum';
     case BROADCAST_CUSTOM_EVENT = 'broadcast_custom_event';
     case CRAWL_WEBSITE = 'crawl_website';
     case CREATE_SOCIAL_MEDIA_POST = 'create_social_media_post';
@@ -40,6 +41,7 @@ enum DocumentTaskEnum: string
     public function getJob()
     {
         return match ($this) {
+            self::ASK_ORACULUM => "App\Jobs\Oraculum\Ask",
             self::BROADCAST_CUSTOM_EVENT => "App\Jobs\BroadcastCustomEvent",
             self::CRAWL_WEBSITE => "App\Jobs\CrawlWebsite",
             self::CREATE_SOCIAL_MEDIA_POST => "App\Jobs\SocialMedia\CreatePost",

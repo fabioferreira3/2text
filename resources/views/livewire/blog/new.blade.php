@@ -4,7 +4,7 @@
     <div class="flex items-center justify-between">
         @include('livewire.common.header', ['icon' => 'newspaper', 'title' => __('blog.new_blog_post')])
         <div class="bg-gray-200 px-3 py-1 rounded-lg text-gray-700 text-sm font-semibold">
-            1 unit = 480 words
+            1 {{__('common.unit')}} = 480 {{__('common.words')}}
         </div>
     </div>
 

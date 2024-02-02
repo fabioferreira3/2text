@@ -102,6 +102,17 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
                 ]
             ]);
 
+            RegisterUnitsConsumption::dispatch(
+                $this->document->account,
+                'audio_transcription',
+                [
+                    'duration' => $this->document->getMeta('duration'),
+                    'document_id' => $this->document->id,
+                    'document_task_id' => $this->meta['task_id'] ?? null,
+                    'job' => DocumentTaskEnum::TRANSCRIBE_AUDIO->value
+                ]
+            );
+
             RegisterAppUsage::dispatch($this->document->account, [
                 'model' => AIModel::WHISPER->value,
                 'length' => $this->document->getMeta('duration'),

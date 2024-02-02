@@ -9,6 +9,7 @@ use App\Events\AudioGenerated;
 use App\Exceptions\AudioGenerationException;
 use App\Exceptions\AudioGenerationTimeoutException;
 use App\Jobs\RegisterAppUsage;
+use App\Jobs\RegisterUnitsConsumption;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\MediaFile;
@@ -114,6 +115,13 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
                 'meta' => [
                     'document_id' => $this->document->id
                 ]
+            ]);
+
+            RegisterUnitsConsumption::dispatch($this->document->account, 'audio_generation', [
+                'word_count' => Str::wordCount($this->meta['input_text']),
+                'document_id' => $this->document->id,
+                'document_task_id' => $this->meta['task_id'] ?? null,
+                'name' => DocumentTaskEnum::TEXT_TO_AUDIO->value,
             ]);
 
             RegisterAppUsage::dispatch($this->document->account, [

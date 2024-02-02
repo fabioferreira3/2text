@@ -25,6 +25,7 @@ return [
     'inquiry' => 'Inquiry',
     'listen' => 'Listen',
     'json_file' => 'JSON file',
+    'minute' => 'minute',
     'my_units' => 'My units',
     'paraphrased_text' => 'Paraphrased Text',
     'pdf_file' => 'PDF file',
@@ -44,5 +45,6 @@ return [
     'view_history' => 'View History',
     'yes' => 'Yes',
     'youtube' => 'Youtube',
-    'website_url' => 'Website pages'
+    'website_url' => 'Website pages',
+    'words' => 'words'
 ];
