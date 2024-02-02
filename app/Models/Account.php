@@ -68,7 +68,7 @@ class Account extends Model implements JWTSubject
         RegisterUnitTransaction::dispatch($this, $amount, $meta);
     }
 
-    public function subUnits(int $amount, array $meta = [])
+    public function subUnits($amount, array $meta = [])
     {
         if ($amount > 0) {
             throw new \Exception('Unit amount must be negative');

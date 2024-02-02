@@ -6,6 +6,7 @@ use App\Enums\DocumentTaskEnum;
 use App\Events\Paraphraser\TextParaphrased;
 use App\Helpers\PromptHelper;
 use App\Jobs\RegisterAppUsage;
+use App\Jobs\RegisterUnitsConsumption;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
@@ -17,6 +18,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ParaphraseText implements ShouldQueue
 {
@@ -58,6 +60,12 @@ class ParaphraseText implements ShouldQueue
                 ]));
             }
 
+            RegisterUnitsConsumption::dispatch($this->document->account, 'words_generation', [
+                'word_count' => Str::wordCount($response['content']),
+                'document_id' => $this->document->id,
+                'job' => DocumentTaskEnum::PARAPHRASE_TEXT->value
+            ]);
+
             RegisterAppUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => [
@@ -66,6 +74,7 @@ class ParaphraseText implements ShouldQueue
                     'name' => DocumentTaskEnum::PARAPHRASE_TEXT->value
                 ]
             ]);
+
             TextParaphrased::dispatch($this->document, [
                 'user_id' => $this->document->meta['user_id'],
                 'process_id' => $this->meta['process_id']

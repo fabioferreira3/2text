@@ -5,7 +5,6 @@ namespace App\Models\Traits;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
-use App\Repositories\DocumentRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

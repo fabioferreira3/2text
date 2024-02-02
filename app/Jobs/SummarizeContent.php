@@ -8,14 +8,13 @@ use App\Jobs\Translation\TranslateTextBlock;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Repositories\GenRepository;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SummarizeContent implements ShouldQueue, ShouldBeUnique
@@ -93,6 +92,12 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
                 'prompt' => null,
                 'order' => 1
             ])));
+
+            RegisterUnitsConsumption::dispatch($this->document->account, 'words_generation', [
+                'word_count' => Str::wordCount($response['content']),
+                'document_id' => $this->document->id,
+                'job' => DocumentTaskEnum::SUMMARIZE_CONTENT->value
+            ]);
 
             RegisterAppUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],

@@ -2,6 +2,8 @@
 
 namespace App\Jobs\Blog;
 
+use App\Enums\DocumentTaskEnum;
+use App\Jobs\RegisterUnitsConsumption;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
@@ -41,6 +43,13 @@ class PublishTextBlocks implements ShouldQueue, ShouldBeUnique
         try {
             $repo = new DocumentRepository($this->document);
             $repo->publishContentBlocks();
+
+            RegisterUnitsConsumption::dispatch($this->document->account, 'words_generation', [
+                'word_count' => $this->document->refresh()->word_count,
+                'document_id' => $this->document->id,
+                'job' => DocumentTaskEnum::PUBLISH_TEXT_BLOCK->value
+            ]);
+
             $this->jobSucceded();
         } catch (Exception $e) {
             $this->jobFailed('Failed to publish text blocks: ' . $e->getMessage());

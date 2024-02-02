@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CreateTitle implements ShouldQueue, ShouldBeUnique
@@ -85,6 +86,12 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
                     $this->meta['text'] ?? $this->document->normalized_structure
                 );
             }
+
+            RegisterUnitsConsumption::dispatch($this->document->account, 'words_generation', [
+                'word_count' => Str::wordCount($response['content']),
+                'document_id' => $this->document->id,
+                'job' => DocumentTaskEnum::CREATE_TITLE->value
+            ]);
 
             RegisterAppUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],

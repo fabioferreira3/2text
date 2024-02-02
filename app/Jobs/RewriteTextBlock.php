@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
@@ -81,6 +82,13 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
     {
         try {
             $response = $this->genRepo->rewriteTextBlock($this->contentBlock, $this->meta);
+
+            RegisterUnitsConsumption::dispatch($this->document->account, 'words_generation', [
+                'word_count' => Str::wordCount($response['content']),
+                'document_id' => $this->document->id,
+                'job' => DocumentTaskEnum::REWRITE_TEXT_BLOCK->value
+            ]);
+
             RegisterAppUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => [

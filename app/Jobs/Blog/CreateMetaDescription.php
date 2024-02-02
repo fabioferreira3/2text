@@ -5,6 +5,7 @@ namespace App\Jobs\Blog;
 use App\Enums\DocumentTaskEnum;
 use App\Events\MetaDescriptionGenerated;
 use App\Jobs\RegisterAppUsage;
+use App\Jobs\RegisterUnitsConsumption;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
@@ -81,12 +82,20 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
     {
         try {
             $response = $this->genRepo->generateMetaDescription($this->document);
+            $parsedContent = Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"');
             $this->document->contentBlocks()->save(new DocumentContentBlock([
                 'type' => 'meta_description',
-                'content' => Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"'),
+                'content' => $parsedContent,
                 'prompt' => '',
                 'order' => 1
             ]));
+
+            RegisterUnitsConsumption::dispatch($this->document->account, 'words_generation', [
+                'word_count' => Str::wordCount($parsedContent),
+                'document_id' => $this->document->id,
+                'job' => DocumentTaskEnum::CREATE_METADESCRIPTION->value
+            ]);
+
             RegisterAppUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => [
@@ -95,6 +104,7 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
                     'name' => DocumentTaskEnum::CREATE_METADESCRIPTION->value
                 ]
             ]);
+
             event(new MetaDescriptionGenerated($this->document, $this->meta['process_id']));
             $this->jobSucceded();
         } catch (HttpException $e) {

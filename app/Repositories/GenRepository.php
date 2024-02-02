@@ -11,6 +11,7 @@ use App\Interfaces\ChatGPTFactoryInterface;
 use App\Interfaces\OraculumFactoryInterface;
 use App\Jobs\DispatchDocumentTasks;
 use App\Jobs\RegisterAppUsage;
+use App\Jobs\RegisterUnitsConsumption;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
@@ -271,6 +272,13 @@ class GenRepository
                 'prompt' => $params['prompt'] ?? null
             ]
         ]);
+
+        RegisterUnitsConsumption::dispatch($document->account, 'image_generation', [
+            'img_count' => 1,
+            'document_id' => $document->id,
+            'job' => DocumentTaskEnum::GENERATE_IMAGE->value
+        ]);
+
         RegisterAppUsage::dispatch($document->account, [
             //'model' => StabilityAIEngine::SD_XL_V_1->value,
             'model' => AIModel::DALL_E_3->value,

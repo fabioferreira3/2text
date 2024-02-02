@@ -19,7 +19,6 @@ class HandlePaymentSucceeded
     public function handle(PaymentSucceeded $event)
     {
         try {
-            Log::debug($event->invoice);
             $invoiceId = $event->invoice->id;
             $productId = $event->invoice->lines['data'][0]['price']['product'];
 

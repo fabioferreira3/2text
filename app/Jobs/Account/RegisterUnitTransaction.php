@@ -12,10 +12,10 @@ class RegisterUnitTransaction
     use Dispatchable, SerializesModels;
 
     public Account $account;
-    public int $amount;
+    public $amount;
     public array $meta;
 
-    public function __construct(Account $account, int $amount, array $meta = [])
+    public function __construct(Account $account, $amount, array $meta = [])
     {
         $this->account = $account;
         $this->amount = $amount;
@@ -26,7 +26,6 @@ class RegisterUnitTransaction
     {
         DB::beginTransaction();
         try {
-
             $this->account->unitTransactions()->create([
                 'amount' => $this->amount,
                 'meta' => $this->meta

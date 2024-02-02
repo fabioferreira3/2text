@@ -51,6 +51,7 @@ class RegisterCreationTasks
                 ]
             );
         }
+
         DocumentRepository::createTask(
             $this->document->id,
             DocumentTaskEnum::CREATE_OUTLINE,

@@ -17,6 +17,8 @@ class Purchase extends Component
     public $displayCalculator = false;
     public $discount = 0;
 
+    protected $listeners = ['closeUnitCalculator'];
+
     public function __construct()
     {
         $this->products = Product::where('name', '!=', 'unit')->levelOrdered()->get();
@@ -78,5 +80,10 @@ class Purchase extends Component
                 'success_url' => route('checkout-success'),
                 'cancel_url' => route('purchase'),
             ]);
+    }
+
+    public function closeUnitCalculator()
+    {
+        $this->displayCalculator = false;
     }
 }
