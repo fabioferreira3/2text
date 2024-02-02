@@ -1,6 +1,9 @@
 <div class="p-8 flex flex-col">
-    <div class="text-3xl font-bold text-gray-800">
-        Units calculator
+    <div>
+        <div class="flex items-center justify-between">
+            <div class="text-3xl font-bold text-gray-800">Units calculator</div>
+            <button class="bg-gray-300 px-4 py-1 rounded-lg font-bold text-gray-800">Close</button>
+        </div>
         <div class="bg-secondary h-1 w-full"></div>
     </div>
     <div class="mt-4 mb-8 text-gray-700 font-semibold">Calculate how much you could generate with a particular number
@@ -16,7 +19,16 @@
             <button wire:click="processPurchase"
                 class="bg-secondary px-4 py-1 rounded-xl text-white font-bold">Buy</button>
         </div>
-        <div class="flex flex-col items-center justify-center gap-4 text-center border border-gray-300 rounded-xl p-8">
+        <div
+            class="flex flex-col items-center w-1/2 justify-center gap-4 text-center border border-gray-300 rounded-xl p-8">
+            <div class="italic text-sm">Important: The values below are just an estimation. You may check the actual
+                usage cost
+                of
+                each AI tool in their
+                respectives
+                pages. You may also spend your units across different tools. The estimation below considers a scenario
+                where you would spend all
+                of your units in a single tool.</div>
             <div class="flex flex-col items-center text-gray-700">
                 <div class="flex items-center gap-2">
                     <x-icon name="newspaper" width="30" />
@@ -31,7 +43,7 @@
             </div>
             <div class="flex items-center gap-2 text-secondary border-y-2">
                 <x-icon name="switch-vertical" width="20" />
-                <div class="text-xl font-semibold">or</div>
+                <div class="font-semibold">OR</div>
             </div>
             <div class="flex flex-col items-center text-gray-700">
                 <div class="flex items-center gap-2">
@@ -44,7 +56,7 @@
             </div>
             <div class="flex items-center gap-2 text-secondary border-y-2">
                 <x-icon name="switch-vertical" width="20" />
-                <div class="text-xl font-semibold">or</div>
+                <div class="font-semibold">OR</div>
             </div>
             <div class="flex flex-col items-center text-gray-700">
                 <div class="flex items-center gap-2">
@@ -57,7 +69,7 @@
             </div>
             <div class="flex items-center gap-2 text-secondary border-y-2">
                 <x-icon name="switch-vertical" width="20" />
-                <div class="text-xl font-semibold">or</div>
+                <div class="font-semibold">OR</div>
             </div>
             <div class="flex flex-col items-center text-gray-700">
                 <div class="flex items-center gap-2">

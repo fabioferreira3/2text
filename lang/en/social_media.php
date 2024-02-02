@@ -34,7 +34,7 @@ return [
     'max_permitted_urls' => 'up to :max links',
     'max_permitted_youtube_links' => 'up to :max youtube links',
     'new' => 'New',
-    'page_info' => 'Create social media posts with AI using multiple types of contexts like web pages, youtube videos, pdf files and much more.',
+    'page_info' => 'Create social media posts with AI using multiple types of contexts like web pages, youtube videos and pdf files.',
     'placeholder_example' => 'Example: Anime illustration of a character bonding with a majestic dragon in a secluded mountain sanctuary.',
     'please_wait' => 'Please wait...',
     'provide_guidelines' => 'Feel free to provide any other guidelines so I can write a post that meets your expectations.',

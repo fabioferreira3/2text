@@ -50,7 +50,7 @@
             @endforeach
         </div>
     </div>
-    @if($displayCalculator)
+    @if(!$displayCalculator)
     <x-experior::modal>
         @livewire('unit-calculator.unit-calculator')
     </x-experior::modal>
