@@ -14,6 +14,7 @@ return [
     'generating_audio' => 'Your audio is being generated!',
     'generating_wait' => 'Generating images. Please wait...',
     'generating_posts' => 'In Progress! Please wait...',
+    'insufficient_units' => 'Insufficient units',
     'language_updated' => 'Language updated successfully!',
     'paraphrase_completed' => 'Paraphrasing complete. You can make edits to the text below.',
     'posts_generated' => 'Post(s) generated!',

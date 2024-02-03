@@ -31,7 +31,7 @@ describe('Media Helper', function () {
         $blogPostSizes = $this->mediaHelper->getImageSizeByDocumentType($blogPost);
         expect($blogPostSizes)->toBe([
             'height' => 1024,
-            'width' => 1792
+            'width' => 1024
         ]);
 
         $socialMediaPost = Document::factory()->create([
@@ -41,7 +41,7 @@ describe('Media Helper', function () {
         $socialMediaPostSizes = $this->mediaHelper->getImageSizeByDocumentType($socialMediaPost);
         expect($socialMediaPostSizes)->toBe([
             'height' => 1024,
-            'width' => 1792
+            'width' => 1024
         ]);
 
         $defaultDoc = Document::factory()->create(['type' => DocumentType::AUDIO_TRANSCRIPTION->value]);

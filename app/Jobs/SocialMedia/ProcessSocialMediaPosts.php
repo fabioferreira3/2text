@@ -23,7 +23,7 @@ class ProcessSocialMediaPosts
     public function __construct($document, array $platforms)
     {
         $this->document = $document;
-        $this->platforms = collect($platforms)->filter();
+        $this->platforms = $platforms;
         $this->processId = Str::uuid();
         $this->repo = new DocumentRepository();
         $this->repo->setDocument($document);

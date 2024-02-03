@@ -7,12 +7,14 @@ use App\Enums\Language;
 use App\Enums\SourceProvider;
 use App\Enums\Tone;
 use App\Exceptions\CreatingSocialMediaPostException;
+use App\Exceptions\InsufficientUnitsException;
 use App\Jobs\SocialMedia\ProcessSocialMediaPosts;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use App\Rules\CsvFile;
 use App\Rules\DocxFile;
 use App\Rules\PdfFile;
+use App\Traits\UnitCheck;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -24,7 +26,7 @@ use Illuminate\Validation\Rule;
 
 class SocialMediaPostsManager extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, UnitCheck;
 
     public Document $document;
     public string $content;
@@ -274,6 +276,19 @@ class SocialMediaPostsManager extends Component
     {
         $this->validate();
         try {
+            $platforms = collect($this->platforms)->filter();
+
+            $this->totalCost = 0;
+            $this->estimateCost('words_generation', [
+                'word_count' => $this->wordCountTarget * count($platforms)
+            ]);
+            if ($this->generateImage) {
+                $this->estimateCost('image_generation', [
+                    'img_count' => count($platforms)
+                ]);
+            }
+            $this->authorizeTotalCost(true);
+
             $this->generating = true;
             $this->dispatchBrowserEvent('alert', [
                 'type' => 'info',
@@ -298,7 +313,12 @@ class SocialMediaPostsManager extends Component
                 ]
             ]);
 
-            ProcessSocialMediaPosts::dispatch($this->document, $this->platforms);
+            ProcessSocialMediaPosts::dispatch($this->document, $platforms);
+        } catch (InsufficientUnitsException $e) {
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'error',
+                'message' => __('alerts.insufficient_units')
+            ]);
         } catch (Exception $e) {
             throw new CreatingSocialMediaPostException($e->getMessage());
         }

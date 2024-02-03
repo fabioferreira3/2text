@@ -62,9 +62,7 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
         ]);
 
         $job = new ProcessSocialMediaPosts($document, [
-            "Linkedin" => false,
             "Facebook" => true,
-            "Instagram" => false,
             "Twitter" => true
         ]);
         $job->handle();
@@ -125,10 +123,7 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
         ]);
 
         $job = new ProcessSocialMediaPosts($document, [
-            "Linkedin" => true,
-            "Facebook" => false,
-            "Instagram" => false,
-            "Twitter" => false
+            "Linkedin" => true
         ]);
         $job->handle();
         $initialOrder = 2;
@@ -192,10 +187,7 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
         ]);
 
         $job = new ProcessSocialMediaPosts($document, [
-            "Linkedin" => false,
-            "Facebook" => true,
-            "Instagram" => false,
-            "Twitter" => false
+            "Facebook" => true
         ]);
         $job->handle();
         $initialOrder = 2;
@@ -263,10 +255,7 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
         ]);
 
         $job = new ProcessSocialMediaPosts($document, [
-            "Linkedin" => false,
-            "Facebook" => true,
-            "Instagram" => false,
-            "Twitter" => false
+            "Facebook" => true
         ]);
         $job->handle();
         $initialOrder = 2;

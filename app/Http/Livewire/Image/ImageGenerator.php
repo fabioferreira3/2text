@@ -4,10 +4,13 @@ namespace App\Http\Livewire\Image;
 
 use App\Enums\DocumentTaskEnum;
 use App\Enums\DocumentType;
+use App\Exceptions\InsufficientUnitsException;
 use App\Helpers\MediaHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\MediaFile;
 use App\Repositories\DocumentRepository;
+use App\Traits\UnitCheck;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -15,6 +18,8 @@ use Livewire\Component;
 
 class ImageGenerator extends Component
 {
+    use UnitCheck;
+
     public string $prompt = '';
     public $imgStyle = null;
     public bool $errorGenerating = false;
@@ -46,36 +51,48 @@ class ImageGenerator extends Component
             return;
         }
 
-        $this->errorGenerating = false;
-        $this->setProcessingState();
+        try {
+            $this->totalCost = 0;
+            $this->authorizeCost('image_generation', ['img_count' => $this->samples]);
 
-        $document = DocumentRepository::createGeneric([
-            'type' => DocumentType::GENERIC,
-            'language' => 'en'
-        ]);
+            $this->errorGenerating = false;
+            $this->setProcessingState();
 
-        $mediaHelper = new MediaHelper();
-        $imageSize = $mediaHelper->getImageSizeByDocumentType($document);
+            $document = DocumentRepository::createGeneric([
+                'type' => DocumentType::GENERIC,
+                'language' => 'en'
+            ]);
 
-        for ($i = 1; $i <= $this->samples; $i++) {
-            $processId = Str::uuid();
-            DocumentRepository::createTask(
-                $document->id,
-                DocumentTaskEnum::GENERATE_IMAGE,
-                [
-                    'order' => 1,
-                    'process_group_id' => $this->processGroupId,
-                    'process_id' => $processId,
-                    'meta' => [
-                        'prompt' => $this->prompt,
-                        'height' => $imageSize['height'],
-                        'width' => $imageSize['width']
+            $mediaHelper = new MediaHelper();
+            $imageSize = $mediaHelper->getImageSizeByDocumentType($document);
+
+            for ($i = 1; $i <= $this->samples; $i++) {
+                $processId = Str::uuid();
+                DocumentRepository::createTask(
+                    $document->id,
+                    DocumentTaskEnum::GENERATE_IMAGE,
+                    [
+                        'order' => 1,
+                        'process_group_id' => $this->processGroupId,
+                        'process_id' => $processId,
+                        'meta' => [
+                            'prompt' => $this->prompt,
+                            'height' => $imageSize['height'],
+                            'width' => $imageSize['width']
+                        ]
                     ]
-                ]
-            );
-        }
+                );
+            }
 
-        DispatchDocumentTasks::dispatch($document);
+            DispatchDocumentTasks::dispatch($document);
+        } catch (InsufficientUnitsException $e) {
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'error',
+                'message' => __('alerts.insufficient_units')
+            ]);
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
     public function downloadImage($mediaFileId)

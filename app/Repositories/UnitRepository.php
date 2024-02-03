@@ -6,6 +6,18 @@ use Illuminate\Support\Str;
 
 class UnitRepository
 {
+    public function validateCost($taskType, $meta)
+    {
+        $estimatedCost = $this->estimateCost($taskType, $meta);
+        $availableUnits = auth()->user()->account->units;
+
+        if ($availableUnits < ($estimatedCost - ($estimatedCost * 0.1))) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function estimateCost($taskType, $meta)
     {
         $handler = 'handle' . Str::studly($taskType);

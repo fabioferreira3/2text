@@ -7,11 +7,13 @@ use App\Enums\SourceProvider;
 use App\Enums\Style;
 use App\Enums\Tone;
 use App\Exceptions\CreatingBlogPostException;
+use App\Exceptions\InsufficientUnitsException;
 use App\Jobs\Blog\PrepareCreationTasks;
 use App\Repositories\DocumentRepository;
 use App\Rules\CsvFile;
 use App\Rules\DocxFile;
 use App\Rules\PdfFile;
+use App\Traits\UnitCheck;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +25,7 @@ use Livewire\WithFileUploads;
 
 class NewPost extends Component
 {
-    use Actions, WithFileUploads;
+    use Actions, WithFileUploads, UnitCheck;
 
     public mixed $context;
     public array $sourceUrls;
@@ -119,6 +121,13 @@ class NewPost extends Component
             ];
     }
 
+    public function updatedGenerateImage($value)
+    {
+        if (!$value) {
+            $this->imgPrompt = null;
+        }
+    }
+
     public function storeFile()
     {
         $accountId = Auth::check() ? Auth::user()->account_id : 'guest';
@@ -144,6 +153,8 @@ class NewPost extends Component
         $this->validate();
 
         try {
+            $this->validateUnitCosts();
+            return;
             if ($this->fileInput) {
                 $this->storeFile();
             }
@@ -168,9 +179,30 @@ class NewPost extends Component
             PrepareCreationTasks::dispatch($document, $params);
 
             return redirect()->route('blog-post-processing-view', ['document' => $document]);
+        } catch (InsufficientUnitsException $e) {
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'error',
+                'message' => __('alerts.insufficient_units')
+            ]);
         } catch (Exception $e) {
             throw new CreatingBlogPostException($e->getMessage());
         }
+    }
+
+    public function validateUnitCosts()
+    {
+        $this->totalCost = 0;
+        $this->estimateCost('words_generation', [
+            'word_count' => $this->targetHeadersCount * 350
+        ]);
+
+        if ($this->imgPrompt ?? false) {
+            $this->estimateCost('image_generation', [
+                'img_count' => 1
+            ]);
+        }
+
+        $this->authorizeTotalCost();
     }
 
     public function checkMaxSourceUrls()
