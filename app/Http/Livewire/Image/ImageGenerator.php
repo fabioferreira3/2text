@@ -52,8 +52,7 @@ class ImageGenerator extends Component
         }
 
         try {
-            $this->totalCost = 0;
-            $this->authorizeCost('image_generation', ['img_count' => $this->samples]);
+            $this->validateUnitCost();
 
             $this->errorGenerating = false;
             $this->setProcessingState();
@@ -93,6 +92,13 @@ class ImageGenerator extends Component
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
+    }
+
+    public function validateUnitCost()
+    {
+        $this->totalCost = 0;
+        $this->estimateImageGenerationCost($this->samples);
+        $this->authorizeTotalCost();
     }
 
     public function downloadImage($mediaFileId)

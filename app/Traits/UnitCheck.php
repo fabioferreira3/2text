@@ -10,24 +10,28 @@ trait UnitCheck
 {
     public $totalCost = 0;
 
-    public function estimateCost($taskType, array $meta)
+    public function authorizeTotalCost()
     {
-        $unitRepo = new UnitRepository();
-        $this->totalCost = $this->totalCost + $unitRepo->estimateCost($taskType, $meta);
-    }
-
-    public function authorizeCost($taskType, array $meta)
-    {
-        $this->estimateCost($taskType, $meta);
-        $this->authorizeTotalCost(true);
-    }
-
-    public function authorizeTotalCost($hardLimit = false)
-    {
-        $totalCost = $hardLimit ? $this->totalCost : $this->totalCost - ($this->totalCost * 0.1);
-        Log::debug($totalCost);
-        if (auth()->user()->account->units < ($totalCost)) {
+        Log::debug($this->totalCost);
+        if (auth()->user()->account->units < ($this->totalCost)) {
             throw new InsufficientUnitsException();
         }
+    }
+
+    public function estimateWordsGenerationCost(int $wordCount)
+    {
+        $unitRepo = new UnitRepository();
+        $this->totalCost = $this->totalCost +
+            (($this->totalCost + $unitRepo->estimateCost('words_generation', [
+                'word_count' => $wordCount
+            ])) * 0.1);
+    }
+
+    public function estimateImageGenerationCost(int $imgCount)
+    {
+        $unitRepo = new UnitRepository();
+        $this->totalCost = $this->totalCost + $unitRepo->estimateCost('image_generation', [
+            'img_count' => $imgCount
+        ]);
     }
 }

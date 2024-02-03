@@ -192,14 +192,10 @@ class NewPost extends Component
     public function validateUnitCosts()
     {
         $this->totalCost = 0;
-        $this->estimateCost('words_generation', [
-            'word_count' => $this->targetHeadersCount * 350
-        ]);
+        $this->estimateWordsGenerationCost($this->targetHeadersCount * 350);
 
         if ($this->imgPrompt ?? false) {
-            $this->estimateCost('image_generation', [
-                'img_count' => 1
-            ]);
+            $this->estimateImageGenerationCost(1);
         }
 
         $this->authorizeTotalCost();
