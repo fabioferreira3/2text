@@ -276,18 +276,7 @@ class SocialMediaPostsManager extends Component
     {
         $this->validate();
         try {
-            $platforms = collect($this->platforms)->filter();
-
-            $this->totalCost = 0;
-            $this->estimateCost('words_generation', [
-                'word_count' => $this->wordCountTarget * count($platforms)
-            ]);
-            if ($this->generateImage) {
-                $this->estimateCost('image_generation', [
-                    'img_count' => count($platforms)
-                ]);
-            }
-            $this->authorizeTotalCost(true);
+            $this->validateUnitCosts();
 
             $this->generating = true;
             $this->dispatchBrowserEvent('alert', [
@@ -313,6 +302,7 @@ class SocialMediaPostsManager extends Component
                 ]
             ]);
 
+            $platforms = collect($this->platforms)->filter();
             ProcessSocialMediaPosts::dispatch($this->document, $platforms);
         } catch (InsufficientUnitsException $e) {
             $this->dispatchBrowserEvent('alert', [
@@ -322,6 +312,17 @@ class SocialMediaPostsManager extends Component
         } catch (Exception $e) {
             throw new CreatingSocialMediaPostException($e->getMessage());
         }
+    }
+
+    public function validateUnitCosts()
+    {
+        $this->totalCost = 0;
+        $platforms = collect($this->platforms)->filter();
+        $this->estimateWordsGenerationCost($this->wordCountTarget * count($platforms));
+        if ($this->generateImage) {
+            $this->estimateImageGenerationCost(count($platforms));
+        }
+        $this->authorizeTotalCost(true);
     }
 
     public function render()

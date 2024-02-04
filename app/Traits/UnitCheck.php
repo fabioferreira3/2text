@@ -10,10 +10,11 @@ trait UnitCheck
 {
     public $totalCost = 0;
 
-    public function authorizeTotalCost()
+    public function authorizeTotalCost($account = null)
     {
         Log::debug($this->totalCost);
-        if (auth()->user()->account->units < ($this->totalCost)) {
+        $units = $account ? $account->units : auth()->user()->account->units;
+        if ($units < ($this->totalCost)) {
             throw new InsufficientUnitsException();
         }
     }
@@ -33,5 +34,10 @@ trait UnitCheck
         $this->totalCost = $this->totalCost + $unitRepo->estimateCost('image_generation', [
             'img_count' => $imgCount
         ]);
+    }
+
+    public function estimateAudioTranscriptionCost(int $duration)
+    {
+        return $duration * 0.1;
     }
 }

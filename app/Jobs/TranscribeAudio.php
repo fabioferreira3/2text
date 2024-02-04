@@ -5,9 +5,13 @@ namespace App\Jobs;
 use App\Enums\AIModel;
 use App\Enums\DataType;
 use App\Enums\DocumentTaskEnum;
+use App\Events\InsufficientUnitsValidated;
+use App\Exceptions\InsufficientUnitsException;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
+use App\Models\User;
 use App\Repositories\MediaRepository;
+use App\Traits\UnitCheck;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,7 +22,12 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class TranscribeAudio implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        JobEndings,
+        UnitCheck;
 
     public Document $document;
     public array $meta;
@@ -83,6 +92,9 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
                 return;
             }
 
+            $this->validateUnitCosts();
+            return;
+
             $transcribedText = $this->mediaRepo->transcribeAudio(
                 $this->document->getMeta('audio_file_path')
             );
@@ -125,9 +137,24 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
             ]);
 
             $this->jobSucceded();
+        } catch (InsufficientUnitsException $e) {
+            event(new InsufficientUnitsValidated(
+                $this->document,
+                DocumentTaskEnum::TRANSCRIBE_AUDIO->value
+            ));
+            $this->jobAborted("Insufficient units");
+            $this->delete();
+            return;
         } catch (HttpException $e) {
             $this->handleError($e, 'Transcribing audio error');
         }
+    }
+
+    public function validateUnitCosts()
+    {
+        $user = User::find($this->document->getMeta('user_id'));
+        $this->estimateAudioTranscriptionCost($this->document->getMeta('duration'));
+        $this->authorizeTotalCost($user->account);
     }
 
     /**

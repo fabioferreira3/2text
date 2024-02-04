@@ -3,15 +3,21 @@
 namespace App\Http\Livewire\Paraphraser;
 
 use App\Enums\DocumentStatus;
+use App\Exceptions\InsufficientUnitsException;
 use App\Helpers\DocumentHelper;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;
 use App\Repositories\GenRepository;
+use App\Traits\UnitCheck;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class Paraphraser extends Component
 {
+    use UnitCheck;
+
     public $document;
     protected $repo;
     public $inputText = '';
@@ -81,24 +87,41 @@ class Paraphraser extends Component
         $this->copied = true;
     }
 
+    public function validateUnitCosts()
+    {
+        $this->totalCost = 0;
+        $this->estimateWordsGenerationCost(Str::wordCount($this->inputText));
+        $this->authorizeTotalCost();
+    }
+
     public function paraphrase()
     {
         $this->validate();
-        if ($this->isSaving) {
-            return;
+        try {
+            $this->validateUnitCosts();
+            if ($this->isSaving) {
+                return;
+            }
+            DocumentRepository::clearContentBlocks($this->document);
+            $this->outputBlocks = [];
+            $this->isSaving = true;
+            $repo = new DocumentRepository($this->document);
+            $repo->updateMeta('tone', $this->tone);
+            $repo->updateMeta('add_content_block', true);
+            $this->document->update(['content' => $this->inputText]);
+
+            $originalSentencesArray = DocumentHelper::breakTextIntoSentences($this->inputText);
+            $repo->updateMeta('sentences', $originalSentencesArray);
+
+            GenRepository::paraphraseDocument($this->document->fresh());
+        } catch (InsufficientUnitsException $e) {
+            $this->dispatchBrowserEvent('alert', [
+                'type' => 'error',
+                'message' => __('alerts.insufficient_units')
+            ]);
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
         }
-        DocumentRepository::clearContentBlocks($this->document);
-        $this->outputBlocks = [];
-        $this->isSaving = true;
-        $repo = new DocumentRepository($this->document);
-        $repo->updateMeta('tone', $this->tone);
-        $repo->updateMeta('add_content_block', true);
-        $this->document->update(['content' => $this->inputText]);
-
-        $originalSentencesArray = DocumentHelper::breakTextIntoSentences($this->inputText);
-        $repo->updateMeta('sentences', $originalSentencesArray);
-
-        GenRepository::paraphraseDocument($this->document->fresh());
     }
 
     public function setTone($tone)

@@ -26,7 +26,7 @@ class UnitRepository
 
     public function handleWordsGeneration(array $params)
     {
-        return number_format($params['word_count'] / 480, 2);
+        return number_format($params['word_count'] / 480, 8);
     }
 
     public function handleImageGeneration(array $params)
