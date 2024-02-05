@@ -1,6 +1,6 @@
 <div
     x-data="wireui_timepicker({
-        model: @entangle($attributes->wire('model')),
+        model: @entangle($attributes->wire('model')).live,
         config: {
             isLazy:   @boolean($attributes->wire('model')->hasModifier('lazy')),
             interval: @toJs($interval),
@@ -18,7 +18,7 @@
     <div class="relative">
         <x-dynamic-component
             :component="WireUi::component('input')"
-            {{ $attributes->whereDoesntStartWith(['wire:model', 'x-model', 'wire:key']) }}
+            {{ $attributes->whereDoesntStartWith(['wire:model.live', 'x-model', 'wire:key']) }}
             :borderless="$borderless"
             :shadowless="$shadowless"
             :label="$label"

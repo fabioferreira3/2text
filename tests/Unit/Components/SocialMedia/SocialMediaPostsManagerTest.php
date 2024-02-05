@@ -5,7 +5,7 @@ use App\Enums\Language;
 use App\Enums\SourceProvider;
 use App\Enums\Style;
 use App\Enums\Tone;
-use App\Http\Livewire\SocialMediaPost\SocialMediaPostsManager;
+use App\Livewire\SocialMediaPost\SocialMediaPostsManager;
 use App\Jobs\SocialMedia\ProcessSocialMediaPosts;
 use App\Models\Document;
 use Illuminate\Http\UploadedFile;

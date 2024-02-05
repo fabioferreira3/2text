@@ -17,7 +17,8 @@
                             @include('livewire.common.help-item', ['header' => __('transcription.source'), 'content' =>
                             App\Helpers\InstructionsHelper::transcriptionSource()])
                         </div>
-                        <select name="provider" wire:model="sourceType" class="p-3 rounded-lg border border-zinc-200">
+                        <select name="provider" wire:model.live="sourceType"
+                            class="p-3 rounded-lg border border-zinc-200">
                             <option value="youtube">Youtube</option>
                         </select>
                     </div>
@@ -25,7 +26,7 @@
                 @if ($sourceType === 'youtube')
                 <div class="flex flex-col gap-3">
                     <label class="font-bold text-lg text-zinc-700">Youtube url:</label>
-                    <input name="url" wire:model="sourceUrl" class="p-3 border border-zinc-200 rounded-lg" />
+                    <input name="url" wire:model.live="sourceUrl" class="p-3 border border-zinc-200 rounded-lg" />
                     @if($errors->has('sourceUrl'))
                     <span class="text-red-500 text-sm">{{ $errors->first('sourceUrl') }}</span>
                     @endif
@@ -39,10 +40,11 @@
                             @include('livewire.common.help-item', ['header' => __('transcription.origin_language'),
                             'content' => App\Helpers\InstructionsHelper::transcriptionLanguage()])
                         </div>
-                        <select name="originLanguage" wire:model="originLanguage"
+                        <select name="originLanguage" wire:model.live="originLanguage"
                             class="p-3 rounded-lg border border-zinc-200">
                             @foreach ($languages as $option)
-                            <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
+                            <option wire:key="{{$option['value']}}" value="{{ $option['value'] }}">{{ $option['name'] }}
+                            </option>
                             @endforeach
                         </select>
                         @if($errors->has('originLanguage'))
@@ -56,11 +58,12 @@
                             @include('livewire.common.help-item', ['header' => __('transcription.target_language'),
                             'content' => App\Helpers\InstructionsHelper::transcriptionTranslate()])
                         </div>
-                        <select name="targetLanguage" wire:model="targetLanguage"
+                        <select name="targetLanguage" wire:model.live="targetLanguage"
                             class="p-3 rounded-lg border border-zinc-200">
                             <option value="same">{{__('transcription.no')}}</option>
                             @foreach ($languages as $option)
-                            <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
+                            <option wire:key="{{$option['value']}}" value="{{ $option['value'] }}">{{ $option['name'] }}
+                            </option>
                             @endforeach
                         </select>
                         @if($errors->has('language'))
@@ -78,7 +81,7 @@
                         </div>
                         <div>
                             <x-checkbox md id="identifySpeakers" name="identifySpeakers" label="{{__('common.yes')}}"
-                                wire:model="identifySpeakers" />
+                                wire:model.live="identifySpeakers" />
                         </div>
                     </div>
                     @if($identifySpeakers)
@@ -92,7 +95,7 @@
                         <div>
                             <input type="number" min="2" max="10"
                                 class="w-1/3 xl:w-1/4 p-3 border border-zinc-200 rounded-lg text-center"
-                                wire:model="speakersExpected" />
+                                wire:model.live="speakersExpected" />
                         </div>
                         @if($errors->has('speakersExpected'))
                         <span class="text-red-500 text-sm">{{ $errors->first('speakersExpected') }}</span>

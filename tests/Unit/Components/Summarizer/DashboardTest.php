@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Summarizer\Dashboard;
+use App\Livewire\Summarizer\Dashboard;
 
 use function Pest\Laravel\{actingAs};
 

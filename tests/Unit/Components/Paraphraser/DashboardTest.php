@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Paraphraser\Dashboard;
+use App\Livewire\Paraphraser\Dashboard;
 
 use function Pest\Laravel\{actingAs};
 

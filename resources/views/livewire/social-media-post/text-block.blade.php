@@ -14,7 +14,7 @@
         <x-loader height="20" width="20" color="white" />
     </div>
     @endif
-    <textarea class="w-full text-base border-0 bg-gray-100 p-0" name="text" wire:model.debounce.500ms="content"
+    <textarea class="w-full text-base border-0 bg-gray-100 p-0" name="text" wire:model.live.debounce.500ms="content"
         rows="7"></textarea>
     @if ($showCustomPrompt)
     <x-experior::modal>
@@ -32,7 +32,7 @@
             </div>
             <input placeholder='ie: Rewrite this text but with a funnier tone'
                 class="w-full text-base border-0 bg-gray-100 p-0 rounded-xl py-3 px-4" name="text"
-                wire:model="customPrompt" />
+                wire:model.live="customPrompt" />
             @if ($errors->has('customPrompt'))
             <span class="text-red-500 text-sm">{{ $errors->first('customPrompt') }}</span>
             @endif

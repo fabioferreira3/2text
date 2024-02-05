@@ -45,7 +45,7 @@
                 </div>
                 <div>
                     <textarea rows="10" class="w-full p-4 border border-zinc-200 rounded-lg"
-                        wire:model="inputText"></textarea>
+                        wire:model.live="inputText"></textarea>
                     @if($errors->has('inputText'))
                     <span class="text-red-500 text-sm">{{ $errors->first('inputText') }}</span>
                     @endif

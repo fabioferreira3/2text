@@ -3,7 +3,7 @@
 use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Enums\Tone;
-use App\Http\Livewire\SocialMediaPost\NewSocialMediaPost;
+use App\Livewire\SocialMediaPost\NewSocialMediaPost;
 use App\Models\Document;
 
 use function Pest\Laravel\{actingAs};

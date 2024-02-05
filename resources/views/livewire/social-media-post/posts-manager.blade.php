@@ -63,15 +63,15 @@
                             <div class='grid grid-cols-2 gap-8 mt-2'>
                                 <div class='flex flex-col gap-2'>
                                     <x-checkbox md id="facebook" name="facebook" label="Facebook"
-                                        wire:model.defer="platforms.Facebook" />
+                                        wire:model="platforms.Facebook" />
                                     <x-checkbox md id="instagram" name="instagram" label="Instagram"
-                                        wire:model.defer="platforms.Instagram" />
+                                        wire:model="platforms.Instagram" />
                                     <x-checkbox md id="twitter" name="twitter" label="X (former Twitter)"
-                                        wire:model.defer="platforms.Twitter" />
+                                        wire:model="platforms.Twitter" />
                                 </div>
                                 <div class='flex flex-col gap-2'>
                                     <x-checkbox md id="linkedin" name="linkedin" label="Linkedin"
-                                        wire:model.defer="platforms.Linkedin" />
+                                        wire:model="platforms.Linkedin" />
                                 </div>
                             </div>
                             <div class="mt-2">
@@ -93,7 +93,7 @@
                                     'content' => App\Helpers\InstructionsHelper::sources(),
                                     ])
                                 </div>
-                                <select name="provider" wire:model="sourceType"
+                                <select name="provider" wire:model.live="sourceType"
                                     class="p-3 rounded-lg border border-zinc-200 w-full">
                                     @include('livewire.common.source-providers-options')
                                 </select>
@@ -110,7 +110,7 @@
                                     'content' => App\Helpers\InstructionsHelper::sources(),
                                     ])
                                 </div>
-                                <input type="number" name="word_count_target" wire:model.defer="wordCountTarget"
+                                <input type="number" name="word_count_target" wire:model="wordCountTarget"
                                     class="p-3 border border-zinc-200 rounded-lg w-full" />
                                 @if ($errors->has('wordCountTarget'))
                                 <span class="text-red-500 text-sm">{{ $errors->first('wordCountTarget') }}</span>
@@ -133,7 +133,7 @@
                                     </div>
                                 </div>
                                 <textarea class="border border-zinc-200 rounded-lg w-full mt-3" rows="6"
-                                    maxlength="30000" wire:model.defer="context"></textarea>
+                                    maxlength="30000" wire:model="context"></textarea>
                                 <div class="mt-2">
                                     @if ($errors->has('context'))
                                     <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
@@ -144,7 +144,7 @@
 
                             @if (in_array($sourceType, ['docx', 'pdf_file', 'csv', 'json']))
                             <label class="font-bold text-lg text-zinc-700">{{ __('social_media.file_option') }}</label>
-                            <input type="file" name="fileInput" wire:model="fileInput"
+                            <input type="file" name="fileInput" wire:model.live="fileInput"
                                 class="p-3 border border-zinc-200 rounded-lg w-full" />
                             @endif
                             @if ($errors->has('fileInput'))
@@ -184,7 +184,7 @@
                                 }
                             }">
                                 <input name="url" x-on:keydown.enter="handleEnter($event)"
-                                    wire:model.defer="tempSourceUrl"
+                                    wire:model="tempSourceUrl"
                                     class="p-3 border border-zinc-200 rounded-lg w-full" />
                                 <button wire:click="addSourceUrl()" class="bg-secondary text-white p-1 rounded-full">
                                     <x-icon name="plus" width="24" height="24" />
@@ -208,7 +208,7 @@
                             </div>
 
                             <textarea class="border border-zinc-200 rounded-lg" rows="8" maxlength="5000"
-                                wire:model.defer="moreInstructions"></textarea>
+                                wire:model="moreInstructions"></textarea>
                             @if ($errors->has('more_instructions'))
                             <span class="text-red-500 text-sm">{{ $errors->first('more_instructions') }}</span>
                             @endif
@@ -232,7 +232,7 @@
                                     </div>
                                     <div class="md:col-span-1 w-full">
                                         <x-checkbox md id="generate_img" name="generate_img" label="{{
-                                            __('social_media.yes') }}" wire:model="generateImage" />
+                                            __('social_media.yes') }}" wire:model.live="generateImage" />
                                     </div>
                                 </div>
                             </div>
@@ -249,7 +249,7 @@
                                 </div>
                                 <textarea placeholder="{{__('social_media.placeholder_example')}}"
                                     class="border border-zinc-200 rounded-lg w-full mt-3" rows="3" maxlength="1000"
-                                    wire:model.defer="imgPrompt"></textarea>
+                                    wire:model="imgPrompt"></textarea>
                                 <div class="mt-2">
                                     @if ($errors->has('imgPrompt'))
                                     <span class="text-red-500 text-sm">{{ $errors->first('imgPrompt') }}</span>
@@ -266,7 +266,7 @@
                                 'content' => App\Helpers\InstructionsHelper::socialMediaKeyword(),
                                 ])
                             </div>
-                            <input name="keyword" wire:model.defer="keyword"
+                            <input name="keyword" wire:model="keyword"
                                 class="p-3 w-full rounded-lg border border-zinc-200" />
                             @if ($errors->has('keyword'))
                             <span class="text-red-500 text-sm">{{ $errors->first('keyword') }}</span>
@@ -281,7 +281,7 @@
                                 'content' => App\Helpers\InstructionsHelper::socialMediaLanguages(),
                                 ])
                             </div>
-                            <select name="language" wire:model="language" class="p-3 rounded-lg border border-zinc-200">
+                            <select name="language" wire:model.live="language" class="p-3 rounded-lg border border-zinc-200">
                                 @foreach ($languages as $option)
                                 <option value="{{ $option['value'] }}">{{ $option['name'] }}</option>
                                 @endforeach
@@ -300,7 +300,7 @@
                             'content' => App\Helpers\InstructionsHelper::writingStyles(),
                             ])
                         </div>
-                        <select name="style" wire:model="style"
+                        <select name="style" wire:model.live="style"
                             class="p-3 rounded-lg border border-zinc-200 focus:border focus:border-zinc-400">
                             @include('livewire.common.styles-options')
                         </select>
@@ -313,7 +313,7 @@
                             'content' => App\Helpers\InstructionsHelper::writingTones(),
                             ])
                         </div>
-                        <select name="tone" wire:model="tone"
+                        <select name="tone" wire:model.live="tone"
                             class="p-3 rounded-lg border border-zinc-200 focus:border focus:border-zinc-400">
                             @include('livewire.common.tones-options')
                         </select>

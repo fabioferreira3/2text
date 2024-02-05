@@ -3,7 +3,7 @@
 use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Enums\SourceProvider;
-use App\Http\Livewire\InsightHub\InsightView;
+use App\Livewire\InsightHub\InsightView;
 use App\Jobs\InsightHub\PrepareTasks;
 use App\Models\ChatThread;
 use App\Models\Document;

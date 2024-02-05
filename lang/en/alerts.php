@@ -7,7 +7,7 @@ return [
     'copied_to_clipboard' => 'Copied to clipboard',
     'image_generated' => 'Images generated successfully!',
     'images_generated' => 'Images generated successfully!',
-    'images_deleted' => 'Image deleted successfully',
+    'image_deleted' => 'Image deleted successfully',
     'image_description' => "Please provide an image description",
     'image_updated' => 'Image updated successfully!',
     'generating_images' => "Generating images. Please wait...",

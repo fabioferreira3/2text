@@ -44,7 +44,7 @@
                 @endif
                 <div class="flex flex-col overflow-auto h-[1px] grow">
                     @foreach($voices as $key => $voice)
-                    <div
+                    <div wire:key="{{$voice['id']}}"
                         class="{{$selectedVoice === $voice['id'] ? 'bg-gray-200' : ''}} flex items-center justify-between px-4 py-2 border border-t-0 border-x-0 border-b">
                         <div class="flex items-center gap-4">
                             <div class="flex items-center gap-2">

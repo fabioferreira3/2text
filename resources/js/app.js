@@ -1,9 +1,9 @@
 import "./bootstrap";
-import Alpine from "alpinejs";
+import { Livewire } from '../../vendor/livewire/livewire/dist/livewire.esm';
 import lottie from 'lottie-web';
 import.meta.glob(["../images/**"]);
 
-window.Alpine = Alpine;
+window.livewire = Livewire;
 window.lottie = lottie;
 
-Alpine.start();
+Livewire.start()

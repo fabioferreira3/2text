@@ -14,9 +14,9 @@
                     'content' => App\Helpers\InstructionsHelper::sources()
                     ])
                 </div>
-                <select name="provider" wire:model="source" class="p-3 rounded-lg border border-zinc-200">
+                <select name="provider" wire:model.live="source" class="p-3 rounded-lg border border-zinc-200">
                     @foreach([App\Enums\SourceProvider::FREE_TEXT, App\Enums\SourceProvider::YOUTUBE] as $provider)
-                    <option value="{{$provider->value}}">{{$provider->label()}}</option>
+                    <option wire:key="{{$provider->value}}" value="{{$provider->value}}">{{$provider->label()}}</option>
                     @endforeach
                 </select>
             </div>
@@ -31,7 +31,7 @@
                     'content' => App\Helpers\InstructionsHelper::summarizerLanguages()
                     ])
                 </div>
-                <select name="language" wire:model="sourceLanguage" class="p-3 rounded-lg border border-zinc-200">
+                <select name="language" wire:model.live="sourceLanguage" class="p-3 rounded-lg border border-zinc-200">
                     @include('livewire.common.languages-options')
                 </select>
                 @if($errors->has('sourceLanguage'))
@@ -49,7 +49,7 @@
                     'content' => App\Helpers\InstructionsHelper::summarizerLanguages()
                     ])
                 </div>
-                <select name="language" wire:model="targetLanguage" class="p-3 rounded-lg border border-zinc-200">
+                <select name="language" wire:model.live="targetLanguage" class="p-3 rounded-lg border border-zinc-200">
                     @include('livewire.common.languages-options')
                 </select>
                 @if($errors->has('targetLanguage'))
@@ -63,7 +63,7 @@
             {{-- @if (in_array($source, ['docx', 'pdf_file', 'csv', 'json']))
             <div class="flex flex-col gap-3 col-span-2">
                 <label class="font-bold text-xl text-zinc-700">{{ __('blog.file_option') }}</label>
-                <input type="file" name="fileInput" wire:model="fileInput"
+                <input type="file" name="fileInput" wire:model.live="fileInput"
                     class="p-3 border border-zinc-200 rounded-lg w-full" />
                 @if ($errors->has('fileInput'))
                 <span class="text-red-500 text-sm">{{ $errors->first('fileInput') }}</span>
@@ -79,7 +79,7 @@
                     Text:
                 </label>
                 <textarea class="border border-zinc-200 rounded-lg" rows="5" maxlength="30000"
-                    wire:model="context"></textarea>
+                    wire:model.live="context"></textarea>
                 @if($errors->has('context'))
                 <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
                 @endif
@@ -93,7 +93,7 @@
                 <label class="font-bold text-xl text-zinc-700 flex items-center">
                     URL
                 </label>
-                <input type="text" name="sourceUrl" wire:model="sourceUrl"
+                <input type="text" name="sourceUrl" wire:model.live="sourceUrl"
                     class="p-3 border border-zinc-200 rounded-lg w-full" />
 
                 @if ($errors->has('sourceUrl'))
@@ -112,7 +112,7 @@
                     'content' => App\Helpers\InstructionsHelper::wordsCount()
                     ])
                 </div>
-                <input type="number" min="50" max="600" name="max_words_count" wire:model.lazy="maxWordsCount"
+                <input type="number" min="50" max="600" name="max_words_count" wire:model.blur="maxWordsCount"
                     class="p-3 rounded-lg border border-zinc-200 w-2/3" />
                 @if($errors->has('maxWordsCount'))
                 <span class="text-red-500 text-sm">{{ $errors->first('maxWordsCount') }}</span>

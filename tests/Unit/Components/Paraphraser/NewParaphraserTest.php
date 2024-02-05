@@ -3,7 +3,7 @@
 use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Enums\SourceProvider;
-use App\Http\Livewire\Paraphraser\NewParaphraser;
+use App\Livewire\Paraphraser\NewParaphraser;
 use App\Jobs\Paraphraser\CreateFromWebsite;
 use App\Models\Document;
 use Illuminate\Support\Facades\Bus;

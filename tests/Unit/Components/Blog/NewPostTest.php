@@ -5,7 +5,7 @@ use App\Enums\Language;
 use App\Enums\SourceProvider;
 use App\Enums\Style;
 use App\Enums\Tone;
-use App\Http\Livewire\Blog\NewPost;
+use App\Livewire\Blog\NewPost;
 use App\Jobs\Blog\PrepareCreationTasks;
 use App\Models\Document;
 use App\Repositories\DocumentRepository;

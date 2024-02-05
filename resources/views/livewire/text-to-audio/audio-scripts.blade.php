@@ -6,15 +6,11 @@
     }) => {
         if (currentAudio) {
         // Remove existing listener to avoid duplicate event triggers.
-            currentAudio.removeEventListener('ended', audioEndedHandler);
             currentAudio.pause();
             currentAudio.load();
         }
 
         currentAudio = document.getElementById(id);
-
-        // Add the 'ended' event listener to the current audio clip.
-        currentAudio.addEventListener('ended', audioEndedHandler);
 
         currentAudio.play().catch((error) => {
             console.error("Play error:", error);

@@ -3,14 +3,14 @@
 
     @if ($attributes->wire('model')->value())
         wireModifiers: @toJs($attributes->wireModifiers()),
-        wireModel: @entangle($attributes->wire('model')),
+        wireModel: @entangle($attributes->wire('model')).live,
     @endif
 
     @if ($colors)
         colors: @toJs($getColors())
     @endif
 })" {{ $attributes->only(['class', 'wire:key'])->class('relative') }}>
-    <x-dynamic-component {{ $attributes->except(['class', 'wire:key'])->whereDoesntStartWith('wire:model') }}
+    <x-dynamic-component {{ $attributes->except(['class', 'wire:key'])->whereDoesntStartWith('wire:model.live') }}
         :component="WireUi::component('input')"
         x-model="{{ $colorNameAsValue ? 'selected.name' : 'selected.value' }}"
         x-bind:class="{ 'pl-8': selected.value }"

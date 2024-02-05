@@ -10,7 +10,7 @@
     <x-slot name="form">
         <div class="col-span-6 sm:col-span-4">
             <x-jet-label for="language" value="{{ __('profile.language') }}" />
-            <select id="language" name="language" wire:model.defer="state.language"
+            <select id="language" name="language" wire:model="state.language"
                 class="w-full p-3 rounded-lg border border-zinc-200">
                 @foreach(App\Enums\Language::systemEnabled() as $language)
                 <option value={{$language->value}}>{{$language->label()}}</option>

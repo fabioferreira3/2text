@@ -43,7 +43,7 @@ trait SocialMediaTrait
 
     public function copy()
     {
-        $this->emit('addToClipboard', $this->text);
+        $this->dispatch('addToClipboard', message: $this->text);
         $this->copied = true;
     }
 
@@ -66,7 +66,7 @@ trait SocialMediaTrait
 
     public function delete()
     {
-        $this->emitUp('deleteSocialMediaPost', [
+        $this->dispatch('deleteSocialMediaPost', [
             'document_id' => $this->document->id
         ]);
     }
@@ -83,10 +83,11 @@ trait SocialMediaTrait
         $this->imageBlock->update(['content' => $mediaFile->id]);
         $this->refreshImage();
         $this->toggleImageGenerator();
-        $this->dispatchBrowserEvent('alert', [
-            'type' => 'success',
-            'message' => __('alerts.image_updated')
-        ]);
+        $this->dispatch(
+            'alert',
+            type: 'success',
+            message: __('alerts.image_updated')
+        );
     }
 
     public function toggleImageGenerator($defaultImg = null)
@@ -105,7 +106,7 @@ trait SocialMediaTrait
         }
         $this->showImageGenerator = !$this->showImageGenerator;
         if ($defaultImg) {
-            $this->emitTo('image.image-block-generator-modal', 'setOriginalPreviewImage', [
+            $this->dispatchTo('image.image-block-generator-modal', 'setOriginalPreviewImage', [
                 'file_url' => $defaultImg
             ]);
         }

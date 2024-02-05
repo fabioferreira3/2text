@@ -7,7 +7,7 @@
             'title' => __('paraphraser.paraphraser'),
             'suffix' => '',
             ])
-            <button onclick="livewire.emit('invokeNew')"
+            <button onclick="livewire.dispatch('invokeNew')"
                 class="flex items-center gap-2 bg-secondary text-white px-4 py-1 rounded-lg">
                 <span class="font-bold text-lg">{{__('paraphraser.new')}}</span>
             </button>

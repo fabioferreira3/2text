@@ -3,7 +3,7 @@
 use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Enums\SourceProvider;
-use App\Http\Livewire\AudioTranscription\NewTranscription;
+use App\Livewire\AudioTranscription\NewTranscription;
 use App\Jobs\AudioTranscription\CreateTranscription;
 use Illuminate\Support\Facades\Bus;
 

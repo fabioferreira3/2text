@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'class_namespace' => 'App\\Http\\Livewire',
+    'class_namespace' => 'App\\Livewire',
 
     /*
     |--------------------------------------------------------------------------
@@ -35,11 +35,11 @@ return [
     |--------------------------------------------------------------------------
     | The default layout view that will be used when rendering a component via
     | Route::get('/some-endpoint', SomeComponent::class);. In this case the
-    | the view returned by SomeComponent will be wrapped in "layouts.app"
+    | the view returned by SomeComponent will be wrapped in "components.layouts.app"
     |
     */
 
-    'layout' => 'layouts.app',
+    'layout' => 'components.layouts.app',
 
     /*
     |--------------------------------------------------------------------------
@@ -154,5 +154,9 @@ return [
     */
 
     'render_on_redirect' => false,
-
+    'legacy_model_binding' => false,
+    'inject_assets' => true,
+    'inject_morph_markers' => true,
+    'navigate' => false,
+    'pagination_theme' => 'tailwind',
 ];

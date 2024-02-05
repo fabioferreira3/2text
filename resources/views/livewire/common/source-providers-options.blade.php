@@ -1,3 +1,3 @@
 @foreach(App\Enums\SourceProvider::cases() as $provider)
-<option value="{{$provider->value}}">{{$provider->label()}}</option>
+<option wire:key="{{$provider->value}}" value="{{$provider->value}}">{{$provider->label()}}</option>
 @endforeach

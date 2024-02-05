@@ -30,7 +30,7 @@
                 <div class="w-full flex flex-col gap-6">
                     <!-- Source -->
                     <div class="flex flex-col gap-3">
-                        <select @if ($isProcessing) disabled @endif name="provider" wire:model="sourceType"
+                        <select @if ($isProcessing) disabled @endif name="provider" wire:model.live="sourceType"
                             class="p-3 rounded-lg border border-zinc-200">
                             @include('livewire.common.source-providers-options')
                         </select>
@@ -48,7 +48,7 @@
                         <label class="font-bold text-xl text-zinc-700 flex items-center">
                             URL
                         </label>
-                        <input @if ($isProcessing) disabled @endif type="text" name="sourceUrl" wire:model="sourceUrl"
+                        <input @if ($isProcessing) disabled @endif type="text" name="sourceUrl" wire:model.live="sourceUrl"
                             class="p-3 border border-zinc-200 rounded-lg w-full" />
 
                         @if ($errors->has('sourceUrl'))
@@ -65,7 +65,7 @@
                             'content' => App\Helpers\InstructionsHelper::blogLanguages()
                             ])
                         </div>
-                        <select name="videoLanguage" wire:model="videoLanguage"
+                        <select name="videoLanguage" wire:model.live="videoLanguage"
                             class="p-3 rounded-lg border border-zinc-200">
                             @include('livewire.common.languages-options')
                         </select>
@@ -81,7 +81,7 @@
                     @if (in_array($sourceType, ['docx', 'pdf_file', 'csv', 'json']))
                     <div class="flex flex-col gap-3 col-span-2">
                         <label class="font-bold text-xl text-zinc-700">{{ __('blog.file_option') }}</label>
-                        <input @if ($isProcessing) disabled @endif type="file" name="fileInput" wire:model="fileInput"
+                        <input @if ($isProcessing) disabled @endif type="file" name="fileInput" wire:model.live="fileInput"
                             class="p-3 border border-zinc-200 rounded-lg w-full" />
 
                         @if ($errors->has('fileInput'))
@@ -98,7 +98,7 @@
                             {{__('insight-hub.text')}}:
                         </label>
                         <textarea @if ($isProcessing) disabled @endif class="border border-zinc-200 rounded-lg" rows="7"
-                            maxlength="30000" wire:model="context"></textarea>
+                            maxlength="30000" wire:model.live="context"></textarea>
                         @if($errors->has('context'))
                         <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
                         @endif

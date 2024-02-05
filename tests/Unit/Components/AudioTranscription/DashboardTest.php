@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\AudioTranscription\Dashboard;
+use App\Livewire\AudioTranscription\Dashboard;
 
 use function Pest\Laravel\{actingAs};
 

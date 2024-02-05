@@ -12,7 +12,7 @@
         <div class="col-span-6 sm:col-span-4">
             <x-jet-label for="token_name" value="{{ __('Token') }}" />
             <x-jet-input @if($state['token_id'] !==null) disabled @endif id="token_name" type="text"
-                class="mt-1 block w-full" wire:model.defer="state.token_name" autocomplete="token_name" />
+                class="mt-1 block w-full" wire:model="state.token_name" autocomplete="token_name" />
             <x-jet-input-error for="token_name" class="mt-2" />
         </div>
     </x-slot>

@@ -1,4 +1,4 @@
-<div class="flex" x-data="{}" x-on:click.away="window.livewire.emit('toggle-audio-menu')">
+<div class="flex" x-data="{}" x-on:click.away="window.livewire.dispatch('toggle-audio-menu')">
     <div class="relative">
         <button
             class="flex items-center gap-2 bg-zinc-200 hover:text-zinc-200 hover:bg-zinc-500 px-4 py-2 rounded-lg text-sm text-zinc-600"
@@ -18,7 +18,7 @@
                 <x-loader />
             </div>
             @endif
-            <select name="language" wire:model="language" class="px-3 py-2 w-64 border-none w-full">
+            <select name="language" wire:model.live="language" class="px-3 py-2 w-64 border-none w-full">
                 @include('livewire.common.voice-languages-options')
             </select>
 
@@ -41,9 +41,10 @@
             @endif
             <div class="max-h-64 overflow-auto bg-zinc-100">
                 @foreach($voices as $key => $voice)
-                <div class="flex items-center justify-between px-4 py-2 border border-t-0 border-x-0 border-b">
+                <div wire:key="{{$voice['id']}}"
+                    class="flex items-center justify-between px-4 py-2 border border-t-0 border-x-0 border-b">
                     <div class="flex items-center gap-2">
-                        <input value={{$voice['value']}} wire:model="selectedVoice" type="radio"
+                        <input value={{$voice['value']}} wire:model.live="selectedVoice" type="radio"
                             class="cursor-pointer border-zinc-500 checked:bg-secondary checked:hover:bg-secondary checked:active:bg-secondary checked:focus:bg-secondary focus:bg-secondary focus:outline-none focus:ring-1 focus:ring-secondary" />
                         <label class="text-zinc-500">{{$voice['label']}}</label>
                     </div>

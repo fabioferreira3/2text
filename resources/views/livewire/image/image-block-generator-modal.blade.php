@@ -75,7 +75,7 @@
                 <div class="text-2xl font-bold">@if($action) {{$action . ":"}} @endif</div>
                 <div class="flex flex-col md:grid md:grid-cols-2 gap-4">
                     @foreach ($previewImgs['variants'] as $key => $mediaFile)
-                    <div class="relative group border border-gray-200 rounded-lg max-h-64">
+                    <div wire:key="{{$key}}" class="relative group border border-gray-200 rounded-lg max-h-64">
                         <img class="rounded-lg object-cover w-full lg:h-44 xl:h-64" src={{ $mediaFile['file_url'] }} />
                         <div
                             class="absolute top-4 left-4 text-2xl font-bold text-black bg-white opacity-50 rounded-lg px-2">
@@ -139,12 +139,13 @@
                 <div class="text-xl font-bold">{{ __('images.write_image_description_changes') }}:</div>
                 <textarea placeholder="{{__('images.placeholder_example')}}"
                     class="w-full text-base border-1 border-gray-200 bg-gray-100 p-0 rounded-xl p-4" rows="3"
-                    wire:model="prompt"></textarea>
+                    wire:model.live="prompt"></textarea>
 
             </div>
             <div class="flex justify-center items-center gap-2">
                 <div class="text-xl font-bold">{{ __('images.samples') }}:</div>
-                <input type="number" wire:model="samples" class="border border-gray-200 rounded-lg" min="1" max="8" />
+                <input type="number" wire:model.live="samples" class="border border-gray-200 rounded-lg" min="1"
+                    max="8" />
             </div>
         </div>
 

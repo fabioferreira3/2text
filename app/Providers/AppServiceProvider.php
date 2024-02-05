@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::componentNamespace('App\\Http\\Livewire\\Common', 'experior');
+        Blade::componentNamespace('App\\Livewire\\Common', 'experior');
         Blade::component('custom.dropdown', Dropdown::class);
 
         Queue::failing(function (JobFailed $event) {

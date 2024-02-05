@@ -2,32 +2,32 @@
 
 use App\Http\Controllers\DocumentViewController;
 use App\Http\Controllers\GoogleAuthController;
-use App\Http\Livewire\Dashboard;
-use App\Http\Livewire\Blog\BlogPost;
-use App\Http\Livewire\Blog\NewPost;
-use App\Http\Livewire\Blog\ProcessingBlogPost;
-use App\Http\Livewire\Paraphraser\NewParaphraser;
-use App\Http\Livewire\Paraphraser\Paraphraser;
-use App\Http\Livewire\SocialMediaPost\NewSocialMediaPost;
-use App\Http\Livewire\SocialMediaPost\SocialMediaPostsManager;
-use App\Http\Livewire\Templates;
-use App\Http\Livewire\TextToAudio\AudioHistory;
-use App\Http\Livewire\TextToAudio\TextToAudio;
-use App\Http\Livewire\AudioTranscription\NewTranscription;
-use App\Http\Livewire\AudioTranscription\AudioTranscription;
-use App\Http\Livewire\AudioTranscription\Dashboard as AudioTranscriptionDashboard;
-use App\Http\Livewire\Blog\Dashboard as BlogDashboard;
-use App\Http\Livewire\InsightHub\Dashboard as InsightHubDashboard;
-use App\Http\Livewire\InsightHub\InsightView;
-use App\Http\Livewire\Paraphraser\Dashboard as ParaphraserDashboard;
+use App\Livewire\Dashboard;
+use App\Livewire\Blog\BlogPost;
+use App\Livewire\Blog\NewPost;
+use App\Livewire\Blog\ProcessingBlogPost;
+use App\Livewire\Paraphraser\NewParaphraser;
+use App\Livewire\Paraphraser\Paraphraser;
+use App\Livewire\SocialMediaPost\NewSocialMediaPost;
+use App\Livewire\SocialMediaPost\SocialMediaPostsManager;
+use App\Livewire\Templates;
+use App\Livewire\TextToAudio\AudioHistory;
+use App\Livewire\TextToAudio\TextToAudio;
+use App\Livewire\AudioTranscription\NewTranscription;
+use App\Livewire\AudioTranscription\AudioTranscription;
+use App\Livewire\AudioTranscription\Dashboard as AudioTranscriptionDashboard;
+use App\Livewire\Blog\Dashboard as BlogDashboard;
+use App\Livewire\InsightHub\Dashboard as InsightHubDashboard;
+use App\Livewire\InsightHub\InsightView;
+use App\Livewire\Paraphraser\Dashboard as ParaphraserDashboard;
 use App\Http\Livewire\Product\Checkout;
-use App\Http\Livewire\Product\Purchase;
-use App\Http\Livewire\Purchase\CheckoutSuccess;
-use App\Http\Livewire\SocialMediaPost\Dashboard as SocialMediaPostDashboard;
-use App\Http\Livewire\Summarizer\Dashboard as SummarizerDashboard;
-use App\Http\Livewire\Summarizer\NewSummarizer;
-use App\Http\Livewire\Summarizer\SummaryView;
-use App\Http\Livewire\Trash;
+use App\Livewire\Product\Purchase;
+use App\Livewire\Purchase\CheckoutSuccess;
+use App\Livewire\SocialMediaPost\Dashboard as SocialMediaPostDashboard;
+use App\Livewire\Summarizer\Dashboard as SummarizerDashboard;
+use App\Livewire\Summarizer\NewSummarizer;
+use App\Livewire\Summarizer\SummaryView;
+use App\Livewire\Trash;
 use App\Models\ShortLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -50,7 +50,7 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-    'checktoken',
+    // 'checktoken',
     'maintenance'
 ])->group(function () {
     Route::get('/', function () {

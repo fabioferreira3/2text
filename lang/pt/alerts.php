@@ -7,7 +7,7 @@ return [
     'copied_to_clipboard' => 'Copiado para a área de transferência',
     'image_generated' => 'Imagens geradas com sucesso!',
     'images_generated' => 'Imagens geradas com sucesso!',
-    'images_deleted' => 'Imagem excluída com sucesso',
+    'image_deleted' => 'Imagem excluída com sucesso',
     'image_description' => 'Por favor, forneça uma descrição da imagem',
     'image_updated' => 'Imagem atualizada com sucesso!',
     'generating_images' => 'Gerando imagens. Por favor, aguarde...',

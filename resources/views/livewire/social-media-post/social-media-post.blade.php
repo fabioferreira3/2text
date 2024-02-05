@@ -6,6 +6,6 @@
     'historyAction' => true,
     ])
     @endsection
-    <textarea class="text-lg mt-2 rounded-lg border border-zinc-200" name="content" wire:model="content"
+    <textarea class="text-lg mt-2 rounded-lg border border-zinc-200" name="content" wire:model.live="content"
         rows="{{ $rows }}"></textarea>
 </div>

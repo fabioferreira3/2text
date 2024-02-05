@@ -1,6 +1,6 @@
 <div class="relative bg-white" :wire:key="$document->id">
     @if($prefix)
-    <input class="font-bold border-0 p-0" wire:model.lazy="prefix" />
+    <input class="font-bold border-0 p-0" wire:model.blur="prefix" />
     @endif
     <div class="relative">
         @if (in_array($type, ['h2', 'h3', 'h4', 'h5', 'h6']))
@@ -11,7 +11,7 @@
         {{ $type === 'h4' ? 'text-lg' : ''}}
         {{ $type === 'h5' ? 'text-base' : ''}}
         {{ $type === 'h6' ? 'text-base' : ''}}
-        " name="text" wire:model.debounce.500ms="content" wire:ignore />
+        " name="text" wire:model.live.debounce.500ms="content" wire:ignore />
             @include('livewire.common.blocks.text-block-actions')
         </div>
 
@@ -20,7 +20,7 @@
         <div class="relative group/block">
             <textarea
                 class="max-h-[500px] focus:bg-blue-100 focus:cursor-text cursor-pointer p-0 text-zinc-700 autoExpandTextarea w-full border-0 text-xl group-hover/block:bg-red-100 rounded"
-                name="text" rows={{$rows}} wire:model.debounce.500ms="content" wire:ignore></textarea>
+                name="text" rows={{$rows}} wire:model.live.debounce.500ms="content" wire:ignore></textarea>
             <div class="border border-b border-gray-50"></div>
             @include('livewire.common.blocks.text-block-actions')
         </div>
@@ -47,7 +47,7 @@
             </div>
             <input placeholder='ie: Rewrite this text but with a funnier tone'
                 class="w-full text-base border-0 bg-gray-100 p-0 rounded-xl py-3 px-4" name="text"
-                wire:model="customPrompt" />
+                wire:model.live="customPrompt" />
             @if ($errors->has('customPrompt'))
             <span class="text-red-500 text-sm">{{ $errors->first('customPrompt') }}</span>
             @endif

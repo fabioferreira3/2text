@@ -16,21 +16,21 @@
                         @include('livewire.common.help-item', ['header' => __('paraphraser.source'), 'content' =>
                         App\Helpers\InstructionsHelper::paraphraserSources()])
                     </div>
-                    <select name="sourceType" wire:model="sourceType" class="p-3 rounded-lg border border-zinc-200">
+                    <select name="sourceType" wire:model.live="sourceType" class="p-3 rounded-lg border border-zinc-200">
                         <option value="free_text">{{__('paraphraser.free_text')}}</option>
                         {{-- <option value="website_url">Website URL</option> --}}
                     </select>
                     @if ($displaySourceUrl)
                     <div class="flex flex-col gap-3">
                         <label>URL:</label>
-                        <input name="url" wire:model="sourceUrl" class="p-3 border border-zinc-200 rounded-lg" />
+                        <input name="url" wire:model.live="sourceUrl" class="p-3 border border-zinc-200 rounded-lg" />
                         @if($errors->has('sourceUrl'))
                         <span class="text-red-500 text-sm">{{ $errors->first('sourceUrl') }}</span>
                         @endif
                     </div>
                     <div class="flex items-center">
                         <div class="mr-4 font-bold">{{__('paraphraser.language')}}:</div>
-                        <select name="language" wire:model="language"
+                        <select name="language" wire:model.live="language"
                             class="p-3 rounded-lg border border-zinc-200 w-64">
                             @include('livewire.common.languages-options')
                         </select>

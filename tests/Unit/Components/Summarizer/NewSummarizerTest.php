@@ -2,7 +2,7 @@
 
 use App\Enums\DocumentType;
 use App\Enums\SourceProvider;
-use App\Http\Livewire\Summarizer\NewSummarizer;
+use App\Livewire\Summarizer\NewSummarizer;
 use App\Jobs\Summarizer\PrepareCreationTasks;
 use App\Models\Document;
 use Illuminate\Http\UploadedFile;

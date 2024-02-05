@@ -5,7 +5,7 @@
             <div class="flex flex-col w-full">
                 @if($editable ?? false) <input
                     class="max-w-full text-2xl md:text-4xl font-bold p-0 border-0 hover:border hover:border-gray-300 rounded-lg"
-                    wire:model.lazy="title" />
+                    wire:model.blur="title" />
                 @else
                 <h1 class="text-2xl md:text-4xl font-bold">
                     {{$title}}

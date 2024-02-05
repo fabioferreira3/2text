@@ -10,7 +10,7 @@
     <x-slot name="form">
         <div class="col-span-6 sm:col-span-4">
             <x-jet-label for="timezone" value="{{ __('profile.timezone') }}" />
-            <select id="timezone" name="timezone" wire:model.defer="state.timezone"
+            <select id="timezone" name="timezone" wire:model="state.timezone"
                 class="w-full p-3 rounded-lg border border-zinc-200">
                 @foreach(App\Helpers\SupportHelper::getTimezones() as $timezone)
                 <option value={{$timezone['value']}}>{{$timezone['label']}}</option>

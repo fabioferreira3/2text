@@ -18,7 +18,7 @@ trait ChatTrait
         ]);
         $this->inputMsg = '';
         $this->activeThread->refresh();
-        $this->dispatchBrowserEvent('scrollToBottom');
+        $this->dispatch('scrollToBottom');
         Ask::dispatch($iteration, $collectionName);
     }
 
@@ -27,7 +27,7 @@ trait ChatTrait
         if ($params['chat_thread_id'] === $this->activeThread->id) {
             $this->processing = false;
             $this->activeThread->refresh();
-            $this->dispatchBrowserEvent('scrollToBottom');
+            $this->dispatch('scrollToBottom');
         }
     }
 }

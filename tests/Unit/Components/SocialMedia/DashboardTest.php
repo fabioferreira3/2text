@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\SocialMediaPost\Dashboard;
+use App\Livewire\SocialMediaPost\Dashboard;
 
 use function Pest\Laravel\{actingAs};
 

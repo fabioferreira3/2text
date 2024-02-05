@@ -29,7 +29,7 @@
         @if($errors->has('inputMsg'))
         <span class="text-red-500 text-sm mb-2">{{ $errors->first('inputMsg') }}</span>
         @endif
-        <textarea wire:model="inputMsg" x-on:keydown.enter="handleEnter($event)"
+        <textarea wire:model.live="inputMsg" x-on:keydown.enter="handleEnter($event)"
             placeholder="{{__('chat.type_message_here')}}" rows="2"
             class="w-full rounded-t-lg border-gray-200"></textarea>
         <button @if($isProcessing) disabled @endif wire:click='submitMsg'

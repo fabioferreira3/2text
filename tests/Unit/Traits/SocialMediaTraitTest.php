@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Models\Traits;
 
-use App\Http\Livewire\SocialMediaPost\Platforms\FacebookPost;
-use App\Http\Livewire\SocialMediaPost\Platforms\InstagramPost;
-use App\Http\Livewire\SocialMediaPost\Platforms\LinkedinPost;
-use App\Http\Livewire\SocialMediaPost\Platforms\TwitterPost;
+use App\Livewire\SocialMediaPost\Platforms\FacebookPost;
+use App\Livewire\SocialMediaPost\Platforms\InstagramPost;
+use App\Livewire\SocialMediaPost\Platforms\LinkedinPost;
+use App\Livewire\SocialMediaPost\Platforms\TwitterPost;
 use App\Models\Document;
 use App\Models\User;
 use App\Repositories\DocumentRepository;
