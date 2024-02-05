@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Bus;
 use function Pest\Laravel\{actingAs};
 
 beforeEach(function () {
+    $this->authUser->account->update(['units' => 99999]);
     $this->document = Document::factory()->create();
     $this->component = actingAs($this->authUser)->livewire(NewParaphraser::class);
 });
@@ -57,13 +58,13 @@ describe(
 
             if ($sourceType === SourceProvider::WEBSITE_URL->value) {
                 $this->component->assertSet('isProcessing', true);
-                $this->component->assertDispatchedBrowserEvent('alert');
+                $this->component->assertDispatched('alert');
                 Bus::assertDispatched(CreateFromWebsite::class, function ($job) {
                     return $job->document->id === $this->component->document->id;
                 });
             } else {
                 $this->component->assertSet('isProcessing', false);
-                $this->component->assertNotDispatchedBrowserEvent('alert');
+                $this->component->assertNotDispatched('alert');
                 Bus::assertNotDispatched(CreateFromWebsite::class);
             }
         })->with([

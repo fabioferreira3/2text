@@ -8,8 +8,6 @@ use App\Enums\Tone;
 use App\Livewire\Blog\NewPost;
 use App\Jobs\Blog\PrepareCreationTasks;
 use App\Models\Document;
-use App\Repositories\DocumentRepository;
-use Cloudinary\Transformation\Source;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 
@@ -17,6 +15,7 @@ use function Pest\Laravel\{actingAs};
 
 beforeEach(function () {
     $this->component = actingAs($this->authUser)->livewire(NewPost::class);
+    $this->authUser->account->update(['units' => 99999]);
 });
 
 describe(
@@ -206,6 +205,7 @@ describe(
                 ->assertHasNoErrors();
 
             $document = Document::latest()->first();
+
             $this->component->assertRedirect(route('blog-post-processing-view', ['document' => $document]));
 
             expect($document->getMeta('source_file_path'))->toBeTruthy();

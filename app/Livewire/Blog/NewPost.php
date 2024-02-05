@@ -154,7 +154,7 @@ class NewPost extends Component
 
         try {
             $this->validateUnitCosts();
-            return;
+
             if ($this->fileInput) {
                 $this->storeFile();
             }
@@ -198,7 +198,6 @@ class NewPost extends Component
         if ($this->imgPrompt ?? false) {
             $this->estimateImageGenerationCost(1);
         }
-
         $this->authorizeTotalCost();
     }
 

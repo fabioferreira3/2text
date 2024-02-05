@@ -16,10 +16,13 @@ use function Pest\Laravel\{actingAs};
 use function Pest\Faker\fake;
 
 beforeEach(function () {
+    $this->authUser->account->update(['units' => 99999]);
     $this->document = Document::factory()->create([
         'type' => DocumentType::SOCIAL_MEDIA_POST->value
     ]);
-    $this->component = actingAs($this->authUser)->livewire(SocialMediaPostsManager::class);
+    $this->component = actingAs($this->authUser)->livewire(SocialMediaPostsManager::class, [
+        'document' => $this->document
+    ]);
 });
 
 describe(
@@ -33,7 +36,6 @@ describe(
         describe('SocialMediaPostsManager component validation', function () {
             test('context', function () {
                 $this->component
-                    ->set('document', $this->document)
                     ->set('sourceType', 'free_text')
                     ->set('context', fake()->text(30500))
                     ->call('process')
@@ -46,7 +48,6 @@ describe(
 
             test('source url', function () {
                 $this->component
-                    ->set('document', $this->document)
                     ->set('sourceType', 'website_url')
                     ->call('process')
                     ->assertHasErrors(['sourceUrls' => 'required_if'])
@@ -64,7 +65,6 @@ describe(
 
             test('youtube invalid source url', function (string $url) {
                 $this->component
-                    ->set('document', $this->document)
                     ->set('sourceType', 'youtube')
                     ->set('tempSourceUrl', $url)
                     ->call('addSourceUrl')
@@ -73,7 +73,6 @@ describe(
 
             test('youtube valid source url', function (string $url) {
                 $this->component
-                    ->set('document', $this->document)
                     ->set('sourceType', 'youtube')
                     ->set('tempSourceUrl', $url)
                     ->call('addSourceUrl')
@@ -86,7 +85,6 @@ describe(
 
             test('source file path is updated when embedding files', function ($sourceType) {
                 $this->component
-                    ->set('document', $this->document)
                     ->set('platforms', [
                         "Linkedin" => false,
                         "Facebook" => true,
@@ -106,7 +104,6 @@ describe(
 
             test('fileInput is required for specific source types', function ($sourceType) {
                 $this->component
-                    ->set('document', $this->document)
                     ->set('sourceType', $sourceType)
                     ->set('platforms', [
                         "Linkedin" => false,
@@ -122,7 +119,6 @@ describe(
 
             test('fileInput must be a valid docx file', function () {
                 $this->component
-                    ->set('document', $this->document)
                     ->set('sourceType', SourceProvider::DOCX->value)
                     ->set('fileInput', UploadedFile::fake()->create('avatar.txt'))
                     ->call('process')
@@ -136,7 +132,6 @@ describe(
 
             test('fileInput must be a valid pdf file', function () {
                 $this->component
-                    ->set('document', $this->document)
                     ->set('sourceType', SourceProvider::PDF->value)
                     ->set('fileInput', UploadedFile::fake()->create('avatar.txt'))
                     ->call('process')
@@ -150,7 +145,6 @@ describe(
 
             test('fileInput must be a valid csv file', function () {
                 $this->component
-                    ->set('document', $this->document)
                     ->set('sourceType', SourceProvider::CSV->value)
                     ->set('fileInput', UploadedFile::fake()->create('avatar.pdf'))
                     ->call('process')
@@ -164,7 +158,6 @@ describe(
 
             test('invalid language', function () {
                 $this->component
-                    ->set('document', $this->document)
                     ->set('sourceType', SourceProvider::YOUTUBE->value)
                     ->set('language', '')
                     ->call('process')
@@ -176,7 +169,6 @@ describe(
 
             test('valid language', function ($language) {
                 $this->component
-                    ->set('document', $this->document)
                     ->set('sourceType', SourceProvider::YOUTUBE->value)
                     ->set('language', $language)
                     ->call('process')
@@ -185,7 +177,6 @@ describe(
 
             test('invalid image prompt', function () {
                 $this->component
-                    ->set('document', $this->document)
                     ->set('sourceType', SourceProvider::YOUTUBE->value)
                     ->set('generateImage', true)
                     ->call('process')
@@ -198,7 +189,6 @@ describe(
 
         test('store file', function () {
             $response = $this->component
-                ->set('document', $this->document)
                 ->set('fileInput', UploadedFile::fake()->create('avatar.pdf'));
 
             Storage::disk('s3')->assertExists($response->filePath);
@@ -224,7 +214,6 @@ describe(
 
         test('process with file inputs', function () {
             $this->component
-                ->set('document', $this->document)
                 ->set('sourceType', SourceProvider::PDF->value)
                 ->set('context', 'any context')
                 ->set('tone', Tone::ACADEMIC->value)

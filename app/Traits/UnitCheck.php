@@ -14,7 +14,7 @@ trait UnitCheck
     {
         Log::debug($this->totalCost);
         $units = $account ? $account->units : auth()->user()->account->units;
-        if ($units < ($this->totalCost)) {
+        if ($units < $this->totalCost) {
             throw new InsufficientUnitsException();
         }
     }

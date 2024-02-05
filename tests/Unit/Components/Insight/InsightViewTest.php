@@ -15,14 +15,18 @@ use function Pest\Laravel\{actingAs};
 use function Pest\Faker\fake;
 
 beforeEach(function () {
+    $this->authUser->account->update(['units' => 99999]);
     $this->document = Document::factory()->create([
-        'type' => DocumentType::INQUIRY->value
+        'type' => DocumentType::INQUIRY->value,
+        'account_id' => $this->authUser->account_id
     ]);
     ChatThread::create([
         'document_id' => $this->document->id,
         'user_id' => $this->authUser->id
     ]);
-    $this->component = actingAs($this->authUser)->livewire(InsightView::class);
+    $this->component = actingAs($this->authUser)->livewire(InsightView::class, [
+        'document' => $this->document
+    ]);
 });
 
 describe(
@@ -35,7 +39,6 @@ describe(
 
         test('confirms embedding', function () {
             $this->component
-                ->set('document', $this->document)
                 ->assertSet('hasEmbeddings', false)
                 ->call('onEmbeddingFinished', ['document_id' => $this->document->id])
                 ->assertSet('hasEmbeddings', true)

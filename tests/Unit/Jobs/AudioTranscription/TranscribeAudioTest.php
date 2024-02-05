@@ -6,16 +6,20 @@ use App\Jobs\EmbedSource;
 use App\Jobs\TranscribeAudio;
 use App\Models\Document;
 use App\Models\DocumentTask;
+use App\Models\User;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
     $this->filePath = fake()->filePath();
+    $this->user = User::factory()->create();
     $this->document = Document::factory()->create([
         'type' => DocumentType::AUDIO_TRANSCRIPTION->value,
         'language' => Language::ENGLISH->value,
         'meta' => [
-            'audio_file_path' => [$this->filePath]
+            'audio_file_path' => [$this->filePath],
+            'user_id' => $this->user->id,
+            'duration' => 13
         ]
     ]);
 });

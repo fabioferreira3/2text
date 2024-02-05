@@ -93,7 +93,6 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
             }
 
             $this->validateUnitCosts();
-            return;
 
             $transcribedText = $this->mediaRepo->transcribeAudio(
                 $this->document->getMeta('audio_file_path')

@@ -305,7 +305,7 @@ class SocialMediaPostsManager extends Component
                 ]
             ]);
 
-            $platforms = collect($this->platforms)->filter();
+            $platforms = collect($this->platforms)->filter()->toArray();
             ProcessSocialMediaPosts::dispatch($this->document, $platforms);
         } catch (InsufficientUnitsException $e) {
             $this->dispatch(
@@ -326,7 +326,7 @@ class SocialMediaPostsManager extends Component
         if ($this->generateImage) {
             $this->estimateImageGenerationCost(count($platforms));
         }
-        $this->authorizeTotalCost(true);
+        $this->authorizeTotalCost();
     }
 
     public function render()

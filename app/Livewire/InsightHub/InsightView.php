@@ -141,7 +141,6 @@ class InsightView extends Component
         if ($params['document_id'] !== $this->document->id) {
             return;
         }
-
         if (!$this->hasEmbeddings) {
             $this->document->updateMeta('has_embeddings', true);
             $this->hasEmbeddings = true;
