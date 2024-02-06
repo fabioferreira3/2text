@@ -17,7 +17,6 @@ class Dashboard extends Component
 
     public function handleInsufficientUnits($event)
     {
-        dd($event);
         if (
             $event->task === DocumentTaskEnum::TRANSCRIBE_AUDIO->value ||
             $event->task === DocumentTaskEnum::TRANSCRIBE_AUDIO_WITH_DIARIZATION->value
