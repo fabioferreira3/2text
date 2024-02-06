@@ -42,6 +42,3 @@
             @endif
         </div>
     </div>
-    @push('scripts')
-    @include('livewire.text-to-audio.audio-scripts')
-    @endpush

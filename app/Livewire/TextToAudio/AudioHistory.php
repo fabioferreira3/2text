@@ -75,7 +75,6 @@ class AudioHistory extends Component
 
     public function stopAudio()
     {
-        $this->dispatch('stop-audio');
         $this->isPlaying = false;
     }
 
