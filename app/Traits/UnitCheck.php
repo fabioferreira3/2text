@@ -39,6 +39,6 @@ trait UnitCheck
 
     public function estimateAudioTranscriptionCost(int $duration)
     {
-        return $duration * 0.1;
+        $this->totalCost = $this->totalCost + ($duration * 0.1);
     }
 }

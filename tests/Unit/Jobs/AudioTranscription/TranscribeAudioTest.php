@@ -2,17 +2,24 @@
 
 use App\Enums\DocumentType;
 use App\Enums\Language;
+use App\Events\InsufficientUnitsValidated;
 use App\Jobs\EmbedSource;
 use App\Jobs\TranscribeAudio;
+use App\Models\Account;
 use App\Models\Document;
 use App\Models\DocumentTask;
 use App\Models\User;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Event;
 
 beforeEach(function () {
     $this->filePath = fake()->filePath();
-    $this->user = User::factory()->create();
+    $this->user = User::factory()->create([
+        'account_id' => Account::factory()->create([
+            'units' => 99999
+        ])
+    ]);
     $this->document = Document::factory()->create([
         'type' => DocumentType::AUDIO_TRANSCRIPTION->value,
         'language' => Language::ENGLISH->value,
@@ -47,6 +54,7 @@ describe('Audio Transcription - TranscribeAudio job', function () {
     })->with([true, false]);
 
     it('aborts when context present', function () {
+        Event::fake([InsufficientUnitsValidated::class]);
         $task = DocumentTask::factory()->create([
             'document_id' => $this->document->id,
         ]);
@@ -57,6 +65,23 @@ describe('Audio Transcription - TranscribeAudio job', function () {
         ]);
         $job->handle();
 
+        Event::assertNotDispatched(InsufficientUnitsValidated::class);
         expect($task->fresh()->status)->toBe('skipped');
+    });
+
+    it('throws insufficient units error', function () {
+        Event::fake([InsufficientUnitsValidated::class]);
+
+        $this->user->account->update(['units' => 0]);
+        $task = DocumentTask::factory()->create([
+            'document_id' => $this->document->id,
+        ]);
+        $job = new TranscribeAudio($this->document, [
+            'task_id' => $task->id
+        ]);
+        $job->handle();
+
+        Event::assertDispatched(InsufficientUnitsValidated::class);
+        expect($task->fresh()->status)->toBe('aborted');
     });
 })->group('audio-transcription');

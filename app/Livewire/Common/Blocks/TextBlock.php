@@ -3,10 +3,12 @@
 namespace App\Livewire\Common\Blocks;
 
 use App\Enums\DocumentTaskEnum;
+use App\Exceptions\InsufficientUnitsException;
 use App\Helpers\PromptHelper;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\DocumentContentBlock;
 use App\Repositories\DocumentRepository;
+use App\Traits\UnitCheck;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -14,6 +16,8 @@ use Illuminate\Support\Str;
 
 class TextBlock extends Component
 {
+    use UnitCheck;
+
     public $contentBlock;
     public string $content;
     public string $type;
@@ -155,28 +159,44 @@ class TextBlock extends Component
         $this->showCustomPrompt = !$this->showCustomPrompt;
     }
 
-    private function rewrite(string $prompt)
+    public function rewrite(string $prompt)
     {
-        $this->dispatch(
-            'alert',
-            type: 'info',
-            message: __('alerts.rewriting_text')
-        );
-        $this->processing = true;
-        DocumentRepository::createTask(
-            $this->contentBlock->document->id,
-            DocumentTaskEnum::REWRITE_TEXT_BLOCK,
-            [
-                'order' => 1,
-                'process_id' => Str::uuid(),
-                'meta' => [
-                    'text' => $this->content,
-                    'document_content_block_id' => $this->contentBlock->id,
-                    'prompt' => $prompt
+        try {
+            $this->validateUnitCosts();
+
+            $this->dispatch(
+                'alert',
+                type: 'info',
+                message: __('alerts.rewriting_text')
+            );
+            $this->processing = true;
+            DocumentRepository::createTask(
+                $this->contentBlock->document->id,
+                DocumentTaskEnum::REWRITE_TEXT_BLOCK,
+                [
+                    'order' => 1,
+                    'process_id' => Str::uuid(),
+                    'meta' => [
+                        'text' => $this->content,
+                        'document_content_block_id' => $this->contentBlock->id,
+                        'prompt' => $prompt
+                    ]
                 ]
-            ]
-        );
-        DispatchDocumentTasks::dispatch($this->contentBlock->document);
+            );
+            DispatchDocumentTasks::dispatch($this->contentBlock->document);
+        } catch (InsufficientUnitsException $e) {
+            $this->dispatch(
+                'alert',
+                type: 'error',
+                message: __('alerts.insufficient_units')
+            );
+        } catch (\Exception $e) {
+            $this->dispatch(
+                'alert',
+                type: 'error',
+                message: __('alerts.error_occurred')
+            );
+        }
     }
 
     public function updatedContent()
@@ -208,6 +228,12 @@ class TextBlock extends Component
             $this->processing = false;
             $this->dispatch('adjustTextArea');
         }
+    }
+
+    public function validateUnitCosts()
+    {
+        $this->estimateWordsGenerationCost(Str::wordCount($this->content));
+        $this->authorizeTotalCost();
     }
 
     public function render()

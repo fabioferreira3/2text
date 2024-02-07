@@ -53,6 +53,7 @@ trait JobEndings
 
     protected function jobFailed($errorMsg = '')
     {
+        Log::error($errorMsg);
         if (isset($this->meta['task_id'])) {
             $task = DocumentTask::findOrFail($this->meta['task_id']);
             $tasksByProcess = DocumentTask::ofProcess($task->process_id)->inProgress()->except([$task->id])->get();
@@ -65,11 +66,12 @@ trait JobEndings
             }
         }
 
-        throw new Exception($errorMsg);
+        $this->fail();
     }
 
     protected function jobAborted($errorMsg = '')
     {
+        Log::error($errorMsg);
         if (isset($this->meta['task_id'])) {
             $task = DocumentTask::findOrFail($this->meta['task_id']);
             $tasksByProcess = DocumentTask::ofProcess($task->process_id)->inProgress()->except([$task->id])->get();
@@ -81,8 +83,7 @@ trait JobEndings
                 });
             }
         }
-
-        throw new Exception($errorMsg);
+        $this->delete();
     }
 
     protected function handleError(HttpException $e, $customErrorMsg)

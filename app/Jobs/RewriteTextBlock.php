@@ -7,7 +7,9 @@ use App\Events\ContentBlockUpdated;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
+use App\Models\User;
 use App\Repositories\GenRepository;
+use App\Traits\UnitCheck;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,7 +21,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        JobEndings;
 
     public $document;
     public $contentBlock;
