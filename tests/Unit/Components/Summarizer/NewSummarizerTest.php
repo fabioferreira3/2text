@@ -13,6 +13,7 @@ use function Pest\Laravel\{actingAs};
 use function Pest\Faker\fake;
 
 beforeEach(function () {
+    $this->authUser->account->update(['units' => 99999]);
     $this->document = Document::factory()->create();
     $this->component = actingAs($this->authUser)->livewire(NewSummarizer::class);
 });
@@ -175,6 +176,26 @@ describe(
             ]);
 
             Bus::assertDispatched(PrepareCreationTasks::class);
+        });
+
+        it('throws an error when processing with TEXT and insufficient units', function () {
+            $this->authUser->account->update(['units' => 0]);
+            $this->component
+                ->set('source', SourceProvider::FREE_TEXT->value)
+                ->set('context', 'any context')
+                ->set('maxWordsCount', 250)
+                ->call('process')
+                ->assertDispatched('alert', type: 'error', message: __('alerts.insufficient_units'));
+        });
+
+        it('throws an error when processing with URL and insufficient units', function () {
+            $this->authUser->account->update(['units' => 0]);
+            $this->component
+                ->set('source', SourceProvider::YOUTUBE->value)
+                ->set('maxWordsCount', 250)
+                ->set('sourceUrl', 'https://www.youtube.com/watch?v=6Hye1ZZReh4')
+                ->call('process')
+                ->assertDispatched('alert', type: 'error', message: __('alerts.insufficient_units'));
         });
     }
 )->group('summarizer');

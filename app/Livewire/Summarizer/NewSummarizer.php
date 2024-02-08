@@ -6,11 +6,13 @@ use App\Enums\DocumentType;
 use App\Enums\Language;
 use App\Enums\SourceProvider;
 use App\Exceptions\CreatingSummaryException;
+use App\Exceptions\InsufficientUnitsException;
 use App\Jobs\Summarizer\PrepareCreationTasks;
 use App\Repositories\DocumentRepository;
 use App\Rules\CsvFile;
 use App\Rules\DocxFile;
 use App\Rules\PdfFile;
+use App\Traits\UnitCheck;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -20,7 +22,7 @@ use Livewire\WithFileUploads;
 
 class NewSummarizer extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, UnitCheck;
 
     public $document;
     public $context;
@@ -103,6 +105,7 @@ class NewSummarizer extends Component
     {
         $this->validate();
         try {
+            $this->validateUnitCost();
             $this->isProcessing = true;
             if ($this->fileInput) {
                 $this->storeFile();
@@ -121,6 +124,12 @@ class NewSummarizer extends Component
             ]);
 
             PrepareCreationTasks::dispatch($this->document, []);
+        } catch (InsufficientUnitsException $e) {
+            $this->dispatch(
+                'alert',
+                type: 'error',
+                message: __('alerts.insufficient_units')
+            );
         } catch (Exception $e) {
             throw new CreatingSummaryException($e->getMessage());
         }
@@ -132,6 +141,13 @@ class NewSummarizer extends Component
             $this->isProcessing = false;
             redirect()->route('summary-view', ['document' => $this->document]);
         }
+    }
+
+    public function validateUnitCost()
+    {
+        $this->totalCost = 0;
+        $this->estimateWordsGenerationCost($this->context ? Str::wordCount($this->context) : 200);
+        $this->authorizeTotalCost();
     }
 
     public function render()

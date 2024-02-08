@@ -21,7 +21,7 @@ class SummaryView extends Component
         $this->context = $document->getMeta('context')
             ?? $document->content
             ?? $document->getMeta('source_url');
-        $this->contentBlock = $document->contentBlocks()->ofTextType()->latest()->first();
+        $this->contentBlock = $document->contentBlocks()->ofTextType()->latest()->firstOrFail();
     }
 
     public function new()

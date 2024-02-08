@@ -88,10 +88,14 @@ class AssemblyAI
 
             if ($vttResponse->successful()) {
                 $results['vtt'] = $vttResponse->body();
+            } else {
+                $vttResponse->throw();
             }
 
             if ($srtResponse->successful()) {
                 $results['srt'] = $srtResponse->body();
+            } else {
+                $srtResponse->throw();
             }
 
             return $results;

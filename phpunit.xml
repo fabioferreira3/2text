@@ -13,6 +13,7 @@
     <env name="APP_ENV" value="testing"/>
     <env name="BCRYPT_ROUNDS" value="4"/>
     <env name="CACHE_DRIVER" value="array"/>
+    <env name="STRIPE_SECRET" value="sk_test_51NeknCEjLWGu0g9v8AQpw8q3egZMYqhhCAeaYGSUuN3rAyYaWzVuwsBuAku59AS331ctIAzQG9CnJ50oSupWLySi00pC3CU5xu"/>
     <!-- <env name="DB_CONNECTION" value="sqlite"/> -->
     <!-- <env name="DB_DATABASE" value=":memory:"/> -->
     <env name="MAIL_MAILER" value="array"/>

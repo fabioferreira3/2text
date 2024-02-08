@@ -182,7 +182,7 @@ class NewPost extends Component
         } catch (InsufficientUnitsException $e) {
             $this->dispatch(
                 'alert',
-                type: 'info',
+                type: 'error',
                 message: __('alerts.insufficient_units')
             );
         } catch (Exception $e) {
