@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Enums\DocumentTaskEnum;
 use App\Models\Document;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
