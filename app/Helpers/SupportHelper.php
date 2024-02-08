@@ -12,11 +12,9 @@ class SupportHelper
     public static function calculateModelCosts(string $model, array $params)
     {
         if (in_array($model, [
-            AIModel::GPT_3_TURBO->value,
-            AIModel::GPT_3_TURBO1106->value,
-            AIModel::GPT_3_TURBO_16->value
+            AIModel::GPT_3_TURBO->value
         ])) {
-            return (($params['prompt'] / 1000) * 0.0010) + (($params['completion'] / 1000) * 0.0020);
+            return (($params['prompt'] / 1000) * 0.0005) + (($params['completion'] / 1000) * 0.0015);
         } elseif (in_array($model, [
             AIModel::GPT_4->value
         ])) {

@@ -37,7 +37,7 @@ class GenRepository
     public function generateTitle(Document $document, $context)
     {
         $promptHelper = PromptHelperFactory::create($document->language->value);
-        $chatGpt = $this->chatGptFactory->make(AIModel::GPT_3_TURBO1106->value);
+        $chatGpt = $this->chatGptFactory->make(AIModel::GPT_3_TURBO->value);
 
         $this->response = $chatGpt->request([[
             'role' => 'user',
@@ -73,7 +73,7 @@ class GenRepository
     public function generateMetaDescription(Document $document)
     {
         $promptHelper = PromptHelperFactory::create($document->language->value);
-        $chatGpt = $this->chatGptFactory->make(AIModel::GPT_3_TURBO1106->value);
+        $chatGpt = $this->chatGptFactory->make(AIModel::GPT_3_TURBO->value);
         return $chatGpt->request([[
             'role' => 'user',
             'content' => $promptHelper->writeMetaDescription(

@@ -40,7 +40,7 @@ class ChatThread extends Model
     {
         static::addGlobalScope(new SameUserScope());
         static::creating(function ($thread) {
-            if (Auth::check()) {
+            if (Auth::check() && !$thread->user_id) {
                 $thread->user_id = Auth::user()->id;
             }
         });

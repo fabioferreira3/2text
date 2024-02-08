@@ -48,7 +48,7 @@ class GenerateAIThoughts implements ShouldQueue, ShouldBeUnique
         try {
             $user = User::findOrFail($this->document->getMeta('user_id'));
             $promptHelper = PromptHelperFactory::create($this->document->language->value);
-            $chatGpt = new ChatGPT(AIModel::GPT_3_TURBO1106->value);
+            $chatGpt = new ChatGPT(AIModel::GPT_3_TURBO->value);
 
             $response = $chatGpt->request([
                 [
