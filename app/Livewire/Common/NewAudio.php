@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Common;
 
-use App\Enums\Language;
 use App\Helpers\AudioHelper;
 use App\Models\Document;
 use App\Repositories\GenRepository;
@@ -117,7 +116,8 @@ class NewAudio extends Component
         );
         $this->isProcessing = true;
         $voice = $this->voices->where('value', $this->selectedVoice)->first();
-        GenRepository::textToAudio($this->document, [
+        $genRepo = new GenRepository();
+        $genRepo->registerTextToAudioTask($this->document, [
             'voice' => $voice['value'],
             'iso_language' => $voice['iso'],
             'text' => $this->document->content

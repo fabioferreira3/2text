@@ -21,10 +21,11 @@ use App\Packages\AssemblyAI\AssemblyAI;
 use App\Packages\OpenAI\ChatGPT;
 use App\Packages\OpenAI\DallE;
 use App\Packages\Oraculum\Oraculum;
-use App\Packages\SendGrid\SendGrid;
 use App\Packages\Whisper\Whisper;
+use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
+use YoutubeDl\YoutubeDl;
 
 uses()->beforeEach(function () {
     $this->withoutVite();
@@ -44,6 +45,19 @@ uses()->beforeEach(function () {
             'total' => 350
         ]
     ];
+
+    // Cloudinary
+    $cloudinaryMock = Mockery::mock(CloudinaryEngine::class);
+    $this->app->instance(CloudinaryEngine::class, $cloudinaryMock);
+
+    $cloudinaryUploadResponse = Mockery::mock();
+    $cloudinaryUploadResponse->shouldReceive('getSecurePath')->andReturn('https://cloudinary.com/secure_image_path.jpg');
+    $cloudinaryUploadResponse->shouldReceive('getSize')->andReturn(1024);
+    $cloudinaryUploadResponse->shouldReceive('getWidth')->andReturn(1920);
+    $cloudinaryUploadResponse->shouldReceive('getHeight')->andReturn(1080);
+    $cloudinaryUploadResponse->shouldReceive('getExtension')->andReturn('jpg');
+    $cloudinaryUploadResponse->shouldReceive('getPublicId')->andReturn('public_id');
+    $cloudinaryMock->shouldReceive('upload')->andReturn($cloudinaryUploadResponse);
 
     // ChatGPT Mock
     $this->chatGpt = Mockery::mock(ChatGPT::class);
@@ -105,6 +119,9 @@ uses()->beforeEach(function () {
     $this->mockSendGrid = Mockery::mock('sendgrid');
     $this->mockSendGrid->shouldReceive('sendDynamicMessage')->andReturn('message');
 
+    // Youtube Dl
+    $this->youtubeDlMock = Mockery::mock(YoutubeDl::class);
+    $this->app->instance(YoutubeDl::class, $this->youtubeDlMock);
 
     $this->app->instance(OraculumFactoryInterface::class, $this->mockOraculumFactory);
     $this->app->instance(ChatGPTFactoryInterface::class, $this->mockChatGPTFactory);

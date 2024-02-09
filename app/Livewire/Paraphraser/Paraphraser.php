@@ -114,7 +114,8 @@ class Paraphraser extends Component
             $originalSentencesArray = DocumentHelper::breakTextIntoSentences($this->inputText);
             $repo->updateMeta('sentences', $originalSentencesArray);
 
-            GenRepository::paraphraseDocument($this->document->fresh());
+            $genRepo = new GenRepository();
+            $genRepo->registerParaphraseDocumentTasks($this->document->fresh());
         } catch (InsufficientUnitsException $e) {
             $this->dispatch(
                 'alert',

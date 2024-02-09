@@ -16,6 +16,7 @@ use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
 use App\Models\User;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Talendor\StabilityAI\Enums\StabilityAIEngine;
@@ -107,9 +108,9 @@ class GenRepository
         return $oraculum->query($promptHelper->writeEmbeddedSummary($params));
     }
 
-    public static function generateImage(Document $document, array $params)
+    public function generateImage(Document $document, array $params)
     {
-        $handler = new ImageGeneratorHandler();
+        $handler = App::make(ImageGeneratorHandler::class);
         $result = $handler->handle('textToImage', $params);
 
         if ($result) {
@@ -216,11 +217,11 @@ class GenRepository
         ]);
     }
 
-    public static function paraphraseDocument(Document $document)
+    public function registerParaphraseDocumentTasks(Document $document)
     {
         $document->refresh();
 
-        foreach ($document->meta['sentences'] as $sentence) {
+        foreach ($document->getMeta('sentences') as $sentence) {
             DocumentRepository::createTask(
                 $document->id,
                 DocumentTaskEnum::PARAPHRASE_TEXT,
@@ -240,7 +241,7 @@ class GenRepository
         DispatchDocumentTasks::dispatch($document);
     }
 
-    public static function textToAudio($document, array $params = [])
+    public function registerTextToAudioTask($document, array $params = [])
     {
         DocumentRepository::createTask(
             $document->id,

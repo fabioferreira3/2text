@@ -101,7 +101,8 @@ class TextToAudio extends Component
             'voice_id' => $this->selectedVoice,
         ]);
 
-        GenRepository::textToAudio($document, [
+        $genRepo = new GenRepository();
+        $genRepo->registerTextToAudioTask($document, [
             'voice_id' => $this->selectedVoice,
             'process_id' => $this->processId,
             'input_text' => $this->inputText

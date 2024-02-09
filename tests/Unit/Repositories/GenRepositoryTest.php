@@ -1,8 +1,16 @@
 <?php
 
+use App\Adapters\ImageGeneratorHandler;
+use App\Enums\DocumentTaskEnum;
+use App\Events\ProcessFinished;
+use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
+use App\Models\DocumentTask;
 use App\Repositories\GenRepository;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Str;
 
 describe('GenRepository', function () {
     it('generates a title', function () {
@@ -72,5 +80,135 @@ describe('GenRepository', function () {
         $response = $repo->rewriteTextBlock($documentContentBlock, ['prompt' => 'some prompt']);
         expect($response['content'])->toBe('AI content generated');
         expect($documentContentBlock->fresh()->content)->toBe('AI content generated');
+    });
+
+    it('generates an image and adds a content block to the document', function () {
+        Event::fake(ProcessFinished::class);
+
+        $document = Document::factory()->create();
+        $processId = (string) Str::uuid();
+        $documentTask = DocumentTask::factory()->create([
+            'document_id' => $document->id,
+            'process_id' => $processId
+        ]);
+
+        $params = [
+            'prompt' => 'A beautiful landscape',
+            'add_content_block' => true,
+            'process_id' => $processId,
+        ];
+
+        $this->mockHandler = Mockery::mock(ImageGeneratorHandler::class);
+        $this->app->instance(ImageGeneratorHandler::class, $this->mockHandler);
+
+        $this->mockHandler->shouldReceive('handle')
+            ->once()
+            ->with('textToImage', $params)
+            ->andReturn([
+                'fileName' => 'landscape.jpg',
+                'imageData' => 'image data here',
+            ]);
+
+        $genRepository = new GenRepository();
+        $genRepository->generateImage($document, $params);
+
+        $document->refresh();
+
+        $this->assertDatabaseHas('media_files', [
+            'meta->document_id' => $document->id,
+        ]);
+
+        $this->assertDatabaseHas('document_content_blocks', [
+            'document_id' => $document->id,
+            'type' => 'media_file_image',
+            'prompt' => $params['prompt'],
+        ]);
+
+        Event::assertDispatched(ProcessFinished::class, function ($event) use ($documentTask) {
+            return $event->documentTask->id === $documentTask->id;
+        });
+    });
+
+    it('translates text', function () {
+        $text = "Hello, world!";
+        $targetLanguage = "es";
+
+        $genRepository = new GenRepository();
+        $response = $genRepository->translateText($text, $targetLanguage);
+
+        expect($response)->toEqual($this->aiModelResponseResponse);
+    });
+
+    it('registers paraphrase document tasks', function () {
+        Bus::fake();
+        $document = Document::factory()->create([
+            'meta' => [
+                'tone' => 'funny',
+                'add_content_block' => true,
+                'sentences' => [
+                    [
+                        'text' => 'sentence 1',
+                        'sentence_order' => 1
+                    ],
+                    [
+                        'text' => 'sentence 2',
+                        'sentence_order' => 2
+                    ]
+                ]
+            ]
+        ]);
+        $genRepository = new GenRepository();
+        $genRepository->registerParaphraseDocumentTasks($document);
+
+        $this->assertDatabaseHas('document_tasks', [
+            'document_id' => $document->id,
+            'job' => DocumentTaskEnum::PARAPHRASE_TEXT->getJob(),
+            'order' => 1,
+            'meta->text' => 'sentence 1',
+            'meta->tone' => 'funny',
+            'meta->sentence_order' => 1,
+            'meta->add_content_block' => true,
+        ]);
+
+        $this->assertDatabaseHas('document_tasks', [
+            'document_id' => $document->id,
+            'job' => DocumentTaskEnum::PARAPHRASE_TEXT->getJob(),
+            'order' => 1,
+            'meta->text' => 'sentence 2',
+            'meta->tone' => 'funny',
+            'meta->sentence_order' => 2,
+            'meta->add_content_block' => true,
+        ]);
+
+        Bus::assertDispatched(DispatchDocumentTasks::class, function ($job) use ($document) {
+            return $job->document->id === $document->id;
+        });
+    });
+
+    it('registers a text to audio task', function () {
+        Bus::fake();
+        $voiceId = (string) Str::uuid();
+        $processId = (string) Str::uuid();
+
+        $document = Document::factory()->create();
+        $genRepository = new GenRepository();
+        $genRepository->registerTextToAudioTask($document, [
+            'voice_id' => $voiceId,
+            'process_id' => $processId,
+            'input_text' => 'some text here'
+        ]);
+
+        $this->assertDatabaseHas('document_tasks', [
+            'document_id' => $document->id,
+            'job' => DocumentTaskEnum::TEXT_TO_AUDIO->getJob(),
+            'order' => 1,
+            'process_id' => $processId,
+            'meta->voice_id' => $voiceId,
+            'meta->input_text' => 'some text here',
+        ]);
+
+        Bus::assertDispatched(DispatchDocumentTasks::class, function ($job) use ($document) {
+            return $job->document->id === $document->id;
+        });
     });
 })->group('repositories');
