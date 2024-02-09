@@ -9,7 +9,6 @@ use App\Interfaces\WhisperFactoryInterface;
 use App\Models\Account;
 use App\Models\MediaFile;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
@@ -17,7 +16,6 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use TypeError;
 use YoutubeDl\YoutubeDl;
 use YoutubeDl\Options;
-use Aws\S3\S3Client;
 
 class MediaRepository
 {

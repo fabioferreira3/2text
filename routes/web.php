@@ -31,9 +31,7 @@ use App\Livewire\Trash;
 use App\Models\ShortLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Laravel\Cashier\Cashier;
 use Laravel\Socialite\Facades\Socialite;
-use Stripe\Stripe;
 
 /*
 |--------------------------------------------------------------------------

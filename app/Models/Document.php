@@ -163,6 +163,7 @@ class Document extends Model
         }
 
         $mainTasksinProgressCount = $this->tasks->whereIn('status', ['in_progress', 'pending', 'on_hold'])->count();
+
         $childTasksInProgressCount = $this->children->reduce(function ($carry, $child) {
             return $carry + $child->tasks->whereIn('status', ['in_progress', 'pending', 'on_hold'])->count();
         }, 0);

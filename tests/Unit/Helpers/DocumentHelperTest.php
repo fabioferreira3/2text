@@ -2,7 +2,7 @@
 
 use App\Helpers\DocumentHelper;
 
-describe('Document Helper', function () {
+describe('DocumentHelper helper', function () {
     it('parses an outline to a raw structure', function () {
         $outline = "1. Main Topic \n A. Subtopic 1 \n B. Subtopic 2 \n C. Subtopic 3 \n
         2. Second Topic \n A. Subtopic \n B. Another subtopic";

@@ -8,7 +8,7 @@ beforeEach(function () {
     $this->mediaHelper = new MediaHelper();
 });
 
-describe('Media Helper', function () {
+describe('MediaHelper helper', function () {
     it('gets social media image size per platform', function () {
         $instagramSizes = $this->mediaHelper->getSocialMediaImageSize('instagram');
         expect($instagramSizes)->toBe(['height' => 1024, 'width' => 1024]);
