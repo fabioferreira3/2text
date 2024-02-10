@@ -3,6 +3,7 @@
 return [
     'back_dashboard' => 'Back to dashboard',
     'billed_monthly' => 'billed monthly',
+    '%_discount' => '(:percentage% discount)',
     'enter_units' => 'Enter the number of units (min: 100)',
     'enter_units_no_minimum' => 'Enter the number of units',
     'get' => 'Get',

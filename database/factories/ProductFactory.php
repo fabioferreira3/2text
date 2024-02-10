@@ -24,7 +24,17 @@ class ProductFactory extends Factory
         return [
             'name' => $this->faker->word(),
             'external_id' => $this->faker->uuid(),
-            'is_active' => true
+            'is_active' => true,
+            'meta' => [
+                'off' => $this->faker->randomNumber(2),
+                'price' => $this->faker->randomFloat(2, 1, 1000),
+                'price_id' => $this->faker->uuid(),
+                'features' => $this->faker->randomElements([
+                    $this->faker->word(),
+                    $this->faker->word(),
+                    $this->faker->word()
+                ])
+            ]
         ];
     }
 }

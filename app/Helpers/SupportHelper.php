@@ -52,6 +52,11 @@ class SupportHelper
         return number_format($dollars, 2, '.', ',');
     }
 
+    public static function subPercent(int $number, int $percentage)
+    {
+        return $number - (($number * $percentage) / 100);
+    }
+
     public static function shortenLink(string $targetUrl, array $params): string
     {
         Validator::make(['link' => $targetUrl], [

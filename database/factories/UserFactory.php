@@ -82,7 +82,7 @@ class UserFactory extends Factory
     {
         return $this->afterCreating(function (User $user) use ($planId) {
             $subscription = $user->subscriptions()->create([
-                'name' => 'default',
+                'type' => 'default',
                 'stripe_id' => Str::random(10),
                 'stripe_status' => 'active',
                 'stripe_price' => $planId,

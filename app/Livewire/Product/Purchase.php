@@ -2,8 +2,10 @@
 
 namespace App\Livewire\Product;
 
+use App\Helpers\SupportHelper;
 use App\Models\Product;
 use App\Repositories\CheckoutRepository;
+use Illuminate\Support\Facades\App;
 use Livewire\Component;
 
 
@@ -34,35 +36,35 @@ class Purchase extends Component
     public function messages()
     {
         return [
-            'units.min' => 'You may purchase a minimum of 100 units'
+            'units.min' => __('checkout.purchase_min', ['amount' => 100]),
+            'units.max' => __('checkout.purchase_max', ['amount' => 10000])
         ];
     }
 
     public function render()
     {
-        return view('livewire.purchase')->title('Purchase units');
+        return view('livewire.purchase')->title(__('checkout.purchase_units'));
     }
 
-    public function updatedUnits($value)
+    public function updatedUnits($unitsAmount)
     {
         $this->discountTier = '';
         $this->discount = 0;
-        if ($value >= 500 && $value < 1000) {
-            $value = $value - ($value * 0.03);
-            $this->discountTier = '(3% discount)';
+        if ($unitsAmount >= 500 && $unitsAmount < 1000) {
             $this->discount = 3;
-        } elseif ($value >= 1000 && $value < 10001) {
-            $value = $value - ($value * 0.07);
-            $this->discountTier = '(7% discount)';
+        } elseif ($unitsAmount >= 1000 && $unitsAmount < 10001) {
             $this->discount = 7;
         }
-        $this->totalPrice = number_format($value * 0.10, 2);
+        $this->discountTier = $this->discount ? __('checkout.%_discount', ['percentage' => $this->discount]) : '';
+
+        $discountedUnits = SupportHelper::subPercent($unitsAmount, $this->discount);
+        $this->totalPrice = number_format($discountedUnits * 0.10, 2);
     }
 
     public function processPurchase()
     {
         $this->validate();
-        $checkoutRepo = new CheckoutRepository();
+        $checkoutRepo = App::make(CheckoutRepository::class);
 
         return $checkoutRepo->processUnitPurchase($this->units, $this->discount);
     }
