@@ -2,12 +2,14 @@
 
 namespace App\Livewire\TextToAudio;
 
-
+use App\Exceptions\InsufficientUnitsException;
 use App\Helpers\AudioHelper;
 use App\Models\Document;
 use App\Models\MediaFile;
 use App\Repositories\DocumentRepository;
 use App\Repositories\GenRepository;
+use App\Traits\UnitCheck;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -15,6 +17,8 @@ use Livewire\Component;
 
 class TextToAudio extends Component
 {
+    use UnitCheck;
+
     public $document;
     protected $repo;
     public $inputText = '';
@@ -94,19 +98,36 @@ class TextToAudio extends Component
     public function generate()
     {
         $this->validate();
-        $this->isProcessing = true;
-        $this->processId = Str::uuid();
-        $document = DocumentRepository::createTextToAudio([
-            'input_text' => $this->inputText,
-            'voice_id' => $this->selectedVoice,
-        ]);
+        try {
+            $this->validateUnitCosts();
+            $this->isProcessing = true;
+            $this->processId = Str::uuid();
+            $this->document = DocumentRepository::createTextToAudio([
+                'input_text' => $this->inputText,
+                'voice_id' => $this->selectedVoice,
+            ]);
 
-        $genRepo = new GenRepository();
-        $genRepo->registerTextToAudioTask($document, [
-            'voice_id' => $this->selectedVoice,
-            'process_id' => $this->processId,
-            'input_text' => $this->inputText
-        ]);
+            $genRepo = new GenRepository();
+            $genRepo->registerTextToAudioTask($this->document, [
+                'voice_id' => $this->selectedVoice,
+                'process_id' => $this->processId,
+                'input_text' => $this->inputText
+            ]);
+        } catch (InsufficientUnitsException $e) {
+            $this->dispatch(
+                'alert',
+                type: 'error',
+                message: __('alerts.insufficient_units')
+            );
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function validateUnitCosts()
+    {
+        $this->estimateAudioGenerationCost(Str::wordCount($this->inputText));
+        $this->authorizeTotalCost();
     }
 
     public function onProcessFinished(array $params)
@@ -126,7 +147,6 @@ class TextToAudio extends Component
 
     public function render()
     {
-        return view('livewire.text-to-audio.text-to-audio')
-            ->title(__('text-to-audio.text_to_audio'));
+        return view('livewire.text-to-audio.text-to-audio')->title(__('text-to-audio.text_to_audio'));
     }
 }

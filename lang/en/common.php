@@ -18,6 +18,7 @@ return [
     'document.finished' => 'Finished',
     'document.in_progress' => 'In Progress',
     'document.on_hold' => 'On Hold',
+    'document.ready' => 'Ready',
     'docx_file' => 'Docx File',
     'free_text' => 'Free Text',
     'go' => 'Go',

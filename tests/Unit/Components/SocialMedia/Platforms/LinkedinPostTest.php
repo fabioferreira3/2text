@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\SocialMediaPost\Platforms\InstagramPost;
+use App\Livewire\SocialMediaPost\Platforms\LinkedinPost;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use Illuminate\Support\Str;
@@ -20,15 +20,15 @@ beforeEach(function () {
         'content' => Str::uuid(),
         'prompt' => 'Image prompt'
     ]);
-    $this->component = actingAs($this->authUser)->livewire(InstagramPost::class, [
+    $this->component = actingAs($this->authUser)->livewire(LinkedinPost::class, [
         'document' => $this->document
     ]);
 });
 
 describe(
-    'Instagram Post component',
+    'Linkedin Post component',
     function () {
-        it('renders the facebook post view', function () {
+        it('renders the linkedin post view', function () {
             $this->component->assertSet('document', $this->document);
             $this->component->assertSet('userId', $this->authUser->id);
             $this->component->assertSet('saving', false);
@@ -37,7 +37,7 @@ describe(
             $this->component->assertSet('textBlockId', $this->contentBlock->id);
             $this->component->assertSet('imageBlockId', $this->imageBlock->id);
             $this->component->assertSet('imagePrompt', 'Image prompt');
-            $this->component->assertStatus(200)->assertViewIs('livewire.social-media-post.platforms.instagram-post');
+            $this->component->assertStatus(200)->assertViewIs('livewire.social-media-post.platforms.linkedin-post');
         });
     }
 )->group('social-media');

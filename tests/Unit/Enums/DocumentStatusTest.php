@@ -29,6 +29,7 @@ describe('DocumentStatus test', function () {
             'finished' => __('common.document.finished'),
             'in_progress' => __('common.document.in_progress'),
             'on_hold' => __('common.document.on_hold'),
+            'ready' => __('common.document.ready')
         ];
         expect(DocumentStatus::getKeyValues())->toBe($expectedKeyValues);
     });

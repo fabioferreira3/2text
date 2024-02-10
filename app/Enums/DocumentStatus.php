@@ -10,6 +10,7 @@ enum DocumentStatus: string
     case FINISHED = 'finished';
     case IN_PROGRESS = 'in_progress';
     case ON_HOLD = 'on_hold';
+    case READY = 'ready';
 
     public function label()
     {
@@ -20,6 +21,7 @@ enum DocumentStatus: string
             self::FINISHED => __('common.document.finished'),
             self::IN_PROGRESS => __('common.document.in_progress'),
             self::ON_HOLD => __('common.document.on_hold'),
+            self::READY => __('common.document.ready'),
         };
     }
 

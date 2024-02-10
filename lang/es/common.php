@@ -18,6 +18,7 @@ return [
     'document.finished' => 'Terminado',
     'document.in_progress' => 'En Progreso',
     'document.on_hold' => 'En Espera',
+    'document.ready' => 'Pronto',
     'docx_file' => 'Archivo Docx',
     'free_text' => 'Texto Libre',
     'go' => 'Ir',

@@ -37,6 +37,14 @@ trait UnitCheck
         ]);
     }
 
+    public function estimateAudioGenerationCost(int $imgCount)
+    {
+        $unitRepo = new UnitRepository();
+        $this->totalCost = $this->totalCost + $unitRepo->estimateCost('audio_generation', [
+            'word_count' => $imgCount
+        ]);
+    }
+
     public function estimateAudioTranscriptionCost(int $duration)
     {
         $this->totalCost = $this->totalCost + ($duration * 0.1);
