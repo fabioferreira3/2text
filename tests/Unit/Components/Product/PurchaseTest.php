@@ -5,7 +5,6 @@ use App\Livewire\Product\Purchase;
 use App\Models\Product;
 use App\Models\User;
 use App\Repositories\CheckoutRepository;
-use Livewire\Livewire;
 
 use function Pest\Laravel\{actingAs};
 
@@ -79,9 +78,21 @@ describe(
                 ->assertSet('displayCalculator', false);
         });
 
-        it('redirects when selecting a product and the user has a spark plan', function () {
-            $user = User::factory()->withSubscription($this->products[0]->meta['pr cice_id'])->create();
-            $this->actingAs($user)->livewire(Purchase::class)->call('selectProduct', $this->products[0]->id);
+        it('redirects to billing page when selecting a product and the user has a spark plan', function () {
+            $user = User::factory()->withSubscription('price_1ObvxSEjLWGu0g9vIezEDGTW')->create();
+            $this->actingAs($user)->livewire(Purchase::class)
+                ->call('selectProduct', $this->products[0]->id)
+                ->assertRedirect('/billing');
+        });
+
+        it('adds a new subscription and redirect to checkout page when user has no spark plan', function () {
+            $user = User::factory()->create();
+            $this->products[0]->update(['meta' =>
+            [...$this->products[0]->meta, 'price_id' => 'price_1ObvxSEjLWGu0g9vIezEDGTW']]);
+            $res = $this->actingAs($user)->livewire(Purchase::class)
+                ->call('selectProduct', $this->products[0]->id)
+                ->assertRedirect();
+            expect($res->effects['redirect'])->toContain('https://checkout.stripe.com/c/pay');
         });
     }
 )->group('product');
