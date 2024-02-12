@@ -1,34 +1,38 @@
 <?php
 
-use App\Enums\DataType;
 use App\Enums\SourceProvider;
-use App\Jobs\EmbedSource;
+use App\Events\Paraphraser\TextParaphrased;
 use App\Jobs\Paraphraser\ParaphraseText;
+use App\Jobs\RegisterAppUsage;
+use App\Jobs\RegisterUnitsConsumption;
 use App\Models\Document;
-use App\Models\User;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Str;
 
 describe('ParaphraseText job', function () {
-    it('should embed from source', function ($dataType) {
+    it('paraphrases text and registers events', function () {
+        Event::fake([TextParaphrased::class]);
+        $processId = Str::uuid();
         $document = Document::factory()->create([
             'meta' => [
-                'source' => SourceProvider::FREE_TEXT->value
+                'source' => SourceProvider::FREE_TEXT->value,
+                'user_id' => $this->authUser->id
             ]
         ]);
         $job = new ParaphraseText(
             $document,
             [
-                'meta' => [
-                    'tone' => 'formal',
-                    'add_content_block' => true,
-                    'sentence_order' => 1,
-                    'text' => 'This is a test sentence.'
-                ]
+                'tone' => 'formal',
+                'add_content_block' => true,
+                'sentence_order' => 1,
+                'text' => 'This is a test sentence.',
+                'process_id' => $processId
             ]
         );
-        $response = $job->handle();
-        expect($response)->toBe('source embedded!');
-
-        $uniqueId = $job->uniqueId();
-        expect($uniqueId)->toBe('embed_document_' . $dataType . '_' . $document->id);
-    })->with(DataType::getValues());
+        $job->handles();
+        Bus::assertDispatched(RegisterUnitsConsumption::class);
+        Bus::assertDispatched(RegisterAppUsage::class);
+        Event::assertDispatched(TextParaphrased::class);
+    });
 })->group('paraphraser');

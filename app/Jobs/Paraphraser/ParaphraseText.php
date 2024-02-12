@@ -74,12 +74,13 @@ class ParaphraseText implements ShouldQueue
             ]);
 
             TextParaphrased::dispatch($this->document, [
-                'user_id' => $this->document->meta['user_id'],
+                'user_id' => $this->document->getMeta('user_id'),
                 'process_id' => $this->meta['process_id']
             ]);
 
             $this->jobSucceded();
         } catch (\Exception $e) {
+            dd($e->getMessage());
             Log::error($e->getMessage());
             $this->jobFailed();
         }
