@@ -6,7 +6,6 @@ use App\Enums\DataType;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Repositories\MediaRepository;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -14,7 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
@@ -23,7 +22,6 @@ class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
 
     public Document $document;
     public array $meta;
-    public $mediaRepo;
 
     /**
      * The number of times the job may be attempted.
@@ -78,7 +76,6 @@ class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->mediaRepo = app(MediaRepository::class);
     }
 
     /**
@@ -88,9 +85,10 @@ class ExtractAndEmbedAudio implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
+        $mediaRepo = App::make(MediaRepository::class);
         try {
-            $audioParams = $this->mediaRepo->downloadYoutubeAudio($this->meta['source_url']);
-            $transcribedText = $this->mediaRepo->transcribeAudio($audioParams['file_paths']);
+            $audioParams = $mediaRepo->downloadYoutubeAudio($this->meta['source_url']);
+            $transcribedText = $mediaRepo->transcribeAudio($audioParams['file_paths']);
             $finalTranscription = "Title: " . $audioParams['title'] . "Content: " . $transcribedText;
             EmbedSource::dispatchSync($this->document, [
                 'data_type' => DataType::TEXT->value,

@@ -26,7 +26,7 @@ class DocumentContentBlockFactory extends Factory
         return [
             'document_id' => Document::factory()->create(),
             'type' => 'text',
-            'content' => 'some content',
+            'content' => $this->faker->words(6, true),
             'prompt' => null,
             'prefix' => null,
             'order' => 1

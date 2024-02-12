@@ -32,7 +32,7 @@
 
 <body class="font-sans antialiased bg-main overflow-hidden">
     <x-notifications />
-    <x-jet-banner />
+    <x-banner />
     @livewire('common.notifications')
     <main class="flex w-full h-screen">
         <!-- Sidebar -->
@@ -145,6 +145,7 @@
             });
 
     </script>
+
 </body>
 
 </html>

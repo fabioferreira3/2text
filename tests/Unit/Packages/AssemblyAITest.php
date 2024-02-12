@@ -5,9 +5,6 @@ use App\Packages\AssemblyAI\Exceptions\GetTranscriptionSubtitlesRequestException
 use App\Packages\AssemblyAI\Exceptions\TranscribeRequestException;
 use Illuminate\Support\Facades\Http;
 
-afterEach(function () {
-});
-
 describe(
     'AssemblyAI package',
     function () {
@@ -39,7 +36,6 @@ describe(
         });
 
         it('retrieves a transcription successfully', function () {
-            // Mock the successful response for a transcription retrieval
             Http::fake([
                 'api.assemblyai.com/v2/transcript/transcription_id' => Http::response([
                     'id' => 'transcription_id',
@@ -58,7 +54,6 @@ describe(
         });
 
         it('throws an exception when retrieving transcription subtitles fails', function () {
-            // Mock a failed response for subtitle retrieval
             Http::fake([
                 'api.assemblyai.com/v2/transcript/transcription_id/vtt' => Http::response(null, 500),
                 'api.assemblyai.com/v2/transcript/transcription_id/srt' => Http::response(null, 500),

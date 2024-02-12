@@ -22,10 +22,13 @@ use App\Packages\OpenAI\ChatGPT;
 use App\Packages\OpenAI\DallE;
 use App\Packages\Oraculum\Oraculum;
 use App\Packages\Whisper\Whisper;
+use App\Wrappers\OpenAIFactoryWrapper;
 use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use YoutubeDl\YoutubeDl;
+use OpenAI\Factory as OpenAI;
 
 uses()->beforeEach(function () {
     $this->withoutVite();

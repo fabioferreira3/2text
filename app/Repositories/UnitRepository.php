@@ -10,7 +10,6 @@ class UnitRepository
     {
         $estimatedCost = $this->estimateCost($taskType, $meta);
         $availableUnits = auth()->user()->account->units;
-
         if ($availableUnits < ($estimatedCost - ($estimatedCost * 0.1))) {
             return false;
         }

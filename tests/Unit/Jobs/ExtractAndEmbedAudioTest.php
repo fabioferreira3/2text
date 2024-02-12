@@ -17,8 +17,9 @@ class ExtractAndEmbedAudioTest extends TestCase
         Bus::fake([EmbedSource::class]);
         $document = Document::factory()->create();
 
-        // Create a mock MediaRepository instance
         $mediaRepo = $this->createMock(MediaRepository::class);
+        $this->app->instance(MediaRepository::class, $mediaRepo);
+
         $mediaRepo->expects($this->once())
             ->method('downloadYoutubeAudio')
             ->willReturn([
@@ -36,7 +37,6 @@ class ExtractAndEmbedAudioTest extends TestCase
             'source_url' => 'https://example.com/audio',
             'collection_name' => 'sample_collection'
         ]);
-        $job->mediaRepo = $mediaRepo;
 
         // Execute the job
         $job->handle();

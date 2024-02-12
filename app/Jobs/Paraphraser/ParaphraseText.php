@@ -5,13 +5,13 @@ namespace App\Jobs\Paraphraser;
 use App\Enums\DocumentTaskEnum;
 use App\Events\Paraphraser\TextParaphrased;
 use App\Helpers\PromptHelper;
+use App\Interfaces\ChatGPTFactoryInterface;
 use App\Jobs\RegisterAppUsage;
 use App\Jobs\RegisterUnitsConsumption;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Packages\OpenAI\ChatGPT;
-use App\Repositories\DocumentRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -24,9 +24,8 @@ class ParaphraseText implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected $document;
-    protected $repo;
-    protected array $meta;
+    public $document;
+    public array $meta;
 
     public function __construct(Document $document, array $params)
     {
@@ -38,9 +37,8 @@ class ParaphraseText implements ShouldQueue
     {
         try {
             $this->document = $this->document->fresh();
-            $this->repo = new DocumentRepository($this->document);
             $promptHelper = new PromptHelper($this->document->language->value);
-            $chatGpt = new ChatGPT();
+            $chatGpt = app(ChatGPTFactoryInterface::class)->make();
             $response = $chatGpt->request([
                 [
                     'role' => 'user',

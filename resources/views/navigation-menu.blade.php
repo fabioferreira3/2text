@@ -30,7 +30,7 @@
                 </div>
                 <!-- Settings Dropdown -->
                 <div class="ml-3 relative">
-                    <x-jet-dropdown align="right" width="48">
+                    <x-jetstream-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                             <button
@@ -59,19 +59,18 @@
                             <div class="block px-4 py-2 text-xs text-gray-400">
                                 {{ __('menus.manage_account') }}
                             </div>
-
-                            <x-jet-dropdown-link href="{{ route('profile.show') }}">
+                            <x-dropdown-link href="{{ route('profile.show') }}">
                                 {{ __('menus.profile') }}
-                            </x-jet-dropdown-link>
+                            </x-dropdown-link>
 
-                            <x-jet-dropdown-link href="{{ route('billing-management') }}">
+                            <x-dropdown-link href="{{ route('billing-management') }}">
                                 {{ __('menus.billing') }}
-                            </x-jet-dropdown-link>
+                            </x-dropdown-link>
 
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                            <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
+                            <x-dropdown-link href="{{ route('api-tokens.index') }}">
                                 {{ __('menus.api_tokens') }}
-                            </x-jet-dropdown-link>
+                            </x-dropdown-link>
                             @endif
 
                             <div class="border-t border-gray-100"></div>
@@ -80,12 +79,12 @@
                             <form method="POST" action="{{ route('logout') }}" x-data>
                                 @csrf
 
-                                <x-jet-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
+                                <x-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
                                     {{ __('menus.logout') }}
-                                </x-jet-dropdown-link>
+                                </x-dropdown-link>
                             </form>
                         </x-slot>
-                    </x-jet-dropdown>
+                    </x-jetstream-dropdown>
                 </div>
             </div>
 
@@ -109,31 +108,31 @@
     <div class="md:hidden">
         <div :class="{'block bg-white': open, 'hidden': ! open}">
             <div class="pt-2 pb-3 space-y-1">
-                <x-jet-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('dashboard')">
+                <x-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('dashboard')">
                     {{ __('menus.dashboard') }}
-                </x-jet-responsive-nav-link>
-                <x-jet-responsive-nav-link href="{{ route('tools') }}" :active="request()->routeIs('templates')">
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('tools') }}" :active="request()->routeIs('templates')">
                     {{ __('menus.tools') }}
-                </x-jet-responsive-nav-link>
-                <x-jet-responsive-nav-link href="{{ route('new-social-media-post') }}"
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('new-social-media-post') }}"
                     :active="request()->routeIs('new-social-media-post')">
                     {{ __('menus.social_media_post') }}
-                </x-jet-responsive-nav-link>
-                <x-jet-responsive-nav-link href="{{ route('new-post') }}" :active="request()->routeIs('new-post')">
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('new-post') }}" :active="request()->routeIs('new-post')">
                     {{ __('menus.blog_post') }}
-                </x-jet-responsive-nav-link>
-                <x-jet-responsive-nav-link href="{{ route('new-audio-transcription') }}"
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('new-audio-transcription') }}"
                     :active="request()->routeIs('new-audio-transcription')">
                     {{ __('menus.audio_transcription') }}
-                </x-jet-responsive-nav-link>
-                <x-jet-responsive-nav-link href="{{ route('new-paraphraser') }}"
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('new-paraphraser') }}"
                     :active="request()->routeIs('new-paraphraser')">
                     {{ __('menus.paraphraser') }}
-                </x-jet-responsive-nav-link>
-                <x-jet-responsive-nav-link href="{{ route('new-text-to-audio') }}"
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('new-text-to-audio') }}"
                     :active="request()->routeIs('new-text-to-audio')">
                     {{ __('menus.text_to_audio') }}
-                </x-jet-responsive-nav-link>
+                </x-responsive-nav-link>
             </div>
 
             <!-- Responsive Settings Options -->
@@ -154,25 +153,29 @@
 
                 <div class="mt-3 space-y-1">
                     <!-- Account Management -->
-                    <x-jet-responsive-nav-link href="{{ route('profile.show') }}"
+                    <x-responsive-nav-link href="{{ route('profile.show') }}"
                         :active="request()->routeIs('profile.show')">
                         {{ __('menus.profile') }}
-                    </x-jet-responsive-nav-link>
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link href="{{ route('billing-management') }}">
+                        {{ __('menus.billing') }}
+                    </x-responsive-nav-link>
 
                     @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                    <x-jet-responsive-nav-link href="{{ route('api-tokens.index') }}"
+                    <x-responsive-nav-link href="{{ route('api-tokens.index') }}"
                         :active="request()->routeIs('api-tokens.index')">
                         {{ __('menus.api_tokens') }}
-                    </x-jet-responsive-nav-link>
+                    </x-responsive-nav-link>
                     @endif
 
                     <!-- Authentication -->
                     <form method="POST" action="{{ route('logout') }}" x-data>
                         @csrf
 
-                        <x-jet-responsive-nav-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
+                        <x-responsive-nav-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
                             {{ __('menus.logout') }}
-                        </x-jet-responsive-nav-link>
+                        </x-responsive-nav-link>
                     </form>
                 </div>
             </div>

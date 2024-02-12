@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <x-jet-authentication-card>
+    <x-authentication-card>
         <x-slot name="logo">
             <a href="https://experior.ai">
                 <div class="h-full w-1/2 md:w-1/4 xl:w-1/5 m-auto mb-8">
@@ -13,7 +13,7 @@
             <div>or <a class="underline" href="{{ route('register') }}">create an account</a></div>
         </div>
 
-        <x-jet-validation-errors class="mb-4" />
+        <x-validation-errors class="mb-4" />
 
         @if (session('status'))
         <div class="mb-4 font-medium text-sm text-green-600">
@@ -26,19 +26,19 @@
 
             <div>
                 <label for="email">{{ __('Email') }}</label>
-                <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"
-                    required autofocus />
+                <x-input id="email" class="block mt-1 w-full border border-gray-200" type="email" name="email"
+                    :value="old('email')" required autofocus />
             </div>
 
             <div class="mt-4">
                 <label for="email">{{ __('Password') }}</label>
-                <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required
-                    autocomplete="current-password" />
+                <x-input id="password" class="block mt-1 w-full border border-gray-200" type="password" name="password"
+                    required autocomplete="current-password" />
             </div>
 
             <div class="flex justify-between py-6">
                 <label for="remember_me" class="flex items-center">
-                    <x-jet-checkbox id="remember_me" name="remember" />
+                    <x-checkbox id="remember_me" name="remember" />
                     <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
                 </label>
                 @if (Route::has('password.request'))
@@ -63,5 +63,5 @@
         </div>
 
 
-    </x-jet-authentication-card>
+    </x-authentication-card>
 </x-guest-layout>

@@ -6,6 +6,7 @@ use App\Enums\DocumentStatus;
 use App\Models\Document;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProcessingBlogPost extends Component
 {
@@ -27,7 +28,7 @@ class ProcessingBlogPost extends Component
     {
         $this->document = $document;
         $this->title = __('oraculum.oraculum_is_working');
-        $this->currentThought = __('oraculum.hmmm');
+        $this->currentThought = '';
         $this->thoughts = null;
         $this->checkStatus();
         $this->defineThought();
@@ -61,7 +62,7 @@ class ProcessingBlogPost extends Component
         $this->currentProgress = $currentProgress >= 100 ? 99 : $currentProgress;
     }
 
-    protected function checkStatus()
+    public function checkStatus()
     {
         if ($this->document->status === DocumentStatus::FINISHED) {
             redirect()->route('blog-post-view', [
