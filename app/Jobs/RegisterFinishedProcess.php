@@ -39,8 +39,7 @@ class RegisterFinishedProcess implements ShouldQueue
     public function handle()
     {
         try {
-            $this->eventDispatcher = app('events');
-            $this->eventDispatcher->dispatch(new ProcessFinished($this->meta['process_id']));
+            event(new ProcessFinished($this->meta['process_id']));
             if (!isset($this->meta['silently'])) {
                 NotifyFinished::dispatch($this->document, $this->document->getMeta('user_id'));
             }

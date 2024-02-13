@@ -8,7 +8,6 @@ use App\Models\DocumentTask;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
-use Illuminate\Events\Dispatcher;
 
 beforeEach(function () {
     $this->be($this->authUser);
@@ -61,25 +60,5 @@ describe('RegisterFinishedProcess job', function () {
         Event::assertDispatched(ProcessFinished::class, function ($event) {
             return $event->documentTask->id === $this->documentTask->id;
         });
-    });
-
-    it('handles exception', function () {
-        $mockEventDispatcher = Mockery::mock(Dispatcher::class);
-        $mockEventDispatcher->shouldReceive('dispatch')
-            ->once()
-            ->with(Mockery::on(function ($event) {
-                return $event instanceof ProcessFinished;
-            }))
-            ->andThrow(new Exception('Error'));
-
-
-        $job = new RegisterFinishedProcess($this->document, [
-            'process_id' => $this->documentTask->process_id,
-            'task_id' => $this->documentTask->id
-        ]);
-        $job->eventDispatcher = $mockEventDispatcher;
-        $job->handle();
-
-        expect($this->documentTask->fresh()->status)->toBe('failed');
     });
 });

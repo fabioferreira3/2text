@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Enums\AIModel;
 use App\Enums\DocumentTaskEnum;
 use App\Helpers\PromptHelper;
 use App\Interfaces\ChatGPTFactoryInterface;
@@ -11,12 +10,14 @@ use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
 use App\Repositories\DocumentRepository;
+use App\Repositories\MediaRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ExpandTextSection implements ShouldQueue, ShouldBeUnique
@@ -29,6 +30,7 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
     protected DocumentRepository $repo;
     public OraculumFactoryInterface $oraculumFactory;
     public ChatGPTFactoryInterface $chatGptFactory;
+    public $med;
 
     /**
      * The number of times the job may be attempted.
@@ -77,6 +79,7 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
         $this->repo = new DocumentRepository($this->document);
         $this->oraculumFactory = app(OraculumFactoryInterface::class);
         $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
+        $this->med = new MediaRepository();
     }
 
     /**

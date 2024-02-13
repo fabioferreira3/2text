@@ -35,6 +35,7 @@ class DispatchDocumentTasks
         DB::table('document_tasks')->whereIn('id', $tasks->pluck('id')->toArray())->update(['status' => 'in_progress']);
 
         $tasksByProcess = $tasks->groupBy('process_id')->all();
+
         foreach ($tasksByProcess as $processTasks) {
             $jobsChain = [];
             foreach ($processTasks as $task) {
