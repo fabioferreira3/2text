@@ -29,6 +29,12 @@ beforeEach(function () {
 });
 
 describe('Oraculum Ask job', function () {
+    it('can be serialized', function () {
+        $job = new Ask($this->chatThreadIteration, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('handles the questions and registers the response', function () {
         Event::fake(ChatMessageReceived::class);
 

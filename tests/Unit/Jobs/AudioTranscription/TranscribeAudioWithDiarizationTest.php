@@ -28,6 +28,12 @@ beforeEach(function () {
 });
 
 describe('Audio Transcription - TranscribeAudioWithDiarization job', function () {
+    it('can be serialized', function () {
+        $job = new TranscribeAudioWithDiarization($this->document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('sends audio to be transcribed by external provider', function () {
         $task = DocumentTask::factory()->create([
             'document_id' => $this->document->id,

@@ -16,6 +16,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -30,7 +31,6 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
     public $document;
     public $contentBlock;
     public array $meta;
-    public $genRepo;
 
     /**
      * The number of times the job may be attempted.
@@ -76,7 +76,6 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
         $this->document = $document->fresh();
         $this->contentBlock = DocumentContentBlock::findOrFail($meta['document_content_block_id']);
         $this->meta = $meta;
-        $this->genRepo = app(GenRepository::class);
     }
 
     /**
@@ -87,7 +86,8 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $response = $this->genRepo->rewriteTextBlock($this->contentBlock, $this->meta);
+            $genRepo = App::make(GenRepository::class);
+            $response = $genRepo->rewriteTextBlock($this->contentBlock, $this->meta);
 
             RegisterUnitsConsumption::dispatch($this->document->account, 'words_generation', [
                 'word_count' => Str::wordCount($response['content']),
@@ -115,6 +115,7 @@ class RewriteTextBlock implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'rewrite_text_block_' . $this->meta['process_id'] ?? $this->contentBlock->id;
+        $id = $this->meta['process_id'] ?? $this->document->id;
+        return 'rewrite_text_block_' . $id;
     }
 }

@@ -30,7 +30,6 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
     protected DocumentRepository $repo;
     public OraculumFactoryInterface $oraculumFactory;
     public ChatGPTFactoryInterface $chatGptFactory;
-    public $med;
 
     /**
      * The number of times the job may be attempted.
@@ -77,9 +76,6 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
         $this->meta = $meta;
         $this->promptHelper = new PromptHelper($document->language->value);
         $this->repo = new DocumentRepository($this->document);
-        $this->oraculumFactory = app(OraculumFactoryInterface::class);
-        $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
-        $this->med = new MediaRepository();
     }
 
     /**
@@ -90,6 +86,9 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
+            $this->oraculumFactory = app(OraculumFactoryInterface::class);
+            $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
+
             $rawStructure = $this->document->getMeta('raw_structure');
             $normalizedStructure = $this->document->normalized_structure;
             $basePrompt = $this->promptHelper->givenFollowingText($normalizedStructure);

@@ -23,6 +23,12 @@ beforeEach(function () {
 });
 
 describe('RegisterFinishedProcess job', function () {
+    it('can be serialized', function () {
+        $job = new RegisterFinishedProcess($this->document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('dispatches ProcessFinished event', function () {
         Event::fake();
         expect($this->documentTask->status)->toBe('ready');

@@ -16,6 +16,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
 class Ask implements ShouldQueue
@@ -32,7 +33,6 @@ class Ask implements ShouldQueue
         $this->iteration = $iteration;
         $this->document = $iteration->thread->document;
         $this->meta = $meta;
-        $this->oraculumFactory = app(OraculumFactoryInterface::class);
     }
 
     /**
@@ -43,6 +43,7 @@ class Ask implements ShouldQueue
     public function handle()
     {
         try {
+            $this->oraculumFactory = App::make(OraculumFactoryInterface::class);
             $client = $this->oraculumFactory->make($this->iteration->thread->user, $this->meta['collection_name']);
             $response = $client->chat($this->iteration->response);
             $newIteration = $this->iteration->thread->iterations()->create([

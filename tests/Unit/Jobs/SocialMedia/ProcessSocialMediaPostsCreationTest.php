@@ -14,6 +14,16 @@ beforeEach(function () {
 });
 
 describe('Social Media - ProcessSocialMediaPostsCreationTest job', function () {
+    it('can be serialized', function () {
+        $document = Document::factory()->create([
+            'type' => DocumentType::SOCIAL_MEDIA_GROUP->value,
+            'meta' => []
+        ]);
+        $job = new ProcessSocialMediaPostsCreation($document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('registers creation tasks for each platform', function ($generateImg, $imgPrompt) {
         $platforms = ['Facebook' => true, 'Twitter' => true];
         $document = Document::factory()->create([

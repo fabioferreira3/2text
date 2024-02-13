@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -21,9 +22,8 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected Document $document;
-    protected GenRepository $generator;
-    protected array $meta;
+    public Document $document;
+    public array $meta;
 
     /**
      * The number of times the job may be attempted.
@@ -64,11 +64,10 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
      *
      * @return void
      */
-    public function __construct(Document $document, array $meta = [], GenRepository $generator = null)
+    public function __construct(Document $document, array $meta = [])
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->generator = $generator ?? app(GenRepository::class);
     }
 
     /**
@@ -79,11 +78,12 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
+            $genRepo = App::make(GenRepository::class);
             if ($this->meta['query_embedding'] ?? false) {
-                $response = $this->generator->generateEmbeddedSummary($this->document, $this->meta);
+                $response = $genRepo->generateEmbeddedSummary($this->document, $this->meta);
             } else {
                 $this->meta['content'] = $this->meta['content'] ?? $this->document->getMeta('context');
-                $response = $this->generator->generateSummary($this->document, $this->meta);
+                $response = $genRepo->generateSummary($this->document, $this->meta);
             }
 
             $contentBlock = $this->document->contentBlocks()->save((new DocumentContentBlock([
@@ -126,6 +126,7 @@ class SummarizeContent implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'summarizing_content_' . $this->meta['process_id'] ?? $this->document->id;
+        $id = $this->meta['process_id'] ?? $this->document->id;
+        return 'summarizing_content_' . $id;
     }
 }

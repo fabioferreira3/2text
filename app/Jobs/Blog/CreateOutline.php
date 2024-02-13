@@ -78,8 +78,6 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
         $this->meta = $meta;
         $this->promptHelper = PromptHelperFactory::create($document->language->value);
         $this->repo = new DocumentRepository($this->document);
-        $this->oraculumFactory = app(OraculumFactoryInterface::class);
-        $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
     }
 
     /**
@@ -90,6 +88,9 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
+            $this->oraculumFactory = app(OraculumFactoryInterface::class);
+            $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
+
             if ($this->meta['query_embedding'] ?? false) {
                 $response = $this->queryEmbedding();
             } else {
@@ -152,6 +153,7 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'create_outline_' . $this->meta['process_id'] ?? $this->document->id;
+        $id = $this->meta['process_id'] ?? $this->document->id;
+        return 'create_outline_' . $id;
     }
 }

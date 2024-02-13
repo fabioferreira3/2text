@@ -9,8 +9,18 @@ use App\Models\Document;
 use App\Models\DocumentTask;
 use Illuminate\Support\Facades\Bus;
 
-
 describe('Social Media - ProcessSocialMediaPosts job', function () {
+    it('can be serialized', function () {
+        $document = Document::factory()->create([
+            'meta' => [
+                'source' => SourceProvider::PDF->value,
+                'max_words_count' => 250
+            ]
+        ]);
+        $job = new ProcessSocialMediaPosts($document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
 
     it('registers remove embedding task', function () {
         Bus::fake([DispatchDocumentTasks::class, ProcessSocialMediaPosts::class]);
@@ -32,7 +42,6 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
         $job = new ProcessSocialMediaPosts($document, $platforms);
         $job->handle();
 
-        // Assert Remove Embeddings tasks
         $this->assertDatabaseHas('document_tasks', [
             'name' => DocumentTaskEnum::REMOVE_EMBEDDINGS->value,
             'job' => DocumentTaskEnum::REMOVE_EMBEDDINGS->getJob(),
@@ -67,7 +76,6 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
         ]);
         $job->handle();
 
-        // Assert Embeddings tasks
         $this->assertDatabaseHas('document_tasks', [
             'name' => DocumentTaskEnum::EMBED_SOURCE->value,
             'job' => DocumentTaskEnum::EMBED_SOURCE->getJob(),
@@ -79,7 +87,6 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
             'meta->collection_name' => $document->id
         ]);
 
-        // Assert Process Social Media Posts creation task
         $this->assertDatabaseHas('document_tasks', [
             'name' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->value,
             'job' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->getJob(),
@@ -90,7 +97,6 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
             'meta->query_embedding' => true
         ]);
 
-        // Assert Title creation task
         $this->assertDatabaseHas('document_tasks', [
             'name' => DocumentTaskEnum::CREATE_TITLE->value,
             'job' => DocumentTaskEnum::CREATE_TITLE->getJob(),
@@ -148,7 +154,6 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
             $initialOrder++;
         }
 
-        // Assert Process Social Media Posts creation task
         $this->assertDatabaseHas('document_tasks', [
             'name' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->value,
             'job' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->getJob(),
@@ -159,7 +164,6 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
             'meta->query_embedding' => true
         ]);
 
-        // Assert Title creation task
         $this->assertDatabaseHas('document_tasks', [
             'name' => DocumentTaskEnum::CREATE_TITLE->value,
             'job' => DocumentTaskEnum::CREATE_TITLE->getJob(),
@@ -211,7 +215,6 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
             $initialOrder++;
         }
 
-        // Assert Process Social Media Posts creation task
         $this->assertDatabaseHas('document_tasks', [
             'name' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->value,
             'job' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->getJob(),
@@ -222,7 +225,6 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
             'meta->query_embedding' => true
         ]);
 
-        // Assert Title creation task
         $this->assertDatabaseHas('document_tasks', [
             'name' => DocumentTaskEnum::CREATE_TITLE->value,
             'job' => DocumentTaskEnum::CREATE_TITLE->getJob(),
@@ -279,7 +281,6 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
             $initialOrder++;
         }
 
-        // Assert Process Social Media Posts creation task
         $this->assertDatabaseHas('document_tasks', [
             'name' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->value,
             'job' => DocumentTaskEnum::PROCESS_SOCIAL_MEDIA_POSTS_CREATION->getJob(),
@@ -290,7 +291,6 @@ describe('Social Media - ProcessSocialMediaPosts job', function () {
             'meta->query_embedding' => true
         ]);
 
-        // Assert Title creation task
         $this->assertDatabaseHas('document_tasks', [
             'name' => DocumentTaskEnum::CREATE_TITLE->value,
             'job' => DocumentTaskEnum::CREATE_TITLE->getJob(),

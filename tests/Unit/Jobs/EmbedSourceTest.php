@@ -22,7 +22,9 @@ describe('EmbedSource job', function () {
                 'source' => fake()->url()
             ]
         );
+        $serialized = serialize($job);
         $response = $job->handle();
+        expect($serialized)->toBeString();
         expect($response)->toBe('source embedded!');
 
         $uniqueId = $job->uniqueId();

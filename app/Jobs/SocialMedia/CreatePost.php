@@ -16,6 +16,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 use Livewire\WithFileUploads;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -27,7 +28,6 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
     public array $meta;
     public PromptHelper $promptHelper;
     public DocumentRepository $repo;
-    public $generator;
 
     /**
      * Determine the time at which the job should timeout.
@@ -44,13 +44,12 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
      *
      * @return void
      */
-    public function __construct(Document $document, array $meta = [], GenRepository $generator = null)
+    public function __construct(Document $document, array $meta = [])
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
         $this->promptHelper = new PromptHelper($document->language->value);
         $this->repo = new DocumentRepository($this->document);
-        $this->generator = $generator ?? app(GenRepository::class);
     }
 
     /**
@@ -61,14 +60,15 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
+            $genRepo = App::make(GenRepository::class);
             if ($this->meta['query_embedding'] ?? false) {
-                $response = $this->generator->generateEmbeddedSocialMediaPost(
+                $response = $genRepo->generateEmbeddedSocialMediaPost(
                     $this->document,
                     $this->meta['platform'],
                     $this->meta['collection_name']
                 );
             } else {
-                $response = $this->generator->generateSocialMediaPost($this->document, $this->meta['platform']);
+                $response = $genRepo->generateSocialMediaPost($this->document, $this->meta['platform']);
             }
 
             $this->document->contentBlocks()->save(
@@ -98,6 +98,7 @@ class CreatePost implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'create_social_media_post_' . $this->meta['platform'] . $this->meta['process_id'] ?? $this->document->id;
+        $id = $this->meta['process_id'] ?? $this->document->id;
+        return 'create_social_media_post_' . $this->meta['platform'] . $id;
     }
 }

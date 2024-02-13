@@ -89,7 +89,8 @@ class CrawlWebsite implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'crawl_website_' . $this->meta['process_id'] ?? $this->document->id;
+        $id = $this->meta['process_id'] ?? $this->document->id;
+        return 'crawl_website_' . $id;
     }
 
     private function unicodeToPlainText($text)

@@ -7,15 +7,21 @@ use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use Illuminate\Support\Facades\Bus;
 
+beforeEach(function () {
+    $this->document = Document::factory()->create();
+});
+
 describe('PublishTextBlock job', function () {
+    it('can be serialized', function () {
+        $job = new PublishTextBlock($this->document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('publishes a text block from a document context', function () {
         Bus::fake(DispatchDocumentTasks::class);
-        $document = Document::factory()->create([
-            'meta' => [
-                'context' => 'some context'
-            ]
-        ]);
-        $job = new PublishTextBlock($document, [
+        $this->document->updateMeta('context', 'some context');
+        $job = new PublishTextBlock($this->document, [
             'target_language' => 'pt'
         ]);
         $job->handle();
@@ -24,7 +30,7 @@ describe('PublishTextBlock job', function () {
 
         $this->assertDatabaseHas('document_content_blocks', [
             'id' => $contentBlock->id,
-            'document_id' => $document->id,
+            'document_id' => $this->document->id,
             'content' => 'some context',
             'type' => 'text',
             'prompt' => null,
@@ -34,21 +40,20 @@ describe('PublishTextBlock job', function () {
         $this->assertDatabaseHas('document_tasks', [
             'name' => DocumentTaskEnum::TRANSLATE_TEXT_BLOCK->value,
             'job' => DocumentTaskEnum::TRANSLATE_TEXT_BLOCK->getJob(),
-            'document_id' => $document->id,
+            'document_id' => $this->document->id,
             'meta->content_block_id' => $contentBlock->id,
             'meta->target_language' => 'pt',
             'order' => 1
         ]);
 
-        Bus::assertDispatched(DispatchDocumentTasks::class, function ($job) use ($document) {
-            return $job->document->id === $document->id;
+        Bus::assertDispatched(DispatchDocumentTasks::class, function ($job) {
+            return $job->document->id === $this->document->id;
         });
     });
 
     it('publishes a text block from a text', function () {
         Bus::fake(DispatchDocumentTasks::class);
-        $document = Document::factory()->create();
-        $job = new PublishTextBlock($document, [
+        $job = new PublishTextBlock($this->document, [
             'text' => 'some text here'
         ]);
         $job->handle();
@@ -57,7 +62,7 @@ describe('PublishTextBlock job', function () {
 
         $this->assertDatabaseHas('document_content_blocks', [
             'id' => $contentBlock->id,
-            'document_id' => $document->id,
+            'document_id' => $this->document->id,
             'content' => 'some text here',
             'type' => 'text',
             'prompt' => null,

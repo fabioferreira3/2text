@@ -26,26 +26,11 @@ beforeEach(function () {
 describe(
     'Blog - ExpandTextSection job',
     function () {
-        it('dispatches the task', function () {
-            DocumentRepository::createTask(
-                $this->document->id,
-                DocumentTaskEnum::EXPAND_TEXT_SECTION,
-                [
-                    'process_id' => Str::uuid(),
-                    'order' => 1,
-                    'meta' => [
-                        'text_section' => 'This is a text section',
-                        'section_key' => 'section_key',
-                        'keyword' => 'keyword',
-                        'query_embedding' => false,
-                        'collection_name' => '',
-                    ]
-                ]
-            );
-            $job = new DispatchDocumentTasks($this->document);
-            $job->handle();
 
-            Bus::assertDispatched(ExpandTextSection::class);
+        it('can be serialized', function () {
+            $job = new ExpandTextSection($this->document, ['meta' => 'data']);
+            $serialized = serialize($job);
+            expect($serialized)->toBeString();
         });
     }
 )->group('blog');

@@ -18,6 +18,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class TranscribeAudio implements ShouldQueue, ShouldBeUnique
@@ -76,7 +77,6 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->mediaRepo = new MediaRepository();
     }
 
     /**
@@ -87,6 +87,7 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
+            $this->mediaRepo = App::make(MediaRepository::class);
             if (($this->meta['abort_when_context_present'] ?? false) && $this->document->getMeta('context')) {
                 $this->jobSkipped();
                 return;
@@ -161,6 +162,7 @@ class TranscribeAudio implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'transcribing_audio_' . $this->meta['process_id'] ?? $this->document->id;
+        $id = $this->meta['process_id'] ?? $this->document->id;
+        return 'transcribing_audio_' . $id;
     }
 }

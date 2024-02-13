@@ -53,6 +53,13 @@ function commonAssertions($document, $chatGptResponse)
 }
 
 describe('Summarize Content job', function () {
+    it('can be serialized', function () {
+        $document = Document::factory()->create();
+        $job = new SummarizeContent($document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('summarizes and translates without embedding', function () {
 
         $document = createDocument(false, 250, Language::PORTUGUESE->value);

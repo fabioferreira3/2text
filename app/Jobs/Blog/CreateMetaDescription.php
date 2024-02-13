@@ -16,6 +16,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -70,7 +71,6 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->genRepo = new GenRepository();
     }
 
     /**
@@ -81,6 +81,7 @@ class CreateMetaDescription implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
+            $this->genRepo = App::make(GenRepository::class);
             $response = $this->genRepo->generateMetaDescription($this->document);
             $parsedContent = Str::of(str_replace(["\r", "\n"], '', $response['content']))->trim()->trim('"');
             $this->document->contentBlocks()->save(new DocumentContentBlock([

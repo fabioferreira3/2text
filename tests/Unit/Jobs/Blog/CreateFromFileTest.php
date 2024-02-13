@@ -27,6 +27,14 @@ beforeEach(function () {
 describe(
     'Blog - CreateFromFile job',
     function () {
+        it('can be serialized', function () {
+            $job = new CreateFromFile($this->document, [
+                'process_id' => Str::uuid()
+            ]);
+            $serialized = serialize($job);
+            expect($serialized)->toBeString();
+        });
+
         it('registers common tasks', function () {
             Bus::fake([DispatchDocumentTasks::class, RegisterCreationTasks::class]);
             $processId = Str::uuid();

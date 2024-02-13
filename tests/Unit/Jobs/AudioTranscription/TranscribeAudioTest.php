@@ -32,6 +32,14 @@ beforeEach(function () {
 });
 
 describe('Audio Transcription - TranscribeAudio job', function () {
+    it('can be serialized', function () {
+        $job = new TranscribeAudio($this->document, [
+            'embed_source' => true
+        ]);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('transcribes audio into text', function ($embedSource) {
         Bus::fake(EmbedSource::class);
         Storage::disk('s3')->put($this->filePath, 'some content');

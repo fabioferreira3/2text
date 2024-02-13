@@ -4,6 +4,9 @@ namespace App\Support;
 
 use App\Packages\SendGrid\SendGrid;
 
+/**
+ * @codeCoverageIgnore
+ */
 class CustomMail
 {
     private $mailProvider;

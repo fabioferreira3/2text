@@ -158,6 +158,7 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'generating_audio_' . $this->meta['process_id'] ?? $this->document->id;
+        $id = $this->meta['process_id'] ?? $this->document->id;
+        return 'generating_audio_' . $id;
     }
 }

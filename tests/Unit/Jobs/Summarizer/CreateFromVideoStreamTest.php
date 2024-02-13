@@ -9,6 +9,13 @@ use Illuminate\Support\Str;
 
 
 describe('Summarizer - CreateFromVideoStream job', function () {
+    it('can be serialized', function () {
+        $document = Document::factory()->create();
+        $job = new CreateFromVideoStream($document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('registers download, transcribe, summarize and broadcast tasks', function () {
         Bus::fake([DispatchDocumentTasks::class]);
 

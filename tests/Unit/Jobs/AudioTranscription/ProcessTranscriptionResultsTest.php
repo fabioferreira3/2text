@@ -42,6 +42,12 @@ beforeEach(function () {
 });
 
 describe('AudioTranscription - ProcessTranscriptionResults job', function () {
+    it('can be serialized', function () {
+        $job = new ProcessTranscriptionResults($this->document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('process the transcription results', function () {
         $job = new ProcessTranscriptionResults($this->document, [
             'pending_task_id' => $this->documentTask->id,

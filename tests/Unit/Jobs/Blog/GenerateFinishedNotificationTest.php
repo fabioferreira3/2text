@@ -22,6 +22,12 @@ beforeEach(function () {
 describe(
     'Blog - GenerateFinishedNotification job',
     function () {
+        it('can be serialized', function () {
+            $job = new GenerateFinishedNotification($this->document, []);
+            $serialized = serialize($job);
+            expect($serialized)->toBeString();
+        });
+
         it('generates the finished notification and updates the document', function () {
             $promptHelper = PromptHelperFactory::create($this->document->language->value);
             $chatGpt = Mockery::mock(ChatGPT::class);

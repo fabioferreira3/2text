@@ -47,6 +47,8 @@ describe(
                 ->andReturn(['content' => 'Rewritten content', 'token_usage' => ['tokens' => 100]]);
 
             $job = new RewriteTextBlock($this->document, $this->meta);
+            $serialized = serialize($job);
+            expect($serialized)->toBeString();
             expect($job->uniqueId())->toBe('rewrite_text_block_' . $this->processId);
             $job->handle();
 

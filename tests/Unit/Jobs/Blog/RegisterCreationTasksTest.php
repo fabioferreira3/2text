@@ -32,6 +32,12 @@ beforeEach(function () {
 });
 
 describe('Blog - RegisterCreationTasksTest job', function () {
+    it('can be serialized', function () {
+        $job = new RegisterCreationTasks($this->document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('registers image generation job', function () {
         $job = new RegisterCreationTasks($this->document, $this->params);
         $job->handle();

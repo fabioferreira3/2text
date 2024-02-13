@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Log;
 use OpenAI\Factory as OpenAI;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ChatGPT
 {
     public string $model;

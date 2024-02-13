@@ -27,6 +27,12 @@ beforeEach(function () {
 });
 
 describe('Blog - Expand Text job', function () {
+    it('can be serialized', function () {
+        $job = new ExpandText($this->document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('registers expands text sections tasks', function () {
         Bus::fake(DispatchDocumentTasks::class);
         $initialOrder = 1;

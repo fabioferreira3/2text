@@ -10,6 +10,12 @@ beforeEach(function () {
 });
 
 describe('RegisterUnitTransaction job', function () {
+    it('can be serialized', function () {
+        $job = new RegisterUnitTransaction($this->account, 10);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('registers a unit transaction successfully', function ($amount) {
 
         $job = new RegisterUnitTransaction($this->account, $amount);

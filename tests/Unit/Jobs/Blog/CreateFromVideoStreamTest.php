@@ -26,6 +26,14 @@ beforeEach(function () {
 describe(
     'Blog - CreateFromVideoStream job',
     function () {
+        it('can be serialized', function () {
+            $job = new CreateFromVideoStream($this->document, [
+                'process_id' => Str::uuid()
+            ]);
+            $serialized = serialize($job);
+            expect($serialized)->toBeString();
+        });
+
         it('registers common tasks', function () {
             Bus::fake([DispatchDocumentTasks::class, RegisterCreationTasks::class]);
 

@@ -54,9 +54,10 @@
 
     document.addEventListener('DOMContentLoaded', initAnimations);
 
-    livewire.hook('message.processed', (message, component) => {
-        // Reinitialize Lottie animations if the Livewire component has the specific IDs
-        initAnimations();
-    });
+    document.addEventListener('livewire:init', function() {
+        window.livewire.on('taskFinished', () => {
+            initAnimations();
+        });
+    })
 </script>
 @endpush

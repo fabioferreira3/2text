@@ -47,10 +47,11 @@ class DocumentHelper
         $output = [];
         foreach ($matches as $match) {
             $subheader = $match[1];
-            $content = $match[2];
+            $content = preg_replace('/<h3>[A-Za-z]\. (.*?)<\/h3>/', '<h3>$1</h3>', $match[2]);
+            $content = preg_replace('/ {2,}/', ' ', $content);
             $output[] = [
                 'subheader' => preg_replace('/^([IVXLCDM]+|[A-Z]+)\.\s+/', '', $subheader),
-                'content' => preg_replace('/<h3>[A-Za-z]\. (.*?)<\/h3>/', '<h3>$1</h3>', $content)
+                'content' => $content
             ];
         }
 

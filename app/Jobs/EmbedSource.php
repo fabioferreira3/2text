@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -77,7 +78,6 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->dataType = DataType::tryFrom($meta['data_type']);
-        $this->oraculumFactory = app(OraculumFactoryInterface::class);
         $this->collectionName = $meta['collection_name'] ?? $document->id;
         $this->meta = $meta;
     }
@@ -91,6 +91,7 @@ class EmbedSource implements ShouldQueue, ShouldBeUnique
     {
         $this->bitly = app('bitly');
         try {
+            $this->oraculumFactory = App::make(OraculumFactoryInterface::class);
             if (in_array($this->dataType, [
                 DataType::PDF,
                 DataType::DOCX,

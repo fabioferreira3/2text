@@ -22,6 +22,19 @@ beforeEach(function () {
 describe(
     'Blog - CreateOutline job',
     function () {
+        it('can be serialized', function () {
+            $job = new CreateOutline(
+                $this->document,
+                [
+                    'process_id' => Str::uuid(),
+                    'query_embedding' => true,
+                    'collection_name' => $this->document->id,
+                ]
+            );
+            $serialized = serialize($job);
+            expect($serialized)->toBeString();
+        });
+
         it('generates the outline and parses the raw structure', function ($queryEmbedding) {
             Bus::fake(RegisterAppUsage::class);
 

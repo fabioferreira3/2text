@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Storage;
 use OpenAI\Factory as OpenAI;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Assistant
 {
     protected string $model;

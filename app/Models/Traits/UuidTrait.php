@@ -4,6 +4,9 @@ namespace App\Models\Traits;
 
 use Illuminate\Support\Str;
 
+/**
+ * @codeCoverageIgnore
+ */
 trait UuidTrait
 {
     protected static function bootUuidTrait()

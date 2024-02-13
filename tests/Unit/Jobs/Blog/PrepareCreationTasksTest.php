@@ -36,6 +36,12 @@ beforeEach(function () {
 });
 
 describe('Blog - PrepareCreationTasks job', function () {
+    it('can be serialized', function () {
+        $job = new PrepareCreationTasks($this->document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('registers finished blog post notification job', function () {
         Bus::fake(DispatchDocumentTasks::class);
         $job = new PrepareCreationTasks($this->document, $this->params);

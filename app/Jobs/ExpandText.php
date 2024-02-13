@@ -86,6 +86,7 @@ class ExpandText implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'expand_text_' . $this->meta['process_id'] ?? $this->document->id;
+        $id = $this->meta['process_id'] ?? $this->document->id;
+        return 'expand_text_' . $id;
     }
 }

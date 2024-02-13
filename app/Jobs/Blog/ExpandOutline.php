@@ -12,24 +12,23 @@ use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
 use App\Repositories\DocumentRepository;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ExpandOutline implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected Document $document;
-    protected array $meta;
-    protected PromptHelper $promptHelper;
-    protected DocumentRepository $repo;
-    public OraculumFactoryInterface $oraculumFactory;
-    public ChatGPTFactoryInterface $chatGptFactory;
+    public Document $document;
+    public array $meta;
+    public PromptHelper $promptHelper;
 
     /**
      * The number of times the job may be attempted.
@@ -75,9 +74,6 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
         $this->document = $document->fresh();
         $this->meta = $meta;
         $this->promptHelper = new PromptHelper($document->language->value);
-        $this->repo = new DocumentRepository($this->document);
-        $this->oraculumFactory = app(OraculumFactoryInterface::class);
-        $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
     }
 
     /**
@@ -94,8 +90,11 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
                 $response = $this->queryGpt();
             }
 
-            $this->repo->updateMeta('first_pass', $response['content']);
-            $this->repo->updateMeta('raw_structure', DocumentHelper::parseHtmlTagsToRawStructure($response['content']));
+            $this->document->updateMeta('first_pass', $response['content']);
+            $this->document->updateMeta(
+                'raw_structure',
+                DocumentHelper::parseHtmlTagsToRawStructure($response['content'])
+            );
             RegisterAppUsage::dispatch($this->document->account, [
                 ...$response['token_usage'],
                 'meta' => [
@@ -107,13 +106,16 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
             $this->jobSucceded();
         } catch (HttpException $e) {
             $this->handleError($e, 'Failed to expand outline');
+        } catch (Exception $e) {
+            $this->jobFailed();
         }
     }
 
     protected function queryEmbedding()
     {
         $user = User::findOrFail($this->document->getMeta('user_id'));
-        $oraculum = $this->oraculumFactory->make($user, $this->meta['collection_name']);
+        $oraculumFactory = App::make(OraculumFactoryInterface::class);
+        $oraculum = $oraculumFactory->make($user, $this->meta['collection_name']);
 
         return $oraculum->query($this->promptHelper->writeEmbeddedFirstPass(
             $this->document->getRawStructureDescription(),
@@ -126,7 +128,8 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
 
     protected function queryGpt()
     {
-        $chatGpt = $this->chatGptFactory->make();
+        $chatGptFactory = App::make(ChatGPTFactoryInterface::class);
+        $chatGpt = $chatGptFactory->make();
         return $chatGpt->request([
             [
                 'role' => 'user',
@@ -146,6 +149,7 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'expand_outline_' . $this->meta['process_id'] ?? $this->document->id;
+        $id = $this->meta['process_id'] ?? $this->document->id;
+        return 'expand_outline_' . $id;
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\Blog\PublishTextBlocks;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
 use App\Models\User;
@@ -24,7 +25,13 @@ beforeEach(function () {
     ]);
 });
 
-describe('Blog - Publish Text Blocks job', function () {
+describe('Blog - PublishTextBlocks job', function () {
+    it('can be serialized', function () {
+        $job = new PublishTextBlocks($this->document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('publishes normalized structure into text blocks', function () {
         $repo = new DocumentRepository($this->document);
         $repo->publishContentBlocks();

@@ -58,6 +58,7 @@ class BroadcastCustomEvent implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'broadcast_custom_event_' . $this->meta['process_id'] ?? $this->document->id;
+        $id = $this->meta['process_id'] ?? $this->document->id;
+        return 'broadcast_custom_event_' . $id;
     }
 }

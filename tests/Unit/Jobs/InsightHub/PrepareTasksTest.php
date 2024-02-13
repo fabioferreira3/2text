@@ -40,6 +40,8 @@ describe('Insight Hub - PrepareTasks job', function () {
             'source_url' => null,
             'video_language' => Language::ENGLISH->value
         ]);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
         $job->handle();
 
         Bus::assertDispatched(RegisterEmbedFreeText::class, function ($job) use ($document) {

@@ -21,6 +21,15 @@ beforeEach(function () {
 describe(
     'Blog - CreateMetaDescription job',
     function () {
+
+        it('can be serialized', function () {
+            $job = new CreateMetaDescription($this->document, [
+                'process_id' => Str::uuid()
+            ]);
+            $serialized = serialize($job);
+            expect($serialized)->toBeString();
+        });
+
         it('generates meta description and triggers completed event', function () {
             Event::fake([MetaDescriptionGenerated::class]);
             Bus::fake(RegisterAppUsage::class);

@@ -39,8 +39,6 @@ class ProcessTranscriptionResults implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->mediaRepo = app(MediaRepository::class);
-        $this->docRepo = app(DocumentRepository::class);
     }
 
     /**
@@ -51,6 +49,8 @@ class ProcessTranscriptionResults implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
+            $this->mediaRepo = app(MediaRepository::class);
+            $this->docRepo = app(DocumentRepository::class);
             $this->docRepo->updateTask($this->meta['pending_task_id'], 'finished');
             $transcription = $this->mediaRepo->getTranscription($this->meta['transcript_id']);
             $subtitles = $this->mediaRepo->getTranscriptionSubtitles($this->meta['transcript_id']);

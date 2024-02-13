@@ -9,6 +9,13 @@ use Illuminate\Support\Str;
 
 
 describe('Summarizer - CreateFromFreeText job', function () {
+    it('can be serialized', function () {
+        $document = Document::factory()->create();
+        $job = new CreateFromFreeText($document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('registers summarize and broadcast tasks', function () {
         Bus::fake([DispatchDocumentTasks::class]);
         $document = Document::factory()->create([

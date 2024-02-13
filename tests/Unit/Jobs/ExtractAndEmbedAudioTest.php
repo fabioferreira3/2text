@@ -37,6 +37,8 @@ class ExtractAndEmbedAudioTest extends TestCase
             'source_url' => 'https://example.com/audio',
             'collection_name' => 'sample_collection'
         ]);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
 
         // Execute the job
         $job->handle();

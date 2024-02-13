@@ -7,11 +7,22 @@ use App\Models\Document;
 use App\Models\DocumentTask;
 use Carbon\Carbon;
 
+beforeEach(function () {
+    $this->document = Document::factory()->create();
+});
+
 describe('RemoveEmbeddings job', function () {
+    it('can be serialized', function () {
+        $job = new RemoveEmbeddings($this->document, [
+            'collection_name' => 'test'
+        ]);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('handles success', function () {
-        $document = Document::factory()->create();
-        $task = DocumentTask::factory()->create(['document_id' => $document->id]);
-        $job = new RemoveEmbeddings($document, ['collection_name' => 'test', 'task_id' => $task->id]);
+        $task = DocumentTask::factory()->create(['document_id' => $this->document->id]);
+        $job = new RemoveEmbeddings($this->document, ['collection_name' => 'test', 'task_id' => $task->id]);
         expect($job->retryUntil())->toBeInstanceOf(Carbon::class);
         $job->handle();
 

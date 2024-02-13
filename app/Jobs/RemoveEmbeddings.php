@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 
 class RemoveEmbeddings implements ShouldQueue
 {
@@ -71,7 +72,6 @@ class RemoveEmbeddings implements ShouldQueue
         $this->document = $document->fresh();
         $this->collectionName = $meta['collection_name'];
         $this->meta = $meta;
-        $this->oraculumFactory = app(OraculumFactoryInterface::class);
     }
 
     /**
@@ -82,6 +82,7 @@ class RemoveEmbeddings implements ShouldQueue
     public function handle()
     {
         try {
+            $this->oraculumFactory = App::make(OraculumFactoryInterface::class);
             $user = User::findOrFail($this->document->getMeta('user_id'));
             $oraculum = $this->oraculumFactory->make($user, $this->collectionName);
             $oraculum->deleteCollection();

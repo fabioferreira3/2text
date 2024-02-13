@@ -12,6 +12,13 @@ use Illuminate\Support\Str;
 
 
 describe('Summarizer - CreateFromFile job', function () {
+    it('can be serialized', function () {
+        $document = Document::factory()->create();
+        $job = new CreateFromFile($document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('registers embed, summarize and broadcast tasks', function ($dataType) {
         Bus::fake([DispatchDocumentTasks::class]);
 

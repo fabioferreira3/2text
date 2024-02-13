@@ -25,6 +25,13 @@ beforeEach(function () {
 });
 
 describe('GenerateImage job', function () {
+    it('can be serialized', function () {
+        $document = Document::factory()->create();
+        $job = new GenerateImage($document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('sets up with correct data', function () {
         $job = new GenerateImage($this->document, $this->meta);
         expect($job->queue)->toBe('image_generation');

@@ -29,6 +29,12 @@ beforeEach(function () {
 });
 
 describe('ParaphraseText job', function () {
+    it('can be serialized', function () {
+        $job = new ParaphraseText($this->document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('paraphrases text and registers events', function ($addContentBlock) {
         Event::fake([TextParaphrased::class]);
 

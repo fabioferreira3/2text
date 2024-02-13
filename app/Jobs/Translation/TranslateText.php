@@ -106,6 +106,7 @@ class TranslateText implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): string
     {
-        return 'translating_text_' . $this->meta['process_id'] ?? $this->document->id;
+        $id = $this->meta['process_id'] ?? $this->document->id;
+        return 'translating_text_' . $id;
     }
 }

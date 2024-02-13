@@ -11,39 +11,38 @@ class SupportHelper
 {
     public static function calculateModelCosts(string $model, array $params)
     {
+        $cost = 0.0000000;
         if (in_array($model, [
             AIModel::GPT_3_TURBO->value
         ])) {
-            return (($params['prompt'] / 1000) * 0.0005) + (($params['completion'] / 1000) * 0.0015);
+            $cost = (($params['prompt'] / 1000) * 0.0005) + (($params['completion'] / 1000) * 0.0015);
         } elseif (in_array($model, [
             AIModel::GPT_4->value
         ])) {
-            return (($params['prompt'] / 1000) * 0.03) + (($params['completion'] / 1000) * 0.06);
+            $cost = (($params['prompt'] / 1000) * 0.03) + (($params['completion'] / 1000) * 0.06);
         } elseif (in_array($model, [
             AIModel::GPT_4_TURBO->value,
             AIModel::GPT_4_1106->value,
             AIModel::GPT_4_VISION->value
         ])) {
-            return (($params['prompt'] / 1000) * 0.01) + (($params['completion'] / 1000) * 0.03);
+            $cost = (($params['prompt'] / 1000) * 0.01) + (($params['completion'] / 1000) * 0.03);
         } elseif (in_array($model, [
             AIModel::GPT_4_32->value
         ])) {
-            return (($params['prompt'] / 1000) * 0.06) + (($params['completion'] / 1000) * 0.12);
+            $cost = (($params['prompt'] / 1000) * 0.06) + (($params['completion'] / 1000) * 0.12);
         } elseif (in_array($model, [AIModel::WHISPER->value])) {
-            return $params['audio_length'] * 0.006;
+            $cost = $params['audio_length'] * 0.0061;
         } elseif (in_array($model, [AIModel::ASSEMBLY_AI->value])) {
-            return $params['audio_length'] * 0.0061;
-        } elseif (in_array($model, [AIModel::POLLY->value])) {
-            return $params['char_count'] * 0.000016;
+            $cost = $params['audio_length'] * 0.0061;
         } elseif (in_array($model, [AIModel::ELEVEN_LABS->value])) {
-            return $params['char_count'] * 0.00011;
+            $cost = $params['char_count'] * 0.00011;
         } elseif (in_array($model, [StabilityAIEngine::SD_XL_V_1->value])) {
-            return 0.08;
+            $cost = 0.08;
         } elseif (in_array($model, [AIModel::DALL_E_3->value])) {
-            return 0.04;
-        } else {
-            return 0;
+            $cost = 0.04;
         }
+
+        return number_format($cost, 7);
     }
 
     public static function formatCentsToDollars($cents)

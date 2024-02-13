@@ -25,6 +25,12 @@ beforeEach(function () {
 });
 
 describe('Audio Transcription - CreateTranscription job', function () {
+    it('can be serialized', function () {
+        $job = new CreateTranscription($this->document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('registers tasks', function ($identifySpeakers) {
         $this->document->updateMeta('identify_speakers', $identifySpeakers);
         Bus::fake(DispatchDocumentTasks::class);

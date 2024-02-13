@@ -15,6 +15,12 @@ beforeEach(function () {
 
 
 describe('Insight Hub - EmbedYoutubeUrl job', function () {
+    it('can be serialized', function () {
+        $job = new EmbedYoutubeUrl($this->document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('registers the embed task', function () {
         Bus::fake();
         $job = new EmbedYoutubeUrl($this->document, [

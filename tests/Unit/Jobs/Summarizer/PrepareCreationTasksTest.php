@@ -12,6 +12,13 @@ use App\Models\Document;
 use Illuminate\Support\Facades\Bus;
 
 describe('Summarizer - PrepareCreationTasks job', function () {
+    it('can be serialized', function () {
+        $document = Document::factory()->create();
+        $job = new PrepareCreationTasks($document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('registers remove embedding task', function () {
         $document = Document::factory()->create();
         $job = new PrepareCreationTasks($document, []);

@@ -42,6 +42,7 @@ class ProcessingBlogPost extends Component
             $this->checkStatus();
             $this->defineThought();
             $this->defineProgress();
+            $this->dispatch('taskFinished');
         }
     }
 

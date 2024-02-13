@@ -13,6 +13,12 @@ beforeEach(function () {
 
 
 describe('Insight Hub - RegisterEmbedFile job', function () {
+    it('can be serialized', function () {
+        $job = new RegisterEmbedFile($this->document, []);
+        $serialized = serialize($job);
+        expect($serialized)->toBeString();
+    });
+
     it('registers the embed task', function ($sourceType) {
         $job = new RegisterEmbedFile($this->document, [
             'process_id' => $this->processId,
