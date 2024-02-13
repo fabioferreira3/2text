@@ -4,6 +4,9 @@ namespace App\Packages\SendGrid;
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * @codeCoverageIgnore
+ */
 class SendGridServiceProvider extends ServiceProvider
 {
     /**

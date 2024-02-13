@@ -41,20 +41,17 @@ trait JobEndings
         }
     }
 
-    protected function jobFailedButSkipped($errorMsg = '')
+    protected function jobFailedButSkipped()
     {
         if (isset($this->meta['task_id'])) {
             $task = DocumentTask::findOrFail($this->meta['task_id']);
             $task->update(['status' => 'skipped']);
         }
-
-        //throw new Exception($errorMsg);
     }
 
-    protected function jobFailed($errorMsg = '')
+    protected function jobFailed()
     {
-        Log::error($errorMsg);
-        if (isset($this->meta['task_id'])) {
+        if ($this->meta['task_id'] ?? false) {
             $task = DocumentTask::findOrFail($this->meta['task_id']);
             $tasksByProcess = DocumentTask::ofProcess($task->process_id)->inProgress()->except([$task->id])->get();
             $task->update(['status' => 'failed']);

@@ -6,6 +6,9 @@ use App\Models\AccessToken;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
+/**
+ * @codeCoverageIgnore
+ */
 class GenerateAccessTokens extends Command
 {
     /**

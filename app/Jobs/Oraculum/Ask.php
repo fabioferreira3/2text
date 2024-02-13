@@ -9,6 +9,7 @@ use App\Jobs\RegisterAppUsage;
 use App\Jobs\RegisterUnitsConsumption;
 use App\Jobs\Traits\JobEndings;
 use App\Models\ChatThreadIteration;
+use App\Models\Document;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -21,14 +22,16 @@ class Ask implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected ChatThreadIteration $iteration;
-    protected string $collectionName;
+    public ChatThreadIteration $iteration;
+    public Document $document;
+    public array $meta;
     public OraculumFactoryInterface $oraculumFactory;
 
-    public function __construct(ChatThreadIteration $iteration, string $collectionName)
+    public function __construct(ChatThreadIteration $iteration, array $meta)
     {
         $this->iteration = $iteration;
-        $this->collectionName = $collectionName;
+        $this->document = $iteration->thread->document;
+        $this->meta = $meta;
         $this->oraculumFactory = app(OraculumFactoryInterface::class);
     }
 
@@ -40,7 +43,7 @@ class Ask implements ShouldQueue
     public function handle()
     {
         try {
-            $client = $this->oraculumFactory->make($this->iteration->thread->user, $this->collectionName);
+            $client = $this->oraculumFactory->make($this->iteration->thread->user, $this->meta['collection_name']);
             $response = $client->chat($this->iteration->response);
             $newIteration = $this->iteration->thread->iterations()->create([
                 'response' => $response['content'],

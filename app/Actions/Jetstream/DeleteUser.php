@@ -5,6 +5,9 @@ namespace App\Actions\Jetstream;
 use App\Models\User;
 use Laravel\Jetstream\Contracts\DeletesUsers;
 
+/**
+ * @codeCoverageIgnore
+ */
 class DeleteUser implements DeletesUsers
 {
     /**

@@ -111,7 +111,7 @@ describe('Summarize Content job', function () {
         $task = DocumentTask::factory()->create([
             'document_id' => $document->id
         ]);
-        expect($task->status)->toEqual('in_progress');
+        expect($task->status)->toEqual('ready');
 
         $job = new SummarizeContent($document, [
             'task_id' => $task->id,

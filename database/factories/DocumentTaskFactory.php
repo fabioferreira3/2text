@@ -31,7 +31,7 @@ class DocumentTaskFactory extends Factory
             'process_id' => Str::uuid(),
             'process_group_id' => null,
             'job' => $documentTask->getJob(),
-            'status' => 'in_progress',
+            'status' => 'ready',
             'meta' => [],
             'order' => 1
         ];

@@ -22,13 +22,10 @@ use App\Packages\OpenAI\ChatGPT;
 use App\Packages\OpenAI\DallE;
 use App\Packages\Oraculum\Oraculum;
 use App\Packages\Whisper\Whisper;
-use App\Wrappers\OpenAIFactoryWrapper;
 use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use YoutubeDl\YoutubeDl;
-use OpenAI\Factory as OpenAI;
 
 uses()->beforeEach(function () {
     $this->withoutVite();
@@ -54,7 +51,8 @@ uses()->beforeEach(function () {
     $this->app->instance(CloudinaryEngine::class, $cloudinaryMock);
 
     $cloudinaryUploadResponse = Mockery::mock();
-    $cloudinaryUploadResponse->shouldReceive('getSecurePath')->andReturn('https://cloudinary.com/secure_image_path.jpg');
+    $cloudinaryUploadResponse->shouldReceive('getSecurePath')
+        ->andReturn('https://cloudinary.com/secure_image_path.jpg');
     $cloudinaryUploadResponse->shouldReceive('getSize')->andReturn(1024);
     $cloudinaryUploadResponse->shouldReceive('getWidth')->andReturn(1920);
     $cloudinaryUploadResponse->shouldReceive('getHeight')->andReturn(1080);
@@ -98,7 +96,7 @@ uses()->beforeEach(function () {
     $this->oraculum->shouldReceive('createBot')->andReturn([]);
     $this->oraculum->shouldReceive('add')->andReturn('source embedded!');
     $this->oraculum->shouldReceive('query')->andReturn($this->aiModelResponseResponse);
-    $this->oraculum->shouldReceive('chat')->andReturn([]);
+    $this->oraculum->shouldReceive('chat')->andReturn($this->aiModelResponseResponse);
     $this->oraculum->shouldReceive('deleteCollection')->andReturn([]);
     $this->oraculum->shouldReceive('countTokens')->andReturn([]);
 

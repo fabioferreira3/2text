@@ -22,7 +22,7 @@ class EmbedYoutubeUrl
         $this->document = $document;
         $this->params = [
             ...$params,
-            'process_id' => Str::uuid()
+            'process_id' => $params['process_id'] ?? Str::uuid()
         ];
     }
 

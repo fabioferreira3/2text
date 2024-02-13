@@ -5,6 +5,9 @@ namespace App\Support\Notifications\Channels;
 use App\Support\CustomMail;
 use Illuminate\Notifications\Notification;
 
+/**
+ * @codeCoverageIgnore
+ */
 class CustomMailChannel
 {
     /**

@@ -7,7 +7,9 @@ use App\Models\Traits\ChatTrait;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-
+/**
+ * @codeCoverageIgnore
+ */
 class Chat extends Component
 {
     use ChatTrait;

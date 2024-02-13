@@ -4,7 +4,6 @@ namespace App\Traits;
 
 use App\Exceptions\InsufficientUnitsException;
 use App\Repositories\UnitRepository;
-use Illuminate\Support\Facades\Log;
 
 trait UnitCheck
 {
@@ -12,9 +11,7 @@ trait UnitCheck
 
     public function authorizeTotalCost($account = null)
     {
-        Log::debug($this->totalCost);
         $units = $account ? $account->units : auth()->user()->account->units;
-        Log::debug($units);
         if ($units < $this->totalCost) {
             throw new InsufficientUnitsException();
         }

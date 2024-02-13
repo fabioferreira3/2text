@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class GenerateImage implements ShouldQueue, ShouldBeUnique
@@ -76,7 +77,7 @@ class GenerateImage implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $genRepo = new GenRepository();
+            $genRepo = App::make(GenRepository::class);
             $genRepo->generateImage($this->document, $this->meta);
             $this->jobSucceded();
         } catch (HttpException $e) {

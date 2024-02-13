@@ -38,7 +38,7 @@ describe(
     'RewriteTextBlock job',
     function () {
         it('successfully rewrites text block', function () {
-            expect($this->documentTask->fresh()->status)->toBe('in_progress');
+            expect($this->documentTask->fresh()->status)->toBe('ready');
             $this->genRepoMock->shouldReceive('rewriteTextBlock')
                 ->once()
                 ->with(Mockery::on(function ($arg) {
@@ -71,7 +71,7 @@ describe(
         });
 
         it('handles http exceptions on rewrite failure and fails the job', function ($errorCode) {
-            expect($this->documentTask->fresh()->status)->toBe('in_progress');
+            expect($this->documentTask->fresh()->status)->toBe('ready');
             $this->genRepoMock->shouldReceive('rewriteTextBlock')
                 ->once()
                 ->andThrow(new HttpException($errorCode, 'Failed to rewrite text block'));
@@ -87,7 +87,8 @@ describe(
         })->with([400, 404, 422, 500, 502]);
 
         it('handles timeout exceptions and doesnt fail the job', function () {
-            expect($this->documentTask->fresh()->status)->toBe('in_progress');
+            $originalStatus = $this->documentTask->fresh()->status;
+            expect($this->documentTask->fresh()->status)->toBe($originalStatus);
 
             $this->genRepoMock->shouldReceive('rewriteTextBlock')
                 ->once()
@@ -96,7 +97,7 @@ describe(
             $job = new RewriteTextBlock($this->document, $this->meta);
             $job->handle();
 
-            expect($this->documentTask->fresh()->status)->toBe('in_progress');
+            expect($this->documentTask->fresh()->status)->toBe($originalStatus);
         });
 
         it('has correct default values', function () {

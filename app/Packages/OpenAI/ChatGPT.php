@@ -11,9 +11,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ChatGPT
 {
-    protected string $model;
-    protected array $defaultMessages;
-    protected bool $shouldStream;
+    public string $model;
+    public array $defaultMessages;
+    public bool $shouldStream;
 
     public function __construct($model = null, $shouldStream = false)
     {

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\AIModel;
 use App\Enums\DocumentTaskEnum;
 use App\Helpers\PromptHelper;
 use App\Interfaces\ChatGPTFactoryInterface;

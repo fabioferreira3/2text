@@ -52,7 +52,9 @@ class InsightChat extends Component
         $this->inputMsg = '';
         $this->activeThread->refresh();
         $this->dispatch('scrollInquiryChatToBottom');
-        Ask::dispatch($iteration, $this->document->id);
+        Ask::dispatch($iteration, [
+            'collection_name' => $this->document->id
+        ]);
     }
 
     public function receiveMsg(array $params)

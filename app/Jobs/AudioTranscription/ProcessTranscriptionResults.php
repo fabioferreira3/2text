@@ -18,6 +18,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ProcessTranscriptionResults implements ShouldQueue, ShouldBeUnique
@@ -101,6 +102,7 @@ class ProcessTranscriptionResults implements ShouldQueue, ShouldBeUnique
             ]);
             $this->jobSucceded();
         } catch (Exception $e) {
+            Log::error($e->getMessage());
             $this->jobFailed($e);
         }
     }

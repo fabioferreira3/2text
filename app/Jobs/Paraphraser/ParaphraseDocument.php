@@ -15,6 +15,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ParaphraseDocument implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;

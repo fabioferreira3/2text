@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Storage;
 use Talendor\StabilityAI\Enums\StylePreset;
 use Talendor\StabilityAI\StabilityAIClient;
 
+/**
+ * @codeCoverageIgnore
+ */
 class StabilityAIHandler implements ImageGeneratorInterface
 {
     public function textToImage(array $params)

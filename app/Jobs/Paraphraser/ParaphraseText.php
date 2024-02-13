@@ -80,7 +80,6 @@ class ParaphraseText implements ShouldQueue
 
             $this->jobSucceded();
         } catch (\Exception $e) {
-            dd($e->getMessage());
             Log::error($e->getMessage());
             $this->jobFailed();
         }

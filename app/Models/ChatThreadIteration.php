@@ -17,4 +17,14 @@ class ChatThreadIteration extends Model
     {
         return $this->belongsTo(ChatThread::class, 'chat_thread_id');
     }
+
+    public function scopeFromSys($query)
+    {
+        return $query->where('origin', 'sys');
+    }
+
+    public function scopeFromUser($query)
+    {
+        return $query->where('origin', 'user');
+    }
 }

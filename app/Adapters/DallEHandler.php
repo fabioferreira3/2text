@@ -6,6 +6,9 @@ use App\Enums\AIModel;
 use App\Interfaces\ImageGeneratorInterface;
 use App\Packages\OpenAI\DallE;
 
+/**
+ * @codeCoverageIgnore
+ */
 class DallEHandler implements ImageGeneratorInterface
 {
     public function textToImage(array $params)

@@ -19,7 +19,9 @@ trait ChatTrait
         $this->inputMsg = '';
         $this->activeThread->refresh();
         $this->dispatch('scrollToBottom');
-        Ask::dispatch($iteration, $collectionName);
+        Ask::dispatch($iteration, [
+            'collection_name' => $collectionName
+        ]);
     }
 
     public function receiveMsg(array $params)

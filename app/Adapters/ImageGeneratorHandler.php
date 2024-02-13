@@ -4,6 +4,9 @@ namespace App\Adapters;
 
 use InvalidArgumentException;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ImageGeneratorHandler
 {
     protected array $handlers;

@@ -19,9 +19,9 @@ class NotifyFinished implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    private User $user;
-    private Document $document;
-    private string $jobName;
+    public User $user;
+    public Document $document;
+    public string $jobName;
 
     /**
      * Construct the job.

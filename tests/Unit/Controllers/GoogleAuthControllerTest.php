@@ -58,7 +58,7 @@ describe('GoogleAuthControler controller', function () {
 
         $userRepositoryMock = Mockery::mock(UserRepository::class);
         $userRepositoryMock->shouldReceive('getUserByEmail')
-            ->andThrow(new Exception('Error during authentication'));;
+            ->andThrow(new Exception('Error during authentication'));
         $controller = new GoogleAuthController();
         $response = $controller->handleProviderCallback($userRepositoryMock);
         expect($response->getSession()->all()['error'])->toBe('Unable to login with Google. Please try again.');

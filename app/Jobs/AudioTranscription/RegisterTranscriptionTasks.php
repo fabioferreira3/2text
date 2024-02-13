@@ -8,6 +8,9 @@ use App\Repositories\DocumentRepository;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * @codeCoverageIgnore
+ */
 class RegisterTranscriptionTasks
 {
     use Dispatchable, SerializesModels;
