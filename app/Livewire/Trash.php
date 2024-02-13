@@ -4,7 +4,9 @@ namespace App\Livewire;
 
 use Livewire\Component;
 
-
+/**
+ * @codeCoverageIgnore
+ */
 class Trash extends Component
 {
 

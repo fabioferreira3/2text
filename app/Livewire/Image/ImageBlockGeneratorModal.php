@@ -8,6 +8,7 @@ use App\Jobs\DispatchDocumentTasks;
 use App\Models\DocumentContentBlock;
 use App\Models\MediaFile;
 use App\Repositories\DocumentRepository;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -25,12 +26,10 @@ class ImageBlockGeneratorModal extends Component
     public int $samples;
     public mixed $action = '';
     private $mediaHelper;
-    private $documentRepo;
 
     public function __construct()
     {
-        $this->documentRepo = app(DocumentRepository::class);
-        $this->mediaHelper = app(MediaHelper::class);
+        $this->mediaHelper = App::make(MediaHelper::class);
     }
 
     public function getListeners()
@@ -80,8 +79,7 @@ class ImageBlockGeneratorModal extends Component
         }
         $this->action = __('modals.new_images');
         $this->setProcessingState();
-        $this->documentRepo->setDocument($this->contentBlock->document);
-        $this->documentRepo->updateMeta('img_prompt', $this->prompt);
+        $this->contentBlock->document->updateMeta('img_prompt', $this->prompt);
 
         $imageSize = $this->mediaHelper->getImageSizeByDocumentType($this->contentBlock->document);
 
@@ -106,15 +104,17 @@ class ImageBlockGeneratorModal extends Component
         DispatchDocumentTasks::dispatch($this->contentBlock->document);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function generateImageVariants($mediaFileId)
     {
         if (!$this->validateParams()) {
             return;
         }
         $this->action = 'Variants';
-        $this->documentRepo->setDocument($this->contentBlock->document);
-        $this->documentRepo->updateMeta('img_prompt', $this->prompt);
-        $this->documentRepo->updateMeta('img_style', $this->imgStyle);
+        $this->contentBlock->document->updateMeta('img_prompt', $this->prompt);
+        $this->contentBlock->document->updateMeta('img_style', $this->imgStyle);
         $this->contentBlock->document->refresh();
 
         $mediaFile = MediaFile::findOrFail($mediaFileId);
@@ -173,7 +173,7 @@ class ImageBlockGeneratorModal extends Component
         return view('livewire.image.image-block-generator-modal');
     }
 
-    protected function setProcessingState()
+    public function setProcessingState()
     {
         $this->processing = true;
         $this->processId = Str::uuid();

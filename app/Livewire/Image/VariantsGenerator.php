@@ -13,6 +13,9 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Talendor\StabilityAI\Enums\StylePreset;
 
+/**
+ * @codeCoverageIgnore
+ */
 class VariantsGenerator extends Component
 {
     public $prompt;

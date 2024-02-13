@@ -61,4 +61,4 @@ describe(
             Bus::assertDispatched(DispatchDocumentTasks::class, 1);
         });
     }
-)->group('social-media');
+)->group('image');

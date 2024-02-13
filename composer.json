@@ -70,7 +70,7 @@
     },
     "scripts": {
         "test": [
-            "./vendor/bin/pest --parallel --coverage"
+            "./vendor/bin/pest --parallel --coverage --profile"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

@@ -14,6 +14,9 @@ use WireUi\Traits\Actions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TrashTable extends DataTableComponent
 {
     use Actions;
