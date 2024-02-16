@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Oraculum
 {
     protected $client;

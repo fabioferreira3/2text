@@ -20,7 +20,6 @@ use App\Livewire\Blog\Dashboard as BlogDashboard;
 use App\Livewire\InsightHub\Dashboard as InsightHubDashboard;
 use App\Livewire\InsightHub\InsightView;
 use App\Livewire\Paraphraser\Dashboard as ParaphraserDashboard;
-use App\Http\Livewire\Product\Checkout;
 use App\Livewire\Product\Purchase;
 use App\Livewire\Purchase\CheckoutSuccess;
 use App\Livewire\SocialMediaPost\Dashboard as SocialMediaPostDashboard;

@@ -1,10 +1,13 @@
 <?php
 
+use App\Jobs\DispatchDocumentTasks;
 use App\Livewire\Image\ImageBlockGeneratorModal;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
+use App\Models\DocumentTask;
 use App\Models\MediaFile;
 use Illuminate\Http\Testing\FileFactory;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 
 use function Pest\Laravel\{actingAs};
@@ -151,8 +154,10 @@ describe(
                 );
         });
 
-        it('generates new images', function () {
-            $this->component->call('generateNewImages')
+        it('generates new images', function ($samples) {
+            $processGroupId = $this->component->processGroupId;
+            $this->component->set('samples', $samples)
+                ->call('generateNewImages')
                 ->assertSet('action', __('modals.new_images'))
                 ->assertSet('processing', true)
                 ->assertDispatched(
@@ -160,8 +165,35 @@ describe(
                     type: 'info',
                     message: __('alerts.generating_images')
                 );
+
+            $this->assertDatabaseCount('document_tasks', $samples);
+            $documentTasks = DocumentTask::all();
+            $documentTasks->each(function ($task) use ($processGroupId) {
+                expect($task->process_group_id)->toBe($processGroupId);
+                expect($task->document_id)->toBe($this->document->id);
+                expect($task->meta['prompt'])->toBe('Image prompt');
+                expect($task->meta['height'])->toBe(1024);
+                expect($task->meta['width'])->toBe(1024);
+            });
             expect($this->contentBlock->document->getMeta('img_prompt'))->toBe('Image prompt');
             expect($this->component->processId)->toBeUuid();
+            Bus::assertDispatched(DispatchDocumentTasks::class, function ($job) {
+                return $job->document->id === $this->document->id;
+            });
+        })->with([1, 3, 5]);
+
+        it('doesnt generate new images when prompt is empty', function () {
+            $this->component->set('prompt', '')
+                ->call('generateNewImages')
+                ->assertSet('processing', false)
+                ->assertNotDispatched(
+                    'alert',
+                    type: 'info',
+                    message: __('alerts.generating_images')
+                );
+
+            $this->assertDatabaseCount('document_tasks', 0);
+            Bus::assertNotDispatched(DispatchDocumentTasks::class);
         });
     }
 )->group('image');

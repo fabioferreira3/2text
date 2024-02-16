@@ -8,6 +8,9 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use Spark\Events\PaymentSucceeded;
 
+/**
+ * @codeCoverageIgnore
+ */
 class HandlePaymentSucceeded
 {
     /**

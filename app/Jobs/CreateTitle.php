@@ -7,6 +7,7 @@ use App\Events\TitleGenerated;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Repositories\GenRepository;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,7 +23,6 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
 
     public Document $document;
     public array $meta;
-    public $genRepo;
 
     /**
      * The number of times the job may be attempted.
@@ -67,7 +67,6 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->genRepo = app(GenRepository::class);
     }
 
     /**
@@ -78,10 +77,11 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
+            $genRepo = app(GenRepository::class);
             if ($this->meta['query_embedding'] ?? false) {
-                $response = $this->genRepo->generateEmbeddedTitle($this->document, $this->meta['collection_name']);
+                $response = $genRepo->generateEmbeddedTitle($this->document, $this->meta['collection_name']);
             } else {
-                $response = $this->genRepo->generateTitle(
+                $response = $genRepo->generateTitle(
                     $this->document,
                     $this->meta['text'] ?? $this->document->normalized_structure
                 );
@@ -106,6 +106,8 @@ class CreateTitle implements ShouldQueue, ShouldBeUnique
             $this->jobSucceded();
         } catch (HttpException $e) {
             $this->handleError($e, 'Failed to create title');
+        } catch (Exception $e) {
+            $this->jobAborted($e->getMessage());
         }
     }
 

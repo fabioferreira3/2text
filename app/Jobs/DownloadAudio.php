@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Repositories\MediaRepository;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,6 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class DownloadAudio implements ShouldQueue, ShouldBeUnique
@@ -20,7 +22,6 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
 
     public Document $document;
     public array $meta;
-    public $mediaRepo;
 
     /**
      * The number of times the job may be attempted.
@@ -75,7 +76,6 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->mediaRepo = new MediaRepository();
     }
 
     /**
@@ -86,9 +86,9 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $audioParams = $this->mediaRepo->downloadYoutubeAudio($this->meta['source_url']);
+            $mediaRepo = App::make(MediaRepository::class);
+            $audioParams = $mediaRepo->downloadYoutubeAudio($this->meta['source_url']);
 
-            // Update the document
             $this->document->update(['title' => $audioParams['title']]);
             $this->document->update(['meta' => [
                 ...$this->document->meta,
@@ -99,6 +99,8 @@ class DownloadAudio implements ShouldQueue, ShouldBeUnique
             $this->jobSucceded();
         } catch (HttpException $e) {
             $this->handleError($e, 'Audio download error');
+        } catch (Exception $e) {
+            $this->jobAborted($e->getMessage());
         }
     }
 

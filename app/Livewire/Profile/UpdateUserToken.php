@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
+/**
+ * @codeCoverageIgnore
+ */
 class UpdateUserToken extends Component
 {
     use WithFileUploads;

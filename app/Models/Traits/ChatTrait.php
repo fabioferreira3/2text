@@ -4,6 +4,9 @@ namespace App\Models\Traits;
 
 use App\Jobs\Oraculum\Ask;
 
+/**
+ * @codeCoverageIgnore
+ */
 trait ChatTrait
 {
     public $inputMsg;

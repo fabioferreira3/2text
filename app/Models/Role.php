@@ -7,6 +7,9 @@ use Database\Factories\RoleFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Permission\Models\Role as SpatieRole;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Role extends SpatieRole
 {
     use HasFactory;

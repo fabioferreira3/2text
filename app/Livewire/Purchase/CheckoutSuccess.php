@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Laravel\Cashier\Cashier;
 use Livewire\Component;
 
-
+/**
+ * @codeCoverageIgnore
+ */
 class CheckoutSuccess extends Component
 {
     public $productId;

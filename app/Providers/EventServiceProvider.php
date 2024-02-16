@@ -8,7 +8,6 @@ use App\Listeners\HandleDocumentTasksCompletedUpdate;
 use App\Listeners\HandleNewUserAdminNotification;
 use App\Listeners\HandleStripeUserCreation;
 use App\Listeners\HandleWelcomeNotification;
-use App\Listeners\Payment\HandleIncomingWebhook;
 use App\Listeners\Payment\HandlePaymentSucceeded;
 use Laravel\Cashier\Events\WebhookReceived as CashierWebhookReceived;
 use Illuminate\Auth\Events\Registered;
@@ -41,9 +40,7 @@ class EventServiceProvider extends ServiceProvider
             \SocialiteProviders\LinkedIn\LinkedInExtendSocialite::class . '@handle',
             \SocialiteProviders\Medium\MediumExtendSocialite::class . '@handle',
         ],
-        CashierWebhookReceived::class => [
-            HandleIncomingWebhook::class,
-        ],
+        CashierWebhookReceived::class => [],
         \Spark\Events\PaymentSucceeded::class => [
             HandlePaymentSucceeded::class,
         ],

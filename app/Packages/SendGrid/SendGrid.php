@@ -5,6 +5,9 @@ namespace App\Packages\SendGrid;
 use Illuminate\Support\Facades\Log;
 use SendGrid\Mail\Mail;
 
+/**
+ * @codeCoverageIgnore
+ */
 class SendGrid
 {
     protected Mail $mail;

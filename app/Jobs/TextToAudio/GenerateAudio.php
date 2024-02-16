@@ -23,6 +23,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Talendor\ElevenLabsClient\TextToSpeech\TextToSpeech;
@@ -31,9 +32,9 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, JobEndings;
 
-    protected Document $document;
-    protected DocumentRepository $repo;
-    protected array $meta;
+    public Document $document;
+    public array $meta;
+    public $filePath;
 
     /**
      * The number of times the job may be attempted.
@@ -78,7 +79,7 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
-        $this->repo = new DocumentRepository($this->document);
+        $this->filePath = '';
         $this->onQueue('voice_generation');
     }
 
@@ -105,12 +106,12 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
 
             $audioContent = $response['response_body'];
 
-            $filePath = 'ai-audio/' . Str::uuid() . '.mp3';
-            Storage::disk('s3')->put($filePath, $audioContent);
+            $this->filePath = 'ai-audio/' . Str::uuid() . '.mp3';
+            Storage::disk('s3')->put($this->filePath, $audioContent);
 
             $mediaFile = MediaFile::create([
                 'account_id' => $user->account_id,
-                'file_path' => $filePath,
+                'file_path' => $this->filePath,
                 'type' => MediaType::AUDIO,
                 'meta' => [
                     'document_id' => $this->document->id
@@ -134,22 +135,24 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
                 ]
             ]);
 
+            dump($this->document->getMeta('user_id'));
             AudioGenerated::dispatchIf(
-                $this->document->meta['user_id'],
+                $this->document->getMeta('user_id'),
                 [
                     'user_id' => $this->document->meta['user_id'],
                     'media_file_id' => $mediaFile->id,
-                    'process_id' => $this->meta['process_id']
+                    'process_id' => (string) $this->meta['process_id']
                 ]
             );
 
             $this->jobSucceded(true);
         } catch (AudioGenerationTimeoutException $e) {
+            Log::error($e->getMessage());
             $this->jobFailed($e->getMessage());
         } catch (AudioGenerationException $e) {
             $this->jobAborted($e->getMessage());
         } catch (Exception $e) {
-            $this->jobFailed("Failed to generate audio: " . $e->getMessage());
+            $this->jobAborted("Failed to generate audio: " . $e->getMessage());
         }
     }
 

@@ -32,7 +32,7 @@ class Dashboard extends Component
         $this->dispatch('titleUpdated', title: $this->title);
     }
 
-    private function defineTitle($tabValue)
+    public function defineTitle($tabValue)
     {
         if ($tabValue === 'images') {
             $this->title = __('dashboard.ai_images');
