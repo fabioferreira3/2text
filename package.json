@@ -2,7 +2,8 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "heroku-prebuild": "composer config http-basic.spark.laravel.com ${SPARK_USERNAME} ${SPARK_API_TOKEN}"
     },
     "devDependencies": {
         "@alpinejs/focus": "^3.10.5",
