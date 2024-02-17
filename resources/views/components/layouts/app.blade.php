@@ -62,9 +62,9 @@
                 {{ $slot }}
             </div>
         </div>
-        @if(app()->env === 'local')
+        {{-- @if(app()->env === 'local')
         @livewire('chat')
-        @endif
+        @endif --}}
         @include('components.footer')
     </main>
 
