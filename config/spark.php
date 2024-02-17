@@ -101,8 +101,7 @@ return [
                 [
                     'name' => 'Starter',
                     'short_description' => '150 units per month with 6% discount.',
-                    'monthly_id' => 'price_1OkuuHEjLWGu0g9vE6T2ndmw',
-                    //  'monthly_id' => 'price_1ObvxSEjLWGu0g9vIezEDGTW', <-- test mode
+                    'monthly_id' => env('SPARK_STARTER_MONTHLY_PLAN'),
                     //  'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'pri_1001'),
                     'features' => [
                         '150 units per month',
@@ -119,8 +118,7 @@ return [
                 [
                     'name' => 'Pro',
                     'short_description' => '500 units per month with 10% discount. The best deal!',
-                    'monthly_id' => 'price_1OkuwREjLWGu0g9vsfuDkHqW',
-                    //  'monthly_id' => 'price_1Obw79EjLWGu0g9vrEaHEpxm', <-- test mode
+                    'monthly_id' => env('SPARK_PRO_MONTHLY_PLAN'),
                     //  'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'pri_1001'),
                     'features' => [
                         '500 units per month',
@@ -137,8 +135,7 @@ return [
                 [
                     'name' => 'Enterprise',
                     'short_description' => '1000 units per month with 15% discount.',
-                    'monthly_id' => '',
-                    // 'monthly_id' => 'price_1OePJYEjLWGu0g9vVkAQ0ZW6', <-- test mode
+                    'monthly_id' => env('SPARK_ENTERPRISE_MONTHLY_PLAN'),
                     //  'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'pri_1001'),
                     'features' => [
                         '1000 units per month',
