@@ -100,37 +100,55 @@ return [
             'plans' => [
                 [
                     'name' => 'Starter',
-                    'short_description' => '',
-                    'monthly_id' => 'price_1ObvxSEjLWGu0g9vIezEDGTW',
+                    'short_description' => '150 units per month with 6% discount.',
+                    'monthly_id' => 'price_1OkuuHEjLWGu0g9vE6T2ndmw',
+                    //  'monthly_id' => 'price_1ObvxSEjLWGu0g9vIezEDGTW', <-- test mode
                     //  'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'pri_1001'),
                     'features' => [
-                        '150 units',
+                        '150 units per month',
+                        'Up to 2 users',
                         'Access to all tools',
+                        '~70.000 words OR',
+                        '~115 AI images OR',
+                        '~25 hours of audio transcription OR',
+                        '~10.500 words of text to audio',
                         'Email support',
                     ],
                     'archived' => false,
                 ],
                 [
                     'name' => 'Pro',
-                    'short_description' => 'This is a short, human friendly description of the plan.',
-                    'monthly_id' => 'price_1Obw79EjLWGu0g9vrEaHEpxm',
+                    'short_description' => '500 units per month with 10% discount. The best deal!',
+                    'monthly_id' => 'price_1OkuwREjLWGu0g9vsfuDkHqW',
+                    //  'monthly_id' => 'price_1Obw79EjLWGu0g9vrEaHEpxm', <-- test mode
                     //  'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'pri_1001'),
                     'features' => [
-                        'Feature 1',
-                        'Feature 2',
-                        'Feature 3',
+                        '500 units per month',
+                        'Up to 10 users',
+                        'Access to all tools',
+                        '~240.000 words OR',
+                        '~390 AI images OR',
+                        '~85 hours of audio transcription OR',
+                        '~35.500 words of text to audio',
+                        '24/7 support'
                     ],
                     'archived' => false,
                 ],
                 [
                     'name' => 'Enterprise',
-                    'short_description' => 'This is a short, human friendly description of the plan.',
-                    'monthly_id' => 'price_1OePJYEjLWGu0g9vVkAQ0ZW6',
+                    'short_description' => '1000 units per month with 15% discount.',
+                    'monthly_id' => 'price_1OkuyIEjLWGu0g9vrmSDMGzN',
+                    // 'monthly_id' => 'price_1OePJYEjLWGu0g9vVkAQ0ZW6', <-- test mode
                     //  'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'pri_1001'),
                     'features' => [
-                        'Feature 1',
-                        'Feature 2',
-                        'Feature 3',
+                        '1000 units per month',
+                        'Up to 30 users',
+                        'Access to all tools',
+                        '~480.000 words OR',
+                        '~780 AI images OR',
+                        '~170 hours of audio transcription OR',
+                        '~71.000 words of text to audio',
+                        '24/7 support'
                     ],
                     'archived' => false,
                 ],
