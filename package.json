@@ -3,7 +3,7 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "heroku-prebuild": "composer config http-basic.spark.laravel.com ${SPARK_USERNAME} ${SPARK_API_TOKEN}"
+        "heroku-prebuild": "heroku-prebuild": "curl -sS https://getcomposer.org/installer | php -- --filename=composer && php composer config http-basic.spark.laravel.com $SPARK_USERNAME $SPARK_API_TOKEN"
     },
     "devDependencies": {
         "@alpinejs/focus": "^3.10.5",
