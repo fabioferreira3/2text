@@ -137,7 +137,7 @@ return [
                 [
                     'name' => 'Enterprise',
                     'short_description' => '1000 units per month with 15% discount.',
-                    'monthly_id' => 'price_1OkuyIEjLWGu0g9vrmSDMGzN',
+                    'monthly_id' => '',
                     // 'monthly_id' => 'price_1OePJYEjLWGu0g9vVkAQ0ZW6', <-- test mode
                     //  'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'pri_1001'),
                     'features' => [
