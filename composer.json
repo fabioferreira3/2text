@@ -21,7 +21,7 @@
         "laravel/pulse": "^1.0@beta",
         "laravel/sanctum": "^3.2",
         "laravel/socialite": "5.10.0",
-        "laravel/spark-stripe": "5.0.1",
+      //  "laravel/spark-stripe": "5.0.1",
         "laravel/tinker": "^2.7",
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^3",
@@ -72,9 +72,6 @@
         "test": [
             "./vendor/bin/pest --parallel --coverage --profile"
         ],
-        "pre-install-cmd": [
-            "@composer config http-basic.spark.laravel.com ${SPARK_USERNAME} ${SPARK_API_TOKEN}"
-        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
@@ -108,13 +105,5 @@
         }
     },
     "minimum-stability": "beta",
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://spark.laravel.com",
-            "username": "${SPARK_USERNAME}",
-            "password": "${SPARK_API_TOKEN}"
-        }
-    ]
+    "prefer-stable": true
 }
