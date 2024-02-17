@@ -72,6 +72,9 @@
         "test": [
             "./vendor/bin/pest --parallel --coverage --profile"
         ],
+        "pre-install-cmd": [
+            "@composer config http-basic.spark.laravel.com ${SPARK_USERNAME} ${SPARK_API_TOKEN}"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
