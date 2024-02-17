@@ -112,7 +112,9 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "https://spark.laravel.com"
+            "url": "https://spark.laravel.com",
+            "username": "${SPARK_USERNAME}",
+            "password": "${SPARK_API_TOKEN}"
         }
     ]
 }
