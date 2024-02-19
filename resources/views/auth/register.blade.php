@@ -18,27 +18,19 @@
             @csrf
 
             <div>
-                <x-label class='font-courier' for="name" value="{{ __('Name') }}" />
-                <x-input id="name" class="font-courier block mt-1 w-full" type="text" name="name" :value="old('name')"
-                    required autofocus autocomplete="name" />
+                <x-input placeholder="{{ __('Name') }}" id="name" class="font-courier block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
             </div>
 
             <div class="mt-4">
-                <x-label class='font-courier' for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="font-courier block mt-1 w-full" type="email" name="email"
-                    :value="old('email')" required />
+                <x-input placeholder="{{ __('Email') }}" id="email" class="font-courier block mt-1 w-full" type="email" name="email" :value="old('email')" required />
             </div>
 
             <div class="mt-4">
-                <x-label class='font-courier' for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="font-courier block mt-1 w-full" type="password" name="password" required
-                    autocomplete="new-password" />
+                <x-input placeholder="{{ __('Password') }}" id="password" class="font-courier block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
             </div>
 
             <div class="mt-4">
-                <x-label class='font-courier' for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-input id="password_confirmation" class="font-courier block mt-1 w-full" type="password"
-                    name="password_confirmation" required autocomplete="new-password" />
+                <x-input placeholder="{{ __('Confirm Password') }}" id="password_confirmation" class="font-courier block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
             </div>
 
             @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
@@ -49,11 +41,9 @@
 
                         <div class="ml-2">
                             {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                            'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'"
-                                class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Terms of
+                            'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Terms of
                                 Service').'</a>',
-                            'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'"
-                                class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Privacy
+                            'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Privacy
                                 Policy').'</a>',
                             ]) !!}
                         </div>
