@@ -18,19 +18,19 @@
             @csrf
 
             <div>
-                <x-input placeholder="{{ __('Name') }}" id="name" class="font-courier block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                <x-input placeholder="{{ __('Name') }}" id="name" class="font-courier block mt-1 w-full border border-gray-300" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
             </div>
 
             <div class="mt-4">
-                <x-input placeholder="{{ __('Email') }}" id="email" class="font-courier block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+                <x-input placeholder="{{ __('Email') }}" id="email" class="font-courier block mt-1 w-full border border-gray-300" type="email" name="email" :value="old('email')" required />
             </div>
 
             <div class="mt-4">
-                <x-input placeholder="{{ __('Password') }}" id="password" class="font-courier block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
+                <x-input placeholder="{{ __('Password') }}" id="password" class="font-courier block mt-1 w-full border border-gray-300" type="password" name="password" required autocomplete="new-password" />
             </div>
 
             <div class="mt-4">
-                <x-input placeholder="{{ __('Confirm Password') }}" id="password_confirmation" class="font-courier block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
+                <x-input placeholder="{{ __('Confirm Password') }}" id="password_confirmation" class="font-courier block mt-1 w-full border border-gray-300" type="password" name="password_confirmation" required autocomplete="new-password" />
             </div>
 
             @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
