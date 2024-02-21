@@ -11,13 +11,9 @@
     <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:weight@400;600;700&display=swap">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Scripts -->
     @wireUiScripts
@@ -76,74 +72,73 @@
     @stack('scripts')
     <script>
         const Toast = Swal.mixin({
-                toast: true,
-                position: 'top',
-                showConfirmButton: false,
-                showCloseButton: true,
-                timer: 5000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            });
-
-            window.addEventListener('alert', ({
-                detail: {
-                    type,
-                    message
-                }
-            }) => {
-                Toast.fire({
-                    icon: type,
-                    title: message
-                })
-            })
-
-            window.addEventListener('refresh-page', () => {
-                window.location.reload();
-            });
-
-            document.addEventListener('livewire:init', function() {
-                window.livewire.on('addToClipboard', function(message) {
-                    navigator.clipboard.writeText(message);
-                });
-                window.livewire.on('openLinkInNewTab', link => {
-                window.open(link, '_blank');
-                });
-            });
-
-            // window.livewire.on('openLinkInNewTab', link => {
-            //     window.open(link, '_blank');
-            // });
-
-            // Text block height adjustment
-
-            function adjustTextArea() {
-                let textareas = document.querySelectorAll('.autoExpandTextarea');
-
-                function adjustHeight(el) {
-                    el.style.height = 'auto';
-                    el.style.height = el.scrollHeight + 'px';
-                }
-
-                textareas.forEach(textarea => {
-                    textarea.addEventListener('input', function() {
-                        adjustHeight(this);
-                    });
-
-                    // Initial adjustment
-                    adjustHeight(textarea);
-                });
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            showCloseButton: true,
+            timer: 5000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
-            document.addEventListener('DOMContentLoaded', function() {
-                adjustTextArea();
-            });
+        });
 
-            document.addEventListener('adjustTextArea', function() {
-                adjustTextArea();
-            });
+        window.addEventListener('alert', ({
+            detail: {
+                type,
+                message
+            }
+        }) => {
+            Toast.fire({
+                icon: type,
+                title: message
+            })
+        })
 
+        window.addEventListener('refresh-page', () => {
+            window.location.reload();
+        });
+
+        document.addEventListener('livewire:init', function() {
+            window.livewire.on('addToClipboard', function(message) {
+                navigator.clipboard.writeText(message);
+            });
+            window.livewire.on('openLinkInNewTab', link => {
+                window.open(link, '_blank');
+            });
+        });
+
+        // window.livewire.on('openLinkInNewTab', link => {
+        //     window.open(link, '_blank');
+        // });
+
+        // Text block height adjustment
+
+        function adjustTextArea() {
+            let textareas = document.querySelectorAll('.autoExpandTextarea');
+
+            function adjustHeight(el) {
+                el.style.height = 'auto';
+                el.style.height = el.scrollHeight + 'px';
+            }
+
+            textareas.forEach(textarea => {
+                textarea.addEventListener('input', function() {
+                    adjustHeight(this);
+                });
+
+                // Initial adjustment
+                adjustHeight(textarea);
+            });
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            adjustTextArea();
+        });
+
+        document.addEventListener('adjustTextArea', function() {
+            adjustTextArea();
+        });
     </script>
 
 </body>

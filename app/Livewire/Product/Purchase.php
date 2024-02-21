@@ -36,8 +36,8 @@ class Purchase extends Component
     public function messages()
     {
         return [
-            'units.min' => __('checkout.purchase_min', ['amount' => 100]),
-            'units.max' => __('checkout.purchase_max', ['amount' => 10000])
+            'units.min' => __('validation.purchase_min', ['amount' => 100]),
+            'units.max' => __('validation.purchase_max', ['amount' => 10000])
         ];
     }
 

@@ -3,7 +3,7 @@
 return [
     'audio_transcription' => 'Audio Transcription',
     'blog_post' => 'Blog Post',
-    'choose_template' => 'Choose a tool and let\'s create content!',
+    'choose_template' => 'Pick a tool and let\'s create content!',
     'create_blog_post' => 'Create a full SEO friendly article with the help of AI',
     'create_insight' => 'Provide your own sources like PDFs, Docx or CSV files, Youtube videos and ask questions to understand their content',
     'create_social_media' => 'Create social media posts using AI',
