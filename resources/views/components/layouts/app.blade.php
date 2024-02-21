@@ -24,18 +24,6 @@
             display: none !important;
         }
     </style>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1010073663"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-
-        gtag('config', 'AW-1010073663');
-    </script>
 </head>
 
 <body class="font-sans antialiased bg-main overflow-hidden">
@@ -151,6 +139,18 @@
         document.addEventListener('adjustTextArea', function() {
             adjustTextArea();
         });
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1010073663"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'AW-1010073663');
     </script>
 
 </body>
