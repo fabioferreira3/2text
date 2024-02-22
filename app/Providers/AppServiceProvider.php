@@ -45,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::componentNamespace('App\\Livewire\\Common', 'experior');
         Blade::component('custom.dropdown', Dropdown::class);
         Blade::component('layouts.app', 'app-layout');
+        Blade::component('layouts.blank', 'blank-layout');
         Blade::component('components.dropdown', 'jetstream-dropdown');
 
         Queue::failing(function (JobFailed $event) {

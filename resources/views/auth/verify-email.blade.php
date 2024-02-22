@@ -45,4 +45,12 @@
             </div>
         </div>
     </x-authentication-card>
+    @push('scripts')
+    <script>
+        gtag('event', 'conversion', {
+            'send_to': 'AW-1010073663/OAOiCJTjwZQZEL-A0uED',
+            'transaction_id': ''
+        });
+    </script>
+    @endpush
 </x-guest-layout>
