@@ -18,19 +18,27 @@
             @csrf
 
             <div>
-                <x-input placeholder="{{ __('Name') }}" id="name" class="font-courier block mt-1 w-full border border-gray-300" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                <x-input placeholder="{{ __('Name') }}" id="name"
+                    class="font-courier block mt-1 w-full border border-gray-300" type="text" name="name"
+                    :value="old('name')" required autofocus autocomplete="name" />
             </div>
 
             <div class="mt-4">
-                <x-input placeholder="{{ __('Email') }}" id="email" class="font-courier block mt-1 w-full border border-gray-300" type="email" name="email" :value="old('email')" required />
+                <x-input placeholder="{{ __('Email') }}" id="email"
+                    class="font-courier block mt-1 w-full border border-gray-300" type="email" name="email"
+                    :value="old('email')" required />
             </div>
 
             <div class="mt-4">
-                <x-input placeholder="{{ __('Password') }}" id="password" class="font-courier block mt-1 w-full border border-gray-300" type="password" name="password" required autocomplete="new-password" />
+                <x-input placeholder="{{ __('Password') }}" id="password"
+                    class="font-courier block mt-1 w-full border border-gray-300" type="password" name="password"
+                    required autocomplete="new-password" />
             </div>
 
             <div class="mt-4">
-                <x-input placeholder="{{ __('Confirm Password') }}" id="password_confirmation" class="font-courier block mt-1 w-full border border-gray-300" type="password" name="password_confirmation" required autocomplete="new-password" />
+                <x-input placeholder="{{ __('Confirm Password') }}" id="password_confirmation"
+                    class="font-courier block mt-1 w-full border border-gray-300" type="password"
+                    name="password_confirmation" required autocomplete="new-password" />
             </div>
 
             @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
@@ -39,12 +47,21 @@
                     <div class="flex items-center">
                         <x-checkbox name="terms" id="terms" required />
 
-                        <div class="ml-2">
+                        {{-- <div class="ml-2">
                             {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                            'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Terms of
+                            'terms_of_service' => '<a target="_blank" href="https://experior.ai/terms-of-use"
+                                class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Terms of
                                 Service').'</a>',
-                            'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Privacy
+                            'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'"
+                                class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Privacy
                                 Policy').'</a>',
+                            ]) !!}
+                        </div> --}}
+                        <div class="ml-2">
+                            {!! __('I agree to the :terms_of_service', [
+                            'terms_of_service' => '<a target="_blank" href="https://experior.ai/terms-of-use"
+                                class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Terms of
+                                Service').'</a>',
                             ]) !!}
                         </div>
                     </div>
