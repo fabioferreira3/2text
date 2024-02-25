@@ -16,7 +16,7 @@
     <p>{{$link}}</p>
     <p><br></p>
     <p>Cheers!</p>
-    <p>Experior AI</p>
+    <p>Experior</p>
     @endif
 </body>
 

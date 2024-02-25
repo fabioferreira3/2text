@@ -54,7 +54,7 @@ return [
         And they must be output in a json array format.
         For example, if the tone is \"funny\":\n\n
         ['What an interesting topic! Let me see...',
-        'Experior AI... it has a lot of features',
+        'Experior... it has a lot of features',
         'I think I\'ll start with a simple introduction, in a casual tone',
         'Hmmm, nah, let me rephrase this paragraph, too formal',
         'Ok, I think now it\'s making sense.']\n\n

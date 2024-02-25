@@ -16,7 +16,7 @@ class SendGrid
     public function __construct()
     {
         $this->mail = new Mail();
-        $this->mail->setFrom(config('sendgrid.from'), 'Experior AI');
+        $this->mail->setFrom(config('sendgrid.from'), 'Experior');
         $this->sendGrid = new \SendGrid(config('sendgrid.api_key'));
     }
 
