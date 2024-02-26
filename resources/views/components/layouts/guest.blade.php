@@ -40,6 +40,13 @@
     <div class="font-sans text-gray-900 antialiased">
         {{ $slot }}
     </div>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'GTM-TNBCJZH9');
+    </script>
     @stack('scripts')
 </body>
 
