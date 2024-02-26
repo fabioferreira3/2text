@@ -2,7 +2,7 @@
     <div class="flex flex-col text-center h-full justify-center gap-4">
         <p class="text-lg italic text-gray-300">"{{$quote}}"</p>
         <p class="flex items-center justify-center gap-4 text-sm mt-2 text-gray-300">
-            <img class="rounded-full object-cover h-14 w-14" src="{{$img}}" alt="logo" />
+            <img class="rounded-full object-cover h-16 w-16" src="{{$img}}" alt="logo" />
             {{$author}}
         </p>
     </div>
