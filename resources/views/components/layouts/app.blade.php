@@ -145,7 +145,7 @@
         });
     </script>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-KCMH8CTR"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-TNBCJZH9"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -154,7 +154,7 @@
         }
         gtag('js', new Date());
 
-        gtag('config', 'GTM-KCMH8CTR');
+        gtag('config', 'GTM-TNBCJZH9');
     </script>
 
 </body>
