@@ -111,6 +111,7 @@
     <!-- Responsive Navigation Menu -->
     <div class="md:hidden">
         <div :class="{'block bg-white': open, 'hidden': ! open}">
+            @include('components.plan')
             <div class="pt-2 pb-3 space-y-1">
                 <x-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('dashboard')">
                     {{ __('menus.dashboard') }}
