@@ -50,9 +50,9 @@
                     <span class="text-red-500 text-sm">{{ $errors->first('inputText') }}</span>
                     @endif
                 </div>
-                <div class="hidden w-full md:flex md:justify-center">
-                    <button wire:target="paraphrase" @if($isSaving) disabled @endif class="mt-4 text-base bg-secondary duration-700 hover:bg-main
-                        text-white font-bold py-2 px-4 rounded-lg" wire:click="paraphrase">
+                <div class="w-full flex justify-center">
+                    <button wire:target="paraphrase" @if($isSaving) disabled @endif class="md:mt-4 text-lg md:text-base bg-secondary duration-700 hover:bg-main
+                        w-full md:w-auto text-white font-bold py-2 px-4 rounded-lg" wire:click="paraphrase">
                         @if(!$isSaving)<span wire:target="paraphrase">{{
                             __('paraphraser.paraphrase') }}</span>@endif
                         @if($isSaving)<span wire:target="paraphrase">{{
@@ -60,7 +60,8 @@
                     </button>
                 </div>
             </div>
-            <div class="flex flex-col gap-4 mt-2 relative h-[25rem]">
+            @if(count($outputBlocks))
+            <div class="flex flex-col gap-4 mt-6 md:mt-2 relative h-[25rem]">
                 <div class="flex items-center justify-between md:hidden z-20">
                     @include('livewire.common.label', ['title' => __('paraphraser.paraphrased_text')])
                 </div>
@@ -75,6 +76,7 @@
                     @endforeach
                 </div>
             </div>
+            @endif
         </div>
     </div>
 </div>

@@ -7,7 +7,7 @@ return [
     'funny' => 'Funny',
     'language' => 'Language',
     'new' => 'New',
-    'new_paraphrase' => 'New Paraphraser',
+    'new_paraphrase' => 'Paraphraser',
     'original_text' => 'Original text',
     'page_info' => 'Let AI rewrite your text in a different way. You can use this tool to rewrite your text in a different style, or to avoid plagiarism.',
     'paraphrase' => 'Paraphrase',

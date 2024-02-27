@@ -1,8 +1,8 @@
 <div class="flex flex-col gap-6">
     @section('header')
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-8">
         @include('livewire.common.header', ['icon' => 'switch-horizontal', 'title' => __('paraphraser.new_paraphrase')])
-        <div class="bg-gray-200 px-3 py-1 rounded-lg text-gray-700 text-sm font-semibold">
+        <div class="bg-gray-200 px-3 py-1 rounded-lg text-gray-700 text-lg md:text-sm font-semibold">
             1 {{__('common.unit')}} = 480 {{__('common.words')}}
         </div>
     </div>
@@ -16,7 +16,8 @@
                         @include('livewire.common.help-item', ['header' => __('paraphraser.source'), 'content' =>
                         App\Helpers\InstructionsHelper::paraphraserSources()])
                     </div>
-                    <select name="sourceType" wire:model.live="sourceType" class="p-3 rounded-lg border border-zinc-200">
+                    <select name="sourceType" wire:model.live="sourceType"
+                        class="p-3 rounded-lg border border-zinc-200">
                         <option value="free_text">{{__('paraphraser.free_text')}}</option>
                         {{-- <option value="website_url">Website URL</option> --}}
                     </select>

@@ -76,7 +76,7 @@
             </header>
             <!-- End: Header -->
 
-            <div class="p-6 bg-white grow overflow-auto">
+            <div class="p-4 md:p-6 bg-white grow overflow-auto">
                 {{ $slot }}
             </div>
         </div>

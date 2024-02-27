@@ -171,7 +171,7 @@ return [
     'uuid' => 'The :attribute must be a valid UUID.',
     'videoLanguage_required_if' => 'The language of the video is a required field.',
     'voice_input_text_required' => 'You need to provide the text you want to convert into audio',
-    'youtube_link_required' => 'You need to provide a Youtube link for the transcription.',
+    'youtube_link_required' => 'You need to provide a Youtube link to be transcripted.',
 
     /*
     |--------------------------------------------------------------------------
