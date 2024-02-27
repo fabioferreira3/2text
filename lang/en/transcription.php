@@ -5,7 +5,7 @@ return [
     'download_subtitles' => 'Download Subtitles',
     'identify_speakers' => 'Identify Speakers',
     'new' => 'New',
-    'new_transcription' => 'New Audio transcription',
+    'new_transcription' => 'Audio transcription',
     'no' => 'No',
     'page_info' => 'Transcribe Youtube videos into text. You can also identify speakers and translate the text into different languages.',
     'origin_language' => 'Source language',

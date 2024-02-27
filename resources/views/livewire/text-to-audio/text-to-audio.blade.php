@@ -1,10 +1,11 @@
 <div class="flex flex-col g-white rounded-lg grow h-full">
     @section('header')
-    <div class="flex items-center justify-between gap-8">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-8">
         <div class="flex items-center gap-2">
-            @include('livewire.common.header', ['icon' => 'volume-up', 'title' => __('text-to-audio.text_to_audio')])
+            @include('livewire.common.header', ['icon' => 'volume-up', 'title' =>
+            __('text-to-audio.text_to_audio')])
         </div>
-        <div class="w-1/2">
+        <div class="w-full md:w-1/2">
             @include('livewire.common.page-info', ['content' => __('text-to-audio.page_info')])
         </div>
     </div>

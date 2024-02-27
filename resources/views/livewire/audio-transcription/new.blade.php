@@ -1,16 +1,16 @@
 <div class="flex flex-col gap-6">
     @section('header')
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-8">
         @include('livewire.common.header', ['icon' => 'chat-alt', 'title' => __('transcription.new_transcription')])
-        <div class="bg-gray-200 px-3 py-1 rounded-lg text-gray-700 text-sm font-semibold">
-            1 {{__('common.minute')}} = 0.1 {{__('common.unit')}}
+        <div class="bg-gray-200 px-3 py-1 rounded-lg text-gray-700 text-lg md:text-sm font-semibold">
+            1 {{__('common.unit')}} = 0.1 {{__('common.words')}}
         </div>
     </div>
     @endsection
     <div class="flex flex-col gap-6">
         <div class="col-span-3">
             <div class="flex flex-col gap-6 p-4 border-zinc-200 border rounded-lg bg-white">
-                <div class="grid grid-cols-2 gap-6">
+                <div class="md:w-1/2 gap-6">
                     <div class="flex flex-col gap-3">
                         <div class="flex gap-2 items-center">
                             <label class="font-bold text-lg text-zinc-700">{{__('transcription.source')}}:</label>
@@ -71,8 +71,8 @@
                         @endif
                     </div>
                 </div>
-                <div class="grid grid-cols-3 gap-6">
-                    <div class="flex flex-col gap-3">
+                <div class="flex flex-col md:grid md:grid-cols-2 gap-6">
+                    <div class="flex items-center md:items-start md:flex-col gap-3">
                         <div class="flex gap-2 items-center">
                             <label
                                 class="text-xl font-bold text-gray-700">{{__('transcription.identify_speakers')}}?</label>
@@ -94,7 +94,7 @@
                         </div>
                         <div>
                             <input type="number" min="2" max="10"
-                                class="w-1/3 xl:w-1/4 p-3 border border-zinc-200 rounded-lg text-center"
+                                class="w-full xl:w-1/4 text-xl md:text-base p-3 border border-zinc-200 rounded-lg text-center"
                                 wire:model.live="speakersExpected" />
                         </div>
                         @if($errors->has('speakersExpected'))

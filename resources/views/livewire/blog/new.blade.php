@@ -1,14 +1,11 @@
 <div class="flex flex-col gap-6">
     @section('header')
-
     <div class="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-8">
         @include('livewire.common.header', ['icon' => 'newspaper', 'title' => __('blog.new_blog_post')])
         <div class="bg-gray-200 px-3 py-1 rounded-lg text-gray-700 text-lg md:text-sm font-semibold">
             1 {{__('common.unit')}} = 480 {{__('common.words')}}
         </div>
     </div>
-
-
     @endsection
     <div class="flex flex-col gap-6 p-4 border rounded-lg">
 
