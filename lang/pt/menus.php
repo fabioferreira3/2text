@@ -24,6 +24,8 @@ return [
     'reduce_complexity' => 'Simplificar',
     'social_media_post' => 'Rede Social',
     'shorten' => 'Simplificar',
+    'subscribe_to_a_plan' => 'Assine um plano e tenha ainda mais descontos!',
+    'support' => 'Ajuda & Suporte',
     'summarizer' => 'Sumarizador',
     'tools' => 'Ferramentas',
     'text_to_audio' => 'Texto para Áudio',

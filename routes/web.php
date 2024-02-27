@@ -26,6 +26,7 @@ use App\Livewire\SocialMediaPost\Dashboard as SocialMediaPostDashboard;
 use App\Livewire\Summarizer\Dashboard as SummarizerDashboard;
 use App\Livewire\Summarizer\NewSummarizer;
 use App\Livewire\Summarizer\SummaryView;
+use App\Livewire\Support\Support;
 use App\Livewire\Trash;
 use App\Models\ShortLink;
 use Illuminate\Http\Request;
@@ -107,6 +108,9 @@ Route::middleware([
     Route::get('/billing-management', function (Request $request) {
         return $request->user()->redirectToBillingPortal();
     })->name('billing-management');
+
+    /* Help & Support */
+    Route::get('/support', Support::class)->name('support');
 
     Route::get('/purchase', Purchase::class)->name('purchase');
     Route::get('/subscription-checkout', function (Request $request) {

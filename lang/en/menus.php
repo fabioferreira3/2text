@@ -25,6 +25,8 @@ return [
     'reduce_complexity' => 'Reduce complexity',
     'social_media_post' => 'Social media',
     'shorten' => 'Shorten',
+    'subscribe_to_a_plan' => 'Subscribe to a plan and get more discounts!',
+    'support' => 'Help & Support',
     'summarizer' => 'Summarizer',
     'tools' => 'Tools',
     'text_to_audio' => 'Text to Audio',

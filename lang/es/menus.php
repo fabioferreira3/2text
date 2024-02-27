@@ -25,6 +25,8 @@ return [
     'reduce_complexity' => 'Reducir complejidad',
     'social_media_post' => 'Publicación en redes sociales',
     'shorten' => 'Acortar',
+    'subscribe_to_a_plan' => '¡Suscríbete a un plan y obtén más descuentos!',
+    'support' => 'Ayuda y soporte',
     'summarizer' => 'Resumidor',
     'tools' => 'Herramientas',
     'text_to_audio' => 'Texto a Audio',

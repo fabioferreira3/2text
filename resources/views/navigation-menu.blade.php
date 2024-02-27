@@ -67,6 +67,10 @@
                                 {{ __('menus.billing') }}
                             </x-dropdown-link>
 
+                            <x-dropdown-link href="{{ route('support') }}">
+                                {{ __('menus.support') }}
+                            </x-dropdown-link>
+
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                             <x-dropdown-link href="{{ route('api-tokens.index') }}">
                                 {{ __('menus.api_tokens') }}
@@ -160,6 +164,10 @@
 
                     <x-responsive-nav-link href="{{ route('billing-management') }}">
                         {{ __('menus.billing') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link href="{{ route('support') }}">
+                        {{ __('menus.support') }}
                     </x-responsive-nav-link>
 
                     @if (Laravel\Jetstream\Jetstream::hasApiFeatures())

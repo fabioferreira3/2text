@@ -110,4 +110,5 @@
         'author' => 'Christine'
         ])
     </div>
+
 </x-guest-layout>
