@@ -42,6 +42,7 @@
         <!-- End: Sidebar -->
 
         <div class="flex flex-col w-full md:ml-[250px] h-screen px-0 overflow-hidden bg-white pb-8">
+
             <!-- Header -->
             <header class="sticky top-0">
                 <div class="z-50">
@@ -50,8 +51,25 @@
                 <div class='h-[1px]'>
                     <div class='h-full bg-gray-200 rounded-lg'></div>
                 </div>
+
+                <!-- Mobile Units Display -->
+                <div class="md:hidden w-full px-4 py-2 border-b border-gray-300">
+                    <div class="flex items-center justify-end font-medium text-gray-500 gap-2">
+                        <div class="text-lg">{{__('common.my_units')}}:</div>
+                        <div class="px-4 py-1 bg-gray-200 rounded-lg text-lg font-bold">
+                            {{number_format(auth()->user()->account->units)}}
+                        </div>
+                        <div>
+                            <a href="{{route('purchase')}}">
+                                <x-icon solid class="text-green-500" name="plus-circle" width="32" height="32" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- End: Mobile Units Display -->
+
                 @hasSection('header')
-                <div class="p-6 border-b border-zinc-200">
+                <div class="px-6 pb-4 pt-2 md:p-6 border-b border-zinc-200">
                     @yield('header')
                 </div>
                 @endif

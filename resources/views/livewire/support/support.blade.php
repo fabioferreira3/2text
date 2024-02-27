@@ -1,11 +1,11 @@
 <div>
     @section('header')
-    <div class="flex items-center justify-between gap-8">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-8">
         <div class="flex items-center gap-2">
             @include('livewire.common.header', ['icon' => 'question-mark-circle', 'title' =>
             __('support.help_support')])
         </div>
-        <div class="w-1/2">
+        <div class="w-full md:w-1/2">
             @include('livewire.common.page-info', ['content' => __('support.page_info')])
         </div>
     </div>

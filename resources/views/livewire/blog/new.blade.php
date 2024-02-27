@@ -1,9 +1,9 @@
 <div class="flex flex-col gap-6">
     @section('header')
 
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-8">
         @include('livewire.common.header', ['icon' => 'newspaper', 'title' => __('blog.new_blog_post')])
-        <div class="bg-gray-200 px-3 py-1 rounded-lg text-gray-700 text-sm font-semibold">
+        <div class="bg-gray-200 px-3 py-1 rounded-lg text-gray-700 text-lg md:text-sm font-semibold">
             1 {{__('common.unit')}} = 480 {{__('common.words')}}
         </div>
     </div>
@@ -137,6 +137,8 @@
                 <span class="text-red-500 text-sm">{{ $errors->first('context') }}</span>
                 @endif
             </div>
+
+            <!-- Hero Image -->
             <div class="w-full flex flex-col gap-6">
                 <div class="flex flex-col gap-3">
                     <div class="flex gap-2 items-center">
@@ -149,7 +151,7 @@
                 </div>
                 @if($generateImage)
                 <div class="flex flex-col gap-3">
-                    <div class="flex gap-8 items-center">
+                    <div class="flex flex-col lg:flex-row gap-2 lg:gap-8 lg:items-center">
                         <div class="flex gap-2 items-center">
                             <label
                                 class="text-lg font-medium text-gray-700">{{__('blog.hero_image_description')}}:</label>
@@ -158,11 +160,11 @@
                             'content' => App\Helpers\InstructionsHelper::heroImages()
                             ])
                         </div>
-                        <div class="bg-gray-200 px-3 py-1 rounded-lg text-sm font-semibold text-gray-700">
+                        <div class="self-start bg-gray-200 px-3 py-1 rounded-lg text-sm font-semibold text-gray-700">
                             1 {{ strtolower(__('common.image'))}} = 1 {{__('common.unit')}}
                         </div>
                     </div>
-                    <div class="w-full relative flex flex-col gap-1">
+                    <div class="w-full relative flex flex-col gap-3">
                         <textarea placeholder="{{__('blog.placeholder_example')}}"
                             class="border border-zinc-200 rounded-lg w-full" rows="3" maxlength="2000"
                             wire:model.live="imgPrompt"></textarea>
@@ -170,7 +172,7 @@
                         <span class="text-red-500 text-sm">{{ $errors->first('imgPrompt') }}</span>
                         @endif
                         <!-- Image guidelines -->
-                        <div class="relative hidden md:block place-self-end" x-data="{ open: false }"
+                        <div class="relative place-self-start md:place-self-end" x-data="{ open: false }"
                             @click.away="open = false">
                             <button @click="open = true"
                                 class="h-8 2-8 flex gap-2 items-center bg-gray-500 text-white px-3 rounded-lg">
@@ -194,6 +196,7 @@
                 </div>
                 @endif
             </div>
+            <!-- End: Hero Image -->
         </div>
         <!-- END: Context and Image -->
 
