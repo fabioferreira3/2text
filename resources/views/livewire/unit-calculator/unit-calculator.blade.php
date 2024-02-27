@@ -23,7 +23,7 @@
                     class="bg-secondary px-4 py-1 rounded-xl text-white font-bold">Buy</button>
             </div>
             <div
-                class="flex flex-col items-center w-1/2 justify-center gap-4 text-center border border-gray-300 rounded-xl p-8">
+                class="flex flex-col items-center w-full md:w-2/3 justify-center gap-4 text-center border border-gray-300 rounded-xl p-8">
                 <div class="italic text-sm">Important: The values below are just an estimation. You may check the actual
                     usage cost
                     of
@@ -36,56 +36,55 @@
                 <div class="flex flex-col items-center text-gray-700">
                     <div class="flex items-center gap-2">
                         <x-icon name="newspaper" width="30" />
-                        <div class="text-lg font-thin">{{$wordsCount}} words
+                        <div class="text-lg text-left">{{$wordsCount}} words
                         </div>
                     </div>
-                    <div class="text-xs text-center w-1/2 mt-1"><span class="font-semibold text-gray-900">related
+                    <div class="text-sm md:text-xs mt-1"><span class="font-semibold text-gray-900">related
                             tools:</span> Social
                         media, Blog post, Summarizer,
                         Paraphraser,
                         Insight hub</div>
                 </div>
                 <div class="flex items-center gap-2 text-secondary border-y-2">
-                    <x-icon name="switch-vertical" width="20" />
+                    <x-icon name="switch-vertical" class="w-8" />
                     <div class="font-semibold">OR</div>
                 </div>
                 <div class="flex flex-col items-center text-gray-700">
                     <div class="flex items-center gap-2">
-                        <x-icon name="photograph" width="30" />
-                        <div class="text-lg font-thin">{{$imagesCount}} images
+                        <x-icon name="photograph" class="w-8" />
+                        <div class="text-lg text-left">{{$imagesCount}} images
                         </div>
                     </div>
-                    <div class="text-xs text-center w-1/2 mt-1"><span class="font-semibold text-gray-900">related
+                    <div class="text-sm md:text-xs mt-1"><span class="font-semibold text-gray-900">related
                             tools:</span> AI image, Social media, Blog post</div>
                 </div>
                 <div class="flex items-center gap-2 text-secondary border-y-2">
-                    <x-icon name="switch-vertical" width="20" />
+                    <x-icon name="switch-vertical" class="w-8" />
                     <div class="font-semibold">OR</div>
                 </div>
                 <div class="flex flex-col items-center text-gray-700">
                     <div class="flex items-center gap-2">
-                        <x-icon name="volume-up" width="30" />
-                        <div class="text-lg font-thin">{{$transcriptionLength}} hours of audio transcriptions
+                        <x-icon name="volume-up" class="w-8" />
+                        <div class="md:text-lg text-left">{{$transcriptionLength}} hours of audio transcriptions
                         </div>
                     </div>
-                    <div class="text-xs mt-1"><span class="font-semibold text-gray-900">related
+                    <div class="text-sm md:text-xs mt-1"><span class="font-semibold text-gray-900">related
                             tools:</span> Transcription</div>
                 </div>
                 <div class="flex items-center gap-2 text-secondary border-y-2">
-                    <x-icon name="switch-vertical" width="20" />
+                    <x-icon name="switch-vertical" class="w-8" />
                     <div class="font-semibold">OR</div>
                 </div>
                 <div class="flex flex-col items-center text-gray-700">
                     <div class="flex items-center gap-2">
-                        <x-icon name="microphone" width="30" />
-                        <div class="text-lg font-thin">{{$audioWordsCount}} words of generated audio
+                        <x-icon name="microphone" class="w-8" />
+                        <div class="text-lg">{{$audioWordsCount}} words of generated audio
                         </div>
                     </div>
-                    <div class="text-xs mt-1"><span class="font-semibold text-gray-900">related
+                    <div class="text-sm md:text-xs mt-1"><span class="font-semibold text-gray-900">related
                             tools:</span> Text to audio</div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
