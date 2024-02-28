@@ -7,6 +7,7 @@ use App\Events\UserCreated;
 use App\Listeners\HandleDocumentTasksCompletedUpdate;
 use App\Listeners\HandleNewUserAdminNotification;
 use App\Listeners\HandleStripeUserCreation;
+use App\Listeners\HandleUserOnboarding;
 use App\Listeners\HandleWelcomeNotification;
 use App\Listeners\Payment\HandlePaymentSucceeded;
 use Laravel\Cashier\Events\WebhookReceived as CashierWebhookReceived;
@@ -36,7 +37,8 @@ class EventServiceProvider extends ServiceProvider
         UserCreated::class => [
             HandleNewUserAdminNotification::class,
             HandleWelcomeNotification::class,
-            HandleStripeUserCreation::class
+            HandleStripeUserCreation::class,
+            HandleUserOnboarding::class
         ],
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
             \SocialiteProviders\Google\GoogleExtendSocialite::class . '@handle',
