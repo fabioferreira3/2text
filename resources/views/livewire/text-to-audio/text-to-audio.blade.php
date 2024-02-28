@@ -1,4 +1,4 @@
-<div class="flex flex-col g-white rounded-lg grow h-full">
+<div class="flex flex-col g-white rounded-lg grow h-full mb-24 md:mb-0">
     @section('header')
     <div class="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-8">
         <div class="flex items-center gap-2">

@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-6 mb-24 md:mb-0">
     @section('header')
     <div class="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-8">
         @include('livewire.common.header', ['icon' => 'chat-alt', 'title' => __('transcription.new_transcription')])
