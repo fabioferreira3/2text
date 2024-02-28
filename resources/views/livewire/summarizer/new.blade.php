@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-6 md:mb-24 md:mb-0">
     @section('header')
     @include('livewire.common.header', ['icon' => 'sort-ascending', 'title' => __('summarizer.new_summary')])
     @endsection
