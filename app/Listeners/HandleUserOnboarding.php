@@ -23,6 +23,8 @@ class HandleUserOnboarding implements ShouldQueue
      */
     public function handle(UserCreated $event)
     {
-        $event->user->account->addUnits(100);
+        $event->user->account->addUnits(100, [
+            'onboarding'
+        ]);
     }
 }
