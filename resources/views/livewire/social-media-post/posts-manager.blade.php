@@ -1,4 +1,4 @@
-<div class="flex flex-col mb-20 md:mb-0">
+<div class="flex flex-col mb-24">
     @section('header')
     <div class="flex flex-col gap-4 md:gap-0 md:flex-row items-center justify-between">
         @livewire('common.header', [
