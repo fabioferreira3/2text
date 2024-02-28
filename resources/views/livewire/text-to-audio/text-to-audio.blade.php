@@ -43,7 +43,7 @@
                 @if ($errors->has('selectedVoice'))
                 <span class="text-red-500 text-sm">{{ $errors->first('selectedVoice') }}</span>
                 @endif
-                <div class="flex flex-col overflow-auto h-[1px] grow">
+                <div class="flex flex-col overflow-auto h-[300px] md:h-[1px] md:grow">
                     @foreach($voices as $key => $voice)
                     <div wire:key="{{$voice['id']}}"
                         class="{{$selectedVoice === $voice['id'] ? 'bg-gray-200' : ''}} flex items-center justify-between px-4 py-2 border border-t-0 border-x-0 border-b">
