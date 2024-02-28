@@ -17,6 +17,7 @@ use Spark\Billable;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Lab404\Impersonate\Models\Impersonate;
 use function Illuminate\Events\queueable;
 
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail
@@ -30,6 +31,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     use HasUuids;
     use SoftDeletes;
     use Billable;
+    use Impersonate;
 
     /**
      * The attributes that are mass assignable.
@@ -109,6 +111,25 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function getJWTToken()
     {
         return JWTAuth::fromUser($this);
+    }
+
+    /**
+     * By default, all users can impersonate anyone
+     * this example limits it so only admins can
+     * impersonate other users
+     */
+    public function canImpersonate(): bool
+    {
+        return $this->hasRole('admin');
+    }
+
+    /**
+     * By default, all users can be impersonated,
+     * this limits it to only certain users.
+     */
+    public function canBeImpersonated(): bool
+    {
+        return !$this->hasRole('admin');
     }
 
     /**

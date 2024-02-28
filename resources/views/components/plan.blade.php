@@ -1,5 +1,4 @@
-<div
-    class="flex flex-col w-full md:mt-4 3xl:mt-40 items-center gap-1 @if(auth()->user()->sparkPlan()) bg-gray-100 p-2 rounded-lg @endif">
+<div class="flex flex-col w-full md:mt-4 3xl:mt-40 items-center gap-1 bg-gray-100 p-2 rounded-lg">
     <div class="flex flex-col items-center">
         @if(auth()->user()->sparkPlan())
         <div class="text-sm">{{__('menus.current_plan')}}:</div>

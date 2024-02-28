@@ -14,6 +14,7 @@
         "doctrine/dbal": "^3.6",
         "google/apiclient": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
+        "lab404/laravel-impersonate": "^1.7",
         "laravel/cashier": "^15",
         "laravel/framework": "^10.0",
         "laravel/horizon": "^5.14",

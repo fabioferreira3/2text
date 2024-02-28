@@ -112,6 +112,7 @@ Route::middleware([
     /* Help & Support */
     Route::get('/support', Support::class)->name('support');
 
+    /* Purchase & Checkout */
     Route::get('/purchase', Purchase::class)->name('purchase');
     Route::get('/subscription-checkout', function (Request $request) {
         return $request->user()
@@ -122,6 +123,8 @@ Route::middleware([
             ]);
     })->name('subscription-checkout');
     Route::get('/checkout/success', CheckoutSuccess::class)->name('checkout-success');
+
+    Route::impersonate();
 });
 
 /* Google Auth */
