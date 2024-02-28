@@ -4,19 +4,20 @@
         <thead>
             <tr>
                 <th>
-                    <div class="bg-gray-200 text-left px-4 py-2 border rounded-lg">{{__('text-to-audio.date')}}
+                    <div class="bg-gray-200 text-left px-4 py-2 border md:rounded-lg">{{__('text-to-audio.date')}}
                     </div>
                 </th>
                 <th>
-                    <div class="bg-gray-200 text-left px-4 py-2 border rounded-lg">{{__('text-to-audio.voice')}}
+                    <div class="bg-gray-200 text-left px-4 py-2 border md:rounded-lg">{{__('text-to-audio.voice')}}
                     </div>
                 </th>
                 <th>
-                    <div class="bg-gray-200 text-left px-4 py-2 border rounded-lg">{{__('text-to-audio.content')}}
+                    <div class="bg-gray-200 text-left px-4 py-2 border md:rounded-lg">{{__('text-to-audio.content')}}
                     </div>
                 </th>
                 <th>
-                    <div class="bg-gray-200 text-left md:px-4 py-2 border rounded-lg">{{__('text-to-audio.actions')}}
+                    <div class="bg-gray-200 text-left px-1 md:px-4 py-2 border md:rounded-lg">
+                        {{__('text-to-audio.actions')}}
                     </div>
                 </th>
             </tr>
