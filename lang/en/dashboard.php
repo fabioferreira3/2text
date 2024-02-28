@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'ai_images' => 'AI Image',
+    'ai_images' => 'AI Images',
     'actions' => 'Actions',
     'back_dashboard' => 'Back to dashboard',
     'created_at' => 'Created at',

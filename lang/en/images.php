@@ -8,7 +8,7 @@ return [
     'example' => 'Example: A majestic red castle, instead of a golden one',
     'images' => 'Images',
     'image_not_generated_warning' => 'It was not possible to generate this image. Please use a different prompt.',
-    'new' => 'Generate Image with AI',
+    'new' => 'New AI Image',
     'original' => 'Original',
     'generate' => 'Generate',
     'generating' => 'Generating',

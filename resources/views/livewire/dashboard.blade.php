@@ -3,7 +3,6 @@
     <div class="w-full flex items-center justify-between">
         @livewire('common.header', ['icon' => 'desktop-computer', 'title' => $title ??
         __('dashboard.dashboard')])
-        <livewire:common.create-document />
     </div>
     @endsection
     <div class="flex flex-col bg-white rounded-lg">
