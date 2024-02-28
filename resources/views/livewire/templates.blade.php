@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-4 md:mb-24 md:mb-0">
+<div class="flex flex-col gap-4 mb-24 md:mb-0">
     <div class="flex items-center gap-2">
         <x-icon name="hashtag" width="48" height="48" class="text-secondary" />
         <div class="flex flex-col">
