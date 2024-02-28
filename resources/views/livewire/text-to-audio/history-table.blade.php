@@ -16,7 +16,7 @@
                     </div>
                 </th>
                 <th>
-                    <div class="bg-gray-200 text-left px-4 py-2 border rounded-lg">{{__('text-to-audio.actions')}}
+                    <div class="bg-gray-200 text-left md:px-4 py-2 border rounded-lg">{{__('text-to-audio.actions')}}
                     </div>
                 </th>
             </tr>
@@ -42,7 +42,8 @@
                         {{$document['content']}}</div>
                 </td>
                 <td class="h-12 align-top">
-                    <div class="h-full px-4 py-2 flex items-center gap-4 text-gray-500 border rounded-lg bg-white">
+                    <div
+                        class="h-full md:px-4 py-2 flex flex-col md:flex-row items-center gap-4 text-gray-500 border rounded-lg bg-white">
                         <button class="relative group/content"
                             wire:click="playAudio('{{ $document['media_file']['id'] }}')">
                             <x-icon name="play" width="26" height="26" />

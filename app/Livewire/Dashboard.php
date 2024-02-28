@@ -9,6 +9,7 @@ class Dashboard extends Component
 {
     public $title;
     public $tab;
+    public $mobileMenuOpen = false;
     protected $queryString = ['tab'];
 
     public function mount()
@@ -30,6 +31,7 @@ class Dashboard extends Component
     {
         $this->defineTitle($value);
         $this->dispatch('titleUpdated', title: $this->title);
+        $this->mobileMenuOpen = false;
     }
 
     public function defineTitle($tabValue)
