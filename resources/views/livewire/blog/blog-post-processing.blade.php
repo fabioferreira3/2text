@@ -1,11 +1,11 @@
 <div>
-    <div class="mb-8">
+    <div class="md:mb-8">
         @include('livewire.common.label', ['title' => $title])
     </div>
-    <div class="flex items-start px-8">
-        <div id="robot-working" wire:key="robot-working" class="w-1/2"></div>
-        <div class="flex flex-col w-1/2">
-            <div class="flex w-full h-64">
+    <div class="flex flex-col md:flex-row items-start px-8">
+        <div id="robot-working" wire:key="robot-working" class="w-full md:w-1/2"></div>
+        <div class="flex flex-col gap-4 md:gap-0 w-full md:w-1/2">
+            <div class="flex w-full md:h-64">
                 <div id="binary-code1" wire:key="binary-code1"></div>
                 <div id="binary-code2" wire:key="binary-code2"></div>
                 <div id="binary-code3" wire:key="binary-code3"></div>
