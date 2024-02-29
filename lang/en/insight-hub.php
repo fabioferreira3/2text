@@ -10,7 +10,7 @@ return [
     'language' => 'Language of the video',
     'new_inquiry' => 'New Insight',
     'new' => 'New',
-    'no_inquiries' => 'You need to add at least 1 source to be able to ask questions to it',
+    'no_inquiries' => 'You need to add at least 1 source to be able to make inquiries to it.',
     'please_wait' => 'Please wait...',
     'send' => 'Send',
     'sources' => 'Sources',

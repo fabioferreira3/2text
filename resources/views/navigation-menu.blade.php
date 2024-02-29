@@ -138,6 +138,10 @@
                     :active="request()->routeIs('new-text-to-audio')">
                     {{ __('menus.text_to_audio') }}
                 </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('insight-dashboard') }}"
+                    :active="request()->routeIs('insight-dashboard')">
+                    {{ __('menus.insight_hub') }}
+                </x-responsive-nav-link>
             </div>
 
             <!-- Responsive Settings Options -->

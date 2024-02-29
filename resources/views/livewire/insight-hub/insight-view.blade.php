@@ -8,9 +8,9 @@
     ])
     @endsection
 
-    <div class="flex gap-4 h-full">
+    <div class="flex flex-col md:flex-row gap-4 h-full">
         <div class="w-full md:w-2/5 h-full">
-            <div class="flex items-start justify-between gap-2">
+            <div class="flex items-center justify-between gap-2">
                 <div class="flex items-center gap-2">
                     <h2 class="font-bold text-3xl text-zinc-700">{{ __('insight-hub.sources') }}:</h2>
                     @include('livewire.common.help-item', [
@@ -20,8 +20,7 @@
                 </div>
                 <div class="flex items-center justify-end gap-2">
                     <button wire:click="createNewInsight()"
-                        class="flex items-center gap-1 bg-main text-white font-bold px-2 py-1 rounded-lg">
-                        <x-icon name="plus" width="18" height="18" />
+                        class="flex items-center gap-1 bg-main text-white font-bold px-4 py-2 rounded-lg">
                         <span class="text-xs">{{__('insight-hub.new')}}</span>
                     </button>
                 </div>
@@ -48,8 +47,8 @@
                         <label class="font-bold text-xl text-zinc-700 flex items-center">
                             URL
                         </label>
-                        <input @if ($isProcessing) disabled @endif type="text" name="sourceUrl" wire:model.live="sourceUrl"
-                            class="p-3 border border-zinc-200 rounded-lg w-full" />
+                        <input @if ($isProcessing) disabled @endif type="text" name="sourceUrl"
+                            wire:model.live="sourceUrl" class="p-3 border border-zinc-200 rounded-lg w-full" />
 
                         @if ($errors->has('sourceUrl'))
                         <span class="text-red-500 text-sm">{{ $errors->first('sourceUrl') }}</span>
@@ -81,8 +80,8 @@
                     @if (in_array($sourceType, ['docx', 'pdf_file', 'csv', 'json']))
                     <div class="flex flex-col gap-3 col-span-2">
                         <label class="font-bold text-xl text-zinc-700">{{ __('blog.file_option') }}</label>
-                        <input @if ($isProcessing) disabled @endif type="file" name="fileInput" wire:model.live="fileInput"
-                            class="p-3 border border-zinc-200 rounded-lg w-full" />
+                        <input @if ($isProcessing) disabled @endif type="file" name="fileInput"
+                            wire:model.live="fileInput" class="p-3 border border-zinc-200 rounded-lg w-full" />
 
                         @if ($errors->has('fileInput'))
                         <span class="text-red-500 text-sm">{{ $errors->first('fileInput') }}</span>
@@ -108,7 +107,7 @@
 
                     <!-- Generate button -->
                     @if(!$isProcessing)
-                    <div class="flex mt-4">
+                    <div class="flex m-auto md:mt-4">
                         <button wire:click="embed" wire:loading.remove wire:target="fileInput"
                             class="bg-secondary text-white rounded-lg py-2 px-4 font-bold text-xl">
                             {{__('insight-hub.submit')}}
