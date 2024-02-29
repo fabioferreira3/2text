@@ -5,13 +5,13 @@
     <div class="relative">
         @if (in_array($type, ['h2', 'h3', 'h4', 'h5', 'h6']))
         <div class="relative group/block">
-            <input class="focus:bg-blue-100 focus:cursor-text cursor-pointer border-0 bg-white w-full font-bold p-0 text-zinc-700
+            <textarea class="focus:bg-blue-100 md:pt-4 leading-2 focus:cursor-text cursor-pointer border-0 bg-white w-full font-bold p-0 text-zinc-700
         {{ $type === 'h2' ? 'text-2xl' : ''}}
         {{ $type === 'h3' ? 'text-xl' : ''}}
         {{ $type === 'h4' ? 'text-lg' : ''}}
         {{ $type === 'h5' ? 'text-base' : ''}}
         {{ $type === 'h6' ? 'text-base' : ''}}
-        " name="text" wire:model.live.debounce.500ms="content" wire:ignore />
+        " name="text" wire:model.live.debounce.500ms="content" wire:ignore></textarea>
             @include('livewire.common.blocks.text-block-actions')
         </div>
 
