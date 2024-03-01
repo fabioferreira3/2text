@@ -38,6 +38,7 @@
         "socialiteproviders/google": "^4.1",
         "socialiteproviders/linkedin": "^4.2",
         "socialiteproviders/medium": "^4.1",
+        "spatie/laravel-backup": "^8.6",
         "spatie/laravel-permission": "^5.10",
         "talendor/elevenlabs-api": "^1.0",
         "talendor/laravel-stability-ai": "^0.3.0",
