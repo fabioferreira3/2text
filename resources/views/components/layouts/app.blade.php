@@ -31,6 +31,9 @@
 </head>
 
 <body class="font-sans antialiased bg-main overflow-hidden">
+    @impersonating($guard = null)
+    <div class="bg-red-700 text-white font-bold h-14 flex items-center text-3xl justify-center">Impersonating</div>
+    @endImpersonating
     <x-notifications />
     <x-banner />
     @livewire('common.notifications')
