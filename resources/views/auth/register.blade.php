@@ -9,7 +9,7 @@
         </x-slot>
 
         <div class="flex flex-col mb-6 font-courier">
-            <div class="text-3xl font-bold text-zinc-700">New account</div>
+            <h1 class="text-3xl font-bold text-zinc-700">New account</h1>
         </div>
 
         <x-validation-errors class="mb-4" />

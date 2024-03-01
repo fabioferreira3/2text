@@ -9,7 +9,7 @@
         </x-slot>
 
         <div class="flex flex-col mb-6">
-            <div class="text-3xl font-bold text-zinc-700 font-avenir">Sign-in</div>
+            <h1 class="text-3xl font-bold text-zinc-700 font-avenir">Sign-in</h1>
             <div>or <a class="underline" href="{{ route('register') }}">create an account</a></div>
         </div>
 
@@ -61,7 +61,5 @@
                 <span class="text-center">Sign-in with Google</span>
             </a>
         </div>
-
-
     </x-authentication-card>
 </x-guest-layout>
