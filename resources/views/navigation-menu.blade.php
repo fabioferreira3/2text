@@ -71,6 +71,12 @@
                                 {{ __('menus.support') }}
                             </x-dropdown-link>
 
+                            @impersonating($guard = null)
+                            <x-dropdown-link href="{{ route('impersonate.leave') }}">
+                                Leave Impersonation
+                            </x-dropdown-link>
+                            @endImpersonating
+
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                             <x-dropdown-link href="{{ route('api-tokens.index') }}">
                                 {{ __('menus.api_tokens') }}
