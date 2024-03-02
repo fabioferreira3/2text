@@ -207,6 +207,11 @@ class InstructionsHelper
             </ul>";
     }
 
+    public static function socialWordsCount()
+    {
+        return "<p>" . __('instructions.social_words_count') . "</p>";
+    }
+
     public static function wordsCount()
     {
         return "<p>" . __('instructions.words_count') . "</p>";

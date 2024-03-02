@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'ai_image' => 'AI Images',
     'choose_language' => 'Select the language you would like the post to be generated in. If you have provided a YouTube link, please ensure that the selected language matches the main language of the video.',
     'choose_keyword' => 'Provide a keyword that you would like our AI to use throughout your post. This keyword will help our AI to generate a relevant and focused article.',
     'choose_platform' => 'Choose for which platforms you would like our AI to write a post. For each selected platform I will create a different post.',
@@ -22,12 +23,13 @@ return [
     'file_option' => 'File:',
     'further_instructions' => 'Further instructions (optional)',
     'generate_ai_image' => 'Generate AI image',
+    'generate_image' => 'Generate Image',
     'generate_new_image' => 'Generate new image',
     'generate' => 'Generate',
     'generating' => 'Generating with AI',
     'go' => 'Generate',
     'instructions' => 'Instructions',
-    'image_description' => 'Image Description',
+    'image_description' => 'Image Prompt',
     'keyword' => 'Keyword',
     'language' => 'Language',
     'new_social_media_post' => 'New Social Media Post',
@@ -53,6 +55,7 @@ return [
     'yes' => 'Yes',
     'youtube_option' => 'Youtube url(s):',
     'url_option' => 'Page URL(s):',
+    'word_count' => 'Word Count',
     'writing_style' => 'Writing style',
     'write_image_description' => 'Write the image description'
 ];

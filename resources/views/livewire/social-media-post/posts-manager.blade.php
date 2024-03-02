@@ -106,8 +106,8 @@
                                     <label class="font-bold text-lg text-zinc-700">{{
                                         __('social_media.target_word_count') }}:</label>
                                     @include('livewire.common.help-item', [
-                                    'header' => __('social_media.source'),
-                                    'content' => App\Helpers\InstructionsHelper::sources(),
+                                    'header' => __('social_media.word_count'),
+                                    'content' => App\Helpers\InstructionsHelper::socialWordsCount(),
                                     ])
                                 </div>
                                 <input type="number" name="word_count_target" wire:model="wordCountTarget"
@@ -222,11 +222,7 @@
                             <div class="grid grid-cols-3 gap-6 items-center justify-between">
                                 <div class="flex col-span-2 gap-2 items-center">
                                     <label class="font-bold text-lg text-zinc-700">{{
-                                        __('social_media.generate_ai_image') }}:</label>
-                                    @include('livewire.common.help-item', [
-                                    'header' => __('social_media.target_platforms'),
-                                    'content' => App\Helpers\InstructionsHelper::socialMediaPlatforms(),
-                                    ])
+                                        __('social_media.generate_image') }}:</label>
                                 </div>
                                 <div class="col-span-1 w-full">
                                     <x-checkbox md id="generate_img" name="generate_img" label="{{
@@ -240,8 +236,8 @@
                                     <label class="font-bold text-lg text-zinc-700">{{
                                         __('social_media.image_description') }}:</label>
                                     @include('livewire.common.help-item', [
-                                    'header' => __('social_media.target_platforms'),
-                                    'content' => App\Helpers\InstructionsHelper::socialMediaPlatforms(),
+                                    'header' => __('social_media.ai_image'),
+                                    'content' => App\Helpers\InstructionsHelper::heroImages(),
                                     ])
                                 </div>
                                 <textarea placeholder="{{__('social_media.placeholder_example')}}"

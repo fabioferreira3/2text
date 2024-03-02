@@ -89,6 +89,7 @@ return [
     'serious_topic' => 'Is it a serious topic? Or could be a fun one?',
     'share_information' => 'Share information in the context of a story.',
     'short_stories' => 'Short stories; novels; poetry; historical accounts.',
+    'social_words_count' => 'Define the number of words you would like our AI to generate for your post. For X posts the word count will always be 50.',
     'source' => 'Source',
     'subtopics_estimate' => 'As an estimate, 1 subtopic covers around 300 ~ 450 words.',
     'target_platforms' => 'Target Platforms',
