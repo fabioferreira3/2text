@@ -106,7 +106,7 @@ trait SocialMediaTrait
         }
         $this->showImageGenerator = !$this->showImageGenerator;
         if ($defaultImg) {
-            $this->dispatchTo('image.image-block-generator-modal', 'setOriginalPreviewImage', [
+            $this->dispatch('image.image-block-generator-modal', 'setOriginalPreviewImage', [
                 'file_url' => $defaultImg
             ]);
         }
