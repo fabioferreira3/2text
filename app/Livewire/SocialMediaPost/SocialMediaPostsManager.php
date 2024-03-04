@@ -49,6 +49,7 @@ class SocialMediaPostsManager extends Component
     public mixed $moreInstructions;
     public bool $showInstructions;
     public bool $generateImage;
+    public bool $showImageGenerator = false;
     public bool $modal;
     public $title;
     public bool $generating;
@@ -238,6 +239,28 @@ class SocialMediaPostsManager extends Component
     public function toggleInstructions()
     {
         $this->showInstructions = !$this->showInstructions;
+    }
+
+    public function toggleImageGenerator($defaultImg = null)
+    {
+        // if (!$this->imageBlock) {
+        //     $imageBlock = $this->document->contentBlocks()->save(
+        //         new DocumentContentBlock([
+        //             'type' => 'image',
+        //             'content' => ''
+        //         ])
+        //     );
+        //     $this->imageBlock = $imageBlock;
+        //     $this->imageBlockId = $imageBlock ? $imageBlock->id : null;
+        //     $this->imagePrompt = '';
+        //     $this->document->refresh();
+        // }
+        $this->showImageGenerator = !$this->showImageGenerator;
+        // if ($defaultImg) {
+        //     $this->dispatch('image.image-block-generator-modal', 'setOriginalPreviewImage', [
+        //         'file_url' => $defaultImg
+        //     ]);
+        // }
     }
 
     public function finishedProcess(array $params)

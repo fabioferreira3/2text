@@ -341,6 +341,9 @@
         @endforeach
     </div>
     @endif
+    @if ($showImageGenerator)
+    @livewire('image.image-block-generator-modal', ['contentBlock' => $imageBlock])
+    @endif
 </div>
 
 <script>
