@@ -125,6 +125,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'test_mode' => env('TEST_MODE', false),
+
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver

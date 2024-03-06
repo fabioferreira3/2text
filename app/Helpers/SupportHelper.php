@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Enums\AIModel;
 use App\Models\ShortLink;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\App;
 use Talendor\StabilityAI\Enums\StabilityAIEngine;
 
 class SupportHelper
@@ -82,5 +83,10 @@ class SupportHelper
         }
 
         return $timezones;
+    }
+
+    public static function isTestModeEnabled()
+    {
+        return App::environment(['local', 'develop']) && config('app.test_mode') === true;
     }
 }

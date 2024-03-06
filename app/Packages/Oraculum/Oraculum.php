@@ -3,6 +3,7 @@
 namespace App\Packages\Oraculum;
 
 use App\Enums\DataType;
+use App\Helpers\SupportHelper;
 use App\Models\User;
 use App\Packages\Oraculum\Exceptions\AddSourceException;
 use App\Packages\Oraculum\Exceptions\ChatRequestException;
@@ -10,6 +11,7 @@ use App\Packages\Oraculum\Exceptions\CreateBotException;
 use App\Packages\Oraculum\Exceptions\DeleteCollectionException;
 use App\Packages\Oraculum\Exceptions\QueryRequestException;
 use Exception;
+use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -86,6 +88,10 @@ class Oraculum
 
     public function query($message, $type = null)
     {
+        if (SupportHelper::isTestModeEnabled()) {
+            return $this->mockResponse($message);
+        }
+
         try {
             if (!$this->user->bot_enabled) {
                 $this->createBot();
@@ -125,6 +131,10 @@ class Oraculum
 
     public function chat($message)
     {
+        if (SupportHelper::isTestModeEnabled()) {
+            return $this->mockResponse($message);
+        }
+
         try {
             if (!$this->user->bot_enabled) {
                 $this->createBot();
@@ -186,5 +196,26 @@ class Oraculum
     {
         Artisan::call('count:token', ['string' => addslashes($string)]);
         return (int) Artisan::output();
+    }
+
+    private function mockResponse(string $message)
+    {
+        $faker = Faker::create();
+        $sleepCounter = $faker->numberBetween(2, 6);
+        $wordsCount = $faker->numberBetween(10, 250);
+        $response = $faker->words($wordsCount, true);
+        $promptTokens = $this->countTokens($message);
+        $completionTokens = $this->countTokens($response);
+
+        sleep($sleepCounter);
+        return [
+            'content' => $response,
+            'token_usage' => [
+                'model' => 'gpt-4',
+                'prompt' => $promptTokens,
+                'completion' => $completionTokens,
+                'total' => $promptTokens + $completionTokens
+            ]
+        ];
     }
 }

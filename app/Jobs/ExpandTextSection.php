@@ -137,7 +137,8 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
                     'tone' => $this->document->getMeta('tone'),
                     'style' => $this->document->getMeta('style') ?? null,
                     'keyword' => $this->meta['keyword']
-                ])
+                ]),
+                'task' => 'expand_text_section'
             ]
         ]);
     }

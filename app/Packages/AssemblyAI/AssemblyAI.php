@@ -2,12 +2,15 @@
 
 namespace App\Packages\AssemblyAI;
 
+use App\Helpers\SupportHelper;
 use App\Packages\AssemblyAI\Exceptions\GetTranscriptionRequestException;
 use App\Packages\AssemblyAI\Exceptions\GetTranscriptionSubtitlesRequestException;
 use App\Packages\AssemblyAI\Exceptions\TranscribeRequestException;
 use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Faker\Factory as Faker;
 
 class AssemblyAI
 {
@@ -26,6 +29,10 @@ class AssemblyAI
 
     public function transcribe($fileUrl, $meta = [])
     {
+        if (SupportHelper::isTestModeEnabled()) {
+            return Str::uuid();
+        }
+
         $urlParams = count($meta) > 0 ? '?' . http_build_query($meta) : '';
         $params = [
             'audio_url' => $fileUrl,
@@ -61,6 +68,10 @@ class AssemblyAI
 
     public function getTranscription($transcriptionId)
     {
+        if (SupportHelper::isTestModeEnabled()) {
+            return $this->mockResponse();
+        }
+
         try {
             $response = $this->client->get('/transcript/' . $transcriptionId);
 
@@ -103,5 +114,17 @@ class AssemblyAI
             Log::error($e->getMessage());
             throw new GetTranscriptionSubtitlesRequestException($e->getMessage());
         }
+    }
+
+    private function mockResponse()
+    {
+        $faker = Faker::create();
+        $sleepCounter = $faker->numberBetween(2, 6);
+        $wordsCount = $faker->numberBetween(10, 250);
+        $response = $faker->words($wordsCount, true);
+
+        sleep($sleepCounter);
+
+        return $response;
     }
 }

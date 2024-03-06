@@ -8,6 +8,7 @@ use App\Enums\MediaType;
 use App\Events\AudioGenerated;
 use App\Exceptions\AudioGenerationException;
 use App\Exceptions\AudioGenerationTimeoutException;
+use App\Helpers\SupportHelper;
 use App\Jobs\RegisterAppUsage;
 use App\Jobs\RegisterUnitsConsumption;
 use App\Jobs\Traits\JobEndings;
@@ -15,7 +16,6 @@ use App\Models\Document;
 use App\Models\MediaFile;
 use App\Models\User;
 use App\Models\Voice;
-use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -91,9 +91,14 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
+            $client = app(TextToSpeech::class);
+
+            if (SupportHelper::isTestModeEnabled()) {
+                $client = $this->mockClient();
+            }
+
             $user = User::findOrFail($this->document->meta['user_id']);
             $voice = Voice::findOrFail($this->meta['voice_id']);
-            $client = app(TextToSpeech::class);
             $response = $client->generate($this->meta['input_text'], $voice->external_id, 0, 'eleven_multilingual_v2');
 
             if ($response['status'] === 504) {
@@ -104,10 +109,7 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
                 throw new AudioGenerationException("Failed to generate audio: " . $response['message']);
             }
 
-            $audioContent = $response['response_body'];
-
-            $this->filePath = 'ai-audio/' . Str::uuid() . '.mp3';
-            Storage::disk('s3')->put($this->filePath, $audioContent);
+            $this->storeAudioFile($response['response_body']);
 
             $mediaFile = MediaFile::create([
                 'account_id' => $user->account_id,
@@ -135,7 +137,6 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
                 ]
             ]);
 
-            dump($this->document->getMeta('user_id'));
             AudioGenerated::dispatchIf(
                 $this->document->getMeta('user_id'),
                 [
@@ -154,6 +155,31 @@ class GenerateAudio implements ShouldQueue, ShouldBeUnique
         } catch (Exception $e) {
             $this->jobAborted("Failed to generate audio: " . $e->getMessage());
         }
+    }
+
+    public function storeAudioFile($content)
+    {
+        if (SupportHelper::isTestModeEnabled()) {
+            $this->filePath = 'ai-audio/testando.mp3';
+            return;
+        }
+
+        $this->filePath = 'ai-audio/' . Str::uuid() . '.mp3';
+        Storage::disk('s3')->put($this->filePath, $content);
+    }
+
+    private function mockClient()
+    {
+        return new class
+        {
+            public function generate()
+            {
+                return [
+                    'status' => 200,
+                    'response_body' => 'test'
+                ];
+            }
+        };
     }
 
     /**

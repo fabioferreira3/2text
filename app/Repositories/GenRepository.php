@@ -45,7 +45,8 @@ class GenRepository
             'content' => $promptHelper->writeTitle($context, [
                 'tone' => $document->getMeta('tone'),
                 'keyword' => $document->getMeta('keyword')
-            ])
+            ]),
+            'task' => 'create_title'
         ]]);
         $generatedTitle = Str::of(str_replace(["\r", "\n"], '', $this->response['content']))->trim()->trim('"');
         $document->update(['title' => $generatedTitle]);
