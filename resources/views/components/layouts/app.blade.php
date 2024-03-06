@@ -126,8 +126,8 @@
         });
 
         document.addEventListener('livewire:init', function() {
-            window.livewire.on('addToClipboard', function(message) {
-                navigator.clipboard.writeText(message);
+            window.livewire.on('addToClipboard', function(payload) {
+                navigator.clipboard.writeText(payload.message);
             });
             window.livewire.on('openLinkInNewTab', link => {
                 window.open(link, '_blank');
