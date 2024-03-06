@@ -3,7 +3,9 @@
 namespace App\Packages\OpenAI;
 
 use App\Enums\AIModel;
+use App\Helpers\SupportHelper;
 use Exception;
+use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Factory as OpenAI;
@@ -32,6 +34,10 @@ class ChatGPT
 
     public function request(array $messages)
     {
+        if (SupportHelper::isTestModeEnabled()) {
+            return $this->mockResponse($messages);
+        }
+
         try {
             $factory = new OpenAI();
             $client = $factory
@@ -78,5 +84,52 @@ class ChatGPT
     {
         Artisan::call('count:token', ['string' => addslashes($string)]);
         return (int) Artisan::output();
+    }
+
+    private function mockResponse(array $messages)
+    {
+        $faker = Faker::create();
+        $sleepCounter = $faker->numberBetween(2, 6);
+        $wordsCount = $faker->numberBetween(10, 250);
+        $response = $faker->words($wordsCount, true);
+        $promptTokens = $this->countTokens($messages[0]['content']);
+        $completionTokens = $this->countTokens($response);
+
+        if (isset($messages[0]['task'])) {
+            switch ($messages[0]['task']) {
+                case 'generate_thoughts':
+                    $response = json_encode([
+                        $faker->sentence(),
+                        $faker->sentence(),
+                        $faker->sentence()
+                    ]);
+                    break;
+                case 'create_title':
+                    $response = $faker->sentence();
+                    break;
+                case 'create_outline':
+                    $response = '1. Main Topic A. Subtopic 1 B. Subtopic 2 C. Subtopic 3';
+                    break;
+                case 'expand_outline':
+                    $response = "<h2>{$faker->sentence()}</h2><p>{$faker->text(200)}</p><h2>{$faker->sentence()}</h2><p>{$faker->text(200)}</p><h2>{$faker->sentence()}</h2><p>{$faker->text(200)}</p>";
+                    break;
+                case 'expand_text_section':
+                    $response = "<p>{$faker->text(200)}</p><p>{$faker->text(200)}</p><p>{$faker->text(200)}</p>";
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        sleep($sleepCounter);
+        return [
+            'content' => $response,
+            'token_usage' => [
+                'model' => 'gpt-4',
+                'prompt' => $promptTokens,
+                'completion' => $completionTokens,
+                'total' => $promptTokens + $completionTokens
+            ]
+        ];
     }
 }

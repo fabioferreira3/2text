@@ -2,9 +2,11 @@
 
 namespace App\Packages\OpenAI;
 
+use App\Helpers\SupportHelper;
 use App\Packages\OpenAI\Exceptions\ImageGenerationException;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Faker\Factory as Faker;
 use OpenAI\Factory as OpenAI;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -28,6 +30,10 @@ class DallE
 
     public function request(array $params)
     {
+        if (SupportHelper::isTestModeEnabled()) {
+            return $this->mockResponse();
+        }
+
         try {
             $factory = new OpenAI();
             $client = $factory
@@ -59,5 +65,17 @@ class DallE
             Log::error("Image generation refused: " . $e->getMessage());
             throw new ImageGenerationException($e->getMessage());
         }
+    }
+
+    private function mockResponse()
+    {
+        $faker = Faker::create();
+        $sleepCounter = $faker->numberBetween(2, 6);
+
+        sleep($sleepCounter);
+        return [
+            'fileName' => uniqid() . '.png',
+            'imageData' => base64_decode("iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAIAAAD/gAIDAAAA5klEQVR4nO3QQQkAIADAQLV/Z63gXiLcJRibe3BrvQ74iVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWYFZgVmBWcEBil4Bx/GEGnoAAAAASUVORK5CYII=")
+        ];
     }
 }

@@ -62,7 +62,8 @@ class GenerateAIThoughts implements ShouldQueue, ShouldBeUnique
                         'sentences_count' => $this->meta['sentences_count'] * 2,
                         'tone' => $this->document->getMeta('tone'),
                         'style' => $this->document->getMeta('style') ?? null
-                    ])
+                    ]),
+                    'task' => 'generate_thoughts'
                 ]
             ]);
 

@@ -43,7 +43,7 @@ trait SocialMediaTrait
 
     public function copy()
     {
-        $this->dispatch('addToClipboard', message: $this->text);
+        $this->dispatch('addToClipboard', message: $this->text->value);
         $this->copied = true;
     }
 
