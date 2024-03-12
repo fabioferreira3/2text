@@ -10,7 +10,7 @@
             'document' => $document
             ])
         </div>
-        <div class="w-1/3 md:w-auto text-center bg-gray-200 px-3 py-1 rounded-lg">
+        <div class="w-2/3 md:w-1/3 md:w-auto text-center bg-gray-200 px-3 py-1 rounded-lg">
             1 {{__('common.unit')}} = 480 {{__('common.words')}}
         </div>
     </div>
