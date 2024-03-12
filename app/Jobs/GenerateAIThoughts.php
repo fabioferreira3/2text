@@ -63,7 +63,7 @@ class GenerateAIThoughts implements ShouldQueue, ShouldBeUnique
                         'tone' => $this->document->getMeta('tone'),
                         'style' => $this->document->getMeta('style') ?? null
                     ]),
-                    'task' => 'generate_thoughts'
+                    //    'task' => 'generate_thoughts'
                 ]
             ]);
 

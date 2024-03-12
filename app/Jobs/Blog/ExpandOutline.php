@@ -140,7 +140,7 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
                         'style' => $this->document->getMeta('style') ?? null
                     ]
                 ),
-                'task' => 'expand_outline'
+                // 'task' => 'expand_outline'
             ]
         ]);
     }
