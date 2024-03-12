@@ -33,3 +33,18 @@
         @endisset
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('livewire:init', function () {
+        console.log('caralho');
+        window.livewire.on('progressUpdated', function (progress) {
+            if (progress < 99) { // Set your desired max progress value
+                setTimeout(()=> {
+                    @this.call('moveProgress');
+                }, 500);
+            }
+        });
+    });
+</script>
+@endpush

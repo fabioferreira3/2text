@@ -60,6 +60,7 @@ class SocialMediaPostsManager extends Component
     public $selectedImageBlock;
     public $selectedImageBlockId;
     public $imagePrompt;
+    public $currentProgress = 0;
 
     public $posts = [];
 
@@ -142,11 +143,11 @@ class SocialMediaPostsManager extends Component
     public function mount(Document $document)
     {
         $this->document = $document;
-        // $this->generating = in_array($this->document->status, [
-        //     DocumentStatus::ON_HOLD,
-        //     DocumentStatus::IN_PROGRESS
-        // ]);
-        $this->generating = true;
+        $this->generating = in_array($this->document->status, [
+            DocumentStatus::ON_HOLD,
+            DocumentStatus::IN_PROGRESS
+        ]);
+        //$this->generating = true;
         $this->checkDocumentStatus();
         $this->sourceType = $document->getMeta('source') ?? 'free_text';
         $this->context = $document->getContext() ?? '';
@@ -233,25 +234,25 @@ class SocialMediaPostsManager extends Component
 
     public function checkDocumentStatus()
     {
-        // if ($this->generating) {
-        //     if (!in_array($this->document->status, [
-        //         DocumentStatus::ON_HOLD,
-        //         DocumentStatus::IN_PROGRESS
-        //     ])) {
-        //         $this->generating = false;
-        //     }
-        //     if (!$this->generating) {
-        //         $this->showInstructions = $this->document->status == DocumentStatus::DRAFT ? true : false;
-        //         $this->dispatch(
-        //             'alert',
-        //             type: 'success',
-        //             message: __('alerts.posts_generated')
-        //         );
-        //         $this->posts = $this->document->children()->ofMediaPosts()->latest()->get();
-        //     }
-        // } else {
-        //     $this->showInstructions = $this->document->status == DocumentStatus::DRAFT ? true : false;
-        // }
+        if ($this->generating) {
+            if (!in_array($this->document->status, [
+                DocumentStatus::ON_HOLD,
+                DocumentStatus::IN_PROGRESS
+            ])) {
+                $this->generating = false;
+            }
+            if (!$this->generating) {
+                $this->showInstructions = $this->document->status == DocumentStatus::DRAFT ? true : false;
+                $this->dispatch(
+                    'alert',
+                    type: 'success',
+                    message: __('alerts.posts_generated')
+                );
+                $this->posts = $this->document->children()->ofMediaPosts()->latest()->get();
+            }
+        } else {
+            $this->showInstructions = $this->document->status == DocumentStatus::DRAFT ? true : false;
+        }
     }
 
     public function toggleInstructions()
@@ -353,7 +354,7 @@ class SocialMediaPostsManager extends Component
 
             $platforms = collect($this->platforms)->filter()->toArray();
             ProcessSocialMediaPosts::dispatch($this->document, $platforms);
-            $this->dispatch('start-processing-animation');
+            $this->moveProgress();
         } catch (InsufficientUnitsException $e) {
             $this->dispatch(
                 'alert',
@@ -363,6 +364,12 @@ class SocialMediaPostsManager extends Component
         } catch (Exception $e) {
             throw new CreatingSocialMediaPostException($e->getMessage());
         }
+    }
+
+    public function moveProgress()
+    {
+        $this->currentProgress++;
+        $this->dispatch('progressUpdated', $this->currentProgress);
     }
 
     public function validateUnitCosts()

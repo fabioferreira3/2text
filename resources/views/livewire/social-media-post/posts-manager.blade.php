@@ -349,7 +349,7 @@
 
     @if($generating)
     @include('livewire.common.processing-robot', [
-    'currentProgress' => '20'
+    'currentProgress' => $currentProgress
     ])
     @endif
 </div>
@@ -358,7 +358,17 @@
 @push('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-    initTypewriter('typewriter', ['...'], 120);
+        initTypewriter('typewriter', ['...'], 120);
+    });
+
+    document.addEventListener('livewire:init', function () {
+        window.livewire.on('progressUpdated', function (progress) {
+            if (progress < 99) { // Set your desired max progress value
+                setTimeout(()=> {
+                    @this.call('moveProgress');
+                }, 500);
+            }
+        });
     });
 </script>
 @endpush
