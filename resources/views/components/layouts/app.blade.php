@@ -165,6 +165,7 @@
             adjustTextArea();
         });
     </script>
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-TNBCJZH9"></script>
     <script>

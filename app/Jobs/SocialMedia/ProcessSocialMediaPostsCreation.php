@@ -42,6 +42,7 @@ class ProcessSocialMediaPostsCreation implements ShouldQueue
             $this->document->refresh();
 
             foreach ($this->meta['platforms'] as $platform => $value) {
+                $processId = Str::uuid();
                 $platformName = Str::of($platform)->lower();
                 $post = Document::create([
                     'type' => DocumentType::SOCIAL_MEDIA_POST->value,
@@ -56,7 +57,8 @@ class ProcessSocialMediaPostsCreation implements ShouldQueue
                     $post->id,
                     DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST,
                     [
-                        'process_id' => $this->textProcessId,
+                        'process_id' => $processId,
+                        'process_group_id' => $this->textProcessId,
                         'meta' => [
                             'platform' => $platformName,
                             'query_embedding' => $this->meta['query_embedding'] ?? false,
@@ -75,6 +77,7 @@ class ProcessSocialMediaPostsCreation implements ShouldQueue
                         [
                             'order' => 1,
                             'process_id' => $this->imageProcessId,
+                            'process_group_id' => $this->textProcessId,
                             'meta' => [
                                 'process_id' => $this->imageProcessId,
                                 'prompt' => $post->getMeta('img_prompt'),
@@ -104,7 +107,8 @@ class ProcessSocialMediaPostsCreation implements ShouldQueue
                     DocumentTaskEnum::REGISTER_FINISHED_PROCESS,
                     [
                         'order' => 2,
-                        'process_id' => $this->textProcessId,
+                        'process_id' => $processId,
+                        'process_group_id' => $this->textProcessId,
                         'meta' => [
                             'silently' => true
                         ]

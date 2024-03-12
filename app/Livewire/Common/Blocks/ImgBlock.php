@@ -7,6 +7,7 @@ use App\Models\MediaFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 
 class ImgBlock extends Component
@@ -22,8 +23,6 @@ class ImgBlock extends Component
         $userId = Auth::user()->id;
         return [
             "echo-private:User.$userId,.ContentBlockUpdated" => 'onProcessFinished',
-            'toggleImageGenerator',
-            'imageSelected'
         ];
     }
 
@@ -39,15 +38,17 @@ class ImgBlock extends Component
         return Storage::download($this->mediaFile->file_path);
     }
 
-    public function imageSelected(array $params)
+    #[On('imageSelected')]
+    public function imageSelected($mediaFileId, $fileUrl)
     {
-        $this->mediaFile = MediaFile::findOrFail($params['media_file_id']);
+        $this->mediaFile = MediaFile::findOrFail($mediaFileId);
         $this->contentBlock->update([
             'content' => $this->mediaFile->id
         ]);
         $this->toggleImageGenerator();
     }
 
+    #[On('toggleImageGenerator')]
     public function toggleImageGenerator()
     {
         $this->showImageGenerator = !$this->showImageGenerator;

@@ -60,8 +60,7 @@ describe(
                 $this->component->call('selectImage', $mediaFile->id)
                     ->assertDispatched(
                         'imageSelected',
-                        media_file_id: $mediaFile->id,
-                        file_url: $mediaFile->file_url
+                        mediaFileId: $mediaFile->id
                     );
             }
         });

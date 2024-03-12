@@ -64,12 +64,7 @@ class ImageBlockGeneratorModal extends Component
 
     public function selectImage($mediaFileId)
     {
-        $mediaFile = MediaFile::findOrFail($mediaFileId);
-        $this->dispatch(
-            'imageSelected',
-            media_file_id: $mediaFileId,
-            file_url: $mediaFile->file_url
-        );
+        $this->dispatch('imageSelected', mediaFileId: $mediaFileId);
     }
 
     public function generateNewImages()

@@ -8,6 +8,7 @@ use App\Models\MediaFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 
 trait SocialMediaTrait
 {
@@ -35,8 +36,6 @@ trait SocialMediaTrait
     {
         return [
             'textBlockUpdated',
-            'toggleImageGenerator',
-            'imageSelected',
             'contentBlockUpdated'
         ];
     }
@@ -77,10 +76,10 @@ trait SocialMediaTrait
         return Storage::download($originalFile->file_path);
     }
 
-    public function imageSelected($params)
+    #[On('imageSelected')]
+    public function imageSelected($mediaFileId)
     {
-        $mediaFile = MediaFile::findOrFail($params['media_file_id']);
-        $this->imageBlock->update(['content' => $mediaFile->id]);
+        $this->imageBlock->update(['content' => $mediaFileId]);
         $this->refreshImage();
         $this->toggleImageGenerator();
         $this->dispatch(
@@ -88,28 +87,6 @@ trait SocialMediaTrait
             type: 'success',
             message: __('alerts.image_updated')
         );
-    }
-
-    public function toggleImageGenerator($defaultImg = null)
-    {
-        if (!$this->imageBlock) {
-            $imageBlock = $this->document->contentBlocks()->save(
-                new DocumentContentBlock([
-                    'type' => 'image',
-                    'content' => ''
-                ])
-            );
-            $this->imageBlock = $imageBlock;
-            $this->imageBlockId = $imageBlock ? $imageBlock->id : null;
-            $this->imagePrompt = '';
-            $this->document->refresh();
-        }
-        $this->showImageGenerator = !$this->showImageGenerator;
-        if ($defaultImg) {
-            $this->dispatch('image.image-block-generator-modal', 'setOriginalPreviewImage', [
-                'file_url' => $defaultImg
-            ]);
-        }
     }
 
     public function refreshImage()

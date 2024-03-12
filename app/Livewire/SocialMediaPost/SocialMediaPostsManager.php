@@ -10,6 +10,7 @@ use App\Exceptions\CreatingSocialMediaPostException;
 use App\Exceptions\InsufficientUnitsException;
 use App\Jobs\SocialMedia\ProcessSocialMediaPosts;
 use App\Models\Document;
+use App\Models\DocumentContentBlock;
 use App\Repositories\DocumentRepository;
 use App\Rules\CsvFile;
 use App\Rules\DocxFile;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\On;
 use Talendor\StabilityAI\Enums\StylePreset;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -54,6 +56,12 @@ class SocialMediaPostsManager extends Component
     public $title;
     public bool $generating;
     public $filePath = null;
+
+    public $selectedImageBlock;
+    public $selectedImageBlockId;
+    public $imagePrompt;
+
+    public $posts = [];
 
     public function rules()
     {
@@ -134,7 +142,11 @@ class SocialMediaPostsManager extends Component
     public function mount(Document $document)
     {
         $this->document = $document;
-        $this->generating = false;
+        // $this->generating = in_array($this->document->status, [
+        //     DocumentStatus::ON_HOLD,
+        //     DocumentStatus::IN_PROGRESS
+        // ]);
+        $this->generating = true;
         $this->checkDocumentStatus();
         $this->sourceType = $document->getMeta('source') ?? 'free_text';
         $this->context = $document->getContext() ?? '';
@@ -156,6 +168,7 @@ class SocialMediaPostsManager extends Component
             'Instagram' => false,
             'Twitter' => false
         ];
+        $this->posts = $document->children()->ofMediaPosts()->latest()->get();
         $this->checkMaxSourceUrls();
     }
 
@@ -220,20 +233,25 @@ class SocialMediaPostsManager extends Component
 
     public function checkDocumentStatus()
     {
-        $this->showInstructions = $this->document->status == DocumentStatus::DRAFT ? true : false;
-        if ($this->generating) {
-            $this->generating = in_array($this->document->status, [
-                DocumentStatus::ON_HOLD,
-                DocumentStatus::IN_PROGRESS
-            ]);
-            if (!$this->generating) {
-                $this->dispatch(
-                    'alert',
-                    type: 'success',
-                    message: __('alerts.posts_generated')
-                );
-            }
-        }
+        // if ($this->generating) {
+        //     if (!in_array($this->document->status, [
+        //         DocumentStatus::ON_HOLD,
+        //         DocumentStatus::IN_PROGRESS
+        //     ])) {
+        //         $this->generating = false;
+        //     }
+        //     if (!$this->generating) {
+        //         $this->showInstructions = $this->document->status == DocumentStatus::DRAFT ? true : false;
+        //         $this->dispatch(
+        //             'alert',
+        //             type: 'success',
+        //             message: __('alerts.posts_generated')
+        //         );
+        //         $this->posts = $this->document->children()->ofMediaPosts()->latest()->get();
+        //     }
+        // } else {
+        //     $this->showInstructions = $this->document->status == DocumentStatus::DRAFT ? true : false;
+        // }
     }
 
     public function toggleInstructions()
@@ -241,32 +259,37 @@ class SocialMediaPostsManager extends Component
         $this->showInstructions = !$this->showInstructions;
     }
 
+    #[On('toggleImageGenerator')]
     public function toggleImageGenerator($defaultImg = null)
     {
-        // if (!$this->imageBlock) {
-        //     $imageBlock = $this->document->contentBlocks()->save(
-        //         new DocumentContentBlock([
-        //             'type' => 'image',
-        //             'content' => ''
-        //         ])
-        //     );
-        //     $this->imageBlock = $imageBlock;
-        //     $this->imageBlockId = $imageBlock ? $imageBlock->id : null;
-        //     $this->imagePrompt = '';
-        //     $this->document->refresh();
-        // }
+        if (!$this->selectedImageBlock) {
+            $imageBlock = $this->document->contentBlocks()->save(
+                new DocumentContentBlock([
+                    'type' => 'image',
+                    'content' => ''
+                ])
+            );
+            $this->selectedImageBlock = $imageBlock;
+            $this->selectedImageBlockId = $imageBlock ? $imageBlock->id : null;
+            $this->imagePrompt = '';
+            $this->document->refresh();
+        }
         $this->showImageGenerator = !$this->showImageGenerator;
-        // if ($defaultImg) {
-        //     $this->dispatch('image.image-block-generator-modal', 'setOriginalPreviewImage', [
-        //         'file_url' => $defaultImg
-        //     ]);
-        // }
+        if ($defaultImg) {
+            $this->dispatch('image.image-block-generator-modal', 'setOriginalPreviewImage', [
+                'file_url' => $defaultImg
+            ]);
+        }
     }
 
     public function finishedProcess(array $params)
     {
-        if (isset($params['parent_document_id']) && $params['parent_document_id'] === $this->document->id) {
-            $this->document->refresh();
+        $this->dispatch('start-processing-animation');
+        if (
+            isset($params['parent_document_id']) &&
+            $params['parent_document_id'] === $this->document->id &&
+            $params['group_finished']
+        ) {
             $this->checkDocumentStatus();
         }
     }
@@ -284,12 +307,12 @@ class SocialMediaPostsManager extends Component
     public function deleteDocument(array $params)
     {
         (new DocumentRepository())->delete($params['document_id']);
-        $this->document->refresh();
         $this->dispatch(
             'alert',
             type: 'success',
             message: __('alerts.post_deleted')
         );
+        redirect(request()->header('Referer'));
     }
 
     public function updatedFileInput($file)
@@ -305,7 +328,7 @@ class SocialMediaPostsManager extends Component
 
             $this->generating = true;
             $this->dispatch(
-                'info',
+                'alert',
                 type: 'info',
                 message: __('alerts.generating_posts')
             );
@@ -330,9 +353,10 @@ class SocialMediaPostsManager extends Component
 
             $platforms = collect($this->platforms)->filter()->toArray();
             ProcessSocialMediaPosts::dispatch($this->document, $platforms);
+            $this->dispatch('start-processing-animation');
         } catch (InsufficientUnitsException $e) {
             $this->dispatch(
-                'info',
+                'alert',
                 type: 'error',
                 message: __('alerts.insufficient_units')
             );

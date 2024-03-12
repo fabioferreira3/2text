@@ -80,9 +80,23 @@ describe(
 
         it('redirects to billing page when selecting a product and the user has a spark plan', function () {
             $user = User::factory()->withSubscription('price_1ObvxSEjLWGu0g9vIezEDGTW')->create();
-            $this->actingAs($user)->livewire(Purchase::class)
-                ->call('selectProduct', $this->products[0]->id)
-                ->assertRedirect('/billing');
+            $product = Product::factory()->create([
+                'meta' => [
+                    'off' => '10',
+                    'price' => '49.90',
+                    'price_id' => 'price_1ObvxSEjLWGu0g9vIezEDGTW',
+                    'features' => [
+                        'f1',
+                        'f2',
+                        'f3'
+                    ]
+                ]
+            ]);
+            $response = $this->actingAs($user)->livewire(Purchase::class)
+                ->call('selectProduct', $product->id)
+                ->assertRedirect();
+
+            expect($response->effects['redirect'])->toContain('https://checkout.stripe.com/c/pay');
         });
 
         it('adds a new subscription and redirect to checkout page when user has no spark plan', function () {

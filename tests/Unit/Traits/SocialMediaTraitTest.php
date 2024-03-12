@@ -51,8 +51,6 @@ describe('SocialMediaTrait', function () {
 
         $this->assertIsArray($listeners);
         $this->assertContains('textBlockUpdated', $listeners);
-        $this->assertContains('toggleImageGenerator', $listeners);
-        $this->assertContains('imageSelected', $listeners);
         $this->assertContains('contentBlockUpdated', $listeners);
     })->with([
         new FacebookPost(),

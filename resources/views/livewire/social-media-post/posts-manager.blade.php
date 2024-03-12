@@ -1,14 +1,16 @@
 <div class="flex flex-col mb-24 md:mb-0">
     @section('header')
     <div class="flex flex-col gap-4 md:gap-0 md:flex-row items-center justify-between">
-        @livewire('common.header', [
-        'icon' => 'hashtag',
-        'title' => $document->title ?? __('social_media.new_social_media_post'),
-        'suffix' => __('social_media.social_media_post'),
-        'editable' => true,
-        'document' => $document
-        ])
-        <div class="w-1/2 md:w-auto text-center bg-gray-200 px-3 py-1 rounded-lg">
+        <div class="w-2/3">
+            @livewire('common.header', [
+            'icon' => 'hashtag',
+            'title' => $document->title ?? __('social_media.new_social_media_post'),
+            'suffix' => __('social_media.social_media_post'),
+            'editable' => true,
+            'document' => $document
+            ])
+        </div>
+        <div class="w-1/3 md:w-auto text-center bg-gray-200 px-3 py-1 rounded-lg">
             1 {{__('common.unit')}} = 480 {{__('common.words')}}
         </div>
     </div>
@@ -331,9 +333,9 @@
         @endif
     </div>
     @endif
-    @if (count($document->children))
+    @if (count($posts) && !$generating)
     <div class="flex flex-col w-full lg:grid lg:grid-cols-2 xl:grid-cols-3 mt-6 gap-12 md:gap-6">
-        @foreach ($document->children()->ofMediaPosts()->latest()->get() as $post)
+        @foreach ($posts as $post)
         @if ($post->isFinished && $post->contentBlocks->count())
         @php $platform = $post->meta['platform']; @endphp
         @livewire("social-media-post.platforms.$platform-post", [$post], key($post->id))
@@ -342,12 +344,21 @@
     </div>
     @endif
     @if ($showImageGenerator)
-    @livewire('image.image-block-generator-modal', ['contentBlock' => $imageBlock])
+    @livewire('image.image-block-generator-modal', ['contentBlock' => $selectedImageBlock])
+    @endif
+
+    @if($generating)
+    @include('livewire.common.processing-robot', [
+    'currentProgress' => '20'
+    ])
     @endif
 </div>
+</div>
 
+@push('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        initTypewriter('typewriter', ['...'], 120);
+    initTypewriter('typewriter', ['...'], 120);
     });
 </script>
+@endpush
