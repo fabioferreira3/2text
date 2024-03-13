@@ -144,7 +144,7 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
                         'maxsubtopics' => $this->document->getMeta('target_headers_count') ?? 2
                     ]
                 ),
-                'task' => 'create_outline'
+                //'task' => 'create_outline'
             ]
         ]);
     }
