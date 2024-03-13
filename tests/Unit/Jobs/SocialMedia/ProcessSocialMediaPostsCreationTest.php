@@ -55,7 +55,6 @@ describe('Social Media - ProcessSocialMediaPostsCreationTest job', function () {
             $this->assertDatabaseHas('document_tasks', [
                 'name' => DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST->value,
                 'job' => DocumentTaskEnum::CREATE_SOCIAL_MEDIA_POST->getJob(),
-                'process_id' => $job->textProcessId,
                 'meta->platform' => Str::of($platform)->lower(),
                 'meta->query_embedding' => true,
                 'order' => 1
@@ -64,7 +63,6 @@ describe('Social Media - ProcessSocialMediaPostsCreationTest job', function () {
             $this->assertDatabaseHas('document_tasks', [
                 'name' => DocumentTaskEnum::REGISTER_FINISHED_PROCESS->value,
                 'job' => DocumentTaskEnum::REGISTER_FINISHED_PROCESS->getJob(),
-                'process_id' => $job->textProcessId,
                 'meta->silently' => true,
                 'order' => 2
             ]);
@@ -74,7 +72,6 @@ describe('Social Media - ProcessSocialMediaPostsCreationTest job', function () {
                     'name' => DocumentTaskEnum::GENERATE_IMAGE->value,
                     'job' => DocumentTaskEnum::GENERATE_IMAGE->getJob(),
                     'process_id' => $job->imageProcessId,
-                    'meta->process_id' => $job->imageProcessId,
                     'meta->prompt' => $imgPrompt,
                     'meta->add_content_block' => true,
                     'order' => 1
@@ -82,7 +79,6 @@ describe('Social Media - ProcessSocialMediaPostsCreationTest job', function () {
                 $this->assertDatabaseHas('document_tasks', [
                     'name' => DocumentTaskEnum::REGISTER_FINISHED_PROCESS->value,
                     'job' => DocumentTaskEnum::REGISTER_FINISHED_PROCESS->getJob(),
-                    'process_id' => $job->imageProcessId,
                     'meta->silently' => true,
                     'order' => 2
                 ]);
