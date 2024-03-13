@@ -39,7 +39,7 @@ class ImgBlock extends Component
     }
 
     #[On('imageSelected')]
-    public function imageSelected($mediaFileId, $fileUrl)
+    public function imageSelected($mediaFileId)
     {
         $this->mediaFile = MediaFile::findOrFail($mediaFileId);
         $this->contentBlock->update([

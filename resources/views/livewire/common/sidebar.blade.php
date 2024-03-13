@@ -24,20 +24,6 @@
         </div>
         <div class="hidden sm:flex sm:flex-col sm:gap-3 ml-4">
             @include('livewire.common.navlink', [
-            'activeRoutes' => ['social-media-dashboard', 'new-social-media-post', 'social-media-view'],
-            'route' => 'social-media-dashboard',
-            'submenu' => true,
-            'name' => __('menus.social_media_post'),
-            'icon' => 'hashtag',
-            ])
-            @include('livewire.common.navlink', [
-            'activeRoutes' => ['blog-dashboard', 'new-post', 'blog-post-view'],
-            'route' => 'blog-dashboard',
-            'submenu' => true,
-            'name' => __('menus.blog_post'),
-            'icon' => 'newspaper',
-            ])
-            @include('livewire.common.navlink', [
             'activeRoutes' => ['my-images'],
             'route' => 'my-images',
             'submenu' => true,
@@ -50,6 +36,20 @@
             'submenu' => true,
             'name' => __('menus.paraphraser'),
             'icon' => 'switch-horizontal',
+            ])
+            @include('livewire.common.navlink', [
+            'activeRoutes' => ['social-media-dashboard', 'new-social-media-post', 'social-media-view'],
+            'route' => 'social-media-dashboard',
+            'submenu' => true,
+            'name' => __('menus.social_media_post'),
+            'icon' => 'hashtag',
+            ])
+            @include('livewire.common.navlink', [
+            'activeRoutes' => ['blog-dashboard', 'new-post', 'blog-post-view'],
+            'route' => 'blog-dashboard',
+            'submenu' => true,
+            'name' => __('menus.blog_post'),
+            'icon' => 'newspaper',
             ])
             @include('livewire.common.navlink', [
             'route' => 'new-text-to-audio',
