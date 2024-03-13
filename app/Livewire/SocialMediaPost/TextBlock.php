@@ -112,7 +112,7 @@ class TextBlock extends Component
                 message: __('alerts.text_regenerated')
             );
             $this->processing = false;
-            $this->dispatch('contentBlockUpdated', document_content_block_id: $this->contentBlockId);
+            $this->dispatch('contentBlockUpdated', documentContentBlockId: $this->contentBlockId);
         }
     }
 }

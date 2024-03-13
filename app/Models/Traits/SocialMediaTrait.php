@@ -106,11 +106,11 @@ trait SocialMediaTrait
         $this->textBlockId = $textBlock ? $textBlock->id : null;
     }
 
-    public function contentBlockUpdated($params)
+    public function contentBlockUpdated($documentContentBlockId)
     {
-        if ($params['document_content_block_id'] === $this->imageBlockId) {
+        if ($documentContentBlockId === $this->imageBlockId) {
             $this->refreshImage();
-        } elseif ($params['document_content_block_id'] === $this->textBlockId) {
+        } elseif ($documentContentBlockId === $this->textBlockId) {
             $this->refreshText();
         }
     }
