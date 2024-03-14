@@ -160,7 +160,7 @@ class ImageBlockGeneratorModal extends Component
     public function previewImage($mediaFileId)
     {
         $mediaFile = MediaFile::findOrFail($mediaFileId);
-        $this->dispatch('openLinkInNewTab', link: $mediaFile->file_url);
+        $this->dispatch('openLinkInNewTab', $mediaFile->file_url);
     }
 
     public function render()

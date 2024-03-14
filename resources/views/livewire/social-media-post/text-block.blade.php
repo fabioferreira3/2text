@@ -1,11 +1,11 @@
 <div class="relative rounded-b-xl border border-zinc-200 p-4 bg-gray-100">
-    <div class="flex flex-col justify-end md:flex-row mb-4 gap-2">
+    <div class="flex flex-col justify-start md:flex-row mb-4 gap-2">
         <button wire:click="shorten"
-            class="p1 lg:text-sm xl:text-base font-bold hover:bg-secondary hover:text-white transition-all duration-500 text-gray-600 bg-gray-200 px-3 py-1 rounded-lg">{{__('menus.shorten')}}</button>
+            class="p1 lg:text-sm font-bold hover:bg-secondary hover:text-white transition-all duration-500 text-gray-600 bg-gray-200 px-2 py-1 rounded-lg">{{__('menus.shorten')}}</button>
         <button wire:click="expand"
-            class="p1 lg:text-sm xl:text-base font-bold hover:bg-secondary hover:text-white transition-all duration-500 text-gray-600 bg-gray-200 px-3 py-1 rounded-lg">{{__('menus.expand')}}</button>
+            class="p1 lg:text-sm font-bold hover:bg-secondary hover:text-white transition-all duration-500 text-gray-600 bg-gray-200 px-2 py-1 rounded-lg">{{__('menus.expand')}}</button>
         <button wire:click="toggleCustomPrompt"
-            class="p1 lg:text-sm xl:text-base font-bold hover:bg-secondary hover:text-white transition-all duration-500 text-gray-600 bg-gray-200 px-3 py-1 rounded-lg">{{__('menus.ask_to')}}
+            class="p1 lg:text-sm font-bold hover:bg-secondary hover:text-white transition-all duration-500 text-gray-600 bg-gray-200 px-2 py-1 rounded-lg">{{__('menus.ask_to')}}
         </button>
     </div>
     @if ($processing)

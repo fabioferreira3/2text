@@ -56,7 +56,7 @@ class ImgBlock extends Component
 
     public function previewImage()
     {
-        $this->dispatch('openLinkInNewTab', link: $this->mediaFile->file_url);
+        $this->dispatch('openLinkInNewTab', $this->mediaFile->file_url);
     }
 
     public function render()

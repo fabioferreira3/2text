@@ -16,7 +16,8 @@
                 </svg>
             </div>
         </div>
-        <div class="flex flex-col lg:grid lg:grid-cols-2 items-start gap-8 mt-4">
+        <div
+            class="flex flex-col lg:grid @php if($previewImgs['original'] && count($previewImgs['variants'])) { return 'lg:grid-cols-2';} @endphp items-start gap-8 mt-4">
             @if ($previewImgs['original'])
             <div class="flex flex-col gap-2 h-full w-full">
                 <div class="text-2xl font-bold mb-8 md:mb-0">{{__('modals.primary')}}:</div>
@@ -158,7 +159,7 @@
                 @if ($processing)
                 <div class="flex items-center gap-4">
                     <x-loader width="6" height="6" color="white" />
-                    <div>{{ __('social_media.generating') }}...</div>
+                    <div>{{ __('social_media.generating_images')}}...</div>
                 </div>
                 @endif
                 @if (!$processing)

@@ -147,7 +147,6 @@ class SocialMediaPostsManager extends Component
             DocumentStatus::ON_HOLD,
             DocumentStatus::IN_PROGRESS
         ]);
-        //$this->generating = true;
         $this->checkDocumentStatus();
         $this->sourceType = $document->getMeta('source') ?? 'free_text';
         $this->context = $document->getContext() ?? '';
@@ -171,6 +170,7 @@ class SocialMediaPostsManager extends Component
         ];
         $this->posts = $document->children()->ofMediaPosts()->latest()->get();
         $this->checkMaxSourceUrls();
+        $this->startProgressBar();
     }
 
     public function checkMaxSourceUrls()
@@ -283,6 +283,12 @@ class SocialMediaPostsManager extends Component
         }
     }
 
+    #[On('closeImageGenerator')]
+    public function closeImageGenerator()
+    {
+        $this->showImageGenerator = false;
+    }
+
     public function finishedProcess(array $params)
     {
         $this->dispatch('start-processing-animation');
@@ -354,7 +360,7 @@ class SocialMediaPostsManager extends Component
 
             $platforms = collect($this->platforms)->filter()->toArray();
             ProcessSocialMediaPosts::dispatch($this->document, $platforms);
-            $this->moveProgress();
+            $this->startProgressBar();
         } catch (InsufficientUnitsException $e) {
             $this->dispatch(
                 'alert',
@@ -366,10 +372,12 @@ class SocialMediaPostsManager extends Component
         }
     }
 
-    public function moveProgress()
+    public function startProgressBar()
     {
-        $this->currentProgress++;
-        $this->dispatch('progressUpdated', $this->currentProgress);
+        if ($this->generating) {
+            $this->currentProgress++;
+            $this->dispatch('progressUpdated', $this->currentProgress);
+        }
     }
 
     public function validateUnitCosts()

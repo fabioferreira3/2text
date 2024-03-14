@@ -27,6 +27,7 @@ return [
     'generate_new_image' => 'Generate new image',
     'generate' => 'Generate',
     'generating' => 'Writing your post(s)! Please wait',
+    'generating_images' => 'Generating images',
     'go' => 'Generate',
     'instructions' => 'Instructions',
     'image_description' => 'Image Prompt',

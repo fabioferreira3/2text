@@ -81,12 +81,12 @@ trait SocialMediaTrait
     {
         $this->imageBlock->update(['content' => $mediaFileId]);
         $this->refreshImage();
-        $this->toggleImageGenerator();
         $this->dispatch(
             'alert',
             type: 'success',
             message: __('alerts.image_updated')
         );
+        $this->dispatch('closeImageGenerator');
     }
 
     public function refreshImage()

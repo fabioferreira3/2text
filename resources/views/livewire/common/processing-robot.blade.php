@@ -34,17 +34,14 @@
     </div>
 </div>
 
-@push('scripts')
 <script>
     document.addEventListener('livewire:init', function () {
-        console.log('caralho');
         window.livewire.on('progressUpdated', function (progress) {
-            if (progress < 99) { // Set your desired max progress value
+            if (progress < 99) {
                 setTimeout(()=> {
-                    @this.call('moveProgress');
+                    @this.call('startProgressBar');
                 }, 500);
             }
         });
     });
 </script>
-@endpush

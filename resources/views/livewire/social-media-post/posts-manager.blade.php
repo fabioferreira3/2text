@@ -360,15 +360,5 @@
     document.addEventListener("DOMContentLoaded", function() {
         initTypewriter('typewriter', ['...'], 120);
     });
-
-    document.addEventListener('livewire:init', function () {
-        window.livewire.on('progressUpdated', function (progress) {
-            if (progress < 99) { // Set your desired max progress value
-                setTimeout(()=> {
-                    @this.call('moveProgress');
-                }, 500);
-            }
-        });
-    });
 </script>
 @endpush
