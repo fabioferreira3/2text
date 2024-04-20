@@ -1,4 +1,5 @@
 <x-guest-layout>
+    @section('title', 'Experior - Register')
     <x-authentication-card>
         <x-slot name="logo">
             <a href="https://experior.ai">
