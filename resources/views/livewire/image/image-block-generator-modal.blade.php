@@ -17,7 +17,7 @@
             </div>
         </div>
         <div
-            class="flex flex-col lg:grid @php if($previewImgs['original'] && count($previewImgs['variants'])) { return 'lg:grid-cols-2';} @endphp items-start gap-8 mt-4">
+            class="flex flex-col lg:grid @if($previewImgs['original'] && count($previewImgs['variants'])) 'lg:grid-cols-2' @endif items-start gap-8 mt-4">
             @if ($previewImgs['original'])
             <div class="flex flex-col gap-2 h-full w-full">
                 <div class="text-2xl font-bold mb-8 md:mb-0">{{__('modals.primary')}}:</div>

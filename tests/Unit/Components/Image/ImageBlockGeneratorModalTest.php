@@ -114,7 +114,7 @@ describe(
         it('previews an image', function () {
             $mediaFile = MediaFile::first();
             $this->component->call('previewImage', $mediaFile->id)
-                ->assertDispatched('openLinkInNewTab', link: $mediaFile->file_url);
+                ->assertDispatched('openLinkInNewTab', $mediaFile->file_url);
         });
 
         it('sets the main (original) image', function () {
