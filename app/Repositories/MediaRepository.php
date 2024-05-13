@@ -11,6 +11,7 @@ use App\Interfaces\WhisperFactoryInterface;
 use App\Models\Account;
 use App\Models\MediaFile;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
@@ -65,6 +66,7 @@ class MediaRepository
     public static function optimizeAndStore(Account $account, $fileParams): MediaFile
     {
         $originalFileUrl = Storage::temporaryUrl($fileParams['fileName'], now()->addMinutes(5));
+        Log::debug($originalFileUrl);
         $uploadedFile = cloudinary()->upload($originalFileUrl);
 
         return self::newImage($account, [

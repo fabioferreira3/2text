@@ -18,6 +18,10 @@ class SupportHelper
         ])) {
             $cost = (($params['prompt'] / 1000) * 0.0005) + (($params['completion'] / 1000) * 0.0015);
         } elseif (in_array($model, [
+            AIModel::GPT_LATEST->value
+        ])) {
+            $cost = (($params['prompt'] / 1000) * 0.015) + (($params['completion'] / 1000) * 0.03);
+        } elseif (in_array($model, [
             AIModel::GPT_4->value
         ])) {
             $cost = (($params['prompt'] / 1000) * 0.03) + (($params['completion'] / 1000) * 0.06);

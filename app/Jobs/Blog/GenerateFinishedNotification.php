@@ -36,7 +36,7 @@ class GenerateFinishedNotification implements ShouldQueue, ShouldBeUnique
         $this->document = $document->fresh();
         $this->repo = new DocumentRepository($this->document);
         $this->meta = $meta;
-        $this->chatGpt = new ChatGPT(AIModel::GPT_4_TURBO->value);
+        $this->chatGpt = new ChatGPT(AIModel::GPT_LATEST->value);
     }
 
     /**

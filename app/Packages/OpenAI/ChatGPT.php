@@ -22,7 +22,7 @@ class ChatGPT
 
     public function __construct($model = null, $shouldStream = false)
     {
-        $this->model = $model ?? AIModel::GPT_4_TURBO->value;
+        $this->model = $model ?? AIModel::GPT_LATEST->value;
         $this->shouldStream = $shouldStream;
         $this->defaultMessages = [
             [

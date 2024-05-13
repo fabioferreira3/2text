@@ -91,7 +91,7 @@ class GenRepository
     public function generateSummary(Document $document, array $params)
     {
         $promptHelper = PromptHelperFactory::create($document->language->value);
-        $chatGpt = $this->chatGptFactory->make(AIModel::GPT_4_TURBO->value);
+        $chatGpt = $this->chatGptFactory->make(AIModel::GPT_LATEST->value);
         $params['target_language'] = $document->getMeta('target_language') ?? null;
 
         return $chatGpt->request([[
