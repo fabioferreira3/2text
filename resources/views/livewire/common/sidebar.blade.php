@@ -71,13 +71,13 @@
             'name' => __('menus.summarizer'),
             'icon' => 'sort-ascending',
             ])
-            @include('livewire.common.navlink', [
+            {{-- @include('livewire.common.navlink', [
             'activeRoutes' => ['insight-dashboard', 'insight-view'],
             'route' => 'insight-dashboard',
             'submenu' => true,
             'name' => __('menus.insight_hub'),
             'icon' => 'search-circle',
-            ])
+            ]) --}}
         </div>
     </div>
     @include('components.plan')
