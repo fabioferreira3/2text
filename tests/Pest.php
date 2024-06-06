@@ -12,8 +12,10 @@
 */
 
 use App\Enums\AIModel;
+use App\Factories\LLMFactory;
 use App\Interfaces\AssemblyAIFactoryInterface;
 use App\Interfaces\ChatGPTFactoryInterface;
+use App\Interfaces\ClaudeFactoryInterface;
 use App\Interfaces\OraculumFactoryInterface;
 use App\Interfaces\WhisperFactoryInterface;
 use App\Models\User;
@@ -104,8 +106,22 @@ uses()->beforeEach(function () {
     $this->mockOraculumFactory = Mockery::mock(OraculumFactoryInterface::class);
     $this->mockOraculumFactory->shouldReceive('make')->andReturn($this->oraculum);
 
-    $this->mockChatGPTFactory = Mockery::mock(ChatGPTFactoryInterface::class);
-    $this->mockChatGPTFactory->shouldReceive('make')->andReturn($this->chatGpt);
+    $this->chatGptFactoryInterface = Mockery::mock(ChatGPTFactoryInterface::class);
+    $this->chatGptFactoryInterface->shouldReceive('request')->withArgs(function ($arg) {
+        return is_array($arg);
+    })->andReturn($this->aiModelResponseResponse);
+    $this->claudeFactoryInterface = Mockery::mock(ClaudeFactoryInterface::class);
+    $this->claudeFactoryInterface->shouldReceive('request')->withArgs(function ($arg) {
+        return is_array($arg);
+    })->andReturn($this->aiModelResponseResponse);
+
+    $this->llmFactory = Mockery::mock(LLMFactory::class);
+    $this->llmFactory->shouldReceive('make')->withArgs(function ($arg) {
+        return $arg === 'chatgpt';
+    })->andReturn($this->chatGptFactoryInterface);
+    $this->llmFactory->shouldReceive('make')->withArgs(function ($arg) {
+        return $arg === 'claude';
+    })->andReturn($this->claudeFactoryInterface);
 
     $this->mockWhisperFactory = Mockery::mock(WhisperFactoryInterface::class);
     $this->mockWhisperFactory->shouldReceive('make')->andReturn($this->whisper);
@@ -125,7 +141,7 @@ uses()->beforeEach(function () {
     $this->app->instance(YoutubeDl::class, $this->youtubeDlMock);
 
     $this->app->instance(OraculumFactoryInterface::class, $this->mockOraculumFactory);
-    $this->app->instance(ChatGPTFactoryInterface::class, $this->mockChatGPTFactory);
+    $this->app->instance(LLMFactory::class, $this->llmFactory);
     $this->app->instance(WhisperFactoryInterface::class, $this->mockWhisperFactory);
     $this->app->instance(AssemblyAIFactoryInterface::class, $this->mockAssemblyAIFactory);
     $this->app->instance('bitly', $this->mockBitly);

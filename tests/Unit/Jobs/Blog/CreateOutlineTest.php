@@ -48,7 +48,6 @@ describe(
                 ]
             );
             $job->oraculumFactory = $this->mockOraculumFactory;
-            $job->chatGptFactory = $this->mockChatGPTFactory;
             $job->handle();
 
             $this->document->refresh();

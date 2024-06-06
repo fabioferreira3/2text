@@ -3,6 +3,8 @@
 use App\Adapters\ImageGeneratorHandler;
 use App\Enums\DocumentTaskEnum;
 use App\Events\ProcessFinished;
+use App\Factories\LLMFactory;
+use App\Interfaces\LLMFactoryInterface;
 use App\Jobs\DispatchDocumentTasks;
 use App\Models\Document;
 use App\Models\DocumentContentBlock;
@@ -11,6 +13,16 @@ use App\Repositories\GenRepository;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+
+beforeEach(function () {
+    // $this->factoryInterface = Mockery::mock(LLMFactoryInterface::class);
+    // $this->factoryInterface->shouldReceive('request')->withArgs(function ($arg) {
+    //     return is_array($arg);
+    // })->andReturn($this->aiModelResponseResponse);
+    // $llmFactory = Mockery::mock(LLMFactory::class);
+    // $llmFactory->shouldReceive('make')->andReturn($this->factoryInterface);
+    // $this->app->instance(LLMFactory::class, $llmFactory);
+});
 
 describe('GenRepository', function () {
     it('generates a title', function () {

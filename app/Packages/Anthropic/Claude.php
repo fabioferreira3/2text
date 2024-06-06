@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Packages\OpenAI;
+namespace App\Packages\Anthropic;
 
+use Anthropic\Laravel\Facades\Anthropic;
 use App\Enums\AIModel;
 use App\Helpers\SupportHelper;
 use Exception;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
-use OpenAI\Factory as OpenAI;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * @codeCoverageIgnore
  */
-class ChatGPT
+class Claude
 {
     public string $model;
     public array $defaultMessages;
@@ -22,14 +22,9 @@ class ChatGPT
 
     public function __construct($model = null, $shouldStream = false)
     {
-        $this->model = $model ?? AIModel::GPT_LATEST->value;
+        $this->model = $model ?? AIModel::CLAUDE3_SONNET->value;
         $this->shouldStream = $shouldStream;
-        $this->defaultMessages = [
-            [
-                'role' => 'system',
-                'content' => 'Strictly follow the instructions. Do not mention you are ChatGPT or an AI assistant.'
-            ]
-        ];
+        $this->defaultMessages = [];
     }
 
     public function request(array $messages)
@@ -39,38 +34,28 @@ class ChatGPT
         }
 
         try {
-            $factory = new OpenAI();
-            $client = $factory
-                ->withApiKey(env('OPENAI_API_KEY'))
-                ->withHttpClient($client = new \GuzzleHttp\Client([
-                    'timeout' => 300.0
-                ]))
-                ->make();
-            $response = $client->chat()->create([
+            $response = Anthropic::messages()->create([
                 'model' => $this->model,
-                'messages' => [
-                    ...$this->defaultMessages,
-                    ...$messages
-                ]
+                'max_tokens' => 1024,
+                'system' => 'Strictly follow the instructions. Do not mention you are Claude or an AI assistant.',
+                'messages' => $messages,
             ]);
 
-            foreach ($response->choices as $result) {
-                if ($result->message->role === 'assistant') {
-                    if ($result->finishReason !== 'stop') {
-                        Log::error("finish reason: " . $result->finishReason);
-                        Log::error($result->message->content);
-                    }
-
-                    return [
-                        'content' => $result->message->content,
-                        'token_usage' => [
-                            'model' => $response->model,
-                            'prompt' => $response->usage->promptTokens,
-                            'completion' => $response->usage->completionTokens,
-                            'total' => $response->usage->totalTokens
-                        ]
-                    ];
+            if ($response->role === 'assistant') {
+                if ($response->stop_reason !== 'end_turn') {
+                    Log::error("finish reason: " . $response->stop_reason);
+                    Log::error($response->content);
                 }
+
+                return [
+                    'content' => $response->content[0]->text,
+                    'token_usage' => [
+                        'model' => $this->model,
+                        'prompt' => $response->usage->inputTokens,
+                        'completion' => $response->usage->outputTokens,
+                        'total' => $response->usage->inputTokens + $response->usage->outputTokens
+                    ]
+                ];
             }
         } catch (\GuzzleHttp\Exception\GuzzleException $e) {
             Log::error("HTTP request failed: " . $e->getMessage());

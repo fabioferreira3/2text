@@ -3,9 +3,9 @@
 namespace App\Jobs\Blog;
 
 use App\Enums\DocumentTaskEnum;
+use App\Factories\LLMFactory;
 use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelperFactory;
-use App\Interfaces\ChatGPTFactoryInterface;
 use App\Interfaces\OraculumFactoryInterface;
 use App\Jobs\RegisterAppUsage;
 use App\Jobs\Traits\JobEndings;
@@ -29,7 +29,6 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
     public $promptHelper;
     public DocumentRepository $repo;
     public OraculumFactoryInterface $oraculumFactory;
-    public ChatGPTFactoryInterface $chatGptFactory;
 
     /**
      * The number of times the job may be attempted.
@@ -89,7 +88,6 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
     {
         try {
             $this->oraculumFactory = app(OraculumFactoryInterface::class);
-            $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
 
             if ($this->meta['query_embedding'] ?? false) {
                 $response = $this->queryEmbedding();
@@ -131,8 +129,8 @@ class CreateOutline implements ShouldQueue, ShouldBeUnique
 
     protected function queryGpt()
     {
-        $chatGpt = $this->chatGptFactory->make();
-        return $chatGpt->request([
+        $llm = app(LLMFactory::class)->make('chatgpt');
+        return $llm->request([
             [
                 'role' => 'user',
                 'content' =>   $this->promptHelper->writeOutline(

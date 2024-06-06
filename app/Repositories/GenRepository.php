@@ -6,8 +6,8 @@ use App\Adapters\ImageGeneratorHandler;
 use App\Enums\DocumentTaskEnum;
 use App\Enums\AIModel;
 use App\Events\ProcessFinished;
+use App\Factories\LLMFactory;
 use App\Helpers\PromptHelperFactory;
-use App\Interfaces\ChatGPTFactoryInterface;
 use App\Interfaces\OraculumFactoryInterface;
 use App\Jobs\DispatchDocumentTasks;
 use App\Jobs\RegisterAppUsage;
@@ -23,14 +23,13 @@ use Talendor\StabilityAI\Enums\StabilityAIEngine;
 
 class GenRepository
 {
-
-    public ChatGPTFactoryInterface $chatGptFactory;
+    public LLMFactory $llmFactory;
     public OraculumFactoryInterface $oraculumFactory;
     public $response;
 
     public function __construct()
     {
-        $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
+        $this->llmFactory = app(LLMFactory::class);
         $this->oraculumFactory = app(OraculumFactoryInterface::class);
         $this->response = null;
     }
@@ -38,9 +37,9 @@ class GenRepository
     public function generateTitle(Document $document, $context)
     {
         $promptHelper = PromptHelperFactory::create($document->language->value);
-        $chatGpt = $this->chatGptFactory->make(AIModel::GPT_3_TURBO->value);
+        $llm = $this->llmFactory->make('chatgpt', AIModel::GPT_3_TURBO->value);
 
-        $this->response = $chatGpt->request([[
+        $this->response = $llm->request([[
             'role' => 'user',
             'content' => $promptHelper->writeTitle($context, [
                 'tone' => $document->getMeta('tone'),
@@ -75,8 +74,8 @@ class GenRepository
     public function generateMetaDescription(Document $document)
     {
         $promptHelper = PromptHelperFactory::create($document->language->value);
-        $chatGpt = $this->chatGptFactory->make(AIModel::GPT_3_TURBO->value);
-        return $chatGpt->request([[
+        $llm = $this->llmFactory->make('chatgpt', AIModel::GPT_3_TURBO->value);
+        return $llm->request([[
             'role' => 'user',
             'content' => $promptHelper->writeMetaDescription(
                 $document->getMeta('outline'),
@@ -91,10 +90,10 @@ class GenRepository
     public function generateSummary(Document $document, array $params)
     {
         $promptHelper = PromptHelperFactory::create($document->language->value);
-        $chatGpt = $this->chatGptFactory->make(AIModel::GPT_4_TURBO->value);
+        $llm = $this->llmFactory->make('chatgpt', AIModel::GPT_LATEST->value);
         $params['target_language'] = $document->getMeta('target_language') ?? null;
 
-        return $chatGpt->request([[
+        return $llm->request([[
             'role' => 'user',
             'content' => $promptHelper->writeSummary($params)
         ]]);
@@ -151,9 +150,9 @@ class GenRepository
         )->validate();
 
         $promptHelper = PromptHelperFactory::create($document->language->value);
-        $chatGpt = $this->chatGptFactory->make();
+        $llm = $this->llmFactory->make('claude');
 
-        return $chatGpt->request([
+        return $llm->request([
             [
                 'role' => 'user',
                 'content' =>   $promptHelper->writeSocialMediaPost($document->getContext(), [
@@ -193,8 +192,8 @@ class GenRepository
     public function rewriteTextBlock(DocumentContentBlock $contentBlock, array $params)
     {
         $promptHelper = PromptHelperFactory::create($contentBlock->document->language->value);
-        $chatGpt = $this->chatGptFactory->make();
-        $this->response = $chatGpt->request([[
+        $llm = $this->llmFactory->make('chatgpt');
+        $this->response = $llm->request([[
             'role' => 'user',
             'content' => $promptHelper->generic($params['prompt'])
         ]]);
@@ -205,9 +204,9 @@ class GenRepository
 
     public function translateText($text, $targetLanguage)
     {
-        $chatGpt = $this->chatGptFactory->make();
+        $llm = $this->llmFactory->make('chatgpt');
         $promptHelper = PromptHelperFactory::create('en');
-        return $chatGpt->request([
+        return $llm->request([
             [
                 'role' => 'user',
                 'content' => $promptHelper->translate(

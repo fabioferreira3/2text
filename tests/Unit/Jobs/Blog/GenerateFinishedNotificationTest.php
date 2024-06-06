@@ -2,11 +2,12 @@
 
 use App\Enums\DocumentType;
 use App\Enums\Language;
+use App\Factories\LLMFactory;
 use App\Helpers\PromptHelperFactory;
+use App\Interfaces\LLMFactoryInterface;
 use App\Jobs\Blog\GenerateFinishedNotification;
 use App\Models\Document;
 use App\Models\User;
-use App\Packages\OpenAI\ChatGPT;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
@@ -17,6 +18,10 @@ beforeEach(function () {
             'user_id' => $this->user->id
         ]
     ]);
+    $this->factoryInterface = Mockery::mock(LLMFactoryInterface::class);
+    $llmFactory = Mockery::mock(LLMFactory::class);
+    $llmFactory->shouldReceive('make')->andReturn($this->factoryInterface);
+    $this->app->instance(LLMFactory::class, $llmFactory);
 });
 
 describe(
@@ -30,8 +35,7 @@ describe(
 
         it('generates the finished notification and updates the document', function () {
             $promptHelper = PromptHelperFactory::create($this->document->language->value);
-            $chatGpt = Mockery::mock(ChatGPT::class);
-            $chatGpt->shouldReceive('request')
+            $this->factoryInterface->shouldReceive('request')
                 ->with([[
                     'role' => 'user',
                     'content' =>  $promptHelper->generateFinishedNotification([
@@ -43,7 +47,6 @@ describe(
                 ]])
                 ->andReturn($this->aiModelResponseResponse);
             $job = new GenerateFinishedNotification($this->document, []);
-            $job->chatGpt = $chatGpt;
             $job->handle();
 
             $this->document->refresh();

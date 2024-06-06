@@ -18,6 +18,10 @@ class SupportHelper
         ])) {
             $cost = (($params['prompt'] / 1000) * 0.0005) + (($params['completion'] / 1000) * 0.0015);
         } elseif (in_array($model, [
+            AIModel::GPT_LATEST->value
+        ])) {
+            $cost = (($params['prompt'] / 1000) * 0.015) + (($params['completion'] / 1000) * 0.03);
+        } elseif (in_array($model, [
             AIModel::GPT_4->value
         ])) {
             $cost = (($params['prompt'] / 1000) * 0.03) + (($params['completion'] / 1000) * 0.06);
@@ -31,6 +35,18 @@ class SupportHelper
             AIModel::GPT_4_32->value
         ])) {
             $cost = (($params['prompt'] / 1000) * 0.06) + (($params['completion'] / 1000) * 0.12);
+        } elseif (in_array($model, [
+            AIModel::CLAUDE3_HAIKI->value
+        ])) {
+            $cost = (($params['prompt'] / 1000) * 0.00025) + (($params['completion'] / 1000) * 0.00125);
+        } elseif (in_array($model, [
+            AIModel::CLAUDE3_SONNET->value
+        ])) {
+            $cost = (($params['prompt'] / 1000) * 0.003) + (($params['completion'] / 1000) * 0.015);
+        } elseif (in_array($model, [
+            AIModel::CLAUDE3_OPPUS->value
+        ])) {
+            $cost = (($params['prompt'] / 1000) * 0.015) + (($params['completion'] / 1000) * 0.075);
         } elseif (in_array($model, [AIModel::WHISPER->value])) {
             $cost = $params['audio_length'] * 0.0061;
         } elseif (in_array($model, [AIModel::ASSEMBLY_AI->value])) {

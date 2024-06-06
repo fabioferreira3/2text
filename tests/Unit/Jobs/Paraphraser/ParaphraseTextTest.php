@@ -3,6 +3,7 @@
 use App\Enums\DocumentTaskEnum;
 use App\Enums\SourceProvider;
 use App\Events\Paraphraser\TextParaphrased;
+use App\Factories\LLMFactory;
 use App\Interfaces\ChatGPTFactoryInterface;
 use App\Jobs\Paraphraser\ParaphraseText;
 use App\Jobs\RegisterAppUsage;
@@ -91,11 +92,14 @@ describe('ParaphraseText job', function () {
         Event::fake([TextParaphrased::class]);
         expect($this->documentTask->status)->toBe('ready');
 
-        $chatGpt = Mockery::mock(ChatGPT::class);
-        $chatGpt->shouldReceive('request')->andThrow(new Exception('Error'));
-        $mockChatGPTFactorys = Mockery::mock(ChatGPTFactoryInterface::class);
-        $mockChatGPTFactorys->shouldReceive('make')->andReturn($chatGpt);
-        $this->app->instance(ChatGPTFactoryInterface::class, $mockChatGPTFactorys);
+        $this->chatGptFactoryInterface = Mockery::mock(ChatGPTFactoryInterface::class);
+        $this->chatGptFactoryInterface->shouldReceive('request')->andThrow(new Exception('Error'));
+        $this->llmFactory = Mockery::mock(LLMFactory::class);
+        $this->llmFactory->shouldReceive('make')->withArgs(function ($arg) {
+            return $arg === 'chatgpt';
+        })->andReturn($this->chatGptFactoryInterface);
+        $this->app->instance(LLMFactory::class, $this->llmFactory);
+
 
         $job = new ParaphraseText(
             $this->document,

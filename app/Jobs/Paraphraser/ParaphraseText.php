@@ -4,6 +4,7 @@ namespace App\Jobs\Paraphraser;
 
 use App\Enums\DocumentTaskEnum;
 use App\Events\Paraphraser\TextParaphrased;
+use App\Factories\LLMFactory;
 use App\Helpers\PromptHelper;
 use App\Interfaces\ChatGPTFactoryInterface;
 use App\Jobs\RegisterAppUsage;
@@ -36,10 +37,12 @@ class ParaphraseText implements ShouldQueue
     public function handle()
     {
         try {
+            $llmFactory = app(LLMFactory::class);
             $this->document = $this->document->fresh();
             $promptHelper = new PromptHelper($this->document->language->value);
-            $chatGpt = app(ChatGPTFactoryInterface::class)->make();
-            $response = $chatGpt->request([
+
+            $llm = $llmFactory->make('chatgpt');
+            $response = $llm->request([
                 [
                     'role' => 'user',
                     'content' => $promptHelper->paraphrase(

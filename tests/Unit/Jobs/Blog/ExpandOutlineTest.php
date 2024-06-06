@@ -1,16 +1,15 @@
 <?php
 
-use App\Interfaces\ChatGPTFactoryInterface;
+use App\Factories\LLMFactory;
 use App\Interfaces\OraculumFactoryInterface;
+use App\Interfaces\LLMFactoryInterface;
 use App\Jobs\Blog\ExpandOutline;
 use App\Jobs\RegisterAppUsage;
 use App\Models\Document;
 use App\Models\DocumentTask;
-use App\Packages\OpenAI\ChatGPT;
 use App\Packages\Oraculum\Oraculum;
 use Illuminate\Support\Facades\Bus;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Illuminate\Support\Str;
 
 beforeEach(function () {
     $this->document = Document::factory()->create();
@@ -24,10 +23,10 @@ beforeEach(function () {
     $mockOraculumFactory->shouldReceive('make')->andReturn($this->oraculumMock);
     $this->app->instance(OraculumFactoryInterface::class, $mockOraculumFactory);
 
-    $this->chatGptMock = Mockery::mock(new ChatGPT($this->authUser, '12345'));
-    $mockChatGptFactory = Mockery::mock(ChatGPTFactoryInterface::class);
-    $mockChatGptFactory->shouldReceive('make')->andReturn($this->chatGptMock);
-    $this->app->instance(ChatGPTFactoryInterface::class, $mockChatGptFactory);
+    $this->factoryInterface = Mockery::mock(LLMFactoryInterface::class);
+    $llmFactory = Mockery::mock(LLMFactory::class);
+    $llmFactory->shouldReceive('make')->andReturn($this->factoryInterface);
+    $this->app->instance(LLMFactory::class, $llmFactory);
 });
 
 describe('Blog - ExpandOutline job', function () {
@@ -97,7 +96,7 @@ describe('Blog - ExpandOutline job', function () {
     })->with([403, 422, 500, 504]);
 
     it('handles the job with gpt', function () {
-        $this->chatGptMock->shouldReceive('request')->once()->andReturn([
+        $this->factoryInterface->shouldReceive('request')->once()->andReturn([
             'content' => $this->firstPass,
             'token_usage' => [
                 'model' => 'gpt_model',
@@ -136,7 +135,7 @@ describe('Blog - ExpandOutline job', function () {
 
     it('handles exceptions with gpt', function ($statusCode) {
         $originalStatus = $this->documentTask->status;
-        $this->chatGptMock->shouldReceive('request')->once()->andThrow(new HttpException($statusCode, 'Error'));
+        $this->factoryInterface->shouldReceive('request')->once()->andThrow(new HttpException($statusCode, 'Error'));
 
         $job = new ExpandOutline($this->document, [
             'query_embedding' => false,
@@ -154,7 +153,7 @@ describe('Blog - ExpandOutline job', function () {
         if ($queryEmbed) {
             $this->oraculumMock->shouldReceive('query')->once()->andThrow(new Exception('Error'));
         } else {
-            $this->chatGptMock->shouldReceive('request')->andThrow(new Exception('Error'));
+            $this->factoryInterface->shouldReceive('request')->andThrow(new Exception('Error'));
         }
 
         $job = new ExpandOutline($this->document, [

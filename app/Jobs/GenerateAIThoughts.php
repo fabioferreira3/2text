@@ -4,11 +4,11 @@ namespace App\Jobs;
 
 use App\Enums\AIModel;
 use App\Enums\DocumentTaskEnum;
+use App\Factories\LLMFactory;
 use App\Helpers\PromptHelperFactory;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
-use App\Packages\OpenAI\ChatGPT;
 use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -27,6 +27,7 @@ class GenerateAIThoughts implements ShouldQueue, ShouldBeUnique
 
     protected Document $document;
     protected array $meta;
+    public LLMFactory $llmFactory;
     protected $repo;
 
     /**
@@ -37,6 +38,7 @@ class GenerateAIThoughts implements ShouldQueue, ShouldBeUnique
     public function __construct(Document $document, array $meta = [])
     {
         $this->document = $document->fresh();
+        $this->llmFactory = app(LLMFactory::class);
         $this->repo = new DocumentRepository($this->document);
         $this->meta = $meta;
     }
@@ -51,9 +53,9 @@ class GenerateAIThoughts implements ShouldQueue, ShouldBeUnique
         try {
             $user = User::findOrFail($this->document->getMeta('user_id'));
             $promptHelper = PromptHelperFactory::create($this->document->language->value);
-            $chatGpt = new ChatGPT(AIModel::GPT_3_TURBO->value);
+            $llm = $this->llmFactory->make('chatgpt', AIModel::GPT_3_TURBO->value);
 
-            $response = $chatGpt->request([
+            $response = $llm->request([
                 [
                     'role' => 'user',
                     'content' =>  $promptHelper->generateThoughts([

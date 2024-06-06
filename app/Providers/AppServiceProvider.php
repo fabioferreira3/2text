@@ -3,11 +3,9 @@
 namespace App\Providers;
 
 use App\Factories\AssemblyAIFactory;
-use App\Factories\ChatGPTFactory;
 use App\Factories\OraculumFactory;
 use App\Factories\WhisperFactory;
 use App\Interfaces\AssemblyAIFactoryInterface;
-use App\Interfaces\ChatGPTFactoryInterface;
 use App\Interfaces\OraculumFactoryInterface;
 use App\Interfaces\WhisperFactoryInterface;
 use App\Jobs\DownloadAudio;
@@ -30,7 +28,6 @@ class AppServiceProvider extends ServiceProvider
             return app(DownloadAudio::class);
         });
         $this->app->bind(OraculumFactoryInterface::class, OraculumFactory::class);
-        $this->app->bind(ChatGPTFactoryInterface::class, ChatGPTFactory::class);
         $this->app->bind(WhisperFactoryInterface::class, WhisperFactory::class);
         $this->app->bind(AssemblyAIFactoryInterface::class, AssemblyAIFactory::class);
     }

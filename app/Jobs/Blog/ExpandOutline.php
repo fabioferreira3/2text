@@ -3,15 +3,14 @@
 namespace App\Jobs\Blog;
 
 use App\Enums\DocumentTaskEnum;
+use App\Factories\LLMFactory;
 use App\Helpers\DocumentHelper;
 use App\Helpers\PromptHelper;
-use App\Interfaces\ChatGPTFactoryInterface;
 use App\Interfaces\OraculumFactoryInterface;
 use App\Jobs\RegisterAppUsage;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
-use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -128,9 +127,8 @@ class ExpandOutline implements ShouldQueue, ShouldBeUnique
 
     protected function queryGpt()
     {
-        $chatGptFactory = App::make(ChatGPTFactoryInterface::class);
-        $chatGpt = $chatGptFactory->make();
-        return $chatGpt->request([
+        $llm = app(LLMFactory::class)->make('chatgpt');
+        return $llm->request([
             [
                 'role' => 'user',
                 'content' => $this->promptHelper->writeFirstPass(

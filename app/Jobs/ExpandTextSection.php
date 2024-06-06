@@ -3,21 +3,19 @@
 namespace App\Jobs;
 
 use App\Enums\DocumentTaskEnum;
+use App\Factories\LLMFactory;
 use App\Helpers\PromptHelper;
-use App\Interfaces\ChatGPTFactoryInterface;
 use App\Interfaces\OraculumFactoryInterface;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
 use App\Repositories\DocumentRepository;
-use App\Repositories\MediaRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ExpandTextSection implements ShouldQueue, ShouldBeUnique
@@ -29,7 +27,6 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
     protected PromptHelper $promptHelper;
     protected DocumentRepository $repo;
     public OraculumFactoryInterface $oraculumFactory;
-    public ChatGPTFactoryInterface $chatGptFactory;
 
     /**
      * The number of times the job may be attempted.
@@ -87,7 +84,6 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
     {
         try {
             $this->oraculumFactory = app(OraculumFactoryInterface::class);
-            $this->chatGptFactory = app(ChatGPTFactoryInterface::class);
 
             $rawStructure = $this->document->getMeta('raw_structure');
             $normalizedStructure = $this->document->normalized_structure;
@@ -129,8 +125,8 @@ class ExpandTextSection implements ShouldQueue, ShouldBeUnique
 
     protected function queryGpt($basePrompt)
     {
-        $chatGpt = $this->chatGptFactory->make();
-        return $chatGpt->request([
+        $llm = app(LLMFactory::class)->make('chatgpt');
+        return $llm->request([
             [
                 'role' => 'user',
                 'content' =>  $basePrompt . $this->promptHelper->expandOn($this->meta['text_section'], [

@@ -2,12 +2,11 @@
 
 namespace App\Jobs\Translation;
 
+use App\Factories\LLMFactory;
 use App\Helpers\PromptHelper;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
-use App\Packages\OpenAI\ChatGPT;
 use App\Repositories\DocumentRepository;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,6 +23,7 @@ class TranslateText implements ShouldQueue, ShouldBeUnique
     protected array $meta;
     protected PromptHelper $promptHelper;
     protected DocumentRepository $repo;
+    public LLMFactory $llmFactory;
 
     /**
      * The number of times the job may be attempted.
@@ -68,6 +68,7 @@ class TranslateText implements ShouldQueue, ShouldBeUnique
     {
         $this->document = $document->fresh();
         $this->meta = $meta;
+        $this->llmFactory = app(LLMFactory::class);
         $this->promptHelper = new PromptHelper($document->language->value);
         $this->repo = new DocumentRepository($this->document);
     }
@@ -80,9 +81,8 @@ class TranslateText implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            $chatGpt = new ChatGPT();
-
-            $response = $chatGpt->request([
+            $llm = $this->llmFactory->make('chatgpt');
+            $response = $llm->request([
                 [
                     'role' => 'user',
                     'content' => $this->promptHelper->translate(

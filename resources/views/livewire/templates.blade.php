@@ -14,6 +14,6 @@
         @livewire('audio-transcription.template')
         @livewire('text-to-audio.template')
         @livewire('summarizer.template')
-        @livewire('insight-hub.template')
+        {{-- @livewire('insight-hub.template') --}}
     </div>
 </div>

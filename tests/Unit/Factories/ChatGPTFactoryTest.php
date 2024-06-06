@@ -1,14 +1,21 @@
 <?php
 
-use App\Factories\ChatGPTFactory;
-use App\Packages\OpenAI\ChatGPT;
+use App\Factories\LLMFactory;
+use App\Interfaces\ChatGPTFactoryInterface;
+use App\Interfaces\ClaudeFactoryInterface;
 
-describe('ChatGPTFactory factory', function () {
+describe('LLms factory', function () {
     it('creates an instance of ChatGPT', function () {
-        $factory = new ChatGPTFactory();
+        $factory = app(LLMFactory::class);
+        $chatGptFactory = $factory->make('chatgpt');
 
-        $chatGpt = $factory->make();
+        expect($chatGptFactory)->toBeInstanceOf(ChatGPTFactoryInterface::class);
+    });
 
-        expect($chatGpt)->toBeInstanceOf(ChatGPT::class);
+    it('creates an instance of Claude', function () {
+        $factory = app(LLMFactory::class);
+        $claudeFactory = $factory->make('claude');
+
+        expect($claudeFactory)->toBeInstanceOf(ClaudeFactoryInterface::class);
     });
 })->group('factories');

@@ -3,11 +3,11 @@
 namespace App\Jobs\Blog;
 
 use App\Enums\AIModel;
+use App\Factories\LLMFactory;
 use App\Helpers\PromptHelperFactory;
 use App\Jobs\Traits\JobEndings;
 use App\Models\Document;
 use App\Models\User;
-use App\Packages\OpenAI\ChatGPT;
 use App\Repositories\DocumentRepository;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -24,7 +24,7 @@ class GenerateFinishedNotification implements ShouldQueue, ShouldBeUnique
     public Document $document;
     public array $meta;
     public $repo;
-    public $chatGpt;
+    public LLMFactory $llmFactory;
 
     /**
      * Create a new job instance.
@@ -36,7 +36,6 @@ class GenerateFinishedNotification implements ShouldQueue, ShouldBeUnique
         $this->document = $document->fresh();
         $this->repo = new DocumentRepository($this->document);
         $this->meta = $meta;
-        $this->chatGpt = new ChatGPT(AIModel::GPT_4_TURBO->value);
     }
 
     /**
@@ -47,10 +46,11 @@ class GenerateFinishedNotification implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
+            $this->llmFactory = app(LLMFactory::class);
+            $llm = $this->llmFactory->make('chatgpt', AIModel::GPT_LATEST->value);
             $user = User::findOrFail($this->document->getMeta('user_id'));
             $promptHelper = PromptHelperFactory::create($this->document->language->value);
-
-            $response = $this->chatGpt->request([
+            $response = $llm->request([
                 [
                     'role' => 'user',
                     'content' =>  $promptHelper->generateFinishedNotification([
