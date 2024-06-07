@@ -24,7 +24,7 @@ class Assistant
         $factory = new OpenAI();
         $client = $factory
             ->withApiKey(env('OPENAI_API_KEY'))
-            ->withHttpHeader('OpenAI-Beta', 'assistants=v1')
+            ->withHttpHeader('OpenAI-Beta', 'assistants=v2')
             ->withHttpClient($client = new \GuzzleHttp\Client([
                 'timeout' => 300.0
             ]))
@@ -87,10 +87,22 @@ class Assistant
         return $client->files()->retrieve('file-yAdMpA9RTtqz1KAwaMs9jn6U');
     }
 
-    public function createThread()
+    public function createThread(array $params = [])
     {
-        $client = $this->getClient();
-        return $client->threads()->create([]);
+        return $this->getClient()->threads()->create($params);
+    }
+
+    public function createAndRunThread(array $params)
+    {
+        return $this->getClient()->threads()->createAndRun($params);
+    }
+
+    public function retrieveRun(string $externalThreadId, string $runId)
+    {
+        return $this->getClient()->threads()->runs()->retrieve(
+            threadId: $externalThreadId,
+            runId: $runId
+        );
     }
 
     public function query($message)
