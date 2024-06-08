@@ -6,5 +6,5 @@ use App\Domain\Thread\Thread;
 
 interface AgentInterface
 {
-    public function run(Thread $thread): array;
+    public function run(Thread $thread);
 }

@@ -2,6 +2,7 @@
 
 namespace App\Domain\Thread;
 
+use App\Domain\Thread\Enum\MessageRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +14,7 @@ class ThreadMessage extends Model
 
     protected $guarded = ['id'];
     protected $casts = [
+        'role' => MessageRole::class,
         'content' => 'array',
         'attachments' => 'array'
     ];

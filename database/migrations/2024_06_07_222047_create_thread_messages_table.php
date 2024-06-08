@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('thread_messages', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('thread_id')->constrained('threads')->onDelete('cascade');
-            $table->string('external_id')->nullable();
+            $table->string('external_id')->nullable()->index();
             $table->string('role');
             $table->json('content');
             $table->json('attachments')->nullable();

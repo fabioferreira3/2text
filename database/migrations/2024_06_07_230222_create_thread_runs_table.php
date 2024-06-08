@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('thread_runs', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('thread_id')->constrained('threads')->onDelete('cascade');
-            $table->string('assistant_id');
-            $table->string('run_id');
+            $table->string('assistant_id')->index();
+            $table->string('run_id')->index();
             $table->string('status');
             $table->dateTime('completed_at')->nullable();
             $table->dateTime('failed_at')->nullable();

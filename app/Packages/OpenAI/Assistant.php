@@ -2,6 +2,7 @@
 
 namespace App\Packages\OpenAI;
 
+use App\Domain\Thread\Enum\MessageRole;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -87,6 +88,8 @@ class Assistant
         return $client->files()->retrieve('file-yAdMpA9RTtqz1KAwaMs9jn6U');
     }
 
+    // Threads
+
     public function createThread(array $params = [])
     {
         return $this->getClient()->threads()->create($params);
@@ -95,6 +98,48 @@ class Assistant
     public function createAndRunThread(array $params)
     {
         return $this->getClient()->threads()->createAndRun($params);
+    }
+
+    // Messages
+
+    public function createMessage(string $externalThreadId, MessageRole $role, string $content)
+    {
+        return $this->getClient()->threads()->messages()->create($externalThreadId, [
+            'role' => $role->value,
+            'content' => $content,
+        ]);
+    }
+
+    public function retrieveThreadMessages(string $externalThreadId, string $runId = null)
+    {
+        $response = $this->getClient()->threads()->messages()->list($externalThreadId, [
+            'run_id' => $runId
+        ]);
+
+        $messages = [];
+
+        foreach ($response->data as $message) {
+            $messages[] = [
+                'id' => $message->id,
+                'created_at' => $message->createdAt,
+                'role' => $message->role,
+                'content' => $message->content[0]->text->value
+            ];
+        }
+
+        return $messages;
+    }
+
+    // Runs
+
+    public function createRun(string $externalThreadId, string $assistantId)
+    {
+        return $this->getClient()->threads()->runs()->create(
+            threadId: $externalThreadId,
+            parameters: [
+                'assistant_id' => $assistantId,
+            ],
+        );
     }
 
     public function retrieveRun(string $externalThreadId, string $runId)
@@ -120,33 +165,5 @@ class Assistant
                 'assistant_id' => 'asst_aa23CPXawJ80kwZMVStIGswR',
             ],
         );
-    }
-
-    public function listMessages()
-    {
-        // $runId = "run_ur0DfGhmRN1qAmaNloLDrVhB";
-        // $threadId = 'thread_MhC6BoQqtPxH04Be0OXZt90q';
-        // $client = $this->getClient();
-        // return $client->threads()->runs()->retrieve(
-        //     threadId: $threadId,
-        //     runId: $runId,
-        // );
-
-        $client = $this->getClient();
-        $response = $client->threads()->messages()->list('thread_MhC6BoQqtPxH04Be0OXZt90q', [
-            'limit' => 10,
-        ]);
-
-        $messages = [];
-
-        foreach ($response->data as $message) {
-            $messages[] = [
-                'id' => $message->id,
-                'created_at' => $message->createdAt,
-                'content' => $message->content[0]->text->value
-            ];
-        }
-
-        return $messages;
     }
 }

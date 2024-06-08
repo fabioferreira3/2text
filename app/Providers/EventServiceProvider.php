@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Domain\Agents\Listeners\HandleFailedRun;
+use App\Domain\AgentsEvents\PollRunFailed;
 use App\Events\DocumentTaskFinished;
 use App\Events\UserCreated;
 use App\Listeners\HandleDocumentTasksCompletedUpdate;
@@ -33,6 +35,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        PollRunFailed::class => [
+            HandleFailedRun::class
         ],
         UserCreated::class => [
             HandleNewUserAdminNotification::class,
