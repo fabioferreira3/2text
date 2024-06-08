@@ -9,8 +9,6 @@ class AgentFactory
 {
     public function make(Agent $agent): AgentInterface
     {
-        return match ($agent) {
-            Agent::THE_PARAPHRASER => new \App\Domain\Agents\TheParaphraser(),
-        };
+        return new \App\Domain\Agents\TheAgent($agent);
     }
 }

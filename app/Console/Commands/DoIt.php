@@ -52,6 +52,8 @@ class DoIt extends Command
         $repo = new AgentRepository();
         $thread = $repo->createThread($content);
 
-        (new TheParaphraser())->run($thread);
+        $agentFactory = new AgentFactory();
+        $agent = $agentFactory->make(Agent::THE_PARAPHRASER);
+        $agent->run($thread);
     }
 }

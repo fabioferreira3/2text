@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Domain\Thread\Enum\RunStatus;
+use App\Domain\Thread\Thread;
+use App\Domain\Thread\ThreadRun;
 use App\Enums\DocumentStatus;
 use App\Enums\DocumentType;
 use App\Enums\Language;
@@ -15,6 +18,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +44,57 @@ class Document extends Model
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function threads(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Thread::class,
+            DocumentThread::class,
+            'document_id',
+            'id',
+            'id',
+            'thread_id'
+        );
+    }
+
+    public function threadRuns(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            ThreadRun::class,
+            DocumentThread::class,
+            'document_id',
+            'thread_id',
+            'id',
+            'thread_id'
+        );
+    }
+
+    public function getStatus()
+    {
+        $statuses = $this->threadRuns->pluck('status')->unique();
+
+        if ($statuses->contains(RunStatus::IN_PROGRESS)) {
+            return DocumentStatus::IN_PROGRESS;
+        }
+
+        if ($statuses->contains(RunStatus::QUEUED) || $statuses->contains(RunStatus::REQUIRES_ACTION)) {
+            return DocumentStatus::ON_HOLD;
+        }
+
+        if ($statuses->contains(RunStatus::CANCELLING) || $statuses->contains(RunStatus::CANCELLED)) {
+            return DocumentStatus::ABORTED;
+        }
+
+        if ($statuses->contains(RunStatus::FAILED)) {
+            return DocumentStatus::FAILED;
+        }
+
+        if ($statuses->contains(RunStatus::COMPLETED)) {
+            return DocumentStatus::FINISHED;
+        }
+
+        return DocumentStatus::READY;
     }
 
     public function chatThread(): HasOne

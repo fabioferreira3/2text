@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Paraphraser;
 
+use App\Domain\Agents\Repositories\AgentRepository;
 use App\Enums\DocumentStatus;
 use App\Exceptions\InsufficientUnitsException;
 use App\Helpers\DocumentHelper;
@@ -62,7 +63,7 @@ class Paraphraser extends Component
         } elseif (in_array($this->document->status, [DocumentStatus::IN_PROGRESS, DocumentStatus::ON_HOLD])) {
             $this->isSaving = true;
         };
-        $this->tone = $this->document->getMeta('tone') ?? 'default';
+        //  $this->tone = $this->document->getMeta('tone') ?? 'default';
         $this->inputText = $this->document->content ?? '';
         $this->outputBlocks = $this->document->contentBlocks()->ofTextType()->get();
         $this->dispatch('adjustTextArea');
@@ -103,19 +104,22 @@ class Paraphraser extends Component
             if ($this->isSaving) {
                 return;
             }
+            //  $this->isSaving = true;
+            $originalSentencesArray = DocumentHelper::breakTextIntoSentences($this->inputText);
+            dd($originalSentencesArray);
+
             DocumentRepository::clearContentBlocks($this->document);
             $this->outputBlocks = [];
-            $this->isSaving = true;
-            $repo = new DocumentRepository($this->document);
-            $repo->updateMeta('tone', $this->tone);
-            $repo->updateMeta('add_content_block', true);
             $this->document->update(['content' => $this->inputText]);
+            $this->document->updateMeta('sentences', $originalSentencesArray);
 
-            $originalSentencesArray = DocumentHelper::breakTextIntoSentences($this->inputText);
-            $repo->updateMeta('sentences', $originalSentencesArray);
+            foreach ($originalSentencesArray as $item) {
+            }
+            $repo = new AgentRepository();
+            $thread = $repo->createThread($this->inputText);
 
-            $genRepo = new GenRepository();
-            $genRepo->registerParaphraseDocumentTasks($this->document->fresh());
+            // $genRepo = new GenRepository();
+            // $genRepo->registerParaphraseDocumentTasks($this->document->fresh());
         } catch (InsufficientUnitsException $e) {
             $this->dispatch(
                 'alert',
@@ -127,13 +131,13 @@ class Paraphraser extends Component
         }
     }
 
-    public function setTone($tone)
-    {
-        $this->tone = $tone;
-        $repo = new DocumentRepository($this->document);
-        $repo->updateMeta('tone', $this->tone);
-        $this->dispatch('setTone', tone: $tone);
-    }
+    // public function setTone($tone)
+    // {
+    //     $this->tone = $tone;
+    //     $repo = new DocumentRepository($this->document);
+    //     $repo->updateMeta('tone', $this->tone);
+    //     $this->dispatch('setTone', tone: $tone);
+    // }
 
     public function render()
     {

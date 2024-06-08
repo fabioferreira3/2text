@@ -71,7 +71,8 @@ class NewParaphraser extends Component
                 'language' => $this->language,
                 'meta' => [
                     'tone' => $this->tone,
-                    'source_url' => $this->sourceUrl
+                    'source_url' => $this->sourceUrl,
+                    'add_content_block' => true,
                 ]
             ]);
             $this->document = $document;
@@ -113,10 +114,10 @@ class NewParaphraser extends Component
         redirect()->route('paraphrase-view', ['document' => $this->document]);
     }
 
-    public function setTone($tone)
-    {
-        $this->tone = $tone;
-    }
+    // public function setTone($tone)
+    // {
+    //     $this->tone = $tone;
+    // }
 
     public function updated()
     {

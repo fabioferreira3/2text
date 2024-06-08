@@ -11,13 +11,13 @@ use App\Domain\Thread\Thread;
 use App\Domain\Thread\ThreadRun;
 use App\Packages\OpenAI\Assistant;
 
-class TheParaphraser implements AgentInterface
+class TheAgent implements AgentInterface
 {
     public $resource;
 
-    public function __construct()
+    public function __construct(Agent $agent)
     {
-        $this->resource = (new AgentResource(Agent::THE_PARAPHRASER))->toArray();
+        $this->resource = (new AgentResource($agent))->toArray();
     }
 
     public function run(Thread $thread)
