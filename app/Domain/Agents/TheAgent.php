@@ -20,7 +20,7 @@ class TheAgent implements AgentInterface
         $this->resource = (new AgentResource($agent))->toArray();
     }
 
-    public function run(Thread $thread)
+    public function run(Thread $thread, array $metadata = [])
     {
         $assistant = new Assistant();
 
@@ -35,6 +35,6 @@ class TheAgent implements AgentInterface
             'cancelled_at' => $runRequest->cancelledAt
         ]);
 
-        PollRun::dispatch($threadRun)->delay(now()->addSeconds(5));
+        PollRun::dispatch($threadRun, $metadata)->delay(now()->addSeconds(5));
     }
 }

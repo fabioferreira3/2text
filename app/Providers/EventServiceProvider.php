@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Domain\Agents\Events\ThreadMessagesReceived;
 use App\Domain\Agents\Listeners\HandleFailedRun;
+use App\Domain\Agents\Listeners\HandleParaphraser;
 use App\Domain\AgentsEvents\PollRunFailed;
 use App\Events\DocumentTaskFinished;
 use App\Events\UserCreated;
@@ -38,6 +40,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         PollRunFailed::class => [
             HandleFailedRun::class
+        ],
+        ThreadMessagesReceived::class => [
+            HandleParaphraser::class
         ],
         UserCreated::class => [
             HandleNewUserAdminNotification::class,

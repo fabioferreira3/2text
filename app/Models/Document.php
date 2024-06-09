@@ -70,33 +70,6 @@ class Document extends Model
         );
     }
 
-    public function getStatus()
-    {
-        $statuses = $this->threadRuns->pluck('status')->unique();
-
-        if ($statuses->contains(RunStatus::IN_PROGRESS)) {
-            return DocumentStatus::IN_PROGRESS;
-        }
-
-        if ($statuses->contains(RunStatus::QUEUED) || $statuses->contains(RunStatus::REQUIRES_ACTION)) {
-            return DocumentStatus::ON_HOLD;
-        }
-
-        if ($statuses->contains(RunStatus::CANCELLING) || $statuses->contains(RunStatus::CANCELLED)) {
-            return DocumentStatus::ABORTED;
-        }
-
-        if ($statuses->contains(RunStatus::FAILED)) {
-            return DocumentStatus::FAILED;
-        }
-
-        if ($statuses->contains(RunStatus::COMPLETED)) {
-            return DocumentStatus::FINISHED;
-        }
-
-        return DocumentStatus::READY;
-    }
-
     public function chatThread(): HasOne
     {
         return $this->hasOne(ChatThread::class);
@@ -207,37 +180,52 @@ class Document extends Model
 
     public function getStatusAttribute()
     {
-        $abortedCount = $this->tasks->whereIn('status', ['aborted'])->count();
-        if ($abortedCount !== 0) {
-            return DocumentStatus::ABORTED;
-        }
+        $statuses = $this->threadRuns->pluck('status')->unique();
 
-        $failedCount = $this->tasks->whereIn('status', ['failed'])->count();
-        if ($failedCount !== 0) {
-            return DocumentStatus::FAILED;
-        }
-
-        $mainTasksinProgressCount = $this->tasks->whereIn('status', ['in_progress', 'pending', 'on_hold'])->count();
-
-        $childTasksInProgressCount = $this->children->reduce(function ($carry, $child) {
-            return $carry + $child->tasks->whereIn('status', ['in_progress', 'pending', 'on_hold'])->count();
-        }, 0);
-
-        if (($mainTasksinProgressCount + $childTasksInProgressCount) > 0) {
+        if ($statuses->contains(RunStatus::IN_PROGRESS) || $statuses->contains(RunStatus::QUEUED)) {
             return DocumentStatus::IN_PROGRESS;
         }
 
-        $finishedCount = $this->tasks->whereIn('status', ['finished', 'skipped'])->count();
-
-        if ($this->tasks->count() === $finishedCount && $finishedCount > 0) {
-            return DocumentStatus::FINISHED;
-        }
-
-        if ($this->tasks->count()) {
+        if ($statuses->contains(RunStatus::REQUIRES_ACTION)) {
             return DocumentStatus::ON_HOLD;
         }
 
+        if ($statuses->contains(RunStatus::COMPLETED)) {
+            return DocumentStatus::FINISHED;
+        }
+
         return DocumentStatus::DRAFT;
+        // $abortedCount = $this->tasks->whereIn('status', ['aborted'])->count();
+        // if ($abortedCount !== 0) {
+        //     return DocumentStatus::ABORTED;
+        // }
+
+        // $failedCount = $this->tasks->whereIn('status', ['failed'])->count();
+        // if ($failedCount !== 0) {
+        //     return DocumentStatus::FAILED;
+        // }
+
+        // $mainTasksinProgressCount = $this->tasks->whereIn('status', ['in_progress', 'pending', 'on_hold'])->count();
+
+        // $childTasksInProgressCount = $this->children->reduce(function ($carry, $child) {
+        //     return $carry + $child->tasks->whereIn('status', ['in_progress', 'pending', 'on_hold'])->count();
+        // }, 0);
+
+        // if (($mainTasksinProgressCount + $childTasksInProgressCount) > 0) {
+        //     return DocumentStatus::IN_PROGRESS;
+        // }
+
+        // $finishedCount = $this->tasks->whereIn('status', ['finished', 'skipped'])->count();
+
+        // if ($this->tasks->count() === $finishedCount && $finishedCount > 0) {
+        //     return DocumentStatus::FINISHED;
+        // }
+
+        // if ($this->tasks->count()) {
+        //     return DocumentStatus::ON_HOLD;
+        // }
+
+        // return DocumentStatus::DRAFT;
     }
 
     public function getSourceAttribute()

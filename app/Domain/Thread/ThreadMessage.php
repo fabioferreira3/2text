@@ -23,4 +23,9 @@ class ThreadMessage extends Model
     {
         return $this->belongsTo(Thread::class);
     }
+
+    public function scopeFromAssistant($query)
+    {
+        return $query->where('role', MessageRole::ASSISTANT->value);
+    }
 }

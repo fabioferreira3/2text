@@ -2,11 +2,14 @@
 
 namespace App\Livewire\Paraphraser;
 
+use App\Domain\Agents\Enums\Agent;
+use App\Domain\Agents\Factories\AgentFactory;
 use App\Domain\Agents\Repositories\AgentRepository;
 use App\Enums\DocumentStatus;
 use App\Exceptions\InsufficientUnitsException;
 use App\Helpers\DocumentHelper;
 use App\Models\Document;
+use App\Models\DocumentThread;
 use App\Repositories\DocumentRepository;
 use App\Repositories\GenRepository;
 use App\Traits\UnitCheck;
@@ -36,7 +39,7 @@ class Paraphraser extends Component
     {
         $userId = Auth::user()->id;
         return [
-            "echo-private:User.$userId,.TextParaphrased" => 'ready',
+            "echo-private:User.$userId,.ParaphraserCheckout" => 'ready',
             'blockDeleted'
         ];
     }
@@ -63,7 +66,6 @@ class Paraphraser extends Component
         } elseif (in_array($this->document->status, [DocumentStatus::IN_PROGRESS, DocumentStatus::ON_HOLD])) {
             $this->isSaving = true;
         };
-        //  $this->tone = $this->document->getMeta('tone') ?? 'default';
         $this->inputText = $this->document->content ?? '';
         $this->outputBlocks = $this->document->contentBlocks()->ofTextType()->get();
         $this->dispatch('adjustTextArea');
@@ -104,19 +106,32 @@ class Paraphraser extends Component
             if ($this->isSaving) {
                 return;
             }
-            //  $this->isSaving = true;
-            $originalSentencesArray = DocumentHelper::breakTextIntoSentences($this->inputText);
-            dd($originalSentencesArray);
+            $this->isSaving = true;
 
+            $agentFactory = new AgentFactory();
+            $agent = $agentFactory->make(Agent::THE_PARAPHRASER);
+            $agentRepo = new AgentRepository();
+
+            $originalSentencesArray = DocumentHelper::breakTextIntoSentences($this->inputText);
             DocumentRepository::clearContentBlocks($this->document);
             $this->outputBlocks = [];
             $this->document->update(['content' => $this->inputText]);
             $this->document->updateMeta('sentences', $originalSentencesArray);
 
             foreach ($originalSentencesArray as $item) {
+                dispatch(function () use ($agentRepo, $agent, $item) {
+                    $thread = $agentRepo->createThread($item['text']);
+                    DocumentThread::create([
+                        'document_id' => $this->document->id,
+                        'thread_id' => $thread->id,
+                    ]);
+                    $agent->run($thread, [
+                        'agent' => Agent::THE_PARAPHRASER->value,
+                        'document_id' => $this->document->id,
+                        'sentence_order' => $item['sentence_order']
+                    ]);
+                });
             }
-            $repo = new AgentRepository();
-            $thread = $repo->createThread($this->inputText);
 
             // $genRepo = new GenRepository();
             // $genRepo->registerParaphraseDocumentTasks($this->document->fresh());

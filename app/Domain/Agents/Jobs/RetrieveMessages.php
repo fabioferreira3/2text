@@ -2,7 +2,7 @@
 
 namespace App\Domain\Agents\Jobs;
 
-use App\Domain\Agents\Exceptions\SyncMessagesException;
+use App\Domain\Agents\Exceptions\RetrieveMessagesException;
 use App\Domain\Agents\Events\ThreadMessagesReceived;
 use App\Domain\Thread\ThreadRun;
 use App\Packages\OpenAI\Assistant;
@@ -19,10 +19,12 @@ class RetrieveMessages implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public ThreadRun $threadRun;
+    public array $metadata;
 
-    public function __construct(ThreadRun $threadRun)
+    public function __construct(ThreadRun $threadRun, array $metadata = [])
     {
         $this->threadRun = $threadRun;
+        $this->metadata = $metadata;
     }
 
     public function handle()
@@ -52,11 +54,11 @@ class RetrieveMessages implements ShouldQueue
                         'updated_at' => $creationDt
                     ]);
                 }
-                ThreadMessagesReceived::dispatch($this->threadRun->thread);
+                ThreadMessagesReceived::dispatch($this->threadRun->thread, $this->metadata);
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            throw new SyncMessagesException($e->getMessage());
+            throw new RetrieveMessagesException($e->getMessage());
         }
     }
 }

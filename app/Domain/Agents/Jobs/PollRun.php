@@ -2,6 +2,7 @@
 
 namespace App\Domain\Agents\Jobs;
 
+use App\Domain\Agents\Events\ThreadMessagesReceived;
 use App\Domain\Agents\Exceptions\PollRunException;
 use App\Domain\AgentsEvents\PollRunFailed;
 use App\Domain\Thread\Enum\RunStatus;
@@ -12,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+
 use Illuminate\Support\Facades\Log;
 
 class PollRun implements ShouldQueue
@@ -19,10 +21,12 @@ class PollRun implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public ThreadRun $threadRun;
+    public array $metadata;
 
-    public function __construct(ThreadRun $threadRun)
+    public function __construct(ThreadRun $threadRun, array $metadata = [])
     {
         $this->threadRun = $threadRun;
+        $this->metadata = $metadata;
     }
 
     public function handle()
@@ -33,13 +37,16 @@ class PollRun implements ShouldQueue
                 $this->threadRun->thread->external_id,
                 $this->threadRun->run_id
             );
+            $this->threadRun->update([
+                'status' => $request->status
+            ]);
             switch ($request->status) {
                 case RunStatus::QUEUED->value:
                 case RunStatus::IN_PROGRESS->value:
                     self::dispatch($this->threadRun)->delay(now()->addSeconds(5));
                     break;
                 case RunStatus::COMPLETED->value:
-                    RetrieveMessages::dispatch($this->threadRun);
+                    RetrieveMessages::dispatch($this->threadRun, $this->metadata);
                     break;
                 case RunStatus::INCOMPLETE->value:
                 case RunStatus::FAILED->value:

@@ -73,6 +73,7 @@ class NewParaphraser extends Component
                     'tone' => $this->tone,
                     'source_url' => $this->sourceUrl,
                     'add_content_block' => true,
+                    'user_id' => Auth::user()->id,
                 ]
             ]);
             $this->document = $document;
