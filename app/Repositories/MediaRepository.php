@@ -66,7 +66,6 @@ class MediaRepository
     public static function optimizeAndStore(Account $account, $fileParams): MediaFile
     {
         $originalFileUrl = Storage::temporaryUrl($fileParams['fileName'], now()->addMinutes(5));
-        Log::debug($originalFileUrl);
         $uploadedFile = cloudinary()->upload($originalFileUrl);
 
         return self::newImage($account, [

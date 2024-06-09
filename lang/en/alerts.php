@@ -17,6 +17,7 @@ return [
     'insufficient_units' => 'Insufficient units',
     'language_updated' => 'Language updated successfully!',
     'paraphrase_completed' => 'Paraphrasing complete. You can make edits to the text below.',
+    'paraphrase_error' => 'An error occurred while paraphrasing. Please try again.',
     'posts_generated' => 'Post(s) generated!',
     'post_deleted' => 'Post deleted!',
     'rewriting_text' => 'Rewriting text...',

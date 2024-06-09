@@ -2,9 +2,9 @@
 
 namespace App\Domain\Agents\Jobs;
 
-use App\Domain\Agents\Events\ThreadMessagesReceived;
 use App\Domain\Agents\Exceptions\PollRunException;
-use App\Domain\AgentsEvents\PollRunFailed;
+use App\Domain\Agents\Events\RunFailed;
+use App\Domain\Agents\Events\TaskFailed;
 use App\Domain\Thread\Enum\RunStatus;
 use App\Domain\Thread\ThreadRun;
 use App\Packages\OpenAI\Assistant;
@@ -53,7 +53,8 @@ class PollRun implements ShouldQueue
                 case RunStatus::EXPIRED->value:
                 case RunStatus::CANCELLED->value:
                 case RunStatus::CANCELLING->value:
-                    event(new PollRunFailed($this->threadRun, $request));
+                    event(new RunFailed($this->threadRun, $request));
+                    event(new TaskFailed($this->metadata));
                     break;
             }
         } catch (\Exception $e) {

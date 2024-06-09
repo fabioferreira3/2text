@@ -2,7 +2,7 @@
 
 namespace App\Domain\Agents\Listeners;
 
-use App\Domain\AgentsEvents\PollRunFailed;
+use App\Domain\Agents\Events\RunFailed;
 use Illuminate\Support\Facades\Log;
 
 class HandleFailedRun
@@ -13,7 +13,7 @@ class HandleFailedRun
      * @param PollRunFailed $event
      * @return void
      */
-    public function handle(PollRunFailed $event)
+    public function handle(RunFailed $event)
     {
         Log::error($event->threadRun->run_id . ' failed');
         $event->threadRun->update([

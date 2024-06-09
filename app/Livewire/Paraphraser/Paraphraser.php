@@ -11,7 +11,6 @@ use App\Helpers\DocumentHelper;
 use App\Models\Document;
 use App\Models\DocumentThread;
 use App\Repositories\DocumentRepository;
-use App\Repositories\GenRepository;
 use App\Traits\UnitCheck;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +39,7 @@ class Paraphraser extends Component
         $userId = Auth::user()->id;
         return [
             "echo-private:User.$userId,.ParaphraserCheckout" => 'ready',
+            "echo-private:User.$userId,.TaskFailed" => 'handleException',
             'blockDeleted'
         ];
     }
@@ -69,6 +69,20 @@ class Paraphraser extends Component
         $this->inputText = $this->document->content ?? '';
         $this->outputBlocks = $this->document->contentBlocks()->ofTextType()->get();
         $this->dispatch('adjustTextArea');
+    }
+
+    public function handleException($params)
+    {
+        if ($params['document_id'] === $this->document->id) {
+            $this->document->refresh();
+            $this->setup($this->document);
+            $this->isSaving = false;
+            $this->dispatch(
+                'alert',
+                type: 'error',
+                message: __('alerts.paraphrase_error')
+            );
+        }
     }
 
     public function ready($params)
@@ -110,7 +124,6 @@ class Paraphraser extends Component
 
             $agentFactory = new AgentFactory();
             $agent = $agentFactory->make(Agent::THE_PARAPHRASER);
-            $agentRepo = new AgentRepository();
 
             $originalSentencesArray = DocumentHelper::breakTextIntoSentences($this->inputText);
             DocumentRepository::clearContentBlocks($this->document);
@@ -119,22 +132,12 @@ class Paraphraser extends Component
             $this->document->updateMeta('sentences', $originalSentencesArray);
 
             foreach ($originalSentencesArray as $item) {
-                dispatch(function () use ($agentRepo, $agent, $item) {
-                    $thread = $agentRepo->createThread($item['text']);
-                    DocumentThread::create([
-                        'document_id' => $this->document->id,
-                        'thread_id' => $thread->id,
-                    ]);
-                    $agent->run($thread, [
-                        'agent' => Agent::THE_PARAPHRASER->value,
-                        'document_id' => $this->document->id,
-                        'sentence_order' => $item['sentence_order']
-                    ]);
-                });
+                $agent->process($item['text'], [
+                    'document_id' => $this->document->id,
+                    'user_id' => $this->document->getMeta('user_id'),
+                    'sentence_order' => $item['sentence_order']
+                ]);
             }
-
-            // $genRepo = new GenRepository();
-            // $genRepo->registerParaphraseDocumentTasks($this->document->fresh());
         } catch (InsufficientUnitsException $e) {
             $this->dispatch(
                 'alert',
@@ -145,14 +148,6 @@ class Paraphraser extends Component
             throw new Exception($e->getMessage());
         }
     }
-
-    // public function setTone($tone)
-    // {
-    //     $this->tone = $tone;
-    //     $repo = new DocumentRepository($this->document);
-    //     $repo->updateMeta('tone', $this->tone);
-    //     $this->dispatch('setTone', tone: $tone);
-    // }
 
     public function render()
     {

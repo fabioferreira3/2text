@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Domain\Thread\Thread;
+use App\Models\Account;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,7 +24,7 @@ class ThreadFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory()->create(),
+            'account_id' => Account::factory()->create(),
             'tool_resources' => []
         ];
     }

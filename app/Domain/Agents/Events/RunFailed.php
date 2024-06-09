@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Domain\AgentsEvents;
+namespace App\Domain\Agents\Events;
 
 use App\Domain\Thread\ThreadRun;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PollRunFailed
+class RunFailed
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

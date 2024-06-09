@@ -2,7 +2,7 @@
 
 namespace App\Domain\Thread;
 
-use App\Models\User;
+use App\Models\Account;
 use Database\Factories\ThreadFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,9 +18,9 @@ class Thread extends Model
     protected $guarded = ['id'];
     protected $casts = ['tool_resources' => 'array'];
 
-    public function user(): BelongsTo
+    public function account(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Account::class);
     }
 
     public function messages(): HasMany

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('threads', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignUuid('account_id')->constrained('accounts')->onDelete('cascade');
             $table->string('external_id')->nullable()->index();
             $table->jsonb('tool_resources')->nullable();
             $table->softDeletes();

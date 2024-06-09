@@ -82,9 +82,20 @@
                 </div>
             </div>
             @else
-            <div class="mt-24 text-xl flex justify-center text-gray-600 w-full h-full italic">No text to be paraphrased.
-                Yet...
+            <div class="relative">
+                @if ($isSaving)
+                <div class="z-40 absolute flex items-center justify-center h-full w-full">
+                    <x-loader color="zinc-700" height="14" width="14" />
+                </div>
+                @endif
+                @if (!$isSaving)<div class="mt-24 text-xl flex justify-center text-gray-600 w-full h-full italic">No
+                    text to be
+                    paraphrased.
+                    Yet...
+                </div>
+                @endif
             </div>
+
             @endif
         </div>
     </div>
